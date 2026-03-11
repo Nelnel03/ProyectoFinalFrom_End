@@ -1,0 +1,11 @@
+{
+    "arboles": [
+        {
+            "id": 1,
+            "nombre": "Roble",
+            "edad": 10,
+            "altura": 15,
+            "estado": "vivo"
+        }
+    ]
+}

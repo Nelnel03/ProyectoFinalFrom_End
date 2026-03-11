@@ -1,0 +1,77 @@
+.visitante-container {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  background-color: #f4fdf8; /* Soft green tint */
+  color: #1a3322;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.visitante-header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.visitante-header h1 {
+  font-size: 2.8rem;
+  color: #0b532d;
+  margin-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.visitante-header p {
+  font-size: 1.2rem;
+  color: #2e6b46;
+  font-weight: 500;
+}
+
+.visitante-content {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(11, 83, 45, 0.08);
+  border: 1px solid rgba(46, 107, 70, 0.1);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.visitante-intro h2 {
+  font-size: 1.8rem;
+  color: #1a3322;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.visitante-intro p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #44614d;
+}
+
+/* Micro-animaciones para modernidad */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
