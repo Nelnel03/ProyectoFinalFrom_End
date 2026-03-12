@@ -21,7 +21,7 @@ async function getUsuarios() {
 
 }
 
-export{getUsuarios}
+
 
 
 
@@ -54,7 +54,7 @@ async function postUsuarios(usuario){
 
 }
 
-export{postUsuarios}
+
 
 
 //PUT
@@ -83,7 +83,7 @@ async function putUsuarios(usuario,id){
     }
 }
 
-export{putUsuarios}
+
 
 
 
@@ -114,4 +114,13 @@ async function deleteUsuarios(id){
     }
 }
 
-export{deleteUsuarios}
+export { getUsuarios, postUsuarios, putUsuarios, deleteUsuarios };
+
+const services = {
+    getUsuarios,
+    postUsuarios,
+    putUsuarios,
+    deleteUsuarios
+};
+
+export default services;

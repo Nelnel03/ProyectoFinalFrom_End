@@ -1,11 +1,21 @@
 {
-    "arboles": [
-        {
-            "id": 1,
-            "nombre": "Roble",
-            "edad": 10,
-            "altura": 15,
-            "estado": "vivo"
-        }
-    ]
+  "arboles": [
+    {
+      "id": "1",
+      "nombre": "Roble",
+      "edad": 10,
+      "altura": 15,
+      "estado": "vivo"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": "a7ab",
+      "nombre": "usuario",
+      "email": "Usuario@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

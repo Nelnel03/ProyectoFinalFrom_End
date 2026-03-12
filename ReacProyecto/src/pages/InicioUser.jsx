@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import MainPagesInicoUser from '../components/MainPagesInicoUser';
 
 function InicioUser() {
   return (
-    <div>InicioUser</div>
-  )
+    <div>
+      <MainPagesInicoUser />
+    </div>
+  );
 }
 
-export default InicioUser
+export default InicioUser;
