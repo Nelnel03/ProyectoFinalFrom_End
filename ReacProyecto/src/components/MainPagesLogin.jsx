@@ -22,7 +22,12 @@ function MainPagesLogin() {
       if (user) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify(user));
-        navigate('/user');
+        // Redirigir según rol
+        if (user.rol === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/user');
+        }
       } else {
         setError('Correo o contraseña incorrectos');
       }

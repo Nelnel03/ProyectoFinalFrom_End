@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
+import MainPagesInicoAdmin from '../components/MainPagesInicoAdmin';
 
 function InicioAdimin() {
-  return (
-    <div>InicioAdimin</div>
-  )
+  return <MainPagesInicoAdmin />;
 }
 
-export default InicioAdimin
+export default InicioAdimin;
