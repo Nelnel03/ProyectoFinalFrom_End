@@ -10,12 +10,14 @@ function Rooting() {
   return (
     <BrowserRouter>
       <Nav />
-      <Routes>
-        <Route path="/" element={<InicioVisitantes />} />
-        <Route path="/user" element={<InicioUser />} />
-        <Route path="/admin" element={<InicioAdimin />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <div className="main-content-layout">
+        <Routes>
+          <Route path="/" element={<InicioVisitantes />} />
+          <Route path="/user" element={<InicioUser />} />
+          <Route path="/admin" element={<InicioAdimin />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

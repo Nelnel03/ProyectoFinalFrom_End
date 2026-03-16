@@ -35,14 +35,6 @@ function Nav() {
               Mi Panel
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink 
-              to="/admin" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
-              Admin
-            </NavLink>
-          </li>
         </ul>
       </div>
     </nav>
