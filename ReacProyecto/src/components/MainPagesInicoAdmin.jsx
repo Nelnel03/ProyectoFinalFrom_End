@@ -680,7 +680,18 @@ function MainPagesInicoAdmin() {
                 </p>
                 <button 
                   onClick={() => handleEliminarTipo(tipoFiltro)}
-                  style={{ backgroundColor: '#ef4444', color: 'white', padding: '6px 14px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+                  style={{  
+                    backgroundColor: '#10b981', /* Esmeralda vibrante */
+                    color: 'white',
+                    padding: '10px 24px',
+                    borderRadius: '50px',
+                    textDecoration: 'none',
+                    fontWeight: '700',
+                    transition: 'transform 0.2s, background-color 0.2s',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   🧨 Eliminar este Tipo y sus Árboles
                 </button>
@@ -835,60 +846,97 @@ function MainPagesInicoAdmin() {
         {tab === 'usuarios' && (
           <div>
             <div className="admin-section-header">
-              <h2>👥 Gestión de Usuarios</h2>
-              <p style={{ color: '#66937a' }}>Administrar accesos y cuentas del sistema</p>
+              <h2 style={{ color: '#ffffff' }}>👥 Gestión de Usuarios</h2>
+              <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar accesos y cuentas del sistema</p>
             </div>
 
-            <div className="admin-form-card" style={{ marginBottom: '2rem' }}>
-              <h3 style={{ margin: '0 0 1rem 0', color: '#1a402a' }}>{modoEdicionUsuario ? '✏️ Editar Usuario' : '➕ Nuevo Usuario'}</h3>
-              <form onSubmit={handleUserSubmit} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                <div style={{ flex: 1, minWidth: '200px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nombre Completo</label>
+            <div className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
+              <h3 style={{ margin: '0 0 1.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                <span style={{ fontSize: '1.4rem' }}>{modoEdicionUsuario ? '✏️' : '👤'}</span>
+                {modoEdicionUsuario ? 'Editar Cuenta de Usuario' : 'Crear Nueva Cuenta'}
+              </h3>
+              
+              <form onSubmit={handleUserSubmit} style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                gap: '1.5rem', 
+                padding: '1.5rem', 
+                borderRadius: '12px',
+                border: '2px solid #10b981'
+              }}>
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Nombre Completo</label>
                   <input
                     type="text"
                     required
                     value={formUsuario.nombre}
                     onChange={(e) => setFormUsuario({...formUsuario, nombre: e.target.value})}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #c5d6cc' }}
+                    placeholder="Ej: Juan Pérez"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
                   />
                 </div>
-                <div style={{ flex: 1, minWidth: '150px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Correo Electrónico</label>
+                
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Correo Electrónico</label>
                   <input
                     type="email"
                     required
                     value={formUsuario.email}
                     onChange={(e) => setFormUsuario({...formUsuario, email: e.target.value})}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #c5d6cc' }}
+                    placeholder="usuario@ejemplo.com"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
                   />
                 </div>
-                <div style={{ flex: 1, minWidth: '150px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Contraseña</label>
+                
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Contraseña</label>
                   <input
                     type="password"
                     required={!modoEdicionUsuario}
                     value={formUsuario.password}
                     onChange={(e) => setFormUsuario({...formUsuario, password: e.target.value})}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #c5d6cc' }}
+                    placeholder={modoEdicionUsuario ? "Dejar en blanco para no cambiar..." : "••••••••"}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
                   />
                 </div>
-                <div style={{ flex: '0 0 150px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Rol</label>
+                
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Rol de Acceso</label>
                   <select
                     value={formUsuario.rol}
                     onChange={(e) => setFormUsuario({...formUsuario, rol: e.target.value})}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #c5d6cc' }}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', cursor: 'pointer', appearance: 'auto', outline: 'none' }}
                   >
-                    <option value="user">Usuario</option>
-                    <option value="admin">Administrador</option>
+                    <option value="user">Usuario (Solo visualista)</option>
+                    <option value="admin">Administrador (Control total)</option>
                   </select>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#2e6b46', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    {modoEdicionUsuario ? '💾 Guardar' : '➕ Agregar'}
+                
+                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                  <button type="submit" style={{ 
+                    flex: 1, 
+                    padding: '12px 24px', 
+                    backgroundColor: '#10b981', 
+                    color: 'white', 
+                    border: 'none', 
+                    borderRadius: '8px', 
+                    cursor: 'pointer', 
+                    fontWeight: '800', 
+                    fontSize: '1rem',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
+                  }}>
+                    {modoEdicionUsuario ? '💾 Guardar Cambios' : '➕ Crear Usuario'}
                   </button>
                   {modoEdicionUsuario && (
-                    <button type="button" onClick={resetFormUsuario} style={{ padding: '10px 20px', backgroundColor: '#9ca3af', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+                    <button type="button" onClick={resetFormUsuario} style={{ 
+                      padding: '12px 24px', 
+                      backgroundColor: '#9ca3af', 
+                      color: 'white', 
+                      border: 'none', 
+                      borderRadius: '8px', 
+                      cursor: 'pointer', 
+                      fontWeight: '800'
+                    }}>
                       Cancelar
                     </button>
                   )}
@@ -896,26 +944,93 @@ function MainPagesInicoAdmin() {
               </form>
             </div>
 
-            <div className="admin-arboles-lista" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+            <div className="admin-arboles-lista" style={{ 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '1.5rem'
+            }}>
               {usuarios.map(user => (
-                <div key={user.id} className="admin-arbol-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '40px', height: '40px', backgroundColor: user.rol === 'admin' ? '#fee2e2' : '#e0f2fe', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
+                <div key={user.id} className="admin-arbol-card" style={{ 
+                  padding: '1.5rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '1.2rem',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
+                  backgroundColor: 'white'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                    <div style={{ 
+                      width: '56px', 
+                      height: '56px', 
+                      backgroundColor: user.rol === 'admin' ? '#fee2e2' : '#e0f2fe', 
+                      borderRadius: '14px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      fontSize: '1.8rem',
+                      boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
+                    }}>
                       {user.rol === 'admin' ? '👑' : '👤'}
                     </div>
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1f2937' }}>{user.nombre}</h3>
-                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{user.email} • {user.rol}</p>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#000000', fontWeight: '900' }}>{user.nombre}</h3>
+                      <p style={{ margin: '2px 0 0 0', fontSize: '0.95rem', color: '#000000', fontWeight: '700', opacity: 0.8 }}>{user.email}</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <button onClick={() => handleEditarUsuario(user)} style={{ flex: 1, padding: '8px', backgroundColor: '#e5e7eb', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', color: '#374151' }}>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: '#e0f2f1', borderRadius: '8px', border: '1px solid #10b981' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: '900', color: '#000000', textTransform: 'uppercase', letterSpacing: '0.05em' }}>ID</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#000000' }}>#{user.id}</span>
+                  </div>
+
+                  <div style={{ 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    gap: '6px', 
+                    padding: '4px 12px', 
+                    borderRadius: '20px', 
+                    fontSize: '0.75rem', 
+                    fontWeight: '800', 
+                    textTransform: 'uppercase',
+                    width: 'fit-content',
+                    backgroundColor: user.rol === 'admin' ? '#fee2e2' : '#bae6fd',
+                    color: user.rol === 'admin' ? '#ef4444' : '#0284c7',
+                    border: user.rol === 'admin' ? '1px solid #fca5a5' : '1px solid #7dd3fc'
+                  }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }}></span>
+                    {user.rol === 'admin' ? 'Administrador' : 'Usuario'}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '0.5rem' }}>
+                    <button 
+                      onClick={() => handleEditarUsuario(user)} 
+                      style={{ 
+                        flex: 1, 
+                        padding: '10px', 
+                        backgroundColor: '#e5e7eb', 
+                        border: 'none', 
+                        borderRadius: '8px', 
+                        cursor: 'pointer', 
+                        fontWeight: '700', 
+                        color: '#374151'
+                      }}
+                    >
                       ✏️ Editar
                     </button>
                     <button 
                       onClick={() => handleEliminarUsuario(user.id, user.nombre)} 
                       disabled={user.rol === 'admin'} 
-                      style={{ flex: 1, padding: '8px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', color: '#b91c1c', opacity: user.rol === 'admin' ? 0.5 : 1 }}
+                      style={{ 
+                        flex: 1, 
+                        padding: '10px', 
+                        backgroundColor: '#fee2e2', 
+                        border: 'none', 
+                        borderRadius: '8px', 
+                        cursor: user.rol === 'admin' ? 'not-allowed' : 'pointer', 
+                        fontWeight: '700', 
+                        color: '#b91c1c',
+                        opacity: user.rol === 'admin' ? 0.6 : 1
+                      }}
                       title={user.rol === 'admin' ? "No se puede eliminar administradores principales" : ""}
                     >
                       🗑️ Eliminar

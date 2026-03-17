@@ -10,7 +10,7 @@
 .arboles-section-title {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #0b532d;
+  color: #059669; /* Más saturado */
   margin-bottom: 0.4rem;
   display: flex;
   align-items: center;
@@ -18,7 +18,7 @@
 }
 
 .arboles-section-subtitle {
-  color: #44614d;
+  color: #166534; /* Más vivo */
   font-size: 1rem;
   margin-bottom: 1.8rem;
 }
@@ -87,13 +87,13 @@
 .arbol-card-nombre {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #0b532d;
+  color: #0d9488; /* Teal más vibrante */
   margin: 0 0 0.2rem 0;
 }
 
 .arbol-card-cientifico {
   font-size: 0.82rem;
-  color: #6b9b85;
+  color: #059669;
   font-style: italic;
   margin: 0 0 0.8rem 0;
 }
@@ -292,7 +292,7 @@
 .admin-container {
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
-  background: linear-gradient(160deg, #0f2417 0%, #1a3a27 50%, #0f2417 100%);
+  background: linear-gradient(160deg, #064e3b 0%, #065f46 50%, #064e3b 100%); /* Fondo más rico en color */
   color: #e8f5ee;
   padding: 0;
 }
@@ -310,7 +310,7 @@
 .admin-header h1 {
   font-size: 1.6rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #34d399, #6ee7b7);
+  background: linear-gradient(90deg, #10b981, #34d399); /* Más vibrante */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -319,13 +319,13 @@
 
 .admin-header p {
   font-size: 0.85rem;
-  color: #86bfa4;
+  color: #6ee7b7; /* Más brillante */
   margin: 0.2rem 0 0;
 }
 
 .admin-logout-btn {
   background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
+  color: #f87171; /* Rojo más encendido */
   border: 1px solid rgba(239, 68, 68, 0.3);
   padding: 0.5rem 1.2rem;
   border-radius: 8px;
@@ -356,7 +356,7 @@
 .admin-tab {
   background: none;
   border: none;
-  color: #86bfa4;
+  color: #d1fae5; /* Texto más claro/vibrante */
   font-size: 0.95rem;
   font-weight: 600;
   padding: 0.6rem 1.4rem;
@@ -366,8 +366,8 @@
   margin-bottom: -1px;
 }
 .admin-tab.active {
-  color: #34d399;
-  border-bottom-color: #34d399;
+  color: #10b981;
+  border-bottom-color: #10b981;
 }
 .admin-tab:hover {
   color: #6ee7b7;
@@ -385,7 +385,7 @@
 .admin-form-card h2 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #6ee7b7;
+  color: #10b981;
   margin: 0 0 1.5rem;
 }
 
