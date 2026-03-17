@@ -1,3 +1,4 @@
+/* --- DASHBOARD SIDEBAR (Admin/User) --- */
 .main-navigation {
   background-color: #0b532d;
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
@@ -12,119 +13,103 @@
   flex-direction: column;
 }
 
-.nav-container {
+/* --- VISITOR TOP NAV --- */
+.visitor-nav {
+  background-color: #ffffff;
+  height: 70px;
   width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.visitor-nav-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visitor-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a4d2e;
+  text-decoration: none;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.visitor-nav-links {
+  display: flex;
+  align-items: center;
   gap: 2rem;
 }
 
-.nav-logo {
-  color: #34d399;
-  font-size: 1.8rem;
-  font-weight: 800;
+.visitor-link {
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
-  margin-bottom: 1.5rem;
-  padding: 0 1.5rem;
-  transition: color 0.3s;
-}
-
-.nav-logo:hover {
-  color: #6ee7b7;
-}
-
-.nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0 1rem;
-  width: 100%;
-}
-
-.nav-item {
-  width: 100%;
-}
-
-.nav-link {
-  color: #e8f5ee;
-  text-decoration: none;
-  font-size: 1.05rem;
-  font-weight: 500;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  display: block;
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-}
-
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-}
-
-.nav-link.active {
-  color: #34d399;
-  background-color: rgba(52, 211, 153, 0.15);
+  color: #4a5568;
   font-weight: 600;
-  border-left: 4px solid #34d399;
-  border-radius: 0 8px 8px 0;
+  font-size: 1rem;
+  transition: color 0.2s;
 }
 
-/* Sidebar layout adjustment for the rest of the application */
+.visitor-link:hover, .visitor-link.active {
+  color: #2e6b46;
+}
+
+.visitor-login-btn {
+  background-color: #2e6b46;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 6px rgba(46, 107, 70, 0.2);
+}
+
+.visitor-login-btn:hover {
+  background-color: #1a4d2e;
+  transform: translateY(-2px);
+}
+
+/* --- LAYOUT ADJUSTMENTS --- */
 body {
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
-.main-content-layout {
+/* Layout for when there is a sidebar (Admin/User usually) */
+.main-content-layout.with-sidebar {
   margin-left: 250px;
-  min-height: 100vh;
   width: calc(100% - 250px);
 }
 
+/* Layout for Visitor (Top Nav) */
+.main-content-layout.visitor-layout {
+  padding-top: 70px;
+  margin-left: 0;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
-  .main-navigation {
-    width: 100%;
-    height: auto;
-    position: sticky;
-    padding: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-  
-  .nav-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  .visitor-nav-links {
     gap: 1rem;
   }
-  
-  .nav-logo {
-    margin-bottom: 0;
-    padding: 0;
+  .visitor-link {
+    display: none; /* Hide simple links on mobile to save space */
   }
-  
-  .nav-links {
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-  
-  .nav-link {
-    display: inline-block;
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .nav-link.active {
-    border-left: none;
-    border-bottom: 3px solid #34d399;
-    border-radius: 6px;
-  }
-
-  .main-content-layout {
-    margin-left: 0;
-    width: 100%;
+  .visitor-nav-container {
+    padding: 0 1rem;
   }
 }

@@ -108,6 +108,48 @@ async function deleteArboles(id) {
   }
 }
 
+// ========================
+// STATS POR TIPO
+// ========================
+
+async function getStatsTipos() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener stats de tipos", error);
+  }
+}
+
+async function postStatsTipos(stat) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(stat),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear stat de tipo", error);
+  }
+}
+
+async function putStatsTipos(stat, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(stat),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al actualizar stat de tipo", error);
+  }
+}
+
 export {
   getUsuarios,
   postUsuarios,
@@ -117,6 +159,9 @@ export {
   postArboles,
   putArboles,
   deleteArboles,
+  getStatsTipos,
+  postStatsTipos,
+  putStatsTipos,
 };
 
 const services = {
@@ -128,6 +173,9 @@ const services = {
   postArboles,
   putArboles,
   deleteArboles,
+  getStatsTipos,
+  postStatsTipos,
+  putStatsTipos,
 };
 
 export default services;
