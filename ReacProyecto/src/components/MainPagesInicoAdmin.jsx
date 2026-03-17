@@ -11,7 +11,6 @@ const FORM_INICIAL = {
   crecimiento: '',
   clima: '',
   descripcion: '',
-  usos: '',
   cuidados: '',
   imagenUrl: '',
   estado: 'vivo',
@@ -312,7 +311,7 @@ function MainPagesInicoAdmin() {
 
                 {/* Clima */}
                 <div className="admin-form-group">
-                  <label htmlFor="clima">Clima ideal</label>
+                  <label htmlFor="clima">Clima</label>
                   <input
                     id="clima"
                     type="text"
@@ -401,18 +400,6 @@ function MainPagesInicoAdmin() {
                   />
                 </div>
 
-                {/* Usos */}
-                <div className="admin-form-group admin-form-full">
-                  <label htmlFor="usos">Usos</label>
-                  <textarea
-                    id="usos"
-                    name="usos"
-                    rows={2}
-                    value={form.usos}
-                    onChange={handleChange}
-                    placeholder="Ej: Madera, medicina, alimentación, construcción..."
-                  />
-                </div>
 
                 {/* Cuidados */}
                 <div className="admin-form-group admin-form-full">

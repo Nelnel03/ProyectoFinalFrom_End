@@ -82,13 +82,6 @@ function ArbolModal({ arbol, onClose }) {
             </>
           )}
 
-          {arbol.usos && (
-            <>
-              <h3 className="modal-section-title">🪵 Usos</h3>
-              <p className="modal-section-text">{arbol.usos}</p>
-            </>
-          )}
-
           {arbol.cuidados && (
             <>
               <h3 className="modal-section-title">🌱 Cuidados</h3>
