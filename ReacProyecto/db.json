@@ -62,6 +62,15 @@
       "email": "leal@gmail.com",
       "password": "12345678",
       "rol": "user"
+    },
+    {
+      "id": "d374",
+      "nombre": "Andrés leal",
+      "email": "alealvfwd@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "user",
+      "resetToken": "r8u5d3ae8bcqjjukbn5yf",
+      "resetTokenExpiry": "2026-03-19T22:35:33.797Z"
     }
   ],
   "stats_tipos": [
@@ -72,5 +81,7 @@
       "muertos": 1
     }
   ],
+  "reportes": [],
+  "reportes_robados": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

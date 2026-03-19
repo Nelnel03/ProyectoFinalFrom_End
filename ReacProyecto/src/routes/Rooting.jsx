@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
 import InicioAdimin from '../pages/InicioAdimin';
 import Login from '../pages/Login';
+import ResetPassword from '../pages/ResetPassword';
 import Nav from '../components/Nav';
 import PrivateRoutes from './PrivateRoutes';
 
 function MainLayout() {
-  const location = useLocation();
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   const layoutClass = isAuthenticated ? "main-content-layout" : "main-content-layout visitor-layout";
@@ -37,6 +37,7 @@ function MainLayout() {
             } 
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
     </div>

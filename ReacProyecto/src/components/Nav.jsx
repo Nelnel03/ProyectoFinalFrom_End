@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import '../styles/Nav.css';
 
 function Nav() {
   const location = useLocation();
-  const [auth, setAuth] = useState(localStorage.getItem('isAuthenticated') === 'true');
-
-  // Sincronizar el estado de autenticación cuando cambie la ruta
-  useEffect(() => {
-    setAuth(localStorage.getItem('isAuthenticated') === 'true');
-  }, [location]);
+  const auth = localStorage.getItem('isAuthenticated') === 'true';
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -54,7 +49,6 @@ function Nav() {
                 onClick={() => {
                   localStorage.removeItem('isAuthenticated');
                   localStorage.removeItem('user');
-                  setAuth(false);
                   window.location.href = '/';
                 }}
                 className="visitor-login-btn"

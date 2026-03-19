@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/MainPagesInicoUser.css';
 
 function MainPagesInicoVisitante() {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    password: '',
-    rol: 'user',
-  });
-  const [mensaje, setMensaje] = useState('');
   const [arboles, setArboles] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     cargarArboles();
@@ -33,21 +24,7 @@ function MainPagesInicoVisitante() {
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await services.postUsuarios(formData);
-      setMensaje('¡Registro exitoso! Redirigiendo al login...');
-      setTimeout(() => navigate('/login'), 2000);
-    } catch (error) {
-      console.error('Error al registrar el usuario', error);
-      setMensaje('Error al registrar. Por favor, intente de nuevo.');
-    }
-  };
 
   return (
     <div className="visitante-container">
@@ -75,72 +52,6 @@ function MainPagesInicoVisitante() {
           <ArbolesSection arboles={arboles} />
         )}
 
-        {localStorage.getItem('isAuthenticated') !== 'true' && (
-          <>
-            {/* Separador */}
-            <div style={{
-              borderTop: '1px solid rgba(46, 107, 70, 0.15)',
-              margin: '2.5rem 0',
-            }} />
-
-            {/* Formulario de registro */}
-            <div className="user-register-form-wrapper"
-              style={{ margin: '0 auto', boxShadow: 'none', border: '1px solid #eee' }}
-            >
-              <h3 style={{ textAlign: 'center', color: '#0b532d', marginBottom: '1.5rem' }}>
-                🔐 Crea tu cuenta
-              </h3>
-
-              {mensaje && <div className="registro-exito-msg">{mensaje}</div>}
-
-              <form onSubmit={handleSubmit}>
-                <div className="user-form-group">
-                  <label htmlFor="nombre">Nombre Completo</label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    required
-                    placeholder="Ej: Juan Pérez"
-                  />
-                </div>
-
-                <div className="user-form-group">
-                  <label htmlFor="email">Correo Electrónico</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="ejemplo@correo.com"
-                  />
-                </div>
-
-                <div className="user-form-group">
-                  <label htmlFor="password">Contraseña</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    placeholder="Mínimo 6 caracteres"
-                    minLength="6"
-                  />
-                </div>
-
-                <button type="submit" className="user-register-btn">
-                  Registrarme ahora
-                </button>
-              </form>
-            </div>
-          </>
-        )}
       </main>
     </div>
   );

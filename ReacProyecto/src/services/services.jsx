@@ -11,6 +11,7 @@ async function getUsuarios() {
     return datosUsuarios;
   } catch (error) {
     console.error("Error al obtener los usuarios", error);
+    return [];
   }
 }
 
@@ -65,6 +66,7 @@ async function getArboles() {
     return datos;
   } catch (error) {
     console.error("Error al obtener los árboles", error);
+    return [];
   }
 }
 
@@ -119,6 +121,7 @@ async function getStatsTipos() {
     return datos;
   } catch (error) {
     console.error("Error al obtener stats de tipos", error);
+    return [];
   }
 }
 
@@ -150,6 +153,76 @@ async function putStatsTipos(stat, id) {
   }
 }
 
+// ========================
+// REPORTES
+// ========================
+
+async function getReportes() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener reportes", error);
+    return [];
+  }
+}
+
+async function postReportes(reporte) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear reporte", error);
+  }
+}
+
+// ========================
+// REPORTES ÁRBOLES ROBADOS
+// ========================
+
+async function getReportesRobados() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener reportes de árboles robados", error);
+    return [];
+  }
+}
+
+async function postReportesRobados(reporte) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear reporte de árbol robado", error);
+  }
+}
+
+async function deleteReportesRobados(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar reporte de árbol robado", error);
+  }
+}
+
 export {
   getUsuarios,
   postUsuarios,
@@ -162,6 +235,11 @@ export {
   getStatsTipos,
   postStatsTipos,
   putStatsTipos,
+  getReportes,
+  postReportes,
+  getReportesRobados,
+  postReportesRobados,
+  deleteReportesRobados,
 };
 
 const services = {
@@ -176,6 +254,11 @@ const services = {
   getStatsTipos,
   postStatsTipos,
   putStatsTipos,
+  getReportes,
+  postReportes,
+  getReportesRobados,
+  postReportesRobados,
+  deleteReportesRobados,
 };
 
 export default services;

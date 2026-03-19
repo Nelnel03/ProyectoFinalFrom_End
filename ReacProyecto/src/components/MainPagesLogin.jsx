@@ -1,74 +1,240 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import services from '../services/services';
 import '../styles/Login.css';
 
 function MainPagesLogin() {
+  const [viewMode, setViewMode] = useState('login'); // 'login' | 'register' | 'forgot'
+  const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
-      // Llamada directa a la función importada
-      const usuarios = await services.getUsuarios();
-      
-      const user = usuarios.find(u => u.email === email && u.password === password);
+      if (!email || email.trim() === '') {
+        setError('El correo es obligatorio');
+        setLoading(false);
+        return;
+      }
 
-      if (user) {
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify(user));
-        // Redirigir según rol
-        if (user.rol === 'admin') {
-          navigate('/admin');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError('Formato de correo inválido');
+        setLoading(false);
+        return;
+      }
+
+      const usuarios = await services.getUsuarios();
+
+      if (viewMode === 'forgot') {
+        const user = usuarios.find(u => u.email === email);
+        if (!user) {
+          // Por seguridad, mostrar mensaje genérico
+          setSuccessMsg('Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña. Revisa la consola o alertas (modo simulación).');
         } else {
-          navigate('/user');
+          // Generar token
+          const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          const expiry = new Date(new Date().getTime() + 15 * 60000); // 15 mins
+          
+          const updatedUser = { ...user, resetToken: token, resetTokenExpiry: expiry.toISOString() };
+          await services.putUsuarios(updatedUser, user.id);
+          
+          setSuccessMsg('Se ha enviado un enlace de recuperación a tu correo.');
+          
+          // MOCK: Simulando el envío de correo mostrando el enlace en la alerta (para pruebas en desarrollo)
+          const resetLink = `${window.location.origin}/reset-password?token=${token}`;
+          setTimeout(() => {
+            Swal.fire({
+              title: '📧 Simulación de Correo',
+              html: `<strong>Para:</strong> ${email}<br/><strong>Asunto:</strong> Recuperación de contraseña<br/><br/>Haz clic en el siguiente enlace para restablecer tu contraseña:<br/><br/><a href="${resetLink}" target="_blank" style="color: #2e6b46; font-weight: bold; word-break: break-all;">${resetLink}</a>`,
+              icon: 'info',
+              confirmButtonColor: '#2e6b46',
+              confirmButtonText: 'Entendido, ir al enlace',
+              showCancelButton: true,
+              cancelButtonText: 'Cerrar ventana'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = resetLink;
+              }
+            });
+          }, 500);
         }
-      } else {
-        setError('Correo o contraseña incorrectos');
+        return;
+      }
+
+      if (viewMode === 'register') {
+        // Validación de correo existente
+        const emailExiste = usuarios.find(u => u.email === email);
+        if (emailExiste) {
+          setError('El correo electrónico ya está registrado.');
+          return;
+        }
+
+        if (password.length < 8) {
+          setError('La contraseña debe tener al menos 8 caracteres.');
+          return;
+        }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+        if (!passwordRegex.test(password)) {
+          setError('La contraseña debe contener al menos 1 letra mayúscula, 1 minúscula y 1 número.');
+          return;
+        }
+
+        // Crear nuevo usuario con contraseña simuladamente "segura"
+        // En producción se usa bcrypt en el Backend
+        const hashedPassword = btoa(password + "_SECURE_SALT");
+        const nuevoUsuario = {
+          nombre,
+          email,
+          password: hashedPassword,
+          rol: 'user'
+        };
+
+        const result = await services.postUsuarios(nuevoUsuario);
+        
+        if (result) {
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('user', JSON.stringify(result));
+          navigate('/user');
+        } else {
+          setError('Ocurrió un error al registrarse. Intenta nuevamente.');
+        }
+
+      } else if (viewMode === 'login') {
+        const hashedPassword = btoa(password + "_SECURE_SALT");
+        // Lógica de inicio de sesión: compatible con contraseñas del db.json y nuevas encriptadas
+        const user = usuarios.find(u => u.email === email && (u.password === password || u.password === hashedPassword));
+
+        if (user) {
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('user', JSON.stringify(user));
+          if (user.rol === 'admin') {
+            navigate('/admin');
+          } else {
+            navigate('/user');
+          }
+        } else {
+          setError('Correo o contraseña incorrectos');
+        }
       }
     } catch (err) {
-      console.error("Error en login:", err);
+      console.error("Error en auth:", err);
       setError('Hubo un problema al conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleMode = (mode) => {
+    setViewMode(mode);
+    setError('');
+    setSuccessMsg('');
+    setPassword('');
+    if (mode === 'register') {
+      setNombre('');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Iniciar Sesión</h2>
+        <h2>
+          {viewMode === 'register' ? 'Crear una cuenta' : 
+           viewMode === 'forgot' ? 'Recuperar Contraseña' : 'Iniciar Sesión'}
+        </h2>
         
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
+        {successMsg && <div className="success-message" style={{ color: 'green', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#e6ffe6', padding: '10px', borderRadius: '5px' }}>{successMsg}</div>}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleAuth}>
+          {viewMode === 'register' && (
+            <div className="form-group">
+              <label>Nombre Completo</label>
+              <input 
+                type="text" 
+                value={nombre} 
+                onChange={(e) => setNombre(e.target.value)} 
+                required 
+                placeholder="Ej: Juan Pérez"
+              />
+            </div>
+          )}
+
           <div className="form-group">
             <label>Correo Electrónico</label>
             <input 
-              type="email" 
+              type="text" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
-              required 
               placeholder="tu@correo.com"
             />
           </div>
 
-          <div className="form-group">
-            <label>Contraseña</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-              placeholder="••••••••"
-            />
-          </div>
+          {(viewMode === 'login' || viewMode === 'register') && (
+            <div className="form-group" style={{ position: 'relative' }}>
+              <label>Contraseña</label>
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="••••••••"
+              />
+              {viewMode === 'login' && (
+                <button 
+                  type="button" 
+                  onClick={() => toggleMode('forgot')}
+                  style={{ 
+                    background: 'none', border: 'none', 
+                    color: '#2e6b46', fontSize: '0.85rem', cursor: 'pointer',
+                    textDecoration: 'underline', marginTop: '8px', display: 'block', width: '100%', textAlign: 'right'
+                  }}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              )}
+            </div>
+          )}
 
-          <button type="submit" className="login-btn">Entrar</button>
+          <button type="submit" disabled={loading} className="login-btn">
+            {loading ? 'Cargando...' : 
+             viewMode === 'register' ? 'Registrarse' : 
+             viewMode === 'forgot' ? 'Enviar enlace de recuperación' : 'Entrar'}
+          </button>
         </form>
+
+        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.95rem' }}>
+          <span style={{ color: '#4b5563' }}>
+            {viewMode === 'register' ? '¿Ya tienes una cuenta? ' : 
+             viewMode === 'login' ? '¿No tienes cuenta? ' : 
+             '¿Recordaste tu contraseña? '}
+          </span>
+          <button 
+            type="button" 
+            onClick={() => toggleMode(viewMode === 'register' || viewMode === 'forgot' ? 'login' : 'register')}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: '#1a4d2e', 
+              fontWeight: '700', 
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              padding: 0,
+              fontSize: '0.95rem'
+            }}
+          >
+            {viewMode === 'register' || viewMode === 'forgot' ? 'Inicia sesión' : 'Regístrate'}
+          </button>
+        </div>
       </div>
     </div>
   );

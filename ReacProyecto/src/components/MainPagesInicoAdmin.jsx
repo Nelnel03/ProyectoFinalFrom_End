@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
+import AdminReports from './AdminReports';
+import AdminReportesRobo from './AdminReportesRobo';
 import '../styles/Arboles.css';
 
 const TIPOS_ARBOLES = [
@@ -42,7 +44,6 @@ function MainPagesInicoAdmin() {
   const [form, setForm] = useState(FORM_INICIAL);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios'
   const [tipoFiltro, setTipoFiltro] = useState('mimbro');
   const [modoNuevoTipo, setModoNuevoTipo] = useState(false);
@@ -61,6 +62,30 @@ function MainPagesInicoAdmin() {
   ]));
 
   // ── Autenticación y carga inicial ───────────────────────────────────────────
+  const mostrarMensaje = useCallback((texto, tipo = 'success') => {
+    setMensaje({ texto, tipo });
+    setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3500);
+  }, []);
+
+  const cargarArboles = useCallback(async () => {
+    setCargando(true);
+    try {
+      const [datosArboles, datosStats, datosUsuarios] = await Promise.all([
+        services.getArboles(),
+        services.getStatsTipos(),
+        services.getUsuarios()
+      ]);
+      setArboles(datosArboles || []);
+      setStatsTipos(datosStats || []);
+      setUsuarios(datosUsuarios || []);
+    } catch (err) {
+      console.error(err);
+      mostrarMensaje('Error al cargar la información.', 'error');
+    } finally {
+      setCargando(false);
+    }
+  }, [mostrarMensaje]);
+
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     const userData = localStorage.getItem('user');
@@ -78,25 +103,7 @@ function MainPagesInicoAdmin() {
 
     setAdminName(user.nombre);
     cargarArboles();
-  }, [navigate]);
-
-  const cargarArboles = async () => {
-    setCargando(true);
-    try {
-      const [datosArboles, datosStats, datosUsuarios] = await Promise.all([
-        services.getArboles(),
-        services.getStatsTipos(),
-        services.getUsuarios()
-      ]);
-      setArboles(datosArboles || []);
-      setStatsTipos(datosStats || []);
-      setUsuarios(datosUsuarios || []);
-    } catch (err) {
-      mostrarMensaje('Error al cargar la información.', 'error');
-    } finally {
-      setCargando(false);
-    }
-  };
+  }, [navigate, cargarArboles]);
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
@@ -124,6 +131,7 @@ function MainPagesInicoAdmin() {
       resetFormUsuario();
       await cargarArboles();
     } catch (err) {
+      console.error(err);
       mostrarMensaje('Error al procesar el usuario', 'error');
     }
   };
@@ -151,6 +159,7 @@ function MainPagesInicoAdmin() {
         Swal.fire('Eliminado', 'El usuario ha sido eliminado', 'success');
         await cargarArboles();
       } catch (err) {
+        console.error(err);
         Swal.fire('Error', 'No se pudo eliminar el usuario', 'error');
       }
     }
@@ -183,13 +192,9 @@ function MainPagesInicoAdmin() {
       setStatsTipos(nuevosStats);
       mostrarMensaje(`Estadísticas de "${tipo}" actualizadas.`);
     } catch (e) {
+      console.error(e);
       mostrarMensaje('Error al actualizar estadísticas del tipo.', 'error');
     }
-  };
-
-  const mostrarMensaje = (texto, tipo = 'success') => {
-    setMensaje({ texto, tipo });
-    setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3500);
   };
 
   // ── Handlers del formulario ─────────────────────────────────────────────────
@@ -313,6 +318,7 @@ function MainPagesInicoAdmin() {
       setTab('lista');
       await cargarArboles();
     } catch (err) {
+      console.error(err);
       mostrarMensaje('Error al guardar el árbol. Revise la conexión.', 'error');
     }
   };
@@ -343,6 +349,7 @@ function MainPagesInicoAdmin() {
       Swal.fire('¡Eliminado!', `El árbol "${arbol.nombre}" ha sido eliminado.`, 'success');
       await cargarArboles();
     } catch (err) {
+      console.error(err);
       Swal.fire('Error', 'No se pudo eliminar el árbol.', 'error');
     }
   };
@@ -378,6 +385,7 @@ function MainPagesInicoAdmin() {
            setTab('lista');
            await cargarArboles();
         } catch(e) {
+           console.error(e);
            Swal.fire('Error de red', 'No se pudieron eliminar todos los registros.', 'error');
         } finally {
            setCargando(false);
@@ -458,6 +466,19 @@ function MainPagesInicoAdmin() {
             onClick={() => { setTab('seguimiento'); resetForm(); }}
           >
             🌱 Seguimiento por Tipo
+          </button>
+          <button
+            className={`admin-tab ${tab === 'reportes' ? 'active' : ''}`}
+            onClick={() => { setTab('reportes'); resetForm(); }}
+          >
+            ✉️ Reportes
+          </button>
+          <button
+            className={`admin-tab ${tab === 'reportar_robos' ? 'active' : ''}`}
+            onClick={() => { setTab('reportar_robos'); resetForm(); }}
+            style={{ color: '#ef4444', borderColor: tab === 'reportar_robos' ? '#ef4444' : 'transparent' }}
+          >
+            🚨 Árboles Robados
           </button>
         </div>
 
@@ -802,6 +823,7 @@ function MainPagesInicoAdmin() {
                           mostrarMensaje(`Estado de "${arbol.nombre}" actualizado.`);
                           cargarArboles();
                         } catch (err) {
+                          console.error(err);
                           mostrarMensaje('Error al actualizar estado', 'error');
                         }
                       }}
@@ -827,6 +849,7 @@ function MainPagesInicoAdmin() {
                            mostrarMensaje(`Progreso actualizado para ${arbol.nombre}`);
                            cargarArboles();
                          } catch (err) {
+                           console.error(err);
                            mostrarMensaje('Error al actualizar progreso', 'error');
                          }
                       }}
@@ -842,6 +865,12 @@ function MainPagesInicoAdmin() {
             </div>
           </div>
         )}
+
+        {/* ──── TAB: REPORTES ──── */}
+        {tab === 'reportes' && (
+          <AdminReports />
+        )}
+
         {/* ──── TAB: USUARIOS ──── */}
         {tab === 'usuarios' && (
           <div>
@@ -1275,6 +1304,20 @@ function MainPagesInicoAdmin() {
                 </button>
               </div>
             </form>
+          </div>
+        )}
+
+        {/* ──── TAB: REPORTES ──── */}
+        {tab === 'reportes' && (
+          <div className="admin-reports-container">
+            <AdminReports />
+          </div>
+        )}
+
+        {/* ──── TAB: REPORTES ROBOS ──── */}
+        {tab === 'reportar_robos' && (
+          <div className="admin-reports-container">
+            <AdminReportesRobo />
           </div>
         )}
       </main>
