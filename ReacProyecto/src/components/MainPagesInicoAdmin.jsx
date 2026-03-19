@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
 import '../styles/Arboles.css';
+import '../styles/MainPagesInicoAdmin.css';
 
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
@@ -814,7 +815,7 @@ function MainPagesInicoAdmin() {
           <div className="admin-resumen-container">
             <div className="admin-section-header">
                <h2>Estadísticas de la Plantación</h2>
-               <p style={{ color: '#66937a' }}>Distribución total de especies en el sistema</p>
+               <p>Distribución total de especies en el sistema</p>
             </div>
 
             <div className="admin-stats-grid">
@@ -826,8 +827,8 @@ function MainPagesInicoAdmin() {
                   </div>
                </div>
 
-               <div className="admin-stat-main-card" style={{ borderColor: '#60a5fa' }}>
-                  <span className="admin-stat-icon" style={{ backgroundColor: '#eff6ff', color: '#3b82f6' }}>🌿</span>
+               <div className="admin-stat-main-card blue-border">
+                  <span className="admin-stat-icon blue">🌿</span>
                   <div className="admin-stat-info">
                      <h3>{tiposDisponibles.length}</h3>
                      <p>Especies/Tipos</p>
@@ -853,9 +854,9 @@ function MainPagesInicoAdmin() {
                                  style={{ width: `${arboles.length > 0 ? (aliveCount / arboles.length) * 100 : 0}%` }}
                               ></div>
                            </div>
-                           <div style={{ display: 'flex', gap: '10px', fontSize: '0.8rem', marginBottom: '1rem', color: '#86bfa4' }}>
+                           <div className="admin-type-stat-footer">
                               <span>📋 Plan: {stat?.planificados || 0}</span>
-                              <span style={{ color: '#fca5a5' }}>🍂 Muerto: {stat?.muertos || 0}</span>
+                              <span className="muerto">🍂 Muerto: {stat?.muertos || 0}</span>
                            </div>
                            <p className="admin-type-percentage">
                               {arboles.length > 0 ? ((aliveCount / arboles.length) * 100).toFixed(1) : 0}% de vitalidad global
@@ -880,41 +881,24 @@ function MainPagesInicoAdmin() {
         {/* ──── TAB: LISTA ──── */}
         {tab === 'lista' && (
           <div>
-            <div className="admin-section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                <h2 style={{ margin: 0 }}>Especies Registradas</h2>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="admin-section-header admin-section-header-flex">
+              <div className="admin-header-row">
+                <h2>Especies Registradas</h2>
+                <div className="admin-controls-row">
                   <div className="admin-search-box">
                     <input 
                       type="text" 
                       placeholder="Buscar por nombre..." 
                       value={busqueda}
                       onChange={(e) => setBusqueda(e.target.value)}
-                      style={{ 
-                        padding: '10px 15px', 
-                        borderRadius: '8px', 
-                        border: '1px solid #34d399', 
-                        backgroundColor: 'rgba(255,255,255,0.1)',
-                        color: 'white',
-                        width: '220px',
-                        outline: 'none'
-                      }}
+                      className="admin-search-input"
                     />
                   </div>
 
                   <select 
                     value={tipoFiltro} 
                     onChange={(e) => setTipoFiltro(e.target.value)}
-                    style={{ 
-                      padding: '10px 15px', 
-                      borderRadius: '8px', 
-                      border: '1px solid #34d399', 
-                      backgroundColor: '#1a402a',
-                      color: 'white',
-                      cursor: 'pointer',
-                      outline: 'none',
-                      minWidth: '180px'
-                    }}
+                    className="admin-filter-select"
                   >
                     <option value="">🍀 Todos los Tipos</option>
                     {tiposDisponibles.map(tipo => (
@@ -922,7 +906,7 @@ function MainPagesInicoAdmin() {
                     ))}
                   </select>
 
-                  <button className="admin-add-btn" onClick={() => setTab('agregar')} style={{ padding: '11px 20px' }}>
+                  <button className="admin-add-btn" onClick={() => setTab('agregar')}>
                     ➕ Nuevo Árbol
                   </button>
                 </div>
@@ -930,61 +914,43 @@ function MainPagesInicoAdmin() {
 
               {/* Estadísticas rápidas por tipo (Solo si hay un tipo seleccionado) */}
               {tipoFiltro && (
-                <div style={{ 
-                  width: '100%', 
-                  background: 'rgba(52, 211, 153, 0.08)', 
-                  padding: '1.2rem', 
-                  borderRadius: '12px',
-                  border: '1px solid rgba(52, 211, 153, 0.2)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                    <h3 style={{ fontSize: '1rem', color: '#6ee7b7', margin: 0 }}>📊 Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
+                <div className="admin-tracking-panel">
+                  <div className="admin-tracking-header">
+                    <h3>📊 Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
                     <button 
                       onClick={() => handleEliminarTipo(tipoFiltro)}
-                      style={{  
-                        backgroundColor: '#ef4444',
-                        color: 'white',
-                        padding: '6px 15px',
-                        borderRadius: '6px',
-                        fontSize: '0.8rem',
-                        fontWeight: '700',
-                        border: 'none',
-                        cursor: 'pointer'
-                      }}
+                      className="admin-btn-delete-type"
                     >
                       🗑️ Eliminar Tipo
                     </button>
                   </div>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                  <div className="admin-tracking-stats">
                     <div className="admin-form-group" style={{ margin: 0 }}>
-                      <label style={{ fontSize: '0.75rem', color: '#86bfa4' }}>📅 Planificados</label>
+                      <label className="admin-tracking-label-plan">📅 Planificados</label>
                       <input 
                         type="number" 
                         value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
                         onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
-                        style={{ padding: '6px 10px', fontSize: '0.9rem' }}
+                        className="admin-tracking-input"
                       />
                     </div>
                     <div className="admin-form-group" style={{ margin: 0 }}>
-                      <label style={{ fontSize: '0.75rem', color: '#fca5a5' }}>🍂 Bajas de este tipo</label>
+                      <label className="admin-tracking-label-dead">🍂 Bajas de este tipo</label>
                       <input 
                         type="number" 
                         value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
                         onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
-                        style={{ padding: '6px 10px', fontSize: '0.9rem' }}
+                        className="admin-tracking-input"
                       />
                     </div>
                     <div className="admin-form-group" style={{ margin: 0, opacity: 0.8 }}>
-                      <label style={{ fontSize: '0.75rem', color: '#6ee7b7' }}>🌲 Vivos en sistema</label>
+                      <label className="admin-tracking-label-alive">🌲 Vivos en sistema</label>
                       <input 
                         type="text" 
                         disabled
                         value={arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
-                        style={{ padding: '6px 10px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                        className="admin-tracking-input-disabled"
                       />
                     </div>
                   </div>
@@ -993,12 +959,12 @@ function MainPagesInicoAdmin() {
             </div>
 
             {cargando ? (
-              <div style={{ textAlign: 'center', color: '#86bfa4', padding: '3rem' }}>
+              <div className="admin-loading-msg">
                 Cargando árboles...
               </div>
             ) : arboles.filter(a => a.estado !== 'muerto').length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem', fontSize: '1rem' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🌲</div>
+              <div className="admin-empty-msg">
+                <div className="admin-empty-icon">🌲</div>
                 <p>No hay árboles activos registrados. ¡Agrega el primero!</p>
               </div>
             ) : (
@@ -1049,7 +1015,7 @@ function MainPagesInicoAdmin() {
                           <p className="admin-arbol-card-cientifico">
                             {arbol.nombreCientifico || '—'}
                           </p>
-                          <p style={{ fontSize: '0.82rem', color: '#66937a', marginBottom: '0.8rem' }}>
+                          <p className="admin-card-clima-altura">
                             {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
                             {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
                           </p>
@@ -1082,12 +1048,12 @@ function MainPagesInicoAdmin() {
           <div>
             <div className="admin-section-header">
               <h2>🍂 Registro de Bajas</h2>
-              <p style={{ color: '#66937a' }}>Historial de piezas forestales declaradas como pérdida</p>
+              <p>Historial de piezas forestales declaradas como pérdida</p>
             </div>
 
             {arboles.filter(a => a.estado === 'muerto').length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem', fontSize: '1rem' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🍃</div>
+              <div className="admin-empty-msg">
+                <div className="admin-empty-icon">🍃</div>
                 <p>No hay registros de bajas en el sistema.</p>
               </div>
             ) : (
@@ -1096,24 +1062,24 @@ function MainPagesInicoAdmin() {
                   .filter(a => a.estado === 'muerto')
                   .sort((a,b) => new Date(b.fechaMuerto || 0) - new Date(a.fechaMuerto || 0))
                   .map((arbol) => (
-                  <div key={arbol.id} className="admin-arbol-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '1.2rem', gap: '1.5rem', width: '100%', maxWidth: '1000px', margin: '0 0' }}>
-                     <div style={{ width: '70px', height: '70px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0, border: '2px solid #fecaca' }}>
+                  <div key={arbol.id} className="admin-arbol-card admin-baja-card">
+                     <div className="admin-baja-img-wrap">
                         {arbol.imagenUrl ? (
-                           <img src={arbol.imagenUrl} alt={arbol.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
-                        ) : <div style={{ background: '#fff1f2', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem' }}>🍂</div>}
+                           <img src={arbol.imagenUrl} alt={arbol.nombre} className="admin-baja-img" />
+                        ) : <div className="admin-baja-placeholder">🍂</div>}
                      </div>
-                     <div style={{ flex: 1 }}>
-                        <h3 style={{ margin: 0, color: '#450a0a', fontSize: '1.1rem' }}>{arbol.nombre}</h3>
-                        <p style={{ margin: '4px 0', color: '#991b1b', textTransform: 'capitalize', fontSize: '0.9rem', fontWeight: '500' }}>
+                     <div className="admin-baja-info">
+                        <h3 className="admin-baja-title">{arbol.nombre}</h3>
+                        <p className="admin-baja-type">
                            Especie: {arbol.tipo || 'mimbro'}
                         </p>
-                        <p style={{ margin: 0, color: '#66937a', fontSize: '0.8rem' }}>
+                        <p className="admin-baja-id">
                            ID: #{arbol.id}
                         </p>
                      </div>
-                     <div style={{ textAlign: 'right', padding: '0 1rem' }}>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#991b1b', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Fecha de Defunción</p>
-                        <p style={{ margin: 0, fontWeight: '800', color: '#ef4444', fontSize: '1.2rem' }}>
+                     <div className="admin-baja-date-wrap">
+                        <p className="admin-baja-date-label">Fecha de Defunción</p>
+                        <p className="admin-baja-date-value">
                            {arbol.fechaMuerto ? arbol.fechaMuerto.split('-').reverse().join('/') : 'Sin fecha'}
                         </p>
                      </div>
@@ -1141,64 +1107,57 @@ function MainPagesInicoAdmin() {
               <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar accesos y cuentas del sistema</p>
             </div>
 
-            <div id="user-form-container" className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
-              <h3 style={{ margin: '0 0 1.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <span style={{ fontSize: '1.4rem' }}>{modoEdicionUsuario ? '✏️' : '👤'}</span>
+            <div id="user-form-container" className="admin-form-card admin-user-form-container">
+              <h3 className="admin-user-form-title">
+                <span className="admin-user-form-title-icon">{modoEdicionUsuario ? '✏️' : '👤'}</span>
                 {modoEdicionUsuario ? 'Editar Usuario' : 'Crear Usuarios'}
               </h3>
               
-              <form onSubmit={handleUserSubmit} style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                gap: '1.5rem', 
-                padding: '1.5rem', 
-                borderRadius: '12px',
-                border: '2px solid #10b981'
-              }}>
+              <form onSubmit={handleUserSubmit} className="admin-user-form">
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Nombre Completo</label>
+                  <label className="admin-user-input-label">Nombre Completo</label>
                   <input
                     type="text"
                     required
                     value={formUsuario.nombre}
                     onChange={(e) => setFormUsuario({...formUsuario, nombre: e.target.value})}
                     placeholder="Ej: Juan Pérez"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
+                    className="admin-user-input"
                   />
                 </div>
                 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Correo Electrónico</label>
+                  <label className="admin-user-input-label">Correo Electrónico</label>
                   <input
                     type="email"
                     required
                     value={formUsuario.email}
                     onChange={(e) => setFormUsuario({...formUsuario, email: e.target.value})}
                     placeholder="usuario@ejemplo.com"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
+                    className="admin-user-input"
                   />
                 </div>
                 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Contraseña</label>
+                  <label className="admin-user-input-label">Contraseña</label>
                   <input
                     type="password"
                     required={!modoEdicionUsuario}
                     value={formUsuario.password}
                     onChange={(e) => setFormUsuario({...formUsuario, password: e.target.value})}
                     placeholder={modoEdicionUsuario ? "Dejar en blanco para no cambiar..." : "••••••••"}
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
+                    className="admin-user-input"
                     maxLength="15"
                   />
                 </div>
                 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Rol de Acceso</label>
+                  <label className="admin-user-input-label">Rol de Acceso</label>
                   <select
                     value={formUsuario.rol}
                     onChange={(e) => setFormUsuario({...formUsuario, rol: e.target.value})}
                     disabled={formUsuario.rol === 'admin'} // Un admin no puede bajarse el rango ni a otros
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', cursor: formUsuario.rol === 'admin' ? 'not-allowed' : 'pointer', appearance: 'auto', outline: 'none' }}
+                    className="admin-user-select"
                   >
                     <option value="user">Usuario (Solo visualista)</option>
                     {formUsuario.rol === 'admin' && (
@@ -1207,31 +1166,12 @@ function MainPagesInicoAdmin() {
                   </select>
                 </div>
                 
-                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                  <button type="submit" style={{ 
-                    flex: 1, 
-                    padding: '12px 24px', 
-                    backgroundColor: '#10b981', 
-                    color: 'white', 
-                    border: 'none', 
-                    borderRadius: '8px', 
-                    cursor: 'pointer', 
-                    fontWeight: '800', 
-                    fontSize: '1rem',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
-                  }}>
+                <div className="admin-user-form-footer">
+                  <button type="submit" className="admin-btn-user-submit">
                     {modoEdicionUsuario ? '💾 Guardar Cambios' : '➕ Crear Usuario'}
                   </button>
                   {modoEdicionUsuario && (
-                    <button type="button" onClick={resetFormUsuario} style={{ 
-                      padding: '12px 24px', 
-                      backgroundColor: '#9ca3af', 
-                      color: 'white', 
-                      border: 'none', 
-                      borderRadius: '8px', 
-                      cursor: 'pointer', 
-                      fontWeight: '800'
-                    }}>
+                    <button type="button" onClick={resetFormUsuario} className="admin-btn-user-cancel">
                       Cancelar
                     </button>
                   )}
@@ -1239,85 +1179,40 @@ function MainPagesInicoAdmin() {
               </form>
             </div>
 
-            <div className="admin-arboles-lista" style={{ 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: '1.5rem'
-            }}>
+            <div className="admin-arboles-lista admin-user-list">
               {usuarios.filter(user => user.rol !== 'voluntario').map(user => (
-                <div key={user.id} className="admin-arbol-card" style={{ 
-                  padding: '1.5rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: '1.2rem',
-                  border: '1px solid #e2e8f0',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
-                  backgroundColor: 'white'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-                    <div style={{ 
-                      width: '56px', 
-                      height: '56px', 
-                      backgroundColor: user.rol === 'admin' ? '#fee2e2' : '#e0f2fe', 
-                      borderRadius: '14px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      fontSize: '1.8rem',
-                      boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
-                    }}>
+                <div key={user.id} className="admin-arbol-card admin-user-card">
+                  <div className="admin-user-card-header">
+                    <div className={`admin-user-avatar ${user.rol}`}>
                       {user.rol === 'admin' ? '👑' : '👤'}
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#000000', fontWeight: '900' }}>{user.nombre}</h3>
-                      <p style={{ margin: '2px 0 0 0', fontSize: '0.95rem', color: '#000000', fontWeight: '700', opacity: 0.8 }}>{user.email}</p>
+                    <div className="admin-user-info-text">
+                      <h3>{user.nombre}</h3>
+                      <p>{user.email}</p>
                     </div>
                   </div>
                   
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: '#e0f2f1', borderRadius: '8px', border: '1px solid #10b981' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: '900', color: '#000000', textTransform: 'uppercase', letterSpacing: '0.05em' }}>ID</span>
-                    <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#000000' }}>#{user.id}</span>
+                  <div className="admin-user-id-badge">
+                    <span className="admin-user-id-label">ID</span>
+                    <span className="admin-user-id-value">#{user.id}</span>
                   </div>
 
-                  <div style={{ 
-                    display: 'inline-flex', 
-                    alignItems: 'center', 
-                    gap: '6px', 
-                    padding: '4px 12px', 
-                    borderRadius: '20px', 
-                    fontSize: '0.75rem', 
-                    fontWeight: '800', 
-                    textTransform: 'uppercase',
-                    width: 'fit-content',
-                    backgroundColor: user.rol === 'admin' ? '#fee2e2' : '#bae6fd',
-                    color: user.rol === 'admin' ? '#ef4444' : '#0284c7',
-                    border: user.rol === 'admin' ? '1px solid #fca5a5' : '1px solid #7dd3fc'
-                  }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }}></span>
+                  <div className={`admin-user-role-badge ${user.rol}`}>
+                    <span className="admin-user-role-dot"></span>
                     {user.rol === 'admin' ? 'Administrador' : 'Usuario'}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '0.5rem', flexWrap: 'wrap' }}>
+                  <div className="admin-user-card-footer">
                     <button 
                       onClick={() => handleEditarUsuario(user)} 
-                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#e5e7eb', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#374151', fontSize: '0.85rem' }}
+                      className="admin-btn-user-edit"
                     >
                       ✏️ Editar
                     </button>
                     <button 
                       onClick={() => handleEliminarUsuario(user.id, user.nombre)} 
                       disabled={user.rol === 'admin'} 
-                      style={{ 
-                        flex: '1 1 45%', 
-                        padding: '10px', 
-                        backgroundColor: '#fee2e2', 
-                        border: 'none', 
-                        borderRadius: '8px', 
-                        cursor: user.rol === 'admin' ? 'not-allowed' : 'pointer', 
-                        fontWeight: '700', 
-                        color: '#b91c1c',
-                        opacity: user.rol === 'admin' ? 0.6 : 1,
-                        fontSize: '0.85rem'
-                      }}
+                      className="admin-btn-user-delete"
                       title={user.rol === 'admin' ? "No se puede eliminar administradores principales" : ""}
                     >
                       🗑️ Borrar
@@ -1325,7 +1220,7 @@ function MainPagesInicoAdmin() {
                     {user.rol !== 'admin' && (
                       <button 
                         onClick={() => handleConvertirUsuarioAVoluntariado(user)} 
-                        style={{ flex: '1 1 100%', padding: '10px', backgroundColor: '#ecfdf5', border: '1px solid #10b981', borderRadius: '8px', cursor: 'pointer', fontWeight: '800', color: '#047857', fontSize: '0.85rem', marginTop: '4px' }}
+                        className="admin-btn-user-convert"
                       >
                         🤝 Convertir a Voluntario
                       </button>
@@ -1345,58 +1240,51 @@ function MainPagesInicoAdmin() {
               <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar la base de datos de voluntarios y sus áreas</p>
             </div>
 
-            <div id="voluntariado-form-container" className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
-              <h3 style={{ margin: '0 0 1.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <span style={{ fontSize: '1.4rem' }}>{modoEdicionVoluntariado ? '✏️' : '🤝'}</span>
+            <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
+              <h3 className="admin-user-form-title">
+                <span className="admin-user-form-title-icon">{modoEdicionVoluntariado ? '✏️' : '🤝'}</span>
                 {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
               </h3>
               
-              <form onSubmit={handleVoluntariadoSubmit} style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                gap: '1.5rem', 
-                padding: '1.5rem', 
-                borderRadius: '12px',
-                border: '2px solid #10b981'
-              }}>
+              <form onSubmit={handleVoluntariadoSubmit} className="admin-user-form">
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Nombre Completo</label>
+                  <label className="admin-user-input-label">Nombre Completo</label>
                   <input
                     type="text"
                     required
                     value={formVoluntariado.nombre}
                     onChange={(e) => setFormVoluntariado({...formVoluntariado, nombre: e.target.value})}
                     placeholder="Ej: Carlos Rodríguez"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                    className="admin-user-input"
                   />
                 </div>
                 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Área de Interés / Cargo</label>
+                  <label className="admin-user-input-label">Área de Interés / Cargo</label>
                   <input
                     type="text"
                     required
                     value={formVoluntariado.area}
                     onChange={(e) => setFormVoluntariado({...formVoluntariado, area: e.target.value})}
                     placeholder="Ej: Siembra, Mantenimiento, Educación..."
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                    className="admin-user-input"
                   />
                 </div>
 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Correo Electrónico</label>
+                  <label className="admin-user-input-label">Correo Electrónico</label>
                   <input
                     type="email"
                     required
                     value={formVoluntariado.email}
                     onChange={(e) => setFormVoluntariado({...formVoluntariado, email: e.target.value})}
                     placeholder="voluntario@bosque.com"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                    className="admin-user-input"
                   />
                 </div>
 
                 <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Teléfono</label>
+                  <label className="admin-user-input-label">Teléfono</label>
                   <input
                     type="text"
                     required
@@ -1407,35 +1295,16 @@ function MainPagesInicoAdmin() {
                        setFormVoluntariado({...formVoluntariado, telefono: value});
                     }}
                     placeholder="Solo 8 números (ej: 88880000)"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                    className="admin-user-input"
                   />
                 </div>
                 
-                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                  <button type="submit" style={{ 
-                    flex: 1, 
-                    padding: '12px 24px', 
-                    backgroundColor: '#10b981', 
-                    color: 'white', 
-                    border: 'none', 
-                    borderRadius: '8px', 
-                    cursor: 'pointer', 
-                    fontWeight: '800', 
-                    fontSize: '1rem',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
-                  }}>
+                <div className="admin-user-form-footer">
+                  <button type="submit" className="admin-btn-user-submit">
                     {modoEdicionVoluntariado ? '💾 Actualizar Ficha' : '➕ Registrar Voluntario'}
                   </button>
                   {modoEdicionVoluntariado && (
-                    <button type="button" onClick={resetFormVoluntariado} style={{ 
-                      padding: '12px 24px', 
-                      backgroundColor: '#9ca3af', 
-                      color: 'white', 
-                      border: 'none', 
-                      borderRadius: '8px', 
-                      cursor: 'pointer', 
-                      fontWeight: '800'
-                    }}>
+                    <button type="button" onClick={resetFormVoluntariado} className="admin-btn-user-cancel">
                       Cancelar
                     </button>
                   )}
@@ -1443,64 +1312,44 @@ function MainPagesInicoAdmin() {
               </form>
             </div>
 
-            <div className="admin-arboles-lista" style={{ 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: '1.5rem'
-            }}>
+            <div className="admin-arboles-lista admin-user-list">
               {voluntariados.filter(vol => vol.rol === 'voluntario').map(vol => (
-                <div key={vol.id} className="admin-arbol-card" style={{ 
-                   padding: '1.5rem', 
-                   display: 'flex', 
-                   flexDirection: 'column', 
-                   gap: '1.2rem',
-                   border: '1px solid #e2e8f0',
-                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
-                   backgroundColor: 'white'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-                    <div style={{ 
-                      width: '56px', 
-                      height: '56px', 
-                      backgroundColor: '#f1f5f9', 
-                      borderRadius: '14px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      fontSize: '1.8rem'
-                    }}>
+                <div key={vol.id} className="admin-arbol-card admin-user-card">
+                  <div className="admin-user-card-header">
+                    <div className="admin-user-avatar admin-vol-avatar">
                       🤝
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#000000', fontWeight: '900' }}>{vol.nombre}</h3>
-                      <p style={{ margin: '2px 0 0 0', fontSize: '0.95rem', color: '#059669', fontWeight: '700' }}>{vol.area}</p>
+                    <div className="admin-user-info-text">
+                      <h3>{vol.nombre}</h3>
+                      <p className="admin-vol-area">{vol.area}</p>
                     </div>
                   </div>
                   
-                  <div style={{ padding: '10px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.9rem' }}>
-                    <p style={{ margin: '0 0 5px 0', color: '#475569' }}>📧 <strong>Email:</strong> {vol.email}</p>
-                    <p style={{ margin: 0, color: '#475569' }}>📞 <strong>Tel:</strong> {vol.telefono}</p>
+                  <div className="admin-vol-contact-box">
+                    <p>📧 <strong>Email:</strong> {vol.email}</p>
+                    <p>📞 <strong>Tel:</strong> {vol.telefono}</p>
                   </div>
 
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold', textAlign: 'right' }}>
+                  <div className="admin-vol-date">
                     Ingreso: {vol.fechaIngreso}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+                  <div className="admin-user-card-footer">
                     <button 
                       onClick={() => handleEditarVoluntariado(vol)} 
-                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#475569', fontSize: '0.85rem' }}
+                      className="admin-btn-user-edit"
                     >
                       ✏️ Editar
                     </button>
                     <button 
                       onClick={() => handleEliminarVoluntariado(vol.id, vol.nombre)} 
-                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#b91c1c', fontSize: '0.85rem' }}
+                      className="admin-btn-user-delete"
                     >
                       🗑️ Baja
                     </button>
                     <button 
                       onClick={() => handleConvertirVoluntariadoAUsuario(vol)} 
-                      style={{ flex: '1 1 100%', padding: '10px', backgroundColor: '#eff6ff', border: '1px solid #3b82f6', borderRadius: '8px', cursor: 'pointer', fontWeight: '800', color: '#1d4ed8', fontSize: '0.85rem', marginTop: '4px' }}
+                      className="admin-vol-btn-convert"
                     >
                       👤 Convertir a Usuario
                     </button>
@@ -1550,7 +1399,7 @@ function MainPagesInicoAdmin() {
                       <option value="___nuevo___" style={{ fontWeight: 'bold', color: '#2e6b46' }}>➕ Añadir otro tipo...</option>
                     </select>
                   ) : (
-                    <div style={{ display: 'flex', gap: '10px' }}>
+                    <div className="admin-type-input-group">
                       <input
                         id="tipo"
                         name="tipo"
@@ -1559,12 +1408,12 @@ function MainPagesInicoAdmin() {
                         onChange={handleChange}
                         placeholder="Escribe el nuevo tipo..."
                         required
-                        style={{ flex: 1 }}
+                        className="admin-type-input"
                       />
                       <button 
                         type="button" 
                         onClick={() => { setModoNuevoTipo(false); setForm({ ...form, tipo: tiposDisponibles[0] || '' }); }}
-                        style={{ padding: '0 15px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                        className="admin-btn-cancel-type"
                       >
                         ❌ Cancelar
                       </button>
@@ -1690,11 +1539,9 @@ function MainPagesInicoAdmin() {
                       />
                     ) : null}
                     <div
-                      className="admin-img-preview-wrap"
+                      className="admin-img-preview-placeholder"
                       style={{
                         display: form.imagenUrl ? 'none' : 'flex',
-                        border: 'none',
-                        height: '100%',
                       }}
                     >
                       <span className="admin-img-no-preview">🖼️</span>
