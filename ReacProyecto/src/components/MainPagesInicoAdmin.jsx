@@ -1197,10 +1197,13 @@ function MainPagesInicoAdmin() {
                   <select
                     value={formUsuario.rol}
                     onChange={(e) => setFormUsuario({...formUsuario, rol: e.target.value})}
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', cursor: 'pointer', appearance: 'auto', outline: 'none' }}
+                    disabled={formUsuario.rol === 'admin'} // Un admin no puede bajarse el rango ni a otros
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', cursor: formUsuario.rol === 'admin' ? 'not-allowed' : 'pointer', appearance: 'auto', outline: 'none' }}
                   >
                     <option value="user">Usuario (Solo visualista)</option>
-                    <option value="admin">Administrador (Control total)</option>
+                    {formUsuario.rol === 'admin' && (
+                       <option value="admin">Administrador (Control total)</option>
+                    )}
                   </select>
                 </div>
                 
