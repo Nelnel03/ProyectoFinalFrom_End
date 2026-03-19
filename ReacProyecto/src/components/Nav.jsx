@@ -4,11 +4,11 @@ import '../styles/Nav.css';
 
 function Nav() {
   const location = useLocation();
-  const [auth, setAuth] = useState(localStorage.getItem('isAuthenticated') === 'true');
+  const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
 
   // Sincronizar el estado de autenticación cuando cambie la ruta
   useEffect(() => {
-    setAuth(localStorage.getItem('isAuthenticated') === 'true');
+    setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
   }, [location]);
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
@@ -43,7 +43,7 @@ function Nav() {
             <div style={{ display: 'flex', gap: '10px' }}>
               {location.pathname !== '/user' && location.pathname !== '/admin' && (
                 <NavLink 
-                  to={localStorage.getItem('user') ? (JSON.parse(localStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
+                  to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
                   className="visitor-login-btn"
                   style={{ backgroundColor: '#1a4d2e' }}
                 >
@@ -52,8 +52,8 @@ function Nav() {
               )}
               <button 
                 onClick={() => {
-                  localStorage.removeItem('isAuthenticated');
-                  localStorage.removeItem('user');
+                  sessionStorage.removeItem('isAuthenticated');
+                  sessionStorage.removeItem('user');
                   setAuth(false);
                   window.location.href = '/';
                 }}

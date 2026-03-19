@@ -4,24 +4,17 @@ import Swal from 'sweetalert2';
 import services from '../services/services';
 import '../styles/Arboles.css';
 
-const TIPOS_ARBOLES = [
-  'mimbro',
-  'almendro de playa',
-  'palmera',
-  'poshote',
-  'espabel',
-  'palma de coyol'
-];
+// Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
 const FORM_INICIAL = {
   nombre: '',
   nombreCientifico: '',
-  tipo: 'mimbro', // Nuevo campo para categorizar
+  tipo: '', // Campo para categorizar (ahora dinámico)
   progreso: '0%', // Nuevo campo para seguimiento
   familia: '',
   altura: '',
   crecimiento: '',
-  clima: '',
+  clima: 'tropical',
   descripcion: '',
   cuidados: '',
   imagenUrl: '',
@@ -36,6 +29,14 @@ const USER_FORM_INICIAL = {
   rol: 'user'
 };
 
+const VOLUNTARIADO_FORM_INICIAL = {
+  nombre: '',
+  area: '', // Antes puesto
+  email: '',
+  telefono: '',
+  fechaIngreso: new Date().toISOString().split('T')[0]
+};
+
 function MainPagesInicoAdmin() {
   const [adminName, setAdminName] = useState('Administrador');
   const [arboles, setArboles] = useState([]);
@@ -43,8 +44,8 @@ function MainPagesInicoAdmin() {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios'
-  const [tipoFiltro, setTipoFiltro] = useState('mimbro');
+  const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios' | 'voluntariados'
+  const [tipoFiltro, setTipoFiltro] = useState('');
   const [modoNuevoTipo, setModoNuevoTipo] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [statsTipos, setStatsTipos] = useState([]);
@@ -52,18 +53,25 @@ function MainPagesInicoAdmin() {
   const [formUsuario, setFormUsuario] = useState(USER_FORM_INICIAL);
   const [modoEdicionUsuario, setModoEdicionUsuario] = useState(false);
   const [idEditandoUsuario, setIdEditandoUsuario] = useState(null);
+
+  const [voluntariados, setVoluntariados] = useState([]);
+  const [formVoluntariado, setFormVoluntariado] = useState(VOLUNTARIADO_FORM_INICIAL);
+  const [modoEdicionVoluntariado, setModoEdicionVoluntariado] = useState(false);
+  const [idEditandoVoluntariado, setIdEditandoVoluntariado] = useState(null);
+
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
+  const [busqueda, setBusqueda] = useState(''); // Nuevo estado para búsqueda por texto
   const navigate = useNavigate();
 
   const tiposDisponibles = Array.from(new Set([
-    ...TIPOS_ARBOLES,
-    ...arboles.map(a => a.tipo).filter(Boolean).map(t => t.toLowerCase())
+    ...arboles.map(a => a.tipo).filter(Boolean).map(t => t.toLowerCase()),
+    ...statsTipos.map(s => s.tipo).filter(Boolean).map(t => t.toLowerCase())
   ]));
 
   // ── Autenticación y carga inicial ───────────────────────────────────────────
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    const userData = localStorage.getItem('user');
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    const userData = sessionStorage.getItem('user');
 
     if (!isAuthenticated || !userData) {
       navigate('/login');
@@ -83,14 +91,16 @@ function MainPagesInicoAdmin() {
   const cargarArboles = async () => {
     setCargando(true);
     try {
-      const [datosArboles, datosStats, datosUsuarios] = await Promise.all([
+      const [datosArboles, datosStats, datosUsuarios, datosEmpleados] = await Promise.all([
         services.getArboles(),
         services.getStatsTipos(),
-        services.getUsuarios()
+        services.getUsuarios(),
+        services.getVoluntariados()
       ]);
       setArboles(datosArboles || []);
       setStatsTipos(datosStats || []);
       setUsuarios(datosUsuarios || []);
+      setVoluntariados(datosEmpleados || []);
     } catch (err) {
       mostrarMensaje('Error al cargar la información.', 'error');
     } finally {
@@ -98,13 +108,62 @@ function MainPagesInicoAdmin() {
     }
   };
 
+  // Efecto para asegurar que tipoFiltro tenga un valor si estamos en la pestaña de seguimiento
+  useEffect(() => {
+    if (tab === 'seguimiento' && !tipoFiltro && tiposDisponibles.length > 0) {
+      setTipoFiltro(tiposDisponibles[0]);
+    }
+  }, [tab, tiposDisponibles, tipoFiltro]);
+
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     
+    const trimmedNombre = formUsuario.nombre.trim();
+    const trimmedEmail = formUsuario.email.trim();
+    const trimmedPassword = formUsuario.password.trim();
+
+    // Validaciones básicas
+    if (!trimmedNombre) {
+      Swal.fire('Error', 'El nombre del usuario es obligatorio', 'error');
+      return;
+    }
+
+    if (trimmedNombre.length < 4) {
+      Swal.fire('Error', 'El nombre del usuario debe tener al menos 4 letras', 'error');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
+      return;
+    }
+
+    if (!modoEdicionUsuario && trimmedPassword.length < 6) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 6 caracteres', 'error');
+      return;
+    }
+
+    if (trimmedPassword.length > 15) {
+      Swal.fire('Error', 'La contraseña no puede exceder los 15 caracteres', 'error');
+      return;
+    }
+
+    // Verificar si el email ya existe en la lista local (excluyendo el actual si es edición)
+    const emailDuplicado = usuarios.find(u => 
+      u.email.toLowerCase() === trimmedEmail.toLowerCase() && 
+      (!modoEdicionUsuario || u.id !== idEditandoUsuario)
+    );
+
+    if (emailDuplicado) {
+      Swal.fire('Atención', 'Este correo electrónico ya está registrado por otro usuario', 'warning');
+      return;
+    }
+
     const action = modoEdicionUsuario ? 'actualizar' : 'crear';
     const confirm = await Swal.fire({
       title: `¿Confirmar ${action}?`,
-      text: `¿Estás seguro de que quieres ${action} al usuario "${formUsuario.nombre}"?`,
+      text: `¿Estás seguro de que quieres ${action} al usuario "${trimmedNombre}"?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, confirmar',
@@ -114,17 +173,24 @@ function MainPagesInicoAdmin() {
     if (!confirm.isConfirmed) return;
 
     try {
+      const usuarioFinal = {
+        ...formUsuario,
+        nombre: trimmedNombre,
+        email: trimmedEmail,
+        password: trimmedPassword || formUsuario.password // Mantener si vacía en edición
+      };
+
       if (modoEdicionUsuario) {
-        await services.putUsuarios(formUsuario, idEditandoUsuario);
-        mostrarMensaje('Usuario actualizado correctamente');
+        await services.putUsuarios(usuarioFinal, idEditandoUsuario);
+        Swal.fire('Éxito', 'Usuario actualizado correctamente', 'success');
       } else {
-        await services.postUsuarios(formUsuario);
-        mostrarMensaje('Usuario creado correctamente');
+        await services.postUsuarios(usuarioFinal);
+        Swal.fire('Éxito', 'Usuario creado correctamente', 'success');
       }
       resetFormUsuario();
       await cargarArboles();
     } catch (err) {
-      mostrarMensaje('Error al procesar el usuario', 'error');
+      Swal.fire('Error', 'No se pudo procesar el usuario', 'error');
     }
   };
 
@@ -132,6 +198,10 @@ function MainPagesInicoAdmin() {
     setFormUsuario(user);
     setModoEdicionUsuario(true);
     setIdEditandoUsuario(user.id);
+    // Scroll al formulario para mejor visibilidad
+    setTimeout(() => {
+      document.getElementById('user-form-container')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const handleEliminarUsuario = async (id, nombre) => {
@@ -162,6 +232,240 @@ function MainPagesInicoAdmin() {
     setIdEditandoUsuario(null);
   };
 
+  // ── Handlers de Voluntariados ──────────────────────────────────────────────
+  const handleVoluntariadoSubmit = async (e) => {
+    e.preventDefault();
+
+    const trimmedNombre = formVoluntariado.nombre.trim();
+    const trimmedArea = formVoluntariado.area.trim();
+    const trimmedEmail = formVoluntariado.email.trim();
+    const trimmedTelefono = formVoluntariado.telefono.trim();
+
+    // Validaciones
+    if (!trimmedNombre) {
+      Swal.fire('Error', 'El nombre del voluntario es obligatorio', 'error');
+      return;
+    }
+
+    if (trimmedNombre.length < 4) {
+      Swal.fire('Error', 'El nombre del voluntario debe tener al menos 4 letras', 'error');
+      return;
+    }
+
+    if (!trimmedArea) {
+      Swal.fire('Error', 'El área/cargo es obligatoria', 'error');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
+      return;
+    }
+
+    const phoneRegex = /^\d{8}$/;
+    if (!phoneRegex.test(trimmedTelefono)) {
+      Swal.fire('Error', 'El teléfono debe contener estrictamente 8 números', 'error');
+      return;
+    }
+
+    // Verificar duplicados en la tabla de usuarios
+    const emailDuplicado = usuarios.find(u => 
+      u.email.toLowerCase() === trimmedEmail.toLowerCase() && 
+      (!modoEdicionVoluntariado || u.id !== idEditandoVoluntariado)
+    );
+
+    if (emailDuplicado) {
+      Swal.fire('Atención', 'Este correo ya está registrado en el sistema (como usuario o voluntario)', 'warning');
+      return;
+    }
+
+    const action = modoEdicionVoluntariado ? 'actualizar' : 'registrar';
+    
+    const confirm = await Swal.fire({
+      title: `¿Confirmar ${action}?`,
+      text: `¿Deseas ${action} la ficha del voluntario "${trimmedNombre}"?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      const voluntariadoFinal = {
+        ...formVoluntariado,
+        nombre: trimmedNombre,
+        area: trimmedArea,
+        email: trimmedEmail,
+        telefono: trimmedTelefono,
+        rol: 'voluntario'
+      };
+
+      if (modoEdicionVoluntariado) {
+        await services.putVoluntariados(voluntariadoFinal, idEditandoVoluntariado);
+        Swal.fire('Éxito', 'Voluntario actualizado con éxito', 'success');
+      } else {
+        // Al crear uno nuevo, asignar password por defecto y forzar cambio
+        const nuevoVoluntarioUser = {
+          ...voluntariadoFinal,
+          password: 'Voluntario123', // Password por defecto
+          debeCambiarPassword: true // Flag para forzar cambio en primer login
+        };
+        await services.postVoluntariados(nuevoVoluntarioUser);
+        Swal.fire({
+          title: 'Registrado',
+          html: `Voluntario creado con éxito.<br><b>Contraseña temporal:</b> Voluntario123`,
+          icon: 'success'
+        });
+      }
+      resetFormVoluntariado();
+      await cargarArboles();
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo gestionar el voluntariado', 'error');
+    }
+  };
+
+  const handleEditarVoluntariado = (vol) => {
+    setFormVoluntariado(vol);
+    setModoEdicionVoluntariado(true);
+    setIdEditandoVoluntariado(vol.id);
+    setTab('voluntariados'); // Asegurar que estamos en la pestaña
+    // Scroll al formulario para mejor visibilidad
+    setTimeout(() => {
+      document.getElementById('voluntariado-form-container')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleEliminarVoluntariado = async (id, nombre) => {
+    const confirm = await Swal.fire({
+      title: '¿Dar de baja voluntario?',
+      text: `¿Estás seguro de eliminar a "${nombre}" de la lista de voluntarios?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.deleteVoluntariados(id);
+        Swal.fire('Eliminado', 'Voluntario eliminado correctamente', 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar al voluntario', 'error');
+      }
+    }
+  };
+
+  const resetFormVoluntariado = () => {
+    setFormVoluntariado(VOLUNTARIADO_FORM_INICIAL);
+    setModoEdicionVoluntariado(false);
+    setIdEditandoVoluntariado(null);
+  };
+
+  // ── Conversiones ──────────────────────────────────────────────────────────
+  const handleConvertirUsuarioAVoluntariado = async (user) => {
+    const { value: formValues } = await Swal.fire({
+      title: '🤝 Convertir a Voluntario',
+      html:
+        `<div style="text-align: left; margin-bottom: 5px; font-weight: bold;">Cual será su área?</div>` +
+        `<input id="swal-input1" class="swal2-input" placeholder="Área de Interés / Cargo" style="margin-top: 5px;">` +
+        `<div style="text-align: left; margin-top: 15px; margin-bottom: 5px; font-weight: bold;">Teléfono de contacto:</div>` +
+        `<input id="swal-input2" class="swal2-input" placeholder="8 números" maxlength="8" oninput="this.value = this.value.replace(/\\D/g, '')" style="margin-top: 5px;">`,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar Conversión',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const area = document.getElementById('swal-input1').value;
+        const telefono = document.getElementById('swal-input2').value;
+        
+        if (!area || !telefono) {
+          Swal.showValidationMessage('Por favor llena todos los campos');
+          return false;
+        }
+
+        const phoneRegex = /^\d{8}$/;
+        if (!phoneRegex.test(telefono)) {
+          Swal.showValidationMessage('El teléfono debe tener estrictamente 8 números');
+          return false;
+        }
+
+        return { area, telefono };
+      }
+    });
+
+    if (formValues) {
+      try {
+        const usuarioActualizado = {
+          ...user,
+          rol: 'voluntario',
+          area: formValues.area,
+          telefono: formValues.telefono,
+          fechaIngreso: new Date().toISOString().split('T')[0]
+        };
+        
+        await services.putUsuarios(usuarioActualizado, user.id);
+        
+        Swal.fire('¡Éxito!', `"${user.nombre}" ahora es voluntario.`, 'success');
+        setTab('voluntariados');
+        await cargarArboles();
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo realizar la conversión.', 'error');
+      }
+    }
+  };
+
+  const handleConvertirVoluntariadoAUsuario = async (vol) => {
+    // Verificar si ya existe un usuario con ese correo
+    const userExists = usuarios.find(u => u.email.toLowerCase() === vol.email.toLowerCase());
+    if (userExists) {
+      Swal.fire('Atención', `Ya existe un usuario con el correo ${vol.email}. No se puede duplicar.`, 'warning');
+      return;
+    }
+
+    const { value: password } = await Swal.fire({
+      title: '👤 Convertir a Usuario',
+      text: `Ingresa una contraseña para la nueva cuenta de "${vol.nombre}":`,
+      input: 'password',
+      inputPlaceholder: 'Contraseña de acceso',
+      showCancelButton: true,
+      confirmButtonText: 'Crear Usuario',
+      cancelButtonText: 'Cancelar',
+      inputValidator: (value) => {
+        if (!value) return 'Debes ingresar una contraseña';
+        if (value.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
+        if (value.length > 15) return 'La contraseña no puede exceder los 15 caracteres';
+      }
+    });
+
+    if (password) {
+      try {
+        const usuarioActualizado = {
+          ...vol,
+          password: password,
+          rol: 'user',
+          debeCambiarPassword: false // Ya la está definiendo el admin aquí
+        };
+        // Limpiar campos de voluntario si se desea, o dejarlos
+        delete usuarioActualizado.area;
+        delete usuarioActualizado.telefono;
+        delete usuarioActualizado.fechaIngreso;
+
+        await services.putUsuarios(usuarioActualizado, vol.id);
+        
+        Swal.fire('¡Éxito!', `"${vol.nombre}" ahora tiene acceso como usuario normal.`, 'success');
+        setTab('usuarios');
+        await cargarArboles();
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo actualizar la cuenta del usuario.', 'error');
+      }
+    }
+  };
+
   const handleUpdateStatTipo = async (tipo, field, value) => {
     try {
       const tipoLower = tipo.toLowerCase();
@@ -188,8 +492,15 @@ function MainPagesInicoAdmin() {
   };
 
   const mostrarMensaje = (texto, tipo = 'success') => {
-    setMensaje({ texto, tipo });
-    setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3500);
+    Swal.fire({
+      title: tipo === 'success' ? 'Éxito' : 'Error',
+      text: texto,
+      icon: tipo,
+      timer: 3000,
+      showConfirmButton: false,
+      toast: true,
+      position: 'top-end'
+    });
   };
 
   // ── Handlers del formulario ─────────────────────────────────────────────────
@@ -203,7 +514,7 @@ function MainPagesInicoAdmin() {
     } else if (name === 'tipoSelector') {
       setModoNuevoTipo(false);
       // Rellenado automático si existe el tipo
-      const existingArbol = arboles.find(a => (a.tipo || 'mimbro').toLowerCase() === value.toLowerCase());
+      const existingArbol = arboles.find(a => (a.tipo || 'Sin clasificar').toLowerCase() === value.toLowerCase());
       if (existingArbol && !modoEdicion) {
          setForm({
             ...form,
@@ -213,7 +524,7 @@ function MainPagesInicoAdmin() {
             familia: existingArbol.familia || '',
             altura: existingArbol.altura || '',
             crecimiento: existingArbol.crecimiento || '',
-            clima: existingArbol.clima || '',
+            clima: existingArbol.clima || 'tropical',
             descripcion: existingArbol.descripcion || '',
             cuidados: existingArbol.cuidados || '',
             imagenUrl: existingArbol.imagenUrl || '',
@@ -229,22 +540,69 @@ function MainPagesInicoAdmin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.nombre.trim()) {
-      mostrarMensaje('El nombre del árbol es obligatorio.', 'error');
+    
+    const trimmedNombre = form.nombre.trim();
+    const trimmedNombreCientifico = form.nombreCientifico.trim();
+    const trimmedTipo = form.tipo.trim();
+    const trimmedProgreso = form.progreso.trim();
+    const trimmedFamilia = form.familia.trim();
+    const trimmedAltura = form.altura.trim();
+    const trimmedCrecimiento = form.crecimiento.trim();
+    const trimmedClima = form.clima.trim();
+    const trimmedDescripcion = form.descripcion.trim();
+    const trimmedCuidados = form.cuidados.trim();
+    const trimmedImagenUrl = form.imagenUrl.trim();
+
+    // Validaciones del árbol
+    if (!trimmedNombre || !trimmedNombreCientifico || !trimmedTipo || !trimmedFamilia || 
+        !trimmedAltura || !trimmedCrecimiento || !trimmedClima || !trimmedDescripcion || 
+        !trimmedCuidados || !trimmedImagenUrl) {
+      Swal.fire('Error', 'Todos los campos son obligatorios. Por favor, completa la información faltante.', 'error');
+      return;
+    }
+
+    if (trimmedNombre.length < 4) {
+      Swal.fire('Error', 'El nombre del árbol debe tener al menos 4 letras', 'error');
+      return;
+    }
+
+    if (trimmedImagenUrl && !trimmedImagenUrl.startsWith('http')) {
+      Swal.fire('Error', 'La URL de la imagen debe ser válida (empezar con http/https).', 'error');
+      return;
+    }
+
+    // El progreso debe ser un porcentaje (ej: 45%)
+    const progressRegex = /^\d{1,3}%$/;
+    if (!progressRegex.test(trimmedProgreso)) {
+      Swal.fire('Error', 'El progreso debe estar en formato de porcentaje (ej: 10%).', 'error');
       return;
     }
 
     try {
       let savedTreeId = null;
+      const formFinal = {
+        ...form,
+        nombre: trimmedNombre,
+        nombreCientifico: trimmedNombreCientifico,
+        tipo: trimmedTipo,
+        progreso: trimmedProgreso,
+        familia: trimmedFamilia,
+        altura: trimmedAltura,
+        crecimiento: trimmedCrecimiento,
+        clima: trimmedClima,
+        descripcion: trimmedDescripcion,
+        cuidados: trimmedCuidados,
+        imagenUrl: trimmedImagenUrl
+      };
 
       if (modoEdicion) {
         const arbolOriginal = arboles.find(a => a.id === idEditando);
         const estadoAnterior = arbolOriginal?.estado;
-        const nuevoEstado = form.estado;
-        const tipoKey = (form.tipo || 'mimbro').toLowerCase();
+        const nuevoEstado = formFinal.estado;
+        const tipoKey = (formFinal.tipo || 'mimbro').toLowerCase();
 
         const arbolActualizado = { 
-          ...form, 
+          ...formFinal, 
           fechaMuerto: nuevoEstado === 'muerto' ? (estadoAnterior === 'muerto' ? arbolOriginal.fechaMuerto : new Date().toISOString().split('T')[0]) : null
         };
 
@@ -265,55 +623,32 @@ function MainPagesInicoAdmin() {
           }
         }
         
-        mostrarMensaje(`✅ Árbol "${form.nombre}" actualizado correctamente.`);
+        Swal.fire('Éxito', `Árbol "${trimmedNombre}" actualizado correctamente.`, 'success');
       } else {
         const arbolConFecha = {
-          ...form,
-          fechaMuerto: form.estado === 'muerto' ? new Date().toISOString().split('T')[0] : null
+          ...formFinal,
+          fechaMuerto: formFinal.estado === 'muerto' ? new Date().toISOString().split('T')[0] : null
         };
         const result = await services.postArboles(arbolConFecha);
         savedTreeId = result?.id; 
 
         // Si se agrega como muerto desde el principio, incrementamos estadística
-        if (form.estado === 'muerto') {
-          const tipoKey = (form.tipo || 'mimbro').toLowerCase();
+        if (formFinal.estado === 'muerto') {
+          const tipoKey = (formFinal.tipo || 'mimbro').toLowerCase();
           const currentStat = statsTipos.find(s => s.tipo === tipoKey);
           const newDeadCount = (currentStat?.muertos || 0) + 1;
           await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
         }
 
-        mostrarMensaje(`✅ Árbol "${form.nombre}" agregado correctamente.`);
+        Swal.fire('Éxito', `Árbol "${trimmedNombre}" agregado correctamente.`, 'success');
       }
 
-      // Auto-guardar la info genérica para todos los árboles de este menú tipo
-      const genericFieldsKeys = [
-        'nombre', 'nombreCientifico', 'familia', 'altura', 
-        'crecimiento', 'clima', 'descripcion', 'cuidados', 'imagenUrl'
-      ];
-      
-      const tipoDelArbol = (form.tipo || 'mimbro').toLowerCase();
-      // Buscamos a los demás árboles de este tipo para aplicarles los mismos datos genéricos
-      const otrosArboles = arboles.filter(a => 
-         (a.tipo || 'mimbro').toLowerCase() === tipoDelArbol && a.id !== savedTreeId
-      );
-
-      if (otrosArboles.length > 0) {
-         // Hacemos el request Put por cada uno simultaneamente
-         await Promise.all(otrosArboles.map(arbolViejto => {
-            const arbolActualizado = { ...arbolViejto };
-            genericFieldsKeys.forEach(key => {
-               arbolActualizado[key] = form[key];
-            });
-            // Respetamos su estado, progreso, id y fechaRegistro per-se
-            return services.putArboles(arbolActualizado, arbolViejto.id);
-         }));
-      }
 
       resetForm();
       setTab('lista');
       await cargarArboles();
     } catch (err) {
-      mostrarMensaje('Error al guardar el árbol. Revise la conexión.', 'error');
+      Swal.fire('Error', 'No se pudo guardar el árbol. Revise la conexión.', 'error');
     }
   };
 
@@ -348,16 +683,21 @@ function MainPagesInicoAdmin() {
   };
 
   const handleEliminarTipo = async (tipoDelete) => {
-     const arbolesDeEseTipo = arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipoDelete.toLowerCase());
+     const arbolesDeEseTipo = arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipoDelete.toLowerCase());
+     const statEntry = statsTipos.find(s => s.tipo.toLowerCase() === tipoDelete.toLowerCase());
      
-     if (arbolesDeEseTipo.length === 0) {
-        Swal.fire('Información', 'No existen árboles de este tipo para eliminar.', 'info');
+     if (arbolesDeEseTipo.length === 0 && !statEntry) {
+        Swal.fire('Información', 'No existe información de este tipo para eliminar.', 'info');
         return;
      }
 
+     const mensajeConfirmacion = arbolesDeEseTipo.length > 0
+        ? `Estás a punto de eliminar un total de ${arbolesDeEseTipo.length} árboles del tipo "${tipoDelete}" y sus estadísticas. ¡Esta acción es irreversible!`
+        : `¿Deseas eliminar las estadísticas del tipo "${tipoDelete}"?`;
+
      const result = await Swal.fire({
-        title: '⚠️ ¿Eliminar todo un tipo?',
-        text: `Estás a punto de eliminar un total de ${arbolesDeEseTipo.length} árboles del tipo "${tipoDelete}". ¡Esta acción es irreversible y borrará todo su historial!`,
+        title: '⚠️ ¿Eliminar este tipo?',
+        text: mensajeConfirmacion,
         icon: 'error',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -370,11 +710,19 @@ function MainPagesInicoAdmin() {
         setCargando(true);
         try {
            // Borrar cada árbol de la lista
-           await Promise.all(arbolesDeEseTipo.map(ar=> services.deleteArboles(ar.id)));
-           Swal.fire('Destruido', `Se han eliminado los ${arbolesDeEseTipo.length} árboles de tipo "${tipoDelete}".`, 'success');
+           if (arbolesDeEseTipo.length > 0) {
+              await Promise.all(arbolesDeEseTipo.map(ar => services.deleteArboles(ar.id)));
+           }
+
+           // Borrar la entrada de estadísticas para este tipo si existe
+           if (statEntry) {
+              await services.deleteStatsTipos(statEntry.id);
+           }
+
+           Swal.fire('Eliminado', `Se han limpiado los datos de tipo "${tipoDelete}".`, 'success');
            
            // Cambiar de vista si no hay más
-           setTipoFiltro('mimbro');
+           setTipoFiltro(tiposDisponibles[0] || '');
            setTab('lista');
            await cargarArboles();
         } catch(e) {
@@ -396,8 +744,8 @@ function MainPagesInicoAdmin() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('user');
     navigate('/');
   };
 
@@ -445,19 +793,19 @@ function MainPagesInicoAdmin() {
             className={`admin-tab ${tab === 'usuarios' ? 'active' : ''}`}
             onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
           >
-            👥 Gestión Usuarios
+            👥 Usuarios
+          </button>
+          <button
+            className={`admin-tab ${tab === 'voluntariados' ? 'active' : ''}`}
+            onClick={() => { setTab('voluntariados'); resetFormVoluntariado(); }}
+          >
+            🤝 Voluntariados
           </button>
           <button
             className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
             onClick={() => { setTab('agregar'); resetForm(); }}
           >
             {modoEdicion ? '✏️ Editar Árbol' : '➕ Agregar Árbol'}
-          </button>
-          <button
-            className={`admin-tab ${tab === 'seguimiento' ? 'active' : ''}`}
-            onClick={() => { setTab('seguimiento'); resetForm(); }}
-          >
-            🌱 Seguimiento por Tipo
           </button>
         </div>
 
@@ -491,7 +839,7 @@ function MainPagesInicoAdmin() {
                <h3>Desglose por Tipo de Árbol</h3>
                <div className="admin-types-grid">
                   {tiposDisponibles.map(tipo => {
-                     const aliveCount = arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipo.toLowerCase() && a.estado !== 'muerto').length;
+                     const aliveCount = arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipo.toLowerCase() && a.estado !== 'muerto').length;
                      const stat = statsTipos.find(s => s.tipo === tipo.toLowerCase());
                      return (
                         <div key={tipo} className="admin-type-stat-card">
@@ -514,10 +862,10 @@ function MainPagesInicoAdmin() {
                            </p>
                            <button 
                               className="admin-type-view-btn"
-                              onClick={() => {
-                                 setTipoFiltro(tipo);
-                                 setTab('seguimiento');
-                              }}
+                               onClick={() => {
+                                  setTipoFiltro(tipo);
+                                  setTab('lista');
+                               }}
                            >
                               Ver detalles →
                            </button>
@@ -532,11 +880,116 @@ function MainPagesInicoAdmin() {
         {/* ──── TAB: LISTA ──── */}
         {tab === 'lista' && (
           <div>
-            <div className="admin-section-header">
-              <h2>Especies Registradas</h2>
-              <button className="admin-add-btn" onClick={() => setTab('agregar')}>
-                ➕ Nuevo Árbol
-              </button>
+            <div className="admin-section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <h2 style={{ margin: 0 }}>Especies Registradas</h2>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <div className="admin-search-box">
+                    <input 
+                      type="text" 
+                      placeholder="Buscar por nombre..." 
+                      value={busqueda}
+                      onChange={(e) => setBusqueda(e.target.value)}
+                      style={{ 
+                        padding: '10px 15px', 
+                        borderRadius: '8px', 
+                        border: '1px solid #34d399', 
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        color: 'white',
+                        width: '220px',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+
+                  <select 
+                    value={tipoFiltro} 
+                    onChange={(e) => setTipoFiltro(e.target.value)}
+                    style={{ 
+                      padding: '10px 15px', 
+                      borderRadius: '8px', 
+                      border: '1px solid #34d399', 
+                      backgroundColor: '#1a402a',
+                      color: 'white',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      minWidth: '180px'
+                    }}
+                  >
+                    <option value="">🍀 Todos los Tipos</option>
+                    {tiposDisponibles.map(tipo => (
+                      <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
+                    ))}
+                  </select>
+
+                  <button className="admin-add-btn" onClick={() => setTab('agregar')} style={{ padding: '11px 20px' }}>
+                    ➕ Nuevo Árbol
+                  </button>
+                </div>
+              </div>
+
+              {/* Estadísticas rápidas por tipo (Solo si hay un tipo seleccionado) */}
+              {tipoFiltro && (
+                <div style={{ 
+                  width: '100%', 
+                  background: 'rgba(52, 211, 153, 0.08)', 
+                  padding: '1.2rem', 
+                  borderRadius: '12px',
+                  border: '1px solid rgba(52, 211, 153, 0.2)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                    <h3 style={{ fontSize: '1rem', color: '#6ee7b7', margin: 0 }}>📊 Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
+                    <button 
+                      onClick={() => handleEliminarTipo(tipoFiltro)}
+                      style={{  
+                        backgroundColor: '#ef4444',
+                        color: 'white',
+                        padding: '6px 15px',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        fontWeight: '700',
+                        border: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      🗑️ Eliminar Tipo
+                    </button>
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                    <div className="admin-form-group" style={{ margin: 0 }}>
+                      <label style={{ fontSize: '0.75rem', color: '#86bfa4' }}>📅 Planificados</label>
+                      <input 
+                        type="number" 
+                        value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
+                        onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
+                        style={{ padding: '6px 10px', fontSize: '0.9rem' }}
+                      />
+                    </div>
+                    <div className="admin-form-group" style={{ margin: 0 }}>
+                      <label style={{ fontSize: '0.75rem', color: '#fca5a5' }}>🍂 Bajas de este tipo</label>
+                      <input 
+                        type="number" 
+                        value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
+                        onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
+                        style={{ padding: '6px 10px', fontSize: '0.9rem' }}
+                      />
+                    </div>
+                    <div className="admin-form-group" style={{ margin: 0, opacity: 0.8 }}>
+                      <label style={{ fontSize: '0.75rem', color: '#6ee7b7' }}>🌲 Vivos en sistema</label>
+                      <input 
+                        type="text" 
+                        disabled
+                        value={arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
+                        style={{ padding: '6px 10px', fontSize: '0.9rem', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {cargando ? (
@@ -549,54 +1002,77 @@ function MainPagesInicoAdmin() {
                 <p>No hay árboles activos registrados. ¡Agrega el primero!</p>
               </div>
             ) : (
-              <div className="admin-arboles-lista">
-                {arboles.filter(a => a.estado !== 'muerto').map((arbol) => (
-                  <div key={arbol.id} className="admin-arbol-card">
-                    {arbol.imagenUrl ? (
-                      <img
-                        src={arbol.imagenUrl}
-                        alt={arbol.nombre}
-                        className="admin-arbol-card-img"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className="admin-arbol-card-img-placeholder"
-                      style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
-                    >
-                      🌳
-                    </div>
-
-                    <div className="admin-arbol-card-body">
-                      <p className="admin-arbol-card-nombre">{arbol.nombre}</p>
-                      <p className="admin-arbol-card-cientifico">
-                        {arbol.nombreCientifico || '—'}
-                      </p>
-                      <p style={{ fontSize: '0.82rem', color: '#66937a', marginBottom: '0.8rem' }}>
-                        {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
-                        {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
-                      </p>
-                      <div className="admin-arbol-card-actions">
-                        <button
-                          className="admin-btn-editar"
-                          onClick={() => handleEditar(arbol)}
-                        >
-                          ✏️ Editar
-                        </button>
-                        <button
-                          className="admin-btn-eliminar"
-                          onClick={() => handleEliminar(arbol)}
-                        >
-                          🗑️ Eliminar
-                        </button>
-                      </div>
-                    </div>
+              <>
+                {arboles
+                  .filter(a => a.estado !== 'muerto')
+                  .filter(a => {
+                    const matchesSearch = a.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
+                                        (a.tipo || '').toLowerCase().includes(busqueda.toLowerCase());
+                    const matchesType = !tipoFiltro || (a.tipo || '').toLowerCase() === tipoFiltro.toLowerCase();
+                    return matchesSearch && matchesType;
+                  }).length === 0 ? (
+                  <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem', fontSize: '1rem' }}>
+                    <p>No se encontraron árboles con los filtros aplicados.</p>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className="admin-arboles-lista">
+                    {arboles
+                      .filter(a => a.estado !== 'muerto')
+                      .filter(a => {
+                        const matchesSearch = a.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
+                                            (a.tipo || '').toLowerCase().includes(busqueda.toLowerCase());
+                        const matchesType = !tipoFiltro || (a.tipo || '').toLowerCase() === tipoFiltro.toLowerCase();
+                        return matchesSearch && matchesType;
+                      })
+                      .map((arbol) => (
+                      <div key={arbol.id} className="admin-arbol-card">
+                        {arbol.imagenUrl ? (
+                          <img
+                            src={arbol.imagenUrl}
+                            alt={arbol.nombre}
+                            className="admin-arbol-card-img"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          className="admin-arbol-card-img-placeholder"
+                          style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
+                        >
+                          🌳
+                        </div>
+
+                        <div className="admin-arbol-card-body">
+                          <p className="admin-arbol-card-nombre">{arbol.nombre}</p>
+                          <p className="admin-arbol-card-cientifico">
+                            {arbol.nombreCientifico || '—'}
+                          </p>
+                          <p style={{ fontSize: '0.82rem', color: '#66937a', marginBottom: '0.8rem' }}>
+                            {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
+                            {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
+                          </p>
+                          <div className="admin-arbol-card-actions">
+                            <button
+                              className="admin-btn-editar"
+                              onClick={() => handleEditar(arbol)}
+                            >
+                              ✏️ Editar
+                            </button>
+                            <button
+                              className="admin-btn-eliminar"
+                              onClick={() => handleEliminar(arbol)}
+                            >
+                              🗑️ Eliminar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
@@ -657,191 +1133,6 @@ function MainPagesInicoAdmin() {
           </div>
         )}
 
-        {/* ──── TAB: SEGUIMIENTO ──── */}
-        {tab === 'seguimiento' && (
-          <div>
-            <div className="admin-section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap' }}>
-                <h2>Seguimiento Específico</h2>
-                <select 
-                  value={tipoFiltro} 
-                  onChange={(e) => setTipoFiltro(e.target.value)}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', fontWeight: '500', color: '#1a402a', outline: 'none' }}
-                >
-                  {tiposDisponibles.map(tipo => (
-                    <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: '5px' }}>
-                <p style={{ fontWeight: 'bold', color: '#2e6b46', margin: 0 }}>
-                  Total: {arboles.filter(a => a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)).length} árboles de tipo "{tipoFiltro}"
-                </p>
-                <button 
-                  onClick={() => handleEliminarTipo(tipoFiltro)}
-                  style={{  
-                    backgroundColor: '#10b981', /* Esmeralda vibrante */
-                    color: 'white',
-                    padding: '10px 24px',
-                    borderRadius: '50px',
-                    textDecoration: 'none',
-                    fontWeight: '700',
-                    transition: 'transform 0.2s, background-color 0.2s',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  🧨 Eliminar este Tipo y sus Árboles
-                </button>
-              </div>
-
-              {/* Nueva sección: Edición de estadísticas manuales */}
-              <div style={{ 
-                width: '100%', 
-                background: 'rgba(52, 211, 153, 0.05)', 
-                padding: '1.5rem', 
-                borderRadius: '12px',
-                border: '1px solid rgba(52, 211, 153, 0.2)',
-                marginTop: '1rem'
-              }}>
-                <h3 style={{ fontSize: '1rem', color: '#6ee7b7', marginBottom: '1rem' }}>📊 Control de Estadísticas para "{tipoFiltro}"</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                  <div className="admin-form-group">
-                    <label>🌳 Árboles Planificados</label>
-                    <input 
-                      type="number" 
-                      placeholder="Cantidad a sembrar..."
-                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
-                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
-                    />
-                  </div>
-                  <div className="admin-form-group">
-                    <label>🍂 Árboles Muertos</label>
-                    <input 
-                      type="number" 
-                      placeholder="Cantidad de pérdidas..."
-                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
-                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
-                    />
-                  </div>
-                  <div className="admin-form-group" style={{ opacity: 0.7 }}>
-                    <label>✅ Sembrados Actuales</label>
-                    <input 
-                      type="text" 
-                      disabled
-                      value={arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="admin-arboles-lista" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', marginTop: '1.5rem' }}>
-              {arboles
-                .filter(a => (a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)) && a.estado !== 'muerto')
-                .map((arbol, index) => (
-                <div key={arbol.id} className="admin-arbol-card" style={{ display: 'block', padding: '1.5rem' }}>
-                  <h3 style={{ margin: '0 0 15px 0', color: '#1a402a', fontSize: '1.2rem' }}>
-                    #{index + 1} - {arbol.nombre}
-                  </h3>
-                  
-                  <div style={{ marginBottom: '15px' }}>
-                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Estado Actual:</label>
-                    <select 
-                      value={arbol.estado} 
-                      onChange={async (e) => {
-                        const nuevoEstado = e.target.value;
-                        const estadoAnterior = arbol.estado;
-
-                        // Pedir confirmación si el cambio es hacia o desde "muerto"
-                        if ((nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') || 
-                            (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto')) {
-                          
-                          const result = await Swal.fire({
-                            title: '¿Confirmar cambio de estado?',
-                            text: nuevoEstado === 'muerto' 
-                              ? `¿Estás seguro de marcar "${arbol.nombre}" como MUERTO? Se registrará como pérdida en las estadísticas.`
-                              : `¿Deseas cambiar el estado de "${arbol.nombre}" a "${nuevoEstado}"?`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#2e6b46',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Sí, cambiar',
-                            cancelButtonText: 'Cancelar'
-                          });
-
-                          if (!result.isConfirmed) {
-                             e.target.value = estadoAnterior; 
-                             return;
-                          }
-                        }
-
-                        const arbolActual = { 
-                          ...arbol, 
-                          estado: nuevoEstado,
-                          fechaMuerto: nuevoEstado === 'muerto' ? new Date().toISOString().split('T')[0] : null
-                        };
-                        
-                        try {
-                          await services.putArboles(arbolActual, arbol.id);
-                          
-                          const tipoKey = arbol.tipo || 'mimbro';
-                          const currentStat = statsTipos.find(s => s.tipo === tipoKey.toLowerCase());
-                          
-                          // Lógica automática de estadísticas de muertos
-                          if (nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') {
-                             const newDeadCount = (currentStat?.muertos || 0) + 1;
-                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
-                          } else if (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto') {
-                             const newDeadCount = Math.max(0, (currentStat?.muertos || 0) - 1);
-                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
-                          }
-
-                          mostrarMensaje(`Estado de "${arbol.nombre}" actualizado.`);
-                          cargarArboles();
-                        } catch (err) {
-                          mostrarMensaje('Error al actualizar estado', 'error');
-                        }
-                      }}
-                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
-                    >
-                      <option value="vivo">Vivo</option>
-                      <option value="en_riesgo">En riesgo</option>
-                      <option value="muerto">Muerto</option>
-                      <option value="protegido">Protegido</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Progreso en el tiempo:</label>
-                    <input 
-                      type="text" 
-                      defaultValue={arbol.progreso || '0%'} 
-                      onBlur={async (e) => {
-                         if (e.target.value === (arbol.progreso || '0%')) return;
-                         const updatedArbol = { ...arbol, progreso: e.target.value };
-                         try {
-                           await services.putArboles(updatedArbol, arbol.id);
-                           mostrarMensaje(`Progreso actualizado para ${arbol.nombre}`);
-                           cargarArboles();
-                         } catch (err) {
-                           mostrarMensaje('Error al actualizar progreso', 'error');
-                         }
-                      }}
-                      placeholder="Ej: Creció 10cm, 50% de meta..."
-                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
-                    />
-                    <small style={{ color: '#66937a', display: 'block', marginTop: '6px' }}>
-                      * Escribe el progreso y haz clic fuera del cuadro para guardar
-                    </small>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
         {/* ──── TAB: USUARIOS ──── */}
         {tab === 'usuarios' && (
           <div>
@@ -850,10 +1141,10 @@ function MainPagesInicoAdmin() {
               <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar accesos y cuentas del sistema</p>
             </div>
 
-            <div className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
+            <div id="user-form-container" className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
               <h3 style={{ margin: '0 0 1.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                 <span style={{ fontSize: '1.4rem' }}>{modoEdicionUsuario ? '✏️' : '👤'}</span>
-                {modoEdicionUsuario ? 'Editar Cuenta de Usuario' : 'Crear Nueva Cuenta'}
+                {modoEdicionUsuario ? 'Editar Usuario' : 'Crear Usuarios'}
               </h3>
               
               <form onSubmit={handleUserSubmit} style={{ 
@@ -897,6 +1188,7 @@ function MainPagesInicoAdmin() {
                     onChange={(e) => setFormUsuario({...formUsuario, password: e.target.value})}
                     placeholder={modoEdicionUsuario ? "Dejar en blanco para no cambiar..." : "••••••••"}
                     style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', outline: 'none' }}
+                    maxLength="15"
                   />
                 </div>
                 
@@ -948,7 +1240,7 @@ function MainPagesInicoAdmin() {
               gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
               gap: '1.5rem'
             }}>
-              {usuarios.map(user => (
+              {usuarios.filter(user => user.rol !== 'voluntario').map(user => (
                 <div key={user.id} className="admin-arbol-card" style={{ 
                   padding: '1.5rem', 
                   display: 'flex', 
@@ -1001,19 +1293,10 @@ function MainPagesInicoAdmin() {
                     {user.rol === 'admin' ? 'Administrador' : 'Usuario'}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', paddingTop: '0.5rem', flexWrap: 'wrap' }}>
                     <button 
                       onClick={() => handleEditarUsuario(user)} 
-                      style={{ 
-                        flex: 1, 
-                        padding: '10px', 
-                        backgroundColor: '#e5e7eb', 
-                        border: 'none', 
-                        borderRadius: '8px', 
-                        cursor: 'pointer', 
-                        fontWeight: '700', 
-                        color: '#374151'
-                      }}
+                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#e5e7eb', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#374151', fontSize: '0.85rem' }}
                     >
                       ✏️ Editar
                     </button>
@@ -1021,7 +1304,7 @@ function MainPagesInicoAdmin() {
                       onClick={() => handleEliminarUsuario(user.id, user.nombre)} 
                       disabled={user.rol === 'admin'} 
                       style={{ 
-                        flex: 1, 
+                        flex: '1 1 45%', 
                         padding: '10px', 
                         backgroundColor: '#fee2e2', 
                         border: 'none', 
@@ -1029,11 +1312,194 @@ function MainPagesInicoAdmin() {
                         cursor: user.rol === 'admin' ? 'not-allowed' : 'pointer', 
                         fontWeight: '700', 
                         color: '#b91c1c',
-                        opacity: user.rol === 'admin' ? 0.6 : 1
+                        opacity: user.rol === 'admin' ? 0.6 : 1,
+                        fontSize: '0.85rem'
                       }}
                       title={user.rol === 'admin' ? "No se puede eliminar administradores principales" : ""}
                     >
-                      🗑️ Eliminar
+                      🗑️ Borrar
+                    </button>
+                    {user.rol !== 'admin' && (
+                      <button 
+                        onClick={() => handleConvertirUsuarioAVoluntariado(user)} 
+                        style={{ flex: '1 1 100%', padding: '10px', backgroundColor: '#ecfdf5', border: '1px solid #10b981', borderRadius: '8px', cursor: 'pointer', fontWeight: '800', color: '#047857', fontSize: '0.85rem', marginTop: '4px' }}
+                      >
+                        🤝 Convertir a Voluntario
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ──── TAB: VOLUNTARIADOS ──── */}
+        {tab === 'voluntariados' && (
+          <div>
+            <div className="admin-section-header">
+              <h2 style={{ color: '#ffffff' }}>🤝 Gestión de Voluntarios</h2>
+              <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar la base de datos de voluntarios y sus áreas</p>
+            </div>
+
+            <div id="voluntariado-form-container" className="admin-form-card" style={{ marginBottom: '2rem', padding: '2rem' }}>
+              <h3 style={{ margin: '0 0 1.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                <span style={{ fontSize: '1.4rem' }}>{modoEdicionVoluntariado ? '✏️' : '🤝'}</span>
+                {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
+              </h3>
+              
+              <form onSubmit={handleVoluntariadoSubmit} style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                gap: '1.5rem', 
+                padding: '1.5rem', 
+                borderRadius: '12px',
+                border: '2px solid #10b981'
+              }}>
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Nombre Completo</label>
+                  <input
+                    type="text"
+                    required
+                    value={formVoluntariado.nombre}
+                    onChange={(e) => setFormVoluntariado({...formVoluntariado, nombre: e.target.value})}
+                    placeholder="Ej: Carlos Rodríguez"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                  />
+                </div>
+                
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Área de Interés / Cargo</label>
+                  <input
+                    type="text"
+                    required
+                    value={formVoluntariado.area}
+                    onChange={(e) => setFormVoluntariado({...formVoluntariado, area: e.target.value})}
+                    placeholder="Ej: Siembra, Mantenimiento, Educación..."
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                  />
+                </div>
+
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Correo Electrónico</label>
+                  <input
+                    type="email"
+                    required
+                    value={formVoluntariado.email}
+                    onChange={(e) => setFormVoluntariado({...formVoluntariado, email: e.target.value})}
+                    placeholder="voluntario@bosque.com"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                  />
+                </div>
+
+                <div className="admin-form-group" style={{ margin: 0 }}>
+                  <label style={{ color: '#ffffff', fontWeight: '700', fontSize: '1rem', marginBottom: '8px', display: 'block' }}>Teléfono</label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={8}
+                    value={formVoluntariado.telefono}
+                    onChange={(e) => {
+                       const value = e.target.value.replace(/\D/g, '');
+                       setFormVoluntariado({...formVoluntariado, telefono: value});
+                    }}
+                    placeholder="Solo 8 números (ej: 88880000)"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #c5d6cc' }}
+                  />
+                </div>
+                
+                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                  <button type="submit" style={{ 
+                    flex: 1, 
+                    padding: '12px 24px', 
+                    backgroundColor: '#10b981', 
+                    color: 'white', 
+                    border: 'none', 
+                    borderRadius: '8px', 
+                    cursor: 'pointer', 
+                    fontWeight: '800', 
+                    fontSize: '1rem',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
+                  }}>
+                    {modoEdicionVoluntariado ? '💾 Actualizar Ficha' : '➕ Registrar Voluntario'}
+                  </button>
+                  {modoEdicionVoluntariado && (
+                    <button type="button" onClick={resetFormVoluntariado} style={{ 
+                      padding: '12px 24px', 
+                      backgroundColor: '#9ca3af', 
+                      color: 'white', 
+                      border: 'none', 
+                      borderRadius: '8px', 
+                      cursor: 'pointer', 
+                      fontWeight: '800'
+                    }}>
+                      Cancelar
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="admin-arboles-lista" style={{ 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '1.5rem'
+            }}>
+              {voluntariados.filter(vol => vol.rol === 'voluntario').map(vol => (
+                <div key={vol.id} className="admin-arbol-card" style={{ 
+                   padding: '1.5rem', 
+                   display: 'flex', 
+                   flexDirection: 'column', 
+                   gap: '1.2rem',
+                   border: '1px solid #e2e8f0',
+                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
+                   backgroundColor: 'white'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                    <div style={{ 
+                      width: '56px', 
+                      height: '56px', 
+                      backgroundColor: '#f1f5f9', 
+                      borderRadius: '14px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      fontSize: '1.8rem'
+                    }}>
+                      🤝
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#000000', fontWeight: '900' }}>{vol.nombre}</h3>
+                      <p style={{ margin: '2px 0 0 0', fontSize: '0.95rem', color: '#059669', fontWeight: '700' }}>{vol.area}</p>
+                    </div>
+                  </div>
+                  
+                  <div style={{ padding: '10px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.9rem' }}>
+                    <p style={{ margin: '0 0 5px 0', color: '#475569' }}>📧 <strong>Email:</strong> {vol.email}</p>
+                    <p style={{ margin: 0, color: '#475569' }}>📞 <strong>Tel:</strong> {vol.telefono}</p>
+                  </div>
+
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold', textAlign: 'right' }}>
+                    Ingreso: {vol.fechaIngreso}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.8rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+                    <button 
+                      onClick={() => handleEditarVoluntariado(vol)} 
+                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#475569', fontSize: '0.85rem' }}
+                    >
+                      ✏️ Editar
+                    </button>
+                    <button 
+                      onClick={() => handleEliminarVoluntariado(vol.id, vol.nombre)} 
+                      style={{ flex: '1 1 45%', padding: '10px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', color: '#b91c1c', fontSize: '0.85rem' }}
+                    >
+                      🗑️ Baja
+                    </button>
+                    <button 
+                      onClick={() => handleConvertirVoluntariadoAUsuario(vol)} 
+                      style={{ flex: '1 1 100%', padding: '10px', backgroundColor: '#eff6ff', border: '1px solid #3b82f6', borderRadius: '8px', cursor: 'pointer', fontWeight: '800', color: '#1d4ed8', fontSize: '0.85rem', marginTop: '4px' }}
+                    >
+                      👤 Convertir a Usuario
                     </button>
                   </div>
                 </div>
@@ -1094,7 +1560,7 @@ function MainPagesInicoAdmin() {
                       />
                       <button 
                         type="button" 
-                        onClick={() => { setModoNuevoTipo(false); setForm({ ...form, tipo: 'mimbro' }); }}
+                        onClick={() => { setModoNuevoTipo(false); setForm({ ...form, tipo: tiposDisponibles[0] || '' }); }}
                         style={{ padding: '0 15px', backgroundColor: '#e2e8f0', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
                       >
                         ❌ Cancelar

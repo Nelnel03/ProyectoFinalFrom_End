@@ -150,6 +150,72 @@ async function putStatsTipos(stat, id) {
   }
 }
 
+async function deleteStatsTipos(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar stat de tipo", error);
+  }
+}
+
+// ========================
+// VOLUNTARIADOS
+// ========================
+
+async function getVoluntariados() {
+  try {
+    const respuestaServidor = await fetch(`${BASE_URL}/usuarios?rol=voluntario`);
+    const datosVoluntariados = await respuestaServidor.json();
+    return datosVoluntariados;
+  } catch (error) {
+    console.error("Error al obtener los voluntariados", error);
+  }
+}
+
+async function postVoluntariados(voluntariado) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/usuarios`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(voluntariado),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear el voluntariado", error);
+  }
+}
+
+async function putVoluntariados(voluntariado, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(voluntariado),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al actualizar el voluntariado", error);
+  }
+}
+
+async function deleteVoluntariados(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar el voluntariado", error);
+  }
+}
+
 export {
   getUsuarios,
   postUsuarios,
@@ -162,6 +228,11 @@ export {
   getStatsTipos,
   postStatsTipos,
   putStatsTipos,
+  deleteStatsTipos,
+  getVoluntariados,
+  postVoluntariados,
+  putVoluntariados,
+  deleteVoluntariados,
 };
 
 const services = {
@@ -176,6 +247,11 @@ const services = {
   getStatsTipos,
   postStatsTipos,
   putStatsTipos,
+  deleteStatsTipos,
+  getVoluntariados,
+  postVoluntariados,
+  putVoluntariados,
+  deleteVoluntariados,
 };
 
-export default services;
+export default services;

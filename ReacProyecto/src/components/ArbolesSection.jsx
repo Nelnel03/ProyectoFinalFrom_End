@@ -99,7 +99,7 @@ function ArbolModal({ arbol, onClose }) {
 function ArbolCard({ arbol, count, onClick }) {
   const [imgError, setImgError] = useState(false);
 
-  const titulo = count !== undefined ? (arbol.tipo || 'mimbro') : arbol.nombre;
+  const titulo = count !== undefined ? (arbol.tipo || 'Sin clasificar') : arbol.nombre;
 
   return (
     <div className="arbol-card" onClick={() => onClick(arbol)}>
@@ -165,7 +165,7 @@ function ArbolesSection({ arboles }) {
 
   // Agrupamos los árboles por su tipo
   const arbolesAgrupados = arboles && arboles.length > 0 ? Object.values(arboles.reduce((acc, arbol) => {
-    const tipo = (arbol.tipo || 'mimbro').toLowerCase();
+    const tipo = (arbol.tipo || 'Sin clasificar').toLowerCase();
     const isAlive = arbol.estado !== 'muerto';
 
     if (!acc[tipo]) {

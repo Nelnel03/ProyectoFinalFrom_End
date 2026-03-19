@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoutes = ({ children, roleRequired }) => {
-  const isAuth = localStorage.getItem('isAuthenticated') === 'true';
-  const userStr = localStorage.getItem('user');
+  const isAuth = sessionStorage.getItem('isAuthenticated') === 'true';
+  const userStr = sessionStorage.getItem('user');
   let user = {};
   
   try {
@@ -11,7 +11,7 @@ const PrivateRoutes = ({ children, roleRequired }) => {
       user = JSON.parse(userStr);
     }
   } catch (e) {
-    console.error("Error parsing user from localStorage", e);
+    console.error("Error parsing user from sessionStorage", e);
   }
 
   if (!isAuth) {

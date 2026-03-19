@@ -9,7 +9,7 @@ import PrivateRoutes from './PrivateRoutes';
 
 function MainLayout() {
   const location = useLocation();
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
 
   const layoutClass = isAuthenticated ? "main-content-layout" : "main-content-layout visitor-layout";
 
