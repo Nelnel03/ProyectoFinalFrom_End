@@ -4,6 +4,13 @@ import Swal from 'sweetalert2';
 import services from '../services/services';
 import '../styles/Arboles.css';
 import '../styles/MainPagesInicoAdmin.css';
+import ResumenTab from './admin/ResumenTab';
+import ListaTab from './admin/ListaTab';
+import BajasTab from './admin/BajasTab';
+import UsuariosTab from './admin/UsuariosTab';
+import VoluntariadosTab from './admin/VoluntariadosTab';
+import AbonosTab from './admin/AbonosTab';
+import ArbolFormTab from './admin/ArbolFormTab';
 
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
@@ -637,9 +644,11 @@ function MainPagesInicoAdmin() {
         await services.putAbonos(abonoActualizado, abonoSeleccionadoId);
 
         // 2. Registrar en historial del árbol
+        const now = new Date();
         const nuevoRegistro = {
           abono: abonoEncontrado.nombre,
-          fecha: new Date().toISOString().split('T')[0],
+          fecha: now.toISOString().split('T')[0],
+          hora: now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
           idAbono: abonoSeleccionadoId
         };
         
@@ -971,896 +980,102 @@ function MainPagesInicoAdmin() {
 
         {/* ──── TAB: RESUMEN ──── */}
         {tab === 'resumen' && (
-          <div className="admin-resumen-container">
-            <div className="admin-section-header">
-               <h2>Estadísticas de la Plantación</h2>
-               <p>Distribución total de especies en el sistema</p>
-            </div>
-
-            <div className="admin-stats-grid">
-               <div className="admin-stat-main-card">
-                  <span className="admin-stat-icon">🌲</span>
-                  <div className="admin-stat-info">
-                     <h3>{arboles.length}</h3>
-                     <p>Censo Total</p>
-                  </div>
-               </div>
-
-               <div className="admin-stat-main-card blue-border">
-                  <span className="admin-stat-icon blue">🌿</span>
-                  <div className="admin-stat-info">
-                     <h3>{tiposDisponibles.length}</h3>
-                     <p>Especies/Tipos</p>
-                  </div>
-               </div>
-            </div>
-
-            <div className="admin-types-breakdown">
-               <h3>Desglose por Tipo de Árbol</h3>
-               <div className="admin-types-grid">
-                  {tiposDisponibles.map(tipo => {
-                     const aliveCount = arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipo.toLowerCase() && a.estado !== 'muerto').length;
-                     const stat = statsTipos.find(s => s.tipo === tipo.toLowerCase());
-                     return (
-                        <div key={tipo} className="admin-type-stat-card">
-                           <div className="admin-type-stat-header">
-                              <span className="admin-type-name">{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>
-                              <span className="admin-type-count" title="Árboles vivos">{aliveCount}</span>
-                           </div>
-                           <div className="admin-type-progress-bar">
-                              <div 
-                                 className="admin-type-progress-fill" 
-                                 style={{ width: `${arboles.length > 0 ? (aliveCount / arboles.length) * 100 : 0}%` }}
-                              ></div>
-                           </div>
-                           <div className="admin-type-stat-footer">
-                              <span>📋 Plan: {stat?.planificados || 0}</span>
-                              <span className="muerto">🍂 Muerto: {stat?.muertos || 0}</span>
-                           </div>
-                           <p className="admin-type-percentage">
-                              {arboles.length > 0 ? ((aliveCount / arboles.length) * 100).toFixed(1) : 0}% de vitalidad global
-                           </p>
-                           <button 
-                              className="admin-type-view-btn"
-                               onClick={() => {
-                                  setTipoFiltro(tipo);
-                                  setTab('lista');
-                               }}
-                           >
-                              Ver detalles →
-                           </button>
-                        </div>
-                     );
-                  })}
-               </div>
-            </div>
-          </div>
+          <ResumenTab 
+            arboles={arboles} 
+            tiposDisponibles={tiposDisponibles} 
+            statsTipos={statsTipos} 
+            setTipoFiltro={setTipoFiltro} 
+            setTab={setTab} 
+          />
         )}
 
         {/* ──── TAB: LISTA ──── */}
         {tab === 'lista' && (
-          <div>
-            <div className="admin-section-header admin-section-header-flex">
-              <div className="admin-header-row">
-                <h2>Especies Registradas</h2>
-                <div className="admin-controls-row">
-                  <div className="admin-search-box">
-                    <input 
-                      type="text" 
-                      placeholder="Buscar por nombre..." 
-                      value={busqueda}
-                      onChange={(e) => setBusqueda(e.target.value)}
-                      className="admin-search-input"
-                    />
-                  </div>
-
-                  <select 
-                    value={tipoFiltro} 
-                    onChange={(e) => setTipoFiltro(e.target.value)}
-                    className="admin-filter-select"
-                  >
-                    <option value="">🍀 Todos los Tipos</option>
-                    {tiposDisponibles.map(tipo => (
-                      <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
-                    ))}
-                  </select>
-
-                  <button className="admin-add-btn" onClick={() => setTab('agregar')}>
-                    ➕ Nuevo Árbol
-                  </button>
-                </div>
-              </div>
-
-              {/* Estadísticas rápidas por tipo (Solo si hay un tipo seleccionado) */}
-              {tipoFiltro && (
-                <div className="admin-tracking-panel">
-                  <div className="admin-tracking-header">
-                    <h3>📊 Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
-                    <button 
-                      onClick={() => handleEliminarTipo(tipoFiltro)}
-                      className="admin-btn-delete-type"
-                    >
-                      🗑️ Eliminar Tipo
-                    </button>
-                  </div>
-                  
-                  <div className="admin-tracking-stats">
-                    <div className="admin-form-group" style={{ margin: 0 }}>
-                      <label className="admin-tracking-label-plan">📅 Planificados</label>
-                      <input 
-                        type="number" 
-                        value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
-                        onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
-                        className="admin-tracking-input"
-                      />
-                    </div>
-                    <div className="admin-form-group" style={{ margin: 0 }}>
-                      <label className="admin-tracking-label-dead">🍂 Bajas de este tipo</label>
-                      <input 
-                        type="number" 
-                        value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
-                        onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
-                        className="admin-tracking-input"
-                      />
-                    </div>
-                    <div className="admin-form-group" style={{ margin: 0, opacity: 0.8 }}>
-                      <label className="admin-tracking-label-alive">🌲 Vivos en sistema</label>
-                      <input 
-                        type="text" 
-                        disabled
-                        value={arboles.filter(a => (a.tipo || 'Sin clasificar').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
-                        className="admin-tracking-input-disabled"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {cargando ? (
-              <div className="admin-loading-msg">
-                Cargando árboles...
-              </div>
-            ) : arboles.filter(a => a.estado !== 'muerto').length === 0 ? (
-              <div className="admin-empty-msg">
-                <div className="admin-empty-icon">🌲</div>
-                <p>No hay árboles activos registrados. ¡Agrega el primero!</p>
-              </div>
-            ) : (
-              <>
-                {arboles
-                  .filter(a => a.estado !== 'muerto')
-                  .filter(a => {
-                    const matchesSearch = a.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
-                                        (a.tipo || '').toLowerCase().includes(busqueda.toLowerCase());
-                    const matchesType = !tipoFiltro || (a.tipo || '').toLowerCase() === tipoFiltro.toLowerCase();
-                    return matchesSearch && matchesType;
-                  }).length === 0 ? (
-                  <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem', fontSize: '1rem' }}>
-                    <p>No se encontraron árboles con los filtros aplicados.</p>
-                  </div>
-                ) : (
-                  <div className="admin-arboles-lista">
-                    {arboles
-                      .filter(a => a.estado !== 'muerto')
-                      .filter(a => {
-                        const matchesSearch = a.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
-                                            (a.tipo || '').toLowerCase().includes(busqueda.toLowerCase());
-                        const matchesType = !tipoFiltro || (a.tipo || '').toLowerCase() === tipoFiltro.toLowerCase();
-                        return matchesSearch && matchesType;
-                      })
-                      .map((arbol) => (
-                      <div key={arbol.id} className="admin-arbol-card">
-                        {arbol.imagenUrl ? (
-                          <img
-                            src={arbol.imagenUrl}
-                            alt={arbol.nombre}
-                            className="admin-arbol-card-img"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div
-                          className="admin-arbol-card-img-placeholder"
-                          style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
-                        >
-                          🌳
-                        </div>
-
-                        <div className="admin-arbol-card-body">
-                          <p className="admin-arbol-card-nombre">{arbol.nombre}</p>
-                          <p className="admin-arbol-card-cientifico">
-                            {arbol.nombreCientifico || '—'}
-                          </p>
-                          <p className="admin-card-clima-altura">
-                            {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
-                            {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
-                          </p>
-
-                          {/* Info de Abono */}
-                          <div className="admin-arbol-status-abono">
-                            <div className="admin-abono-count-wrap">
-                               <span className="admin-abono-badge">
-                                 🦴 {arbol.historialAbono?.length || 0} Abonos
-                               </span>
-                               {arbol.historialAbono?.length > 0 && (
-                                 <button 
-                                   className="admin-btn-clear-history"
-                                   onClick={() => handleLimpiarHistorialAbono(arbol)}
-                                   title="Limpiar historial de abonos"
-                                 >
-                                   ×
-                                 </button>
-                               )}
-                            </div>
-                            {arbol.historialAbono?.length > 0 && (
-                              <p className="admin-abono-last-date">
-                                Último: {arbol.historialAbono[arbol.historialAbono.length - 1].fecha.split('-').reverse().join('/')}
-                              </p>
-                            )}
-                          </div>
-                          <div className="admin-arbol-card-actions">
-                            <button
-                              className="admin-btn-editar"
-                              onClick={() => handleEditar(arbol)}
-                            >
-                              ✏️ Editar
-                            </button>
-                            <button
-                              className="admin-btn-abonar"
-                              onClick={() => handleAbonarArbol(arbol)}
-                              title="Aplicar abono/fertilizante"
-                            >
-                              🍽️ Abonar
-                            </button>
-                            <button
-                              className="admin-btn-eliminar"
-                              onClick={() => handleEliminar(arbol)}
-                            >
-                              🗑️ Eliminar
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+          <ListaTab 
+            busqueda={busqueda} 
+            setBusqueda={setBusqueda}
+            tipoFiltro={tipoFiltro}
+            setTipoFiltro={setTipoFiltro}
+            tiposDisponibles={tiposDisponibles}
+            setTab={setTab}
+            handleEliminarTipo={handleEliminarTipo}
+            statsTipos={statsTipos}
+            handleUpdateStatTipo={handleUpdateStatTipo}
+            arboles={arboles}
+            cargando={cargando}
+            handleEditar={handleEditar}
+            handleAbonarArbol={handleAbonarArbol}
+            handleEliminar={handleEliminar}
+            handleLimpiarHistorialAbono={handleLimpiarHistorialAbono}
+          />
         )}
 
         {/* ──── TAB: BAJAS ──── */}
         {tab === 'bajas' && (
-          <div>
-            <div className="admin-section-header">
-              <h2>🍂 Registro de Bajas</h2>
-              <p>Historial de piezas forestales declaradas como pérdida</p>
-            </div>
-
-            {arboles.filter(a => a.estado === 'muerto').length === 0 ? (
-              <div className="admin-empty-msg">
-                <div className="admin-empty-icon">🍃</div>
-                <p>No hay registros de bajas en el sistema.</p>
-              </div>
-            ) : (
-              <div className="admin-arboles-lista" style={{ gridTemplateColumns: '1fr', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {arboles
-                  .filter(a => a.estado === 'muerto')
-                  .sort((a,b) => new Date(b.fechaMuerto || 0) - new Date(a.fechaMuerto || 0))
-                  .map((arbol) => (
-                  <div key={arbol.id} className="admin-arbol-card admin-baja-card">
-                     <div className="admin-baja-img-wrap">
-                        {arbol.imagenUrl ? (
-                           <img src={arbol.imagenUrl} alt={arbol.nombre} className="admin-baja-img" />
-                        ) : <div className="admin-baja-placeholder">🍂</div>}
-                     </div>
-                     <div className="admin-baja-info">
-                        <h3 className="admin-baja-title">{arbol.nombre}</h3>
-                        <p className="admin-baja-type">
-                           Especie: {arbol.tipo || 'mimbro'}
-                        </p>
-                        <p className="admin-baja-id">
-                           ID: #{arbol.id}
-                        </p>
-                     </div>
-                     <div className="admin-baja-date-wrap">
-                        <p className="admin-baja-date-label">Fecha de Defunción</p>
-                        <p className="admin-baja-date-value">
-                           {arbol.fechaMuerto ? arbol.fechaMuerto.split('-').reverse().join('/') : 'Sin fecha'}
-                        </p>
-                     </div>
-                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button 
-                           className="admin-edit-btn" 
-                           onClick={() => handleEditar(arbol)}
-                           style={{ padding: '8px 12px', fontSize: '0.85rem' }}
-                        >
-                           ✏️ Restaurar/Editar
-                        </button>
-                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <BajasTab 
+            arboles={arboles} 
+            handleEditar={handleEditar} 
+          />
         )}
 
         {/* ──── TAB: USUARIOS ──── */}
         {tab === 'usuarios' && (
-          <div>
-            <div className="admin-section-header">
-              <h2 style={{ color: '#ffffff' }}>👥 Gestión de Usuarios</h2>
-              <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar accesos y cuentas del sistema</p>
-            </div>
-
-            <div id="user-form-container" className="admin-form-card admin-user-form-container">
-              <h3 className="admin-user-form-title">
-                <span className="admin-user-form-title-icon">{modoEdicionUsuario ? '✏️' : '👤'}</span>
-                {modoEdicionUsuario ? 'Editar Usuario' : 'Crear Usuarios'}
-              </h3>
-              
-              <form onSubmit={handleUserSubmit} className="admin-user-form">
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Nombre Completo</label>
-                  <input
-                    type="text"
-                    required
-                    value={formUsuario.nombre}
-                    onChange={(e) => setFormUsuario({...formUsuario, nombre: e.target.value})}
-                    placeholder="Ej: Juan Pérez"
-                    className="admin-user-input"
-                  />
-                </div>
-                
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Correo Electrónico</label>
-                  <input
-                    type="email"
-                    required
-                    value={formUsuario.email}
-                    onChange={(e) => setFormUsuario({...formUsuario, email: e.target.value})}
-                    placeholder="usuario@ejemplo.com"
-                    className="admin-user-input"
-                  />
-                </div>
-                
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Contraseña</label>
-                  <input
-                    type="password"
-                    required={!modoEdicionUsuario}
-                    value={formUsuario.password}
-                    onChange={(e) => setFormUsuario({...formUsuario, password: e.target.value})}
-                    placeholder={modoEdicionUsuario ? "Dejar en blanco para no cambiar..." : "••••••••"}
-                    className="admin-user-input"
-                    maxLength="15"
-                  />
-                </div>
-                
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Rol de Acceso</label>
-                  <select
-                    value={formUsuario.rol}
-                    onChange={(e) => setFormUsuario({...formUsuario, rol: e.target.value})}
-                    disabled={formUsuario.rol === 'admin'} // Un admin no puede bajarse el rango ni a otros
-                    className="admin-user-select"
-                  >
-                    <option value="user">Usuario (Solo visualista)</option>
-                    {formUsuario.rol === 'admin' && (
-                       <option value="admin">Administrador (Control total)</option>
-                    )}
-                  </select>
-                </div>
-                
-                <div className="admin-user-form-footer">
-                  <button type="submit" className="admin-btn-user-submit">
-                    {modoEdicionUsuario ? '💾 Guardar Cambios' : '➕ Crear Usuario'}
-                  </button>
-                  {modoEdicionUsuario && (
-                    <button type="button" onClick={resetFormUsuario} className="admin-btn-user-cancel">
-                      Cancelar
-                    </button>
-                  )}
-                </div>
-              </form>
-            </div>
-
-            <div className="admin-arboles-lista admin-user-list">
-              {usuarios.filter(user => user.rol !== 'voluntario').map(user => (
-                <div key={user.id} className="admin-arbol-card admin-user-card">
-                  <div className="admin-user-card-header">
-                    <div className={`admin-user-avatar ${user.rol}`}>
-                      {user.rol === 'admin' ? '👑' : '👤'}
-                    </div>
-                    <div className="admin-user-info-text">
-                      <h3>{user.nombre}</h3>
-                      <p>{user.email}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="admin-user-id-badge">
-                    <span className="admin-user-id-label">ID</span>
-                    <span className="admin-user-id-value">#{user.id}</span>
-                  </div>
-
-                  <div className={`admin-user-role-badge ${user.rol}`}>
-                    <span className="admin-user-role-dot"></span>
-                    {user.rol === 'admin' ? 'Administrador' : 'Usuario'}
-                  </div>
-
-                  <div className="admin-user-card-footer">
-                    <button 
-                      onClick={() => handleEditarUsuario(user)} 
-                      className="admin-btn-user-edit"
-                    >
-                      ✏️ Editar
-                    </button>
-                    <button 
-                      onClick={() => handleEliminarUsuario(user.id, user.nombre)} 
-                      disabled={user.rol === 'admin'} 
-                      className="admin-btn-user-delete"
-                      title={user.rol === 'admin' ? "No se puede eliminar administradores principales" : ""}
-                    >
-                      🗑️ Borrar
-                    </button>
-                    {user.rol !== 'admin' && (
-                      <button 
-                        onClick={() => handleConvertirUsuarioAVoluntariado(user)} 
-                        className="admin-btn-user-convert"
-                      >
-                        🤝 Convertir a Voluntario
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <UsuariosTab 
+            modoEdicionUsuario={modoEdicionUsuario}
+            handleUserSubmit={handleUserSubmit}
+            formUsuario={formUsuario}
+            setFormUsuario={setFormUsuario}
+            resetFormUsuario={resetFormUsuario}
+            usuarios={usuarios}
+            handleEditarUsuario={handleEditarUsuario}
+            handleEliminarUsuario={handleEliminarUsuario}
+            handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado}
+          />
         )}
 
         {/* ──── TAB: VOLUNTARIADOS ──── */}
         {tab === 'voluntariados' && (
-          <div>
-            <div className="admin-section-header">
-              <h2 style={{ color: '#ffffff' }}>🤝 Gestión de Voluntarios</h2>
-              <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar la base de datos de voluntarios y sus áreas</p>
-            </div>
-
-            <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
-              <h3 className="admin-user-form-title">
-                <span className="admin-user-form-title-icon">{modoEdicionVoluntariado ? '✏️' : '🤝'}</span>
-                {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
-              </h3>
-              
-              <form onSubmit={handleVoluntariadoSubmit} className="admin-user-form">
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Nombre Completo</label>
-                  <input
-                    type="text"
-                    required
-                    value={formVoluntariado.nombre}
-                    onChange={(e) => setFormVoluntariado({...formVoluntariado, nombre: e.target.value})}
-                    placeholder="Ej: Carlos Rodríguez"
-                    className="admin-user-input"
-                  />
-                </div>
-                
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Área de Interés / Cargo</label>
-                  <input
-                    type="text"
-                    required
-                    value={formVoluntariado.area}
-                    onChange={(e) => setFormVoluntariado({...formVoluntariado, area: e.target.value})}
-                    placeholder="Ej: Siembra, Mantenimiento, Educación..."
-                    className="admin-user-input"
-                  />
-                </div>
-
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Correo Electrónico</label>
-                  <input
-                    type="email"
-                    required
-                    value={formVoluntariado.email}
-                    onChange={(e) => setFormVoluntariado({...formVoluntariado, email: e.target.value})}
-                    placeholder="voluntario@bosque.com"
-                    className="admin-user-input"
-                  />
-                </div>
-
-                <div className="admin-form-group" style={{ margin: 0 }}>
-                  <label className="admin-user-input-label">Teléfono</label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={8}
-                    value={formVoluntariado.telefono}
-                    onChange={(e) => {
-                       const value = e.target.value.replace(/\D/g, '');
-                       setFormVoluntariado({...formVoluntariado, telefono: value});
-                    }}
-                    placeholder="Solo 8 números (ej: 88880000)"
-                    className="admin-user-input"
-                  />
-                </div>
-                
-                <div className="admin-user-form-footer">
-                  <button type="submit" className="admin-btn-user-submit">
-                    {modoEdicionVoluntariado ? '💾 Actualizar Ficha' : '➕ Registrar Voluntario'}
-                  </button>
-                  {modoEdicionVoluntariado && (
-                    <button type="button" onClick={resetFormVoluntariado} className="admin-btn-user-cancel">
-                      Cancelar
-                    </button>
-                  )}
-                </div>
-              </form>
-            </div>
-
-            <div className="admin-arboles-lista admin-user-list">
-              {voluntariados.filter(vol => vol.rol === 'voluntario').map(vol => (
-                <div key={vol.id} className="admin-arbol-card admin-user-card">
-                  <div className="admin-user-card-header">
-                    <div className="admin-user-avatar admin-vol-avatar">
-                      🤝
-                    </div>
-                    <div className="admin-user-info-text">
-                      <h3>{vol.nombre}</h3>
-                      <p className="admin-vol-area">{vol.area}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="admin-vol-contact-box">
-                    <p>📧 <strong>Email:</strong> {vol.email}</p>
-                    <p>📞 <strong>Tel:</strong> {vol.telefono}</p>
-                  </div>
-
-                  <div className="admin-vol-date">
-                    Ingreso: {vol.fechaIngreso}
-                  </div>
-
-                  <div className="admin-user-card-footer">
-                    <button 
-                      onClick={() => handleEditarVoluntariado(vol)} 
-                      className="admin-btn-user-edit"
-                    >
-                      ✏️ Editar
-                    </button>
-                    <button 
-                      onClick={() => handleEliminarVoluntariado(vol.id, vol.nombre)} 
-                      className="admin-btn-user-delete"
-                    >
-                      🗑️ Baja
-                    </button>
-                    <button 
-                      onClick={() => handleConvertirVoluntariadoAUsuario(vol)} 
-                      className="admin-vol-btn-convert"
-                    >
-                      👤 Convertir a Usuario
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <VoluntariadosTab 
+            modoEdicionVoluntariado={modoEdicionVoluntariado}
+            handleVoluntariadoSubmit={handleVoluntariadoSubmit}
+            formVoluntariado={formVoluntariado}
+            setFormVoluntariado={setFormVoluntariado}
+            resetFormVoluntariado={resetFormVoluntariado}
+            voluntariados={voluntariados}
+            handleEditarVoluntariado={handleEditarVoluntariado}
+            handleEliminarVoluntariado={handleEliminarVoluntariado}
+            handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario}
+          />
         )}
 
         {/* ──── TAB: ABONOS ──── */}
         {tab === 'abonos' && (
-          <div className="admin-abonos-container">
-            <div className="admin-section-header">
-              <h2>🌿 Gestión de Abonos y Fertilizantes</h2>
-              <p>Control de inventario y reposición de insumos</p>
-            </div>
-
-            <div className="admin-abono-form-card">
-              <h3>{modoEdicionAbono ? '✏️ Reponer / Editar Stock' : '➕ Registrar Nuevo Producto'}</h3>
-              <form onSubmit={handleAbonoSubmit} className="admin-abono-form">
-                <div className="admin-form-group">
-                  <label>Nombre del Producto</label>
-                  <input
-                    type="text"
-                    required
-                    value={formAbono.nombre}
-                    onChange={(e) => setFormAbono({...formAbono, nombre: e.target.value})}
-                    placeholder="Ej: Compost Orgánico"
-                  />
-                </div>
-                <div className="admin-form-group">
-                  <label>Cantidad en Stock</label>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    value={formAbono.stock}
-                    onChange={(e) => setFormAbono({...formAbono, stock: e.target.value})}
-                    className="admin-input-no-spinner"
-                    placeholder="Ingresa cantidad..."
-                  />
-                </div>
-                <div className="admin-form-group">
-                  <label>Unidad (kg, L, sacos...)</label>
-                  <input
-                    type="text"
-                    required
-                    value={formAbono.unidad}
-                    onChange={(e) => setFormAbono({...formAbono, unidad: e.target.value})}
-                    placeholder="Ej: kg"
-                  />
-                </div>
-                <div className="admin-abono-form-actions">
-                  <button type="submit" className="admin-btn-save-abono">
-                    {modoEdicionAbono ? '💾 Guardar Inventario' : '➕ Agregar al Sistema'}
-                  </button>
-                  {modoEdicionAbono && (
-                    <button type="button" onClick={resetFormAbono} className="admin-btn-cancel-abono">
-                      Cancelar
-                    </button>
-                  )}
-                </div>
-              </form>
-            </div>
-
-            <div className="admin-abonos-grid">
-              {abonos.map(abono => (
-                <div key={abono.id} className="admin-abono-stat-card">
-                  <div className="admin-abono-card-body">
-                    <div className="admin-abono-icon">🔋</div>
-                    <div className="admin-abono-info">
-                      <h4>{abono.nombre}</h4>
-                      <div className="admin-abono-stock-badge">
-                        <span className="stock-number">{abono.stock}</span>
-                        <span className="stock-unit">{abono.unidad} disponibles</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="admin-abono-card-footer">
-                    <button onClick={() => handleEditarAbono(abono)} className="btn-edit-stock">✏️ Editar Stock</button>
-                    <button onClick={() => handleEliminarAbono(abono.id, abono.nombre)} className="btn-delete-abono">🗑️ Eliminar</button>
-                  </div>
-                </div>
-              ))}
-              {abonos.length === 0 && <p className="admin-no-data">No hay productos registrados en el inventario.</p>}
-            </div>
-          </div>
+          <AbonosTab 
+            modoEdicionAbono={modoEdicionAbono}
+            handleAbonoSubmit={handleAbonoSubmit}
+            formAbono={formAbono}
+            setFormAbono={setFormAbono}
+            resetFormAbono={resetFormAbono}
+            abonos={abonos}
+            handleEditarAbono={handleEditarAbono}
+            handleEliminarAbono={handleEliminarAbono}
+          />
         )}
 
         {/* ──── TAB: FORMULARIO ──── */}
         {tab === 'agregar' && (
-          <div className="admin-form-card">
-            <h2>{modoEdicion ? '✏️ Editar árbol' : '➕ Registrar nuevo árbol'}</h2>
-
-            <form onSubmit={handleSubmit}>
-              <div className="admin-form-grid">
-
-                {/* Nombre */}
-                <div className="admin-form-group">
-                  <label htmlFor="nombre">Nombre común *</label>
-                  <input
-                    id="nombre"
-                    type="text"
-                    name="nombre"
-                    value={form.nombre}
-                    onChange={handleChange}
-                    placeholder="Ej: Roble, Ceiba, Guanacaste..."
-                    required
-                  />
-                </div>
-
-                {/* Tipo de árbol */}
-                <div className="admin-form-group">
-                  <label htmlFor="tipo">Tipo de Árbol *</label>
-                  {!modoNuevoTipo ? (
-                    <select
-                      id="tipoSelector"
-                      name="tipoSelector"
-                      value={form.tipo}
-                      onChange={handleChange}
-                      required
-                    >
-                      {tiposDisponibles.map(tipo => (
-                        <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
-                      ))}
-                      <option value="___nuevo___" style={{ fontWeight: 'bold', color: '#2e6b46' }}>➕ Añadir otro tipo...</option>
-                    </select>
-                  ) : (
-                    <div className="admin-type-input-group">
-                      <input
-                        id="tipo"
-                        name="tipo"
-                        type="text"
-                        value={form.tipo}
-                        onChange={handleChange}
-                        placeholder="Escribe el nuevo tipo..."
-                        required
-                        className="admin-type-input"
-                      />
-                      <button 
-                        type="button" 
-                        onClick={() => { setModoNuevoTipo(false); setForm({ ...form, tipo: tiposDisponibles[0] || '' }); }}
-                        className="admin-btn-cancel-type"
-                      >
-                        ❌ Cancelar
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Nombre científico */}
-                <div className="admin-form-group">
-                  <label htmlFor="nombreCientifico">Nombre científico</label>
-                  <input
-                    id="nombreCientifico"
-                    type="text"
-                    name="nombreCientifico"
-                    value={form.nombreCientifico}
-                    onChange={handleChange}
-                    placeholder="Ej: Quercus robur"
-                  />
-                </div>
-
-                {/* Familia */}
-                <div className="admin-form-group">
-                  <label htmlFor="familia">Familia botánica</label>
-                  <input
-                    id="familia"
-                    type="text"
-                    name="familia"
-                    value={form.familia}
-                    onChange={handleChange}
-                    placeholder="Ej: Fagaceae"
-                  />
-                </div>
-
-                {/* Altura */}
-                <div className="admin-form-group">
-                  <label htmlFor="altura">Altura promedio</label>
-                  <input
-                    id="altura"
-                    type="text"
-                    name="altura"
-                    value={form.altura}
-                    onChange={handleChange}
-                    placeholder="Ej: 20-40 metros"
-                  />
-                </div>
-
-                {/* Crecimiento */}
-                <div className="admin-form-group">
-                  <label htmlFor="crecimiento">Velocidad de crecimiento</label>
-                  <input
-                    id="crecimiento"
-                    type="text"
-                    name="crecimiento"
-                    value={form.crecimiento}
-                    onChange={handleChange}
-                    placeholder="Ej: Lento (30-60 cm por año)"
-                  />
-                </div>
-
-                {/* Clima */}
-                <div className="admin-form-group">
-                  <label htmlFor="clima">Clima</label>
-                  <input
-                    id="clima"
-                    type="text"
-                    name="clima"
-                    value={form.clima}
-                    onChange={handleChange}
-                    placeholder="Ej: Tropical húmedo"
-                  />
-                </div>
-
-                {/* Estado */}
-                <div className="admin-form-group">
-                  <label htmlFor="estado">Estado</label>
-                  <select
-                    id="estado"
-                    name="estado"
-                    value={form.estado}
-                    onChange={handleChange}
-                  >
-                    <option value="vivo">Vivo</option>
-                    <option value="en_riesgo">En riesgo</option>
-                    <option value="muerto">Muerto</option>
-                    <option value="protegido">Protegido</option>
-                  </select>
-                </div>
-
-                {/* Fecha de registro */}
-                <div className="admin-form-group">
-                  <label htmlFor="fechaRegistro">Fecha de registro</label>
-                  <input
-                    id="fechaRegistro"
-                    type="date"
-                    name="fechaRegistro"
-                    value={form.fechaRegistro}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* URL de imagen - full width */}
-                <div className="admin-form-group admin-form-full">
-                  <label htmlFor="imagenUrl">URL de la imagen</label>
-                  <input
-                    id="imagenUrl"
-                    type="url"
-                    name="imagenUrl"
-                    value={form.imagenUrl}
-                    onChange={handleChange}
-                    placeholder="https://ejemplo.com/imagen-del-arbol.jpg"
-                  />
-                  {/* Preview de imagen */}
-                  <div className="admin-img-preview-wrap">
-                    {form.imagenUrl ? (
-                      <img
-                        src={form.imagenUrl}
-                        alt="Vista previa"
-                        className="admin-img-preview"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className="admin-img-preview-placeholder"
-                      style={{
-                        display: form.imagenUrl ? 'none' : 'flex',
-                      }}
-                    >
-                      <span className="admin-img-no-preview">🖼️</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Descripción */}
-                <div className="admin-form-group admin-form-full">
-                  <label htmlFor="descripcion">Descripción general</label>
-                  <textarea
-                    id="descripcion"
-                    name="descripcion"
-                    rows={4}
-                    value={form.descripcion}
-                    onChange={handleChange}
-                    placeholder="Describe el árbol: historia, características destacadas, importancia ecológica..."
-                  />
-                </div>
-
-
-                {/* Cuidados */}
-                <div className="admin-form-group admin-form-full">
-                  <label htmlFor="cuidados">Cuidados y cultivo</label>
-                  <textarea
-                    id="cuidados"
-                    name="cuidados"
-                    rows={2}
-                    value={form.cuidados}
-                    onChange={handleChange}
-                    placeholder="Ej: Requiere suelo bien drenado, pleno sol, riego moderado..."
-                  />
-                </div>
-              </div>
-
-              {/* Botones */}
-              <div className="admin-form-actions">
-                <button
-                  type="button"
-                  className="admin-btn-cancelar"
-                  onClick={() => { resetForm(); setTab('lista'); }}
-                >
-                  Cancelar
-                </button>
-                <button type="submit" className="admin-btn-guardar">
-                  {modoEdicion ? '💾 Guardar cambios' : '➕ Registrar árbol'}
-                </button>
-              </div>
-            </form>
-          </div>
+          <ArbolFormTab 
+            modoEdicion={modoEdicion}
+            handleSubmit={handleSubmit}
+            form={form}
+            handleChange={handleChange}
+            modoNuevoTipo={modoNuevoTipo}
+            tiposDisponibles={tiposDisponibles}
+            setModoNuevoTipo={setModoNuevoTipo}
+            setForm={setForm}
+            resetForm={resetForm}
+            setTab={setTab}
+          />
         )}
       </main>
     </div>

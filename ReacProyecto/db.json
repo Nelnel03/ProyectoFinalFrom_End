@@ -16,7 +16,18 @@
       "fechaRegistro": "2026-03-17",
       "id": "c2ed",
       "fechaMuerto": null,
-      "historialAbono": []
+      "historialAbono": [
+        {
+          "abono": "Abono",
+          "fecha": "2026-03-19",
+          "idAbono": "1ede"
+        },
+        {
+          "abono": "Abono",
+          "fecha": "2026-03-19",
+          "idAbono": "1ede"
+        }
+      ]
     },
     {
       "nombre": "árbol de Guanacaste",
@@ -39,6 +50,12 @@
           "abono": "Abono ",
           "fecha": "2026-03-19",
           "idAbono": "7fda"
+        },
+        {
+          "abono": "Abono",
+          "fecha": "2026-03-19",
+          "hora": "15:16",
+          "idAbono": "1ede"
         }
       ]
     },
@@ -58,7 +75,13 @@
       "estado": "vivo",
       "fechaRegistro": "2026-03-18",
       "fechaMuerto": null,
-      "historialAbono": []
+      "historialAbono": [
+        {
+          "abono": "compost organico",
+          "fecha": "2026-03-19",
+          "idAbono": "aeb9"
+        }
+      ]
     }
   ],
   "usuarios": [
@@ -119,10 +142,16 @@
   ],
   "abonos": [
     {
-      "id": "7fda",
-      "nombre": "Abono ",
-      "stock": 1599,
-      "unidad": "unidad"
+      "id": "1ede",
+      "nombre": "Abono",
+      "stock": 0,
+      "unidad": "500kg"
+    },
+    {
+      "id": "aeb9",
+      "nombre": "compost organico",
+      "stock": 0,
+      "unidad": "500g"
     }
   ],
   "voluntariados": [
