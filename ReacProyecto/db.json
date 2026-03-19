@@ -56,6 +56,12 @@
           "fecha": "2026-03-19",
           "hora": "15:16",
           "idAbono": "1ede"
+        },
+        {
+          "abono": "abono organico",
+          "fecha": "2026-03-19",
+          "hora": "15:42",
+          "idAbono": "1ee4"
         }
       ]
     },
@@ -121,8 +127,8 @@
       "telefono": "11111111",
       "fechaIngreso": "2026-03-19",
       "rol": "voluntario",
-      "password": "Voluntario123",
-      "debeCambiarPassword": true
+      "password": "12345678",
+      "debeCambiarPassword": false
     },
     {
       "id": "ca99",
@@ -152,6 +158,13 @@
       "nombre": "compost organico",
       "stock": 0,
       "unidad": "500g"
+    },
+    {
+      "id": "1ee4",
+      "nombre": "abono organico",
+      "stock": 199,
+      "unidad": "500g",
+      "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
   "voluntariados": [

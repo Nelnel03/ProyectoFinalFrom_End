@@ -52,6 +52,16 @@ function AbonosTab({
               placeholder="Ej: kg"
             />
           </div>
+          <div className="admin-form-group" style={{ gridColumn: 'span 2' }}>
+            <label>URL de Imagen (Opcional)</label>
+            <input
+              type="url"
+              value={formAbono.imagenUrl || ''}
+              onChange={(e) => setFormAbono({...formAbono, imagenUrl: e.target.value})}
+              placeholder="https://ejemplo.com/imagen.jpg"
+              className="admin-input-full"
+            />
+          </div>
           <div className="admin-abono-form-actions">
             <button type="submit" className="admin-btn-save-abono">
               {modoEdicionAbono ? '💾 Guardar Inventario' : '➕ Agregar al Sistema'}
@@ -69,7 +79,15 @@ function AbonosTab({
         {abonos.map(abono => (
           <div key={abono.id} className="admin-abono-stat-card">
             <div className="admin-abono-card-body">
-              <div className="admin-abono-icon">🔋</div>
+              <div className="admin-abono-icon">
+                {abono.imagenUrl ? (
+                  <img src={abono.imagenUrl} alt={abono.nombre} className="admin-abono-img-preview" onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }} />
+                ) : null}
+                <span style={{ display: abono.imagenUrl ? 'none' : 'block' }}>🔋</span>
+              </div>
               <div className="admin-abono-info">
                 <h4>{abono.nombre}</h4>
                 <div className="admin-abono-stock-badge">

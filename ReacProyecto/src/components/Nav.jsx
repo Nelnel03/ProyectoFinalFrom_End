@@ -32,6 +32,14 @@ function Nav() {
           >
             Inicio
           </NavLink>
+          {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
+            <NavLink 
+              to="/voluntariado" 
+              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+            >
+              Voluntariado
+            </NavLink>
+          )}
           {!auth ? (
             <NavLink 
               to="/login" 

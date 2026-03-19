@@ -48,7 +48,8 @@ const VOLUNTARIADO_FORM_INICIAL = {
 const ABONO_FORM_INICIAL = {
   nombre: '',
   stock: '',
-  unidad: 'kg'
+  unidad: 'kg',
+  imagenUrl: ''
 };
 
 function MainPagesInicoAdmin() {

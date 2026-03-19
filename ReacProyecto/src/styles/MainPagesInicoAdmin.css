@@ -664,6 +664,14 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  overflow: hidden; /* Para que la imagen respete el border-radius */
+  border: 1px solid #d1fae5;
+}
+
+.admin-abono-img-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .admin-abono-info h4 {
@@ -792,4 +800,8 @@
   -moz-appearance: textfield;
   appearance: none;
   -webkit-appearance: none;
+}
+
+.admin-input-full {
+  width: 100%;
 }

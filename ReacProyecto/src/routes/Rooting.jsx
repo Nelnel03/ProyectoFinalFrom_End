@@ -4,6 +4,7 @@ import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
 import InicioAdimin from '../pages/InicioAdimin';
 import Login from '../pages/Login';
+import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import PrivateRoutes from './PrivateRoutes';
 
@@ -23,7 +24,7 @@ function MainLayout() {
           <Route 
             path="/user" 
             element={
-              <PrivateRoutes roleRequired="user">
+              <PrivateRoutes rolesAllowed={['user', 'voluntario']}>
                 <InicioUser />
               </PrivateRoutes>
             } 
@@ -36,6 +37,7 @@ function MainLayout() {
               </PrivateRoutes>
             } 
           />
+          <Route path="/voluntariado" element={<Voluntariado />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
