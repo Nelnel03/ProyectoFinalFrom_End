@@ -15,7 +15,8 @@
       "estado": "vivo",
       "fechaRegistro": "2026-03-17",
       "id": "c2ed",
-      "fechaMuerto": null
+      "fechaMuerto": null,
+      "historialAbono": []
     },
     {
       "nombre": "árbol de Guanacaste",
@@ -29,10 +30,17 @@
       "descripcion": "asdfghjklñ{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
-      "estado": "muerto",
+      "estado": "vivo",
       "fechaRegistro": "2026-03-17",
       "id": "2440",
-      "fechaMuerto": "2026-03-19"
+      "fechaMuerto": null,
+      "historialAbono": [
+        {
+          "abono": "Abono ",
+          "fecha": "2026-03-19",
+          "idAbono": "7fda"
+        }
+      ]
     },
     {
       "id": "aa80",
@@ -49,7 +57,8 @@
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.0lyUU6ToXswBlaCSYGkJvgAAAA%3Fpid%3DApi&f=1&ipt=5a7368bc95cb05f1c9f225fdb55f0f86ede8307f2c3951937f4d613234cf41e5&ipo=images",
       "estado": "vivo",
       "fechaRegistro": "2026-03-18",
-      "fechaMuerto": null
+      "fechaMuerto": null,
+      "historialAbono": []
     }
   ],
   "usuarios": [
@@ -105,7 +114,15 @@
       "id": "11f2",
       "tipo": "guanacaste",
       "planificados": 0,
-      "muertos": 1
+      "muertos": 0
+    }
+  ],
+  "abonos": [
+    {
+      "id": "7fda",
+      "nombre": "Abono ",
+      "stock": 1599,
+      "unidad": "unidad"
     }
   ],
   "voluntariados": [

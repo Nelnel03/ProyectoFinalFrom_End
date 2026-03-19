@@ -38,6 +38,12 @@ const VOLUNTARIADO_FORM_INICIAL = {
   fechaIngreso: new Date().toISOString().split('T')[0]
 };
 
+const ABONO_FORM_INICIAL = {
+  nombre: '',
+  stock: '',
+  unidad: 'kg'
+};
+
 function MainPagesInicoAdmin() {
   const [adminName, setAdminName] = useState('Administrador');
   const [arboles, setArboles] = useState([]);
@@ -59,6 +65,11 @@ function MainPagesInicoAdmin() {
   const [formVoluntariado, setFormVoluntariado] = useState(VOLUNTARIADO_FORM_INICIAL);
   const [modoEdicionVoluntariado, setModoEdicionVoluntariado] = useState(false);
   const [idEditandoVoluntariado, setIdEditandoVoluntariado] = useState(null);
+
+  const [abonos, setAbonos] = useState([]);
+  const [formAbono, setFormAbono] = useState(ABONO_FORM_INICIAL);
+  const [modoEdicionAbono, setModoEdicionAbono] = useState(false);
+  const [idEditandoAbono, setIdEditandoAbono] = useState(null);
 
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
   const [busqueda, setBusqueda] = useState(''); // Nuevo estado para búsqueda por texto
@@ -92,16 +103,18 @@ function MainPagesInicoAdmin() {
   const cargarArboles = async () => {
     setCargando(true);
     try {
-      const [datosArboles, datosStats, datosUsuarios, datosEmpleados] = await Promise.all([
+      const [datosArboles, datosStats, datosUsuarios, datosEmpleados, datosAbonos] = await Promise.all([
         services.getArboles(),
         services.getStatsTipos(),
         services.getUsuarios(),
-        services.getVoluntariados()
+        services.getVoluntariados(),
+        services.getAbonos()
       ]);
       setArboles(datosArboles || []);
       setStatsTipos(datosStats || []);
       setUsuarios(datosUsuarios || []);
       setVoluntariados(datosEmpleados || []);
+      setAbonos(datosAbonos || []);
     } catch (err) {
       mostrarMensaje('Error al cargar la información.', 'error');
     } finally {
@@ -504,6 +517,146 @@ function MainPagesInicoAdmin() {
     });
   };
 
+  // ── Handlers de Abonos ──────────────────────────────────────────────────────
+  const resetFormAbono = () => {
+    setFormAbono(ABONO_FORM_INICIAL);
+    setModoEdicionAbono(false);
+    setIdEditandoAbono(null);
+  };
+
+  const handleLimpiarHistorialAbono = async (arbol) => {
+    const confirm = await Swal.fire({
+      title: '¿Limpiar historial?',
+      text: `Se borrará el registro de los ${arbol.historialAbono?.length} abonos aplicados a "${arbol.nombre}".`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, limpiar',
+      cancelButtonText: 'No'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        const arbolActualizado = { ...arbol, historialAbono: [] };
+        await services.putArboles(arbolActualizado, arbol.id);
+        Swal.fire('Historial Limpiado', '', 'success');
+        await cargarArboles();
+      } catch (e) {
+        Swal.fire('Error', 'No se pudo limpiar el historial.', 'error');
+      }
+    }
+  };
+
+  const handleAbonoSubmit = async (e) => {
+    e.preventDefault();
+    const trimmedNombre = formAbono.nombre.trim();
+    if (!trimmedNombre) {
+      Swal.fire('Error', 'El nombre es obligatorio', 'error');
+      return;
+    }
+
+    const stockFinal = parseInt(formAbono.stock) || 0;
+
+    if (stockFinal < 0) {
+      Swal.fire('Error', 'El stock no puede ser un número negativo', 'error');
+      return;
+    }
+
+    try {
+      const abonoFinal = { ...formAbono, stock: stockFinal };
+      if (modoEdicionAbono) {
+        await services.putAbonos(abonoFinal, idEditandoAbono);
+        Swal.fire('Éxito', 'Abono actualizado', 'success');
+      } else {
+        await services.postAbonos(abonoFinal);
+        Swal.fire('Éxito', 'Abono registrado', 'success');
+      }
+      resetFormAbono();
+      await cargarArboles();
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo guardar el abono', 'error');
+    }
+  };
+
+  const handleEditarAbono = (abono) => {
+    setFormAbono(abono);
+    setModoEdicionAbono(true);
+    setIdEditandoAbono(abono.id);
+    setTab('abonos');
+  };
+
+  const handleEliminarAbono = async (id, nombre) => {
+    const confirm = await Swal.fire({
+      title: '¿Confirmar eliminación?',
+      text: `Eliminarás "${nombre}" del inventario.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.deleteAbonos(id);
+        Swal.fire('Eliminado', 'Abono borrado', 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar', 'error');
+      }
+    }
+  };
+
+  const handleAbonarArbol = async (arbol) => {
+    if (abonos.length === 0) {
+      Swal.fire('Inventario vacío', 'No hay abonos registrados para aplicar.', 'warning');
+      return;
+    }
+
+    const { value: abonoSeleccionadoId } = await Swal.fire({
+      title: '🌿 Aplicar Abono/Fertilizante',
+      text: `Selecciona el producto para el árbol "${arbol.nombre}":`,
+      input: 'select',
+      inputOptions: abonos.reduce((acc, curr) => {
+        acc[curr.id] = `${curr.nombre} (Stock: ${curr.stock} ${curr.unidad})`;
+        return acc;
+      }, {}),
+      inputPlaceholder: 'Selecciona un producto...',
+      showCancelButton: true,
+      confirmButtonText: 'Aplicar 1 unidad',
+      inputValidator: (value) => {
+        if (!value) return 'Debes seleccionar un producto';
+        const ab = abonos.find(a => a.id === value);
+        if (ab.stock <= 0) return 'No queda stock de este producto';
+      }
+    });
+
+    if (abonoSeleccionadoId) {
+      try {
+        const abonoEncontrado = abonos.find(a => a.id === abonoSeleccionadoId);
+        
+        // 1. Restar stock
+        const abonoActualizado = { ...abonoEncontrado, stock: abonoEncontrado.stock - 1 };
+        await services.putAbonos(abonoActualizado, abonoSeleccionadoId);
+
+        // 2. Registrar en historial del árbol
+        const nuevoRegistro = {
+          abono: abonoEncontrado.nombre,
+          fecha: new Date().toISOString().split('T')[0],
+          idAbono: abonoSeleccionadoId
+        };
+        
+        const arbolActualizado = {
+          ...arbol,
+          historialAbono: [...(arbol.historialAbono || []), nuevoRegistro]
+        };
+        await services.putArboles(arbolActualizado, arbol.id);
+
+        await Swal.fire('¡Árbol Abonado!', `Se aplicó "${abonoEncontrado.nombre}" correctamente.`, 'success');
+        await cargarArboles();
+      } catch (e) {
+        Swal.fire('Error', 'No se pudo registrar la fertilización.', 'error');
+      }
+    }
+  };
+
   // ── Handlers del formulario ─────────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -803,6 +956,12 @@ function MainPagesInicoAdmin() {
             🤝 Voluntariados
           </button>
           <button
+            className={`admin-tab ${tab === 'abonos' ? 'active' : ''}`}
+            onClick={() => { setTab('abonos'); resetFormAbono(); }}
+          >
+            🦴 Abonos / Stock ({abonos.length})
+          </button>
+          <button
             className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
             onClick={() => { setTab('agregar'); resetForm(); }}
           >
@@ -1019,12 +1178,42 @@ function MainPagesInicoAdmin() {
                             {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
                             {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
                           </p>
+
+                          {/* Info de Abono */}
+                          <div className="admin-arbol-status-abono">
+                            <div className="admin-abono-count-wrap">
+                               <span className="admin-abono-badge">
+                                 🦴 {arbol.historialAbono?.length || 0} Abonos
+                               </span>
+                               {arbol.historialAbono?.length > 0 && (
+                                 <button 
+                                   className="admin-btn-clear-history"
+                                   onClick={() => handleLimpiarHistorialAbono(arbol)}
+                                   title="Limpiar historial de abonos"
+                                 >
+                                   ×
+                                 </button>
+                               )}
+                            </div>
+                            {arbol.historialAbono?.length > 0 && (
+                              <p className="admin-abono-last-date">
+                                Último: {arbol.historialAbono[arbol.historialAbono.length - 1].fecha.split('-').reverse().join('/')}
+                              </p>
+                            )}
+                          </div>
                           <div className="admin-arbol-card-actions">
                             <button
                               className="admin-btn-editar"
                               onClick={() => handleEditar(arbol)}
                             >
                               ✏️ Editar
+                            </button>
+                            <button
+                              className="admin-btn-abonar"
+                              onClick={() => handleAbonarArbol(arbol)}
+                              title="Aplicar abono/fertilizante"
+                            >
+                              🍽️ Abonar
                             </button>
                             <button
                               className="admin-btn-eliminar"
@@ -1356,6 +1545,86 @@ function MainPagesInicoAdmin() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ──── TAB: ABONOS ──── */}
+        {tab === 'abonos' && (
+          <div className="admin-abonos-container">
+            <div className="admin-section-header">
+              <h2>🌿 Gestión de Abonos y Fertilizantes</h2>
+              <p>Control de inventario y reposición de insumos</p>
+            </div>
+
+            <div className="admin-abono-form-card">
+              <h3>{modoEdicionAbono ? '✏️ Reponer / Editar Stock' : '➕ Registrar Nuevo Producto'}</h3>
+              <form onSubmit={handleAbonoSubmit} className="admin-abono-form">
+                <div className="admin-form-group">
+                  <label>Nombre del Producto</label>
+                  <input
+                    type="text"
+                    required
+                    value={formAbono.nombre}
+                    onChange={(e) => setFormAbono({...formAbono, nombre: e.target.value})}
+                    placeholder="Ej: Compost Orgánico"
+                  />
+                </div>
+                <div className="admin-form-group">
+                  <label>Cantidad en Stock</label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    value={formAbono.stock}
+                    onChange={(e) => setFormAbono({...formAbono, stock: e.target.value})}
+                    className="admin-input-no-spinner"
+                    placeholder="Ingresa cantidad..."
+                  />
+                </div>
+                <div className="admin-form-group">
+                  <label>Unidad (kg, L, sacos...)</label>
+                  <input
+                    type="text"
+                    required
+                    value={formAbono.unidad}
+                    onChange={(e) => setFormAbono({...formAbono, unidad: e.target.value})}
+                    placeholder="Ej: kg"
+                  />
+                </div>
+                <div className="admin-abono-form-actions">
+                  <button type="submit" className="admin-btn-save-abono">
+                    {modoEdicionAbono ? '💾 Guardar Inventario' : '➕ Agregar al Sistema'}
+                  </button>
+                  {modoEdicionAbono && (
+                    <button type="button" onClick={resetFormAbono} className="admin-btn-cancel-abono">
+                      Cancelar
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="admin-abonos-grid">
+              {abonos.map(abono => (
+                <div key={abono.id} className="admin-abono-stat-card">
+                  <div className="admin-abono-card-body">
+                    <div className="admin-abono-icon">🔋</div>
+                    <div className="admin-abono-info">
+                      <h4>{abono.nombre}</h4>
+                      <div className="admin-abono-stock-badge">
+                        <span className="stock-number">{abono.stock}</span>
+                        <span className="stock-unit">{abono.unidad} disponibles</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="admin-abono-card-footer">
+                    <button onClick={() => handleEditarAbono(abono)} className="btn-edit-stock">✏️ Editar Stock</button>
+                    <button onClick={() => handleEliminarAbono(abono.id, abono.nombre)} className="btn-delete-abono">🗑️ Eliminar</button>
+                  </div>
+                </div>
+              ))}
+              {abonos.length === 0 && <p className="admin-no-data">No hay productos registrados en el inventario.</p>}
             </div>
           </div>
         )}
