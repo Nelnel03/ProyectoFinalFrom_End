@@ -1,41 +1,78 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import '../styles/Nav.css';
 
 function Nav() {
+  const location = useLocation();
+  const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
+
+  // Sincronizar el estado de autenticación cuando cambie la ruta
+  useEffect(() => {
+    setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
+  }, [location]);
+
+  // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  
+  if (isAdminRoute && auth) {
+    return null;
+  }
+
   return (
-    <nav className="main-navigation">
-      <div className="nav-container">
-        <NavLink to="/" className="nav-logo">
-          EcoControl
+    <nav className="visitor-nav">
+      <div className="visitor-nav-container">
+        <NavLink to="/" className="visitor-logo">
+          🌳 EcoControl
         </NavLink>
         
-        <ul className="nav-links">
-          <li className="nav-item">
+        <div className="visitor-nav-links">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
+          >
+            Inicio
+          </NavLink>
+          {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
             <NavLink 
-              to="/" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              to="/voluntariado" 
+              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
             >
-              Inicio
+              Voluntariado
             </NavLink>
-          </li>
-          <li className="nav-item">
+          )}
+          {!auth ? (
             <NavLink 
               to="/login" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              className="visitor-login-btn"
             >
-              Iniciar Sesión
+              Iniciar Sesión / Registro
             </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink 
-              to="/user" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
-              Mi Panel
-            </NavLink>
-          </li>
-        </ul>
+          ) : (
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {location.pathname !== '/user' && location.pathname !== '/admin' && (
+                <NavLink 
+                  to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
+                  className="visitor-login-btn"
+                  style={{ backgroundColor: '#1a4d2e' }}
+                >
+                  🚀 Ir a mi Panel
+                </NavLink>
+              )}
+              <button 
+                onClick={() => {
+                  sessionStorage.removeItem('isAuthenticated');
+                  sessionStorage.removeItem('user');
+                  setAuth(false);
+                  window.location.href = '/';
+                }}
+                className="visitor-login-btn"
+                style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer' }}
+              >
+                🚪 Cerrar Sesión
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

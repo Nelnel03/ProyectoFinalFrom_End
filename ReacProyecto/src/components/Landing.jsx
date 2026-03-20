@@ -16,26 +16,6 @@ const Landing = () => {
                 color: 'white',
                 padding: '2rem'
             }}>
-                <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ background: '#A3B18A', padding: '0.5rem', borderRadius: '50%' }}>
-                            <Leaf size={28} color="#344E41" />
-                        </div>
-                        <h2 style={{ margin: 0, fontWeight: 'bold', color: '#DAD7CD' }}>BioMon ADI</h2>
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                        <button onClick={() => navigate('/mapa')} style={{ background: 'transparent', border: 'none', color: '#DAD7CD', fontWeight: '600', cursor: 'pointer', fontSize: '1rem', transition: 'color 0.2s' }}>
-                            Mapa
-                        </button>
-                        <button onClick={() => navigate('/historia')} style={{ background: 'transparent', border: 'none', color: '#DAD7CD', fontWeight: '600', cursor: 'pointer', fontSize: '1rem', transition: 'color 0.2s' }}>
-                            Historia
-                        </button>
-                        <button onClick={() => navigate('/auth')} style={{ background: 'transparent', border: '2px solid #A3B18A', color: '#DAD7CD', padding: '0.5rem 1.5rem', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>
-                            Iniciar Sesión
-                        </button>
-                    </div>
-                </nav>
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
                     <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', color: '#DAD7CD', lineHeight: 1.1, fontWeight: '800' }}>
