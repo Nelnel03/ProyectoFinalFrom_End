@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
+import UserProfile from './UserProfile';
+import UserReports from './UserReports';
+import UserReportesRobo from './UserReportesRobo';
 import '../styles/MainPagesInicoVisitante.css';
 
 function MainPagesInicoUser() {
-  const [userName, setUserName] = useState('');
+  const [user, setUser] = useState(null);
   const [arboles, setArboles] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [currentTab, setCurrentTab] = useState('coleccion');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +23,8 @@ function MainPagesInicoUser() {
 
     const userData = localStorage.getItem('user');
     if (userData) {
-      const user = JSON.parse(userData);
-      setUserName(user.nombre);
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
     }
 
     cargarArboles();
@@ -46,21 +50,76 @@ function MainPagesInicoUser() {
 
   return (
     <div className="visitante-container">
-      <header className="visitante-header">
-        <h1>🌿 Panel de Usuario</h1>
-        <p>Bienvenido de vuelta, <strong>{userName}</strong></p>
+      <header className="visitante-header" style={{ background: 'linear-gradient(135deg, #1a4d2e 0%, #2e6b46 100%)', padding: '3rem 1rem' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>🌳 ¡Hola, {user?.nombre}!</h1>
+        <p style={{ opacity: 0.9, fontSize: '1.1rem' }}>Panel de Usuario - Gestiona tu información y explora</p>
       </header>
 
       <main className="visitante-content" style={{ maxWidth: '1100px' }}>
         <section className="visitante-intro"
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}
         >
-          <div>
-            <h2>Monitor Forestal</h2>
-            <p>
-              Aquí puedes consultar todas las especies forestales registradas en el sistema.
-              Haz click en cualquier tarjeta para conocer los detalles completos de cada árbol.
-            </p>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button
+              onClick={() => setCurrentTab('coleccion')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'coleccion' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'coleccion' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              🌳 Colección Forestal
+            </button>
+            <button
+              onClick={() => setCurrentTab('perfil')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'perfil' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'perfil' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              👤 Mi Perfil
+            </button>
+            <button
+              onClick={() => setCurrentTab('reportes')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'reportes' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'reportes' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              ✉️ Soporte/Reportes
+            </button>
+            <button
+              onClick={() => setCurrentTab('reporte_robo')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'reporte_robo' ? '#ef4444' : '#fef2f2',
+                color: currentTab === 'reporte_robo' ? 'white' : '#ef4444',
+                border: '1px solid #fca5a5',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              🚨 Reportar Robo
+            </button>
           </div>
           <button
             onClick={handleLogout}
@@ -73,21 +132,43 @@ function MainPagesInicoUser() {
               cursor: 'pointer',
               fontWeight: '600',
               fontSize: '0.9rem',
-              flexShrink: 0,
             }}
           >
             🚪 Cerrar Sesión
           </button>
         </section>
 
-        {/* Tarjetas de árboles */}
-        {cargando ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
-            Cargando especies forestales...
-          </div>
-        ) : (
-          <ArbolesSection arboles={arboles} />
-        )}
+        <div style={{ marginTop: '2rem' }}>
+          {currentTab === 'coleccion' && (
+            <div>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h2 style={{ color: '#1a4d2e', margin: 0 }}>Colección Forestal</h2>
+                <p>
+                  Consulta todas las especies forestales registradas. Como usuario, puedes ver toda la información de la página en tiempo real.
+                </p>
+              </div>
+              {cargando ? (
+                <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
+                  Cargando especies forestales...
+                </div>
+              ) : (
+                <ArbolesSection arboles={arboles} />
+              )}
+            </div>
+          )}
+          
+          {currentTab === 'perfil' && (
+            <UserProfile user={user} onUpdateUser={setUser} />
+          )}
+
+          {currentTab === 'reportes' && (
+            <UserReports user={user} />
+          )}
+
+          {currentTab === 'reporte_robo' && (
+            <UserReportesRobo user={user} />
+          )}
+        </div>
       </main>
     </div>
   );

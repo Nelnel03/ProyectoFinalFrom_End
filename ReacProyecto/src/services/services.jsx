@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = "http://localhost:3000";
 
 // ========================
 // USUARIOS
@@ -11,6 +11,7 @@ async function getUsuarios() {
     return datosUsuarios;
   } catch (error) {
     console.error("Error al obtener los usuarios", error);
+    return [];
   }
 }
 
@@ -65,6 +66,7 @@ async function getArboles() {
     return datos;
   } catch (error) {
     console.error("Error al obtener los árboles", error);
+    return [];
   }
 }
 
@@ -108,6 +110,119 @@ async function deleteArboles(id) {
   }
 }
 
+// ========================
+// STATS POR TIPO
+// ========================
+
+async function getStatsTipos() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener stats de tipos", error);
+    return [];
+  }
+}
+
+async function postStatsTipos(stat) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(stat),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear stat de tipo", error);
+  }
+}
+
+async function putStatsTipos(stat, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/stats_tipos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(stat),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al actualizar stat de tipo", error);
+  }
+}
+
+// ========================
+// REPORTES
+// ========================
+
+async function getReportes() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener reportes", error);
+    return [];
+  }
+}
+
+async function postReportes(reporte) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear reporte", error);
+  }
+}
+
+// ========================
+// REPORTES ÁRBOLES ROBADOS
+// ========================
+
+async function getReportesRobados() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener reportes de árboles robados", error);
+    return [];
+  }
+}
+
+async function postReportesRobados(reporte) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al crear reporte de árbol robado", error);
+  }
+}
+
+async function deleteReportesRobados(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar reporte de árbol robado", error);
+  }
+}
+
 export {
   getUsuarios,
   postUsuarios,
@@ -117,6 +232,14 @@ export {
   postArboles,
   putArboles,
   deleteArboles,
+  getStatsTipos,
+  postStatsTipos,
+  putStatsTipos,
+  getReportes,
+  postReportes,
+  getReportesRobados,
+  postReportesRobados,
+  deleteReportesRobados,
 };
 
 const services = {
@@ -128,6 +251,14 @@ const services = {
   postArboles,
   putArboles,
   deleteArboles,
+  getStatsTipos,
+  postStatsTipos,
+  putStatsTipos,
+  getReportes,
+  postReportes,
+  getReportesRobados,
+  postReportesRobados,
+  deleteReportesRobados,
 };
 
 export default services;

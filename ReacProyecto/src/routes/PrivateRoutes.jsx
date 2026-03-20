@@ -1,25 +1,29 @@
-// import type { ReactNode } from "react";
-// import { Navigate } from "react-router-dom";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 
+const PrivateRoutes = ({ children, roleRequired }) => {
+  const isAuth = localStorage.getItem('isAuthenticated') === 'true';
+  const userStr = localStorage.getItem('user');
+  let user = {};
+  
+  try {
+    if (userStr) {
+      user = JSON.parse(userStr);
+    }
+  } catch (e) {
+    console.error("Error parsing user from localStorage", e);
+  }
 
+  if (!isAuth) {
+    return <Navigate to="/login" replace />;
+  }
 
-// interface PrivateRoutePagina {
-//     children: ReactNode
-// }
+  if (roleRequired && user.rol !== roleRequired) {
+    // Si no tiene el rol, redirige a la página principal (o a un "acceso denegado")
+    return <Navigate to="/" replace />;
+  }
 
+  return children;
+};
 
-// const PrivateRoutes =({children}:PrivateRoutePagina)=>{
-
-//     const estaAutenticado =localStorage.getItem('token');
-
-//     if (!estaAutenticado) {
-//         return <Navigate to="/Login" />;
-    
-        
-//     }
-//     return children
-
-
-// }
-
-// export default PrivateRoutes;
+export default PrivateRoutes;

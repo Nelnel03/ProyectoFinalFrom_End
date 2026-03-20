@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import services from '../services/services';
 import '../styles/Arboles.css';
 
 // ── Modal con toda la información del árbol ──────────────────────────────────
@@ -82,13 +83,6 @@ function ArbolModal({ arbol, onClose }) {
             </>
           )}
 
-          {arbol.usos && (
-            <>
-              <h3 className="modal-section-title">🪵 Usos</h3>
-              <p className="modal-section-text">{arbol.usos}</p>
-            </>
-          )}
-
           {arbol.cuidados && (
             <>
               <h3 className="modal-section-title">🌱 Cuidados</h3>
@@ -102,15 +96,17 @@ function ArbolModal({ arbol, onClose }) {
 }
 
 // ── Tarjeta individual de árbol ───────────────────────────────────────────────
-function ArbolCard({ arbol, onClick }) {
+function ArbolCard({ arbol, count, onClick }) {
   const [imgError, setImgError] = useState(false);
+
+  const titulo = count !== undefined ? (arbol.tipo || 'mimbro') : arbol.nombre;
 
   return (
     <div className="arbol-card" onClick={() => onClick(arbol)}>
       {arbol.imagenUrl && !imgError ? (
         <img
           src={arbol.imagenUrl}
-          alt={arbol.nombre}
+          alt={titulo}
           className="arbol-card-img"
           onError={() => setImgError(true)}
         />
@@ -122,16 +118,36 @@ function ArbolCard({ arbol, onClick }) {
       )}
 
       <div className="arbol-card-body">
-        <h3 className="arbol-card-nombre">{arbol.nombre}</h3>
+        <h3 className="arbol-card-nombre" style={{ textTransform: 'capitalize' }}>{titulo}</h3>
         {arbol.nombreCientifico && (
           <p className="arbol-card-cientifico">{arbol.nombreCientifico}</p>
         )}
-        {arbol.descripcion && (
-          <p className="arbol-card-desc">{arbol.descripcion}</p>
+        
+        {count !== undefined ? (
+          <div className="arbol-stats-mini-grid">
+            <div className="arbol-stat-pill planted">
+              <span className="pill-dot"></span>
+              <strong>{count}</strong> Sembrados
+            </div>
+            {arbol.stats && arbol.stats.planificados > 0 && (
+              <div className="arbol-stat-pill planned">
+                <span className="pill-dot"></span>
+                <strong>{arbol.stats.planificados}</strong> Planeados
+              </div>
+            )}
+            {arbol.stats && arbol.stats.muertos > 0 && (
+              <div className="arbol-stat-pill dead">
+                <span className="pill-dot"></span>
+                <strong>{arbol.stats.muertos}</strong> Muertos
+              </div>
+            )}
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+            <span className="arbol-card-badge">{arbol.estado || 'Registrado'}</span>
+          </div>
         )}
-        <span className="arbol-card-badge">
-          {arbol.estado || 'Registrado'}
-        </span>
+        
         <p className="arbol-card-hint">🔍 Click para ver más información</p>
       </div>
     </div>
@@ -141,20 +157,47 @@ function ArbolCard({ arbol, onClick }) {
 // ── Sección completa de tarjetas (usada en User y Visitante) ──────────────────
 function ArbolesSection({ arboles }) {
   const [arbolSeleccionado, setArbolSeleccionado] = useState(null);
+  const [stats, setStats] = useState([]);
+
+  useEffect(() => {
+    services.getStatsTipos().then(res => setStats(res || []));
+  }, []);
+
+  // Agrupamos los árboles por su tipo
+  const arbolesAgrupados = arboles && arboles.length > 0 ? Object.values(arboles.reduce((acc, arbol) => {
+    const tipo = (arbol.tipo || 'mimbro').toLowerCase();
+    const isAlive = arbol.estado !== 'muerto';
+
+    if (!acc[tipo]) {
+      const statDelTipo = stats.find(s => s.tipo.toLowerCase() === tipo);
+      acc[tipo] = {
+        tipo,
+        count: 0,
+        representante: { ...arbol, stats: statDelTipo },
+      };
+    }
+    
+    if (isAlive) {
+      acc[tipo].count += 1;
+    }
+    
+    return acc;
+  }, {})) : [];
 
   return (
     <section className="arboles-section">
       <h2 className="arboles-section-title">🌿 Especies Registradas</h2>
       <p className="arboles-section-subtitle">
-        Explora nuestra base de datos forestal — haz click en una tarjeta para ver todos los detalles.
+        Explora nuestra base de datos forestal agrupada por tipo de árbol — haz click en una tarjeta para ver información exhaustiva de la especie.
       </p>
 
-      {arboles && arboles.length > 0 ? (
+      {arbolesAgrupados.length > 0 ? (
         <div className="arboles-grid">
-          {arboles.map((arbol) => (
+          {arbolesAgrupados.map((grupo) => (
             <ArbolCard
-              key={arbol.id}
-              arbol={arbol}
+              key={grupo.tipo}
+              arbol={grupo.representante}
+              count={grupo.count}
               onClick={setArbolSeleccionado}
             />
           ))}
@@ -162,7 +205,7 @@ function ArbolesSection({ arboles }) {
       ) : (
         <div className="arboles-empty">
           <div className="tree-icon">🌲</div>
-          <p>Aún no hay árboles registrados en el sistema.</p>
+          <p>Aún no hay especies registradas en el sistema.</p>
         </div>
       )}
 
