@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
+import * as emailjs from '@emailjs/browser';
 import '../styles/Login.css';
 
 function MainPagesLogin() {
@@ -48,25 +49,38 @@ function MainPagesLogin() {
           const updatedUser = { ...user, resetToken: token, resetTokenExpiry: expiry.toISOString() };
           await services.putUsuarios(updatedUser, user.id);
           
-          setSuccessMsg('Se ha enviado un enlace de recuperación a tu correo.');
+          setSuccessMsg('Enviando enlace de recuperación a tu correo...');
           
-          // MOCK: Simulando el envío de correo mostrando el enlace en la alerta (para pruebas en desarrollo)
           const resetLink = `${window.location.origin}/reset-password?token=${token}`;
-          setTimeout(() => {
-            Swal.fire({
-              title: '📧 Simulación de Correo',
-              html: `<strong>Para:</strong> ${email}<br/><strong>Asunto:</strong> Recuperación de contraseña<br/><br/>Haz clic en el siguiente enlace para restablecer tu contraseña:<br/><br/><a href="${resetLink}" target="_blank" style="color: #2e6b46; font-weight: bold; word-break: break-all;">${resetLink}</a>`,
-              icon: 'info',
-              confirmButtonColor: '#2e6b46',
-              confirmButtonText: 'Entendido, ir al enlace',
-              showCancelButton: true,
-              cancelButtonText: 'Cerrar ventana'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = resetLink;
+          const templateParams = {
+            to_email: email,
+            reset_link: resetLink,
+            user_name: user.nombre || 'Usuario'
+          };
+
+          try {
+            await emailjs.send(
+              'YOUR_SERVICE_ID', // Reemplaza con tu Service ID de EmailJS
+              'YOUR_TEMPLATE_ID', // Reemplaza con tu Template ID de EmailJS
+              templateParams,
+              {
+                publicKey: 'YOUR_PUBLIC_KEY' // Reemplaza con tu Public Key de EmailJS
               }
+            );
+
+            setSuccessMsg('¡Correo enviado exitosamente! Revisa tu bandeja de entrada o carpeta de spam.');
+            Swal.fire({
+              title: '¡Correo Enviado!',
+              text: 'Se ha enviado un enlace de recuperación a tu correo electrónico.',
+              icon: 'success',
+              confirmButtonColor: '#2e6b46',
+              confirmButtonText: 'Entendido'
             });
-          }, 500);
+          } catch (emailError) {
+            console.error('Error al enviar el correo con EmailJS:', emailError);
+            setError('No se pudo enviar el correo de recuperación. Por favor, verifica tu configuración de EmailJS o intenta más tarde.');
+            setSuccessMsg('');
+          }
         }
         return;
       }

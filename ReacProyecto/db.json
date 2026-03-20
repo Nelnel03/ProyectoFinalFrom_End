@@ -69,8 +69,17 @@
       "email": "alealvfwd@gmail.com",
       "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
       "rol": "user",
-      "resetToken": "r8u5d3ae8bcqjjukbn5yf",
-      "resetTokenExpiry": "2026-03-19T22:35:33.797Z"
+      "resetToken": "njig41nqox26omjx0zhsf",
+      "resetTokenExpiry": "2026-03-20T21:23:46.044Z"
+    },
+    {
+      "id": "9ba2",
+      "nombre": "Andrés Leal V",
+      "email": "andresgerardolv@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "user",
+      "resetToken": "o5phuesjo69r3drsixzy7i",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
     }
   ],
   "stats_tipos": [
