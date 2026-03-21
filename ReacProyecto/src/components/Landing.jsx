@@ -6,27 +6,27 @@ const Landing = () => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ fontFamily: 'Montserrat, sans-serif', color: 'var(--text)' }}>
+        <div style={{ fontFamily: 'var(--fuente-principal)', color: 'var(--color-texto)' }}>
             {/* Cabecera / Sección Hero */}
             <div style={{ 
                 minHeight: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
-                background: 'linear-gradient(rgba(58, 90, 64, 0.8), rgba(52, 78, 65, 0.9)), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80") center/cover no-repeat',
+                background: 'linear-gradient(rgba(0, 119, 182, 0.7), rgba(0, 180, 216, 0.8)), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80") center/cover no-repeat',
                 color: 'white',
                 padding: '2rem'
             }}>
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-                    <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', color: '#DAD7CD', lineHeight: 1.1, fontWeight: '800' }}>
+                    <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', color: 'var(--color-caracola)', lineHeight: 1.1, fontWeight: '800', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>
                         Descubre y Protege La Angostura
                     </h1>
                     <p style={{ fontSize: '1.2rem', marginBottom: '2.5rem', color: '#e0e0e0', lineHeight: 1.6 }}>
                         Explora la asombrosa variedad de flora y fauna en Puntarenas. Únete a nuestra comunidad de voluntarios para registrar, monitorear y asegurar la conservación de nuestro ecosistema forestal.
                     </p>
                     <button 
-                        onClick={() => navigate('/auth')}
-                        style={{ background: '#A3B18A', color: '#1a1a1a', border: 'none', padding: '1.2rem 3rem', fontSize: '1.2rem', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.3)', transition: 'transform 0.2s' }}
+                        onClick={() => navigate('/login')}
+                        style={{ background: 'var(--color-coral)', color: 'white', border: 'none', padding: '1.2rem 3rem', fontSize: '1.2rem', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.3)', transition: 'transform 0.2s', fontFamily: 'var(--fuente-principal)' }}
                     >
                         Comenzar Ahora <ArrowRight size={22} />
                     </button>
@@ -34,9 +34,9 @@ const Landing = () => {
             </div>
 
             {/* Sección de Localidades */}
-            <div style={{ padding: '5rem 2rem', background: '#DAD7CD', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '2.5rem', color: '#3A5A40', marginBottom: '1.5rem', fontWeight: 'bold' }}>Localidades del Corredor</h2>
-                <p style={{ color: '#555', marginBottom: '3.5rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
+            <div style={{ padding: '5rem 2rem', background: 'var(--color-arena)', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.5rem', color: 'var(--color-mar-profundo)', marginBottom: '1.5rem', fontWeight: 'bold', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>Localidades del Corredor</h2>
+                <p style={{ color: 'var(--color-texto)', marginBottom: '3.5rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
                     Trabajamos en la recuperación de tres sectores estratégicos que conectan el ecosistema costero de Puntarenas.
                 </p>
                 
@@ -48,10 +48,10 @@ const Landing = () => {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-10px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                        <div style={{ background: '#e9f5ed', width: '70px', height: '70px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-                            <MapIcon size={35} color="#3A5A40" />
+                        <div style={{ background: '#e9f5ed', width: '70px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                            <MapIcon size={35} color="var(--color-mar-profundo)" />
                         </div>
-                        <h3 style={{ color: '#344E41', marginBottom: '1rem', fontSize: '1.5rem' }}>Chacarita</h3>
+                        <h3 style={{ color: 'var(--color-mar-profundo)', marginBottom: '1rem', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>Chacarita</h3>
                         <p style={{ color: '#666', lineHeight: 1.6 }}>El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Ver mapa local <ArrowRight size={16} />
@@ -65,10 +65,10 @@ const Landing = () => {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-10px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                        <div style={{ background: '#e9f5ed', width: '70px', height: '70px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-                            <Leaf size={35} color="#3A5A40" />
+                        <div style={{ background: '#e9f5ed', width: '70px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                            <Leaf size={35} color="var(--color-mar-profundo)" />
                         </div>
-                        <h3 style={{ color: '#344E41', margin: '1rem 0', fontSize: '1.5rem' }}>La Angostura</h3>
+                        <h3 style={{ color: 'var(--color-mar-profundo)', margin: '1rem 0', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>La Angostura</h3>
                         <p style={{ color: '#666', lineHeight: 1.6 }}>El pulmón estrecho de la ciudad. Un tómbolo de arena que conecta la península con el continente.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Leer historia <ArrowRight size={16} />
@@ -82,10 +82,10 @@ const Landing = () => {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-10px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                        <div style={{ background: '#e9f5ed', width: '70px', height: '70px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-                            <Shield size={35} color="#3A5A40" />
+                        <div style={{ background: '#e9f5ed', width: '70px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                            <Shield size={35} color="var(--color-mar-profundo)" />
                         </div>
-                        <h3 style={{ color: '#344E41', marginBottom: '1rem', fontSize: '1.5rem' }}>El Carmen</h3>
+                        <h3 style={{ color: 'var(--color-mar-profundo)', marginBottom: '1rem', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>El Carmen</h3>
                         <p style={{ color: '#666', lineHeight: 1.6 }}>Zona de recuperación de manglares al final de la península, protegiendo el entorno del Paseo de los Turistas.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Ver puntos <ArrowRight size={16} />
@@ -95,12 +95,15 @@ const Landing = () => {
             </div>
 
             {/* Footer */}
-            <footer style={{ background: '#344E41', color: '#DAD7CD', padding: '3rem 2rem', textAlign: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-                    <Leaf size={30} color="#A3B18A" />
-                    <h3 style={{ margin: 0, fontWeight: 'bold', fontSize: '1.8rem' }}>BioMon ADI</h3>
+            <footer style={{ background: 'var(--color-mar-profundo)', color: 'var(--color-caracola)', padding: '3rem 2rem', textAlign: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginBottom: '1.5rem' }}>
+                    <img src="/src/assets/logo.png" alt="Logo" style={{ width: '60px', height: '60px', borderRadius: '50%' }} />
+                    <div>
+                        <h3 style={{ margin: 0, fontWeight: 'bold', fontSize: '1.8rem', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>BioMon ADI</h3>
+                        <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>CORREDOR BIOLÓGICO</p>
+                    </div>
                 </div>
-                <p style={{ margin: 0, fontSize: '1rem', color: '#A3B18A' }}>&copy; {new Date().getFullYear()} ADI La Angostura, Puntarenas. Salvando el futuro juntos.</p>
+                <p style={{ margin: 0, fontSize: '1rem', color: 'var(--color-caracola)', opacity: 0.8 }}>&copy; {new Date().getFullYear()} ADI La Angostura, Puntarenas. Salvando el futuro juntos.</p>
             </footer>
         </div>
     );

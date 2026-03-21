@@ -8,19 +8,22 @@
 }
 
 .arboles-section-title {
-  font-size: 1.6rem;
+  font-family: var(--fuente-acento);
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #059669; /* Más saturado */
-  margin-bottom: 0.4rem;
+  color: var(--color-mar-profundo);
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-transform: uppercase;
 }
 
 .arboles-section-subtitle {
-  color: #166534; /* Más vivo */
-  font-size: 1rem;
-  margin-bottom: 1.8rem;
+  color: var(--color-mar-turquesa);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-family: var(--fuente-principal);
 }
 
 .arboles-grid {
@@ -30,20 +33,19 @@
 }
 
 .arbol-card {
-  background: #fff;
-  border-radius: 18px;
+  background: var(--color-caracola);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(11, 83, 45, 0.10);
-  border: 1px solid rgba(46, 107, 70, 0.12);
+  box-shadow: var(--sombra-suave);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.28s ease;
+  transition: all 0.3s ease;
   animation: cardFadeIn 0.5s ease both;
 }
 
 .arbol-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(11, 83, 45, 0.18);
+  transform: translateY(-8px);
+  box-shadow: var(--sombra-profunda);
 }
 
 @keyframes cardFadeIn {
@@ -85,25 +87,28 @@
 }
 
 .arbol-card-nombre {
-  font-size: 1.15rem;
+  font-family: var(--fuente-acento);
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #0d9488; /* Teal más vibrante */
+  color: var(--color-mar-profundo);
   margin: 0 0 0.2rem 0;
+  text-transform: uppercase;
 }
 
 .arbol-card-cientifico {
-  font-size: 0.82rem;
-  color: #059669;
+  font-size: 0.9rem;
+  color: var(--color-mar-turquesa);
   font-style: italic;
   margin: 0 0 0.8rem 0;
 }
 
 .arbol-card-desc {
-  font-size: 0.88rem;
-  color: #44614d;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  color: var(--color-texto);
+  line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 1rem;
@@ -111,11 +116,11 @@
 
 .arbol-card-badge {
   display: inline-block;
-  background: #d1fae5;
-  color: #065f46;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 3px 10px;
+  background: var(--color-arena);
+  color: var(--color-mar-profundo);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
   border-radius: 999px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -227,10 +232,12 @@
 }
 
 .modal-nombre {
-  font-size: 1.8rem;
+  font-family: var(--fuente-acento);
+  font-size: 2.2rem;
   font-weight: 800;
-  color: #0b532d;
+  color: var(--color-mar-profundo);
   margin: 0 0 0.2rem 0;
+  text-transform: uppercase;
 }
 
 .modal-cientifico {

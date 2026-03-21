@@ -1,6 +1,5 @@
-/* --- DASHBOARD SIDEBAR (Admin/User) --- */
 .main-navigation {
-  background-color: #0b532d;
+  background-color: var(--color-mar-profundo);
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
   padding: 2.5rem 0;
   position: fixed;
@@ -15,7 +14,7 @@
 
 /* --- VISITOR TOP NAV --- */
 .visitor-nav {
-  background-color: #ffffff;
+  background-color: var(--color-caracola);
   height: 70px;
   width: 100%;
   position: fixed;
@@ -25,7 +24,7 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--color-mar-turquesa);
 }
 
 .visitor-nav-container {
@@ -39,9 +38,9 @@
 }
 
 .visitor-logo {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  color: #1a4d2e;
+  color: var(--color-mar-profundo);
   text-decoration: none;
   font-family: 'Outfit', sans-serif;
   display: flex;
@@ -64,23 +63,24 @@
 }
 
 .visitor-link:hover, .visitor-link.active {
-  color: #2e6b46;
+  color: var(--color-mar-profundo);
 }
 
 .visitor-login-btn {
-  background-color: #10b981; /* Emerald-500 muy saturado */
+  background-color: var(--color-coral);
   color: white;
   padding: 10px 24px;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 700;
-  transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 127, 80, 0.4);
 }
 
 .visitor-login-btn:hover {
-  background-color: #059669; /* Emerald-600 */
+  background-color: var(--color-mar-profundo);
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 119, 182, 0.4);
 }
 
 /* --- LAYOUT ADJUSTMENTS --- */

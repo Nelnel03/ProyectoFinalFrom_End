@@ -143,6 +143,23 @@
       "email": "s@gmail.com",
       "password": "12345678",
       "rol": "user"
+    },
+    {
+      "id": "admin_m",
+      "nombre": "Administrador Maestro",
+      "email": "master@gmail.com",
+      "password": "admin1234",
+      "rol": "admin"
+    },
+    {
+      "id": "vol_p",
+      "nombre": "Voluntario de Prueba",
+      "email": "voluntario@gmail.com",
+      "password": "12345678",
+      "rol": "voluntario",
+      "area": "Reforestación",
+      "telefono": "8888-8888",
+      "fechaIngreso": "2026-03-20"
     }
   ],
   "stats_tipos": [
@@ -191,6 +208,14 @@
       "area": "       ",
       "telefono": "87657687566",
       "fechaIngreso": "2026-03-19"
+    },
+    {
+      "id": "vol_p",
+      "nombre": "Voluntario de Prueba",
+      "email": "voluntario@gmail.com",
+      "area": "Reforestación",
+      "telefono": "8888-8888",
+      "fechaIngreso": "2026-03-20"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

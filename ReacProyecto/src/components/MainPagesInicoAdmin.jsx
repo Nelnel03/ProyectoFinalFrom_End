@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import services from '../services/services';
 import '../styles/Arboles.css';
 import '../styles/MainPagesInicoAdmin.css';
+import '../styles/PremiumDashboard.css';
 import ResumenTab from './admin/ResumenTab';
 import ListaTab from './admin/ListaTab';
 import BajasTab from './admin/BajasTab';
@@ -915,169 +916,67 @@ function MainPagesInicoAdmin() {
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="admin-container">
-      {/* Header */}
-      <header className="admin-header">
-        <div>
-          <h1>🌳 Panel de Administración</h1>
-          <p>Bienvenido, <strong>{adminName}</strong> — Gestión de especies forestales</p>
+    <div className="dashboard-premium">
+      <header className="premium-header">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+          <div>
+            <h2 style={{ textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.9rem', marginBottom: '0.8rem', opacity: 0.8 }}>BioMon ADI</h2>
+            <h1>🌳 Panel de Control</h1>
+            <p style={{ opacity: 0.9, fontSize: '1.2rem', marginTop: '1rem' }}>
+              Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
+            </p>
+          </div>
+          <button className="btn-logout-premium" onClick={handleLogout}>
+            🚪 Cerrar Sesión
+          </button>
         </div>
-        <button className="admin-logout-btn" onClick={handleLogout}>
-          🚪 Cerrar sesión
-        </button>
       </header>
 
-      <main className="admin-main">
-        {/* Mensaje de feedback */}
+      <main className="glass-card" style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {mensaje.texto && (
-          <div className={`admin-msg ${mensaje.tipo}`}>{mensaje.texto}</div>
+          <div className={`admin-msg ${mensaje.tipo}`} style={{ 
+            padding: '1rem', 
+            borderRadius: '12px', 
+            marginBottom: '2rem',
+            background: mensaje.tipo === 'success' ? 'rgba(52, 211, 153, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+            color: mensaje.tipo === 'success' ? '#065f46' : '#991b1b',
+            fontWeight: '700'
+          }}>
+            {mensaje.texto}
+          </div>
         )}
 
-        {/* Tabs de navegación */}
-        <div className="admin-tabs">
-          <button
-            className={`admin-tab ${tab === 'resumen' ? 'active' : ''}`}
-            onClick={() => { setTab('resumen'); resetForm(); }}
-          >
-            📊 Resumen General
-          </button>
-          <button
-            className={`admin-tab ${tab === 'lista' ? 'active' : ''}`}
-            onClick={() => { setTab('lista'); resetForm(); }}
-          >
-            📋 Lista de Árboles ({arboles.filter(a => a.estado !== 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'bajas' ? 'active' : ''}`}
-            onClick={() => { setTab('bajas'); resetForm(); }}
-          >
-            🍂 Registro de Bajas ({arboles.filter(a => a.estado === 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'usuarios' ? 'active' : ''}`}
-            onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
-          >
-            👥 Usuarios
-          </button>
-          <button
-            className={`admin-tab ${tab === 'voluntariados' ? 'active' : ''}`}
-            onClick={() => { setTab('voluntariados'); resetFormVoluntariado(); }}
-          >
-            🤝 Voluntariados
-          </button>
-          <button
-            className={`admin-tab ${tab === 'abonos' ? 'active' : ''}`}
-            onClick={() => { setTab('abonos'); resetFormAbono(); }}
-          >
-            🦴 Abonos / Stock ({abonos.length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
-            onClick={() => { setTab('agregar'); resetForm(); }}
-          >
-            {modoEdicion ? '✏️ Editar Árbol' : '➕ Agregar Árbol'}
-          </button>
+        {/* Tabs de navegación Premium */}
+        <div className="premium-tabs" style={{ marginBottom: '3.5rem', overflowX: 'auto', padding: '10px' }}>
+          {[
+            { id: 'resumen', label: '📊 Resumen', reset: resetForm },
+            { id: 'lista', label: `📋 Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },
+            { id: 'bajas', label: `🍂 Bajas (${arboles.filter(a => a.estado === 'muerto').length})`, reset: resetForm },
+            { id: 'usuarios', label: '👥 Usuarios', reset: resetFormUsuario },
+            { id: 'voluntariados', label: '🤝 Voluntariados', reset: resetFormVoluntariado },
+            { id: 'abonos', label: `🦴 Abonos (${abonos.length})`, reset: resetFormAbono },
+            { id: 'agregar', label: modoEdicion ? '✏️ Editar' : '➕ Agregar', reset: resetForm }
+          ].map(t => (
+            <button
+              key={t.id}
+              className={`premium-tab ${tab === t.id ? 'active' : ''}`}
+              onClick={() => { setTab(t.id); t.reset(); }}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
-        {/* ──── TAB: RESUMEN ──── */}
-        {tab === 'resumen' && (
-          <ResumenTab 
-            arboles={arboles} 
-            tiposDisponibles={tiposDisponibles} 
-            statsTipos={statsTipos} 
-            setTipoFiltro={setTipoFiltro} 
-            setTab={setTab} 
-          />
-        )}
-
-        {/* ──── TAB: LISTA ──── */}
-        {tab === 'lista' && (
-          <ListaTab 
-            busqueda={busqueda} 
-            setBusqueda={setBusqueda}
-            tipoFiltro={tipoFiltro}
-            setTipoFiltro={setTipoFiltro}
-            tiposDisponibles={tiposDisponibles}
-            setTab={setTab}
-            handleEliminarTipo={handleEliminarTipo}
-            statsTipos={statsTipos}
-            handleUpdateStatTipo={handleUpdateStatTipo}
-            arboles={arboles}
-            cargando={cargando}
-            handleEditar={handleEditar}
-            handleAbonarArbol={handleAbonarArbol}
-            handleEliminar={handleEliminar}
-            handleLimpiarHistorialAbono={handleLimpiarHistorialAbono}
-          />
-        )}
-
-        {/* ──── TAB: BAJAS ──── */}
-        {tab === 'bajas' && (
-          <BajasTab 
-            arboles={arboles} 
-            handleEditar={handleEditar} 
-          />
-        )}
-
-        {/* ──── TAB: USUARIOS ──── */}
-        {tab === 'usuarios' && (
-          <UsuariosTab 
-            modoEdicionUsuario={modoEdicionUsuario}
-            handleUserSubmit={handleUserSubmit}
-            formUsuario={formUsuario}
-            setFormUsuario={setFormUsuario}
-            resetFormUsuario={resetFormUsuario}
-            usuarios={usuarios}
-            handleEditarUsuario={handleEditarUsuario}
-            handleEliminarUsuario={handleEliminarUsuario}
-            handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado}
-          />
-        )}
-
-        {/* ──── TAB: VOLUNTARIADOS ──── */}
-        {tab === 'voluntariados' && (
-          <VoluntariadosTab 
-            modoEdicionVoluntariado={modoEdicionVoluntariado}
-            handleVoluntariadoSubmit={handleVoluntariadoSubmit}
-            formVoluntariado={formVoluntariado}
-            setFormVoluntariado={setFormVoluntariado}
-            resetFormVoluntariado={resetFormVoluntariado}
-            voluntariados={voluntariados}
-            handleEditarVoluntariado={handleEditarVoluntariado}
-            handleEliminarVoluntariado={handleEliminarVoluntariado}
-            handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario}
-          />
-        )}
-
-        {/* ──── TAB: ABONOS ──── */}
-        {tab === 'abonos' && (
-          <AbonosTab 
-            modoEdicionAbono={modoEdicionAbono}
-            handleAbonoSubmit={handleAbonoSubmit}
-            formAbono={formAbono}
-            setFormAbono={setFormAbono}
-            resetFormAbono={resetFormAbono}
-            abonos={abonos}
-            handleEditarAbono={handleEditarAbono}
-            handleEliminarAbono={handleEliminarAbono}
-          />
-        )}
-
-        {/* ──── TAB: FORMULARIO ──── */}
-        {tab === 'agregar' && (
-          <ArbolFormTab 
-            modoEdicion={modoEdicion}
-            handleSubmit={handleSubmit}
-            form={form}
-            handleChange={handleChange}
-            modoNuevoTipo={modoNuevoTipo}
-            tiposDisponibles={tiposDisponibles}
-            setModoNuevoTipo={setModoNuevoTipo}
-            setForm={setForm}
-            resetForm={resetForm}
-            setTab={setTab}
-          />
-        )}
+        {/* Contenido Dinámico con Animación */}
+        <div className="tab-content-premium" key={tab}>
+            {tab === 'resumen' && <ResumenTab arboles={arboles} tiposDisponibles={tiposDisponibles} statsTipos={statsTipos} setTipoFiltro={setTipoFiltro} setTab={setTab} />}
+            {tab === 'lista' && <ListaTab busqueda={busqueda} setBusqueda={setBusqueda} tipoFiltro={tipoFiltro} setTipoFiltro={setTipoFiltro} tiposDisponibles={tiposDisponibles} setTab={setTab} handleEliminarTipo={handleEliminarTipo} statsTipos={statsTipos} handleUpdateStatTipo={handleUpdateStatTipo} arboles={arboles} cargando={cargando} handleEditar={handleEditar} handleAbonarArbol={handleAbonarArbol} handleEliminar={handleEliminar} handleLimpiarHistorialAbono={handleLimpiarHistorialAbono} />}
+            {tab === 'bajas' && <BajasTab arboles={arboles} handleEditar={handleEditar} />}
+            {tab === 'usuarios' && <UsuariosTab modoEdicionUsuario={modoEdicionUsuario} handleUserSubmit={handleUserSubmit} formUsuario={formUsuario} setFormUsuario={setFormUsuario} resetFormUsuario={resetFormUsuario} usuarios={usuarios} handleEditarUsuario={handleEditarUsuario} handleEliminarUsuario={handleEliminarUsuario} handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado} />}
+            {tab === 'voluntariados' && <VoluntariadosTab modoEdicionVoluntariado={modoEdicionVoluntariado} handleVoluntariadoSubmit={handleVoluntariadoSubmit} formVoluntariado={formVoluntariado} setFormVoluntariado={setFormVoluntariado} resetFormVoluntariado={resetFormVoluntariado} voluntariados={voluntariados} handleEditarVoluntariado={handleEditarVoluntariado} handleEliminarVoluntariado={handleEliminarVoluntariado} handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario} />}
+            {tab === 'abonos' && <AbonosTab modoEdicionAbono={modoEdicionAbono} handleAbonoSubmit={handleAbonoSubmit} formAbono={formAbono} setFormAbono={setFormAbono} resetFormAbono={resetFormAbono} abonos={abonos} handleEditarAbono={handleEditarAbono} handleEliminarAbono={handleEliminarAbono} />}
+            {tab === 'agregar' && <ArbolFormTab modoEdicion={modoEdicion} handleSubmit={handleSubmit} form={form} handleChange={handleChange} modoNuevoTipo={modoNuevoTipo} tiposDisponibles={tiposDisponibles} setModoNuevoTipo={setModoNuevoTipo} setForm={setForm} resetForm={resetForm} setTab={setTab} />}
+        </div>
       </main>
     </div>
   );

@@ -109,7 +109,8 @@ function MainPagesInicoVisitante() {
   return (
     <div className="visitante-container">
       <header className="visitante-header">
-        <h1>🌳 Sistema de Control Forestal</h1>
+        <img src="/src/assets/logo.png" alt="Logo" style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }} />
+        <h1>BIOMON ADI</h1>
         <p>Monitoreo de árboles, especies y estado de vida</p>
       </header>
 

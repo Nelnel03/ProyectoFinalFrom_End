@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Nav.css';
 
 function Nav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
 
   // Sincronizar el estado de autenticación cuando cambie la ruta
@@ -22,7 +23,8 @@ function Nav() {
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
         <NavLink to="/" className="visitor-logo">
-          🌳 EcoControl
+          <img src="/src/assets/logo.png" alt="Logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+          <span style={{ fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>BioMon ADI</span>
         </NavLink>
         
         <div className="visitor-nav-links">
@@ -31,6 +33,12 @@ function Nav() {
             className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
           >
             Inicio
+          </NavLink>
+          <NavLink 
+            to="/historia" 
+            className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+          >
+            Historia
           </NavLink>
           {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
             <NavLink 
@@ -53,9 +61,9 @@ function Nav() {
                 <NavLink 
                   to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
                   className="visitor-login-btn"
-                  style={{ backgroundColor: '#1a4d2e' }}
+                  style={{ backgroundColor: 'var(--color-mar-profundo)' }}
                 >
-                  🚀 Ir a mi Panel
+                  🚀 Panel
                 </NavLink>
               )}
               <button 
