@@ -12,7 +12,7 @@ const Landing = () => {
                 minHeight: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
-                background: 'linear-gradient(rgba(0, 119, 182, 0.7), rgba(0, 180, 216, 0.8)), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80") center/cover no-repeat',
+                background: 'linear-gradient(rgba(58, 90, 64, 0.7), rgba(52, 78, 65, 0.8)), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80") center/cover no-repeat',
                 color: 'white',
                 padding: '2rem'
             }}>
@@ -21,12 +21,12 @@ const Landing = () => {
                     <h1 style={{ fontSize: '4rem', marginBottom: '1.5rem', color: 'var(--color-caracola)', lineHeight: 1.1, fontWeight: '800', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>
                         Descubre y Protege La Angostura
                     </h1>
-                    <p style={{ fontSize: '1.2rem', marginBottom: '2.5rem', color: '#e0e0e0', lineHeight: 1.6 }}>
+                    <p style={{ fontSize: '1.2rem', marginBottom: '2.5rem', color: 'var(--color-crema-organico)', lineHeight: 1.6 }}>
                         Explora la asombrosa variedad de flora y fauna en Puntarenas. Únete a nuestra comunidad de voluntarios para registrar, monitorear y asegurar la conservación de nuestro ecosistema forestal.
                     </p>
                     <button 
                         onClick={() => navigate('/login')}
-                        style={{ background: 'var(--color-coral)', color: 'white', border: 'none', padding: '1.2rem 3rem', fontSize: '1.2rem', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.3)', transition: 'transform 0.2s', fontFamily: 'var(--fuente-principal)' }}
+                        style={{ background: 'var(--color-bosque-musgo)', color: 'white', border: '3px solid var(--color-ocre-silvestre)', padding: '1.2rem 3rem', fontSize: '1.2rem', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 8px 25px rgba(58, 90, 64, 0.4)', transition: 'transform 0.2s', fontFamily: 'var(--fuente-principal)' }}
                     >
                         Comenzar Ahora <ArrowRight size={22} />
                     </button>
@@ -48,11 +48,11 @@ const Landing = () => {
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-10px)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                        <div style={{ background: '#e9f5ed', width: '70px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+                        <div style={{ background: 'var(--color-crema-organico)', width: '70px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto', border: '2px solid var(--color-ocre-silvestre)' }}>
                             <MapIcon size={35} color="var(--color-mar-profundo)" />
                         </div>
                         <h3 style={{ color: 'var(--color-mar-profundo)', marginBottom: '1rem', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>Chacarita</h3>
-                        <p style={{ color: '#666', lineHeight: 1.6 }}>El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
+                        <p style={{ color: 'var(--color-tierra-sombra)', lineHeight: 1.6 }}>El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Ver mapa local <ArrowRight size={16} />
                         </div>
@@ -69,7 +69,7 @@ const Landing = () => {
                             <Leaf size={35} color="var(--color-mar-profundo)" />
                         </div>
                         <h3 style={{ color: 'var(--color-mar-profundo)', margin: '1rem 0', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>La Angostura</h3>
-                        <p style={{ color: '#666', lineHeight: 1.6 }}>El pulmón estrecho de la ciudad. Un tómbolo de arena que conecta la península con el continente.</p>
+                        <p style={{ color: 'var(--color-tierra-sombra)', lineHeight: 1.6 }}>El pulmón estrecho de la ciudad. Un tómbolo de arena que conecta la península con el continente.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Leer historia <ArrowRight size={16} />
                         </div>
@@ -86,7 +86,7 @@ const Landing = () => {
                             <Shield size={35} color="var(--color-mar-profundo)" />
                         </div>
                         <h3 style={{ color: 'var(--color-mar-profundo)', marginBottom: '1rem', fontSize: '1.5rem', fontFamily: 'var(--fuente-acento)' }}>El Carmen</h3>
-                        <p style={{ color: '#666', lineHeight: 1.6 }}>Zona de recuperación de manglares al final de la península, protegiendo el entorno del Paseo de los Turistas.</p>
+                        <p style={{ color: 'var(--color-tierra-sombra)', lineHeight: 1.6 }}>Zona de recuperación de manglares al final de la península, protegiendo el entorno del Paseo de los Turistas.</p>
                         <div style={{ marginTop: '1rem', color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
                             Ver puntos <ArrowRight size={16} />
                         </div>

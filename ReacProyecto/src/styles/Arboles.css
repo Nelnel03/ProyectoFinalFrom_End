@@ -58,7 +58,7 @@
   height: 170px;
   object-fit: cover;
   display: block;
-  background: linear-gradient(135deg, #d4edda 0%, #a8d5b5 100%);
+  background: linear-gradient(135deg, var(--color-ocre-silvestre) 0%, var(--color-bosque-helecho) 100%);
 }
 
 .arbol-card-img-placeholder {
@@ -128,7 +128,7 @@
 
 .arbol-card-hint {
   font-size: 0.75rem;
-  color: #9ab5a5;
+  color: var(--color-bosque-helecho);
   margin-top: 0.7rem;
 }
 
@@ -136,7 +136,7 @@
 .arboles-empty {
   text-align: center;
   padding: 3rem 1rem;
-  color: #6b9b85;
+  color: var(--color-bosque-helecho);
 }
 .arboles-empty .tree-icon {
   font-size: 4rem;
@@ -150,7 +150,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 30, 15, 0.65);
+  background: rgba(52, 78, 65, 0.7);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -172,7 +172,7 @@
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 30px 80px rgba(5, 30, 15, 0.35);
+  box-shadow: 0 30px 80px rgba(52, 78, 65, 0.4);
   animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
 }
@@ -216,7 +216,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0b532d;
+  color: var(--color-bosque-musgo);
   box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   transition: background 0.2s, transform 0.2s;
   z-index: 10;
@@ -243,7 +243,7 @@
 .modal-cientifico {
   font-size: 1rem;
   font-style: italic;
-  color: #6b9b85;
+  color: var(--color-bosque-helecho);
   margin: 0 0 1.4rem 0;
 }
 
@@ -255,10 +255,10 @@
 }
 
 .modal-info-item {
-  background: #f0faf4;
+  background: var(--color-crema-organico);
   border-radius: 12px;
   padding: 0.8rem 1rem;
-  border-left: 3px solid #34d399;
+  border-left: 3px solid var(--color-bosque-helecho);
 }
 
 .modal-info-label {
@@ -266,20 +266,20 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: #2e6b46;
+  color: var(--color-bosque-musgo);
   margin-bottom: 0.2rem;
 }
 
 .modal-info-value {
   font-size: 0.92rem;
-  color: #1a3322;
+  color: var(--color-tierra-sombra);
   font-weight: 500;
 }
 
 .modal-section-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #0b532d;
+  color: var(--color-bosque-musgo);
   margin: 1.2rem 0 0.5rem;
   display: flex;
   align-items: center;
@@ -297,10 +297,10 @@
 =========================== */
 
 .admin-container {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
   min-height: 100vh;
-  background: linear-gradient(160deg, #064e3b 0%, #065f46 50%, #064e3b 100%); /* Fondo más rico en color */
-  color: #e8f5ee;
+  background-color: var(--color-crema-organico); /* Usar el fondo vibrante claro */
+  color: var(--color-tierra-sombra); /* Texto oscuro para contraste */
   padding: 0;
 }
 
@@ -316,8 +316,8 @@
 
 .admin-header h1 {
   font-size: 1.6rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, #10b981, #34d399); /* Más vibrante */
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--color-bosque-musgo), var(--color-bosque-helecho));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -326,7 +326,7 @@
 
 .admin-header p {
   font-size: 0.85rem;
-  color: #6ee7b7; /* Más brillante */
+  color: var(--color-bosque-helecho); /* Más brillante */
   margin: 0.2rem 0 0;
 }
 
@@ -363,9 +363,9 @@
 .admin-tab {
   background: none;
   border: none;
-  color: #d1fae5; /* Texto más claro/vibrante */
+  color: var(--color-bosque-helecho);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.6rem 1.4rem;
   border-bottom: 3px solid transparent;
   cursor: pointer;
@@ -373,11 +373,11 @@
   margin-bottom: -1px;
 }
 .admin-tab.active {
-  color: #10b981;
-  border-bottom-color: #10b981;
+  color: var(--color-bosque-helecho);
+  border-bottom-color: var(--color-bosque-helecho);
 }
 .admin-tab:hover {
-  color: #6ee7b7;
+  color: var(--color-ocre-silvestre);
 }
 
 /* Formulario Admin */
@@ -392,7 +392,7 @@
 .admin-form-card h2 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #10b981;
+  color: var(--color-bosque-helecho);
   margin: 0 0 1.5rem;
 }
 
@@ -415,7 +415,7 @@
 .admin-form-group label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #86bfa4;
+  color: var(--color-ocre-silvestre);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -443,8 +443,8 @@
 .admin-form-group textarea:focus,
 .admin-form-group select:focus {
   outline: none;
-  border-color: #34d399;
-  background: rgba(52, 211, 153, 0.07);
+  border-color: var(--color-bosque-helecho);
+  background: rgba(88, 129, 87, 0.07);
 }
 
 .admin-form-group select option {
@@ -483,7 +483,7 @@
 }
 
 .admin-btn-guardar {
-  background: linear-gradient(135deg, #059669, #34d399);
+  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-bosque-helecho));
   color: #fff;
   border: none;
   padding: 0.7rem 1.8rem;
@@ -497,7 +497,7 @@
 
 .admin-btn-cancelar {
   background: rgba(255,255,255,0.08);
-  color: #86bfa4;
+  color: var(--color-ocre-silvestre);
   border: 1px solid rgba(255,255,255,0.1);
   padding: 0.7rem 1.4rem;
   border-radius: 10px;
@@ -551,13 +551,13 @@
 .admin-arbol-card-nombre {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #6ee7b7;
+  color: var(--color-bosque-helecho);
   margin: 0 0 0.2rem;
 }
 
 .admin-arbol-card-cientifico {
   font-size: 0.8rem;
-  color: #4d7a63;
+  color: var(--color-ocre-silvestre);
   font-style: italic;
   margin: 0 0 0.8rem;
 }
@@ -596,7 +596,7 @@
 .admin-btn-eliminar:hover { background: rgba(239, 68, 68, 0.25); }
 
 .admin-add-btn {
-  background: linear-gradient(135deg, #059669, #34d399);
+  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-bosque-helecho));
   color: #fff;
   border: none;
   padding: 0.6rem 1.5rem;
@@ -621,7 +621,7 @@
 .admin-section-header h2 {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #6ee7b7;
+  color: var(--color-bosque-helecho);
   margin: 0;
 }
 
@@ -636,7 +636,7 @@
 
 .admin-msg.success {
   background: rgba(52, 211, 153, 0.12);
-  color: #34d399;
+  color: var(--color-bosque-helecho);
   border: 1px solid rgba(52, 211, 153, 0.25);
 }
 .admin-msg.error {
@@ -674,8 +674,8 @@
 }
 
 .admin-stat-main-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  background: white;
+  border: 2px solid var(--color-ocre-silvestre);
   border-radius: 20px;
   padding: 1.5rem;
   display: flex;
@@ -698,21 +698,21 @@
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: #34d399;
+  color: var(--color-bosque-helecho);
 }
 
 .admin-stat-info h3 {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 900;
   margin: 0;
-  color: #ffffff;
+  color: var(--color-bosque-musgo); /* Verde oscuro vibrante */
 }
 
 .admin-stat-info p {
-  font-size: 0.9rem;
-  color: #86bfa4;
+  font-size: 0.95rem;
+  color: var(--color-tierra-sombra);
   margin: 0.1rem 0 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .admin-types-breakdown {
@@ -780,7 +780,7 @@
 
 .admin-type-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #059669, #34d399);
+  background: linear-gradient(90deg, var(--color-bosque-musgo), var(--color-bosque-helecho));
   border-radius: 10px;
   transition: width 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
@@ -795,7 +795,7 @@
   width: 100%;
   background: rgba(52, 211, 153, 0.08);
   border: 1px solid rgba(52, 211, 153, 0.2);
-  color: #34d399;
+  color: var(--color-bosque-helecho);
   padding: 0.6rem;
   border-radius: 10px;
   font-weight: 600;

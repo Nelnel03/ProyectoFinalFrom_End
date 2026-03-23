@@ -11,40 +11,59 @@ const Navbar = () => {
             justifyContent: 'space-between', 
             alignItems: 'center',
             padding: '1rem 2rem',
-            background: 'rgba(0, 119, 182, 0.95)', // var(--color-mar-profundo) with opacity
+            background: 'var(--color-bosque-musgo)', // Verde Esmeralda Vibrante
             backdropFilter: 'blur(10px)',
             position: 'sticky',
             top: 0,
             zIndex: 1010,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+            boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
         }}>
             <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                <img src="/src/assets/logo.png" alt="Logo" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
-                <h2 style={{ margin: 0, fontWeight: 'bold', color: 'var(--color-caracola)', fontSize: '1.2rem', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>BioMon ADI</h2>
+                <img src="/src/assets/logo.png" alt="Logo" style={{ width: '45px', height: '45px', borderRadius: '50%', border: '2px solid white' }} />
+                <h2 style={{ margin: 0, fontWeight: '800', color: 'white', fontSize: '1.2rem', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase', letterSpacing: '1px' }}>BioMon ADI</h2>
             </div>
             
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <button 
+                    onClick={() => navigate('/')} 
+                    style={{ background: 'var(--color-fauna-marino)', border: 'none', color: 'white', padding: '0.6rem 1.2rem', borderRadius: '50px', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--fuente-principal)', transition: 'all 0.3s ease', boxShadow: '0 4px 10px rgba(17, 138, 178, 0.3)' }}
+                    onMouseEnter={(e) => { e.target.style.transform = 'scale(1.05)'; e.target.style.background = 'var(--color-bosque-helecho)'; }}
+                    onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.background = 'var(--color-fauna-marino)'; }}
+                >
                     Inicio
                 </button>
-                <button onClick={() => navigate('/mapa')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+                <button 
+                    onClick={() => navigate('/mapa')} 
+                    style={{ background: 'var(--color-fauna-marino)', border: 'none', color: 'white', padding: '0.6rem 1.2rem', borderRadius: '50px', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--fuente-principal)', transition: 'all 0.3s ease', boxShadow: '0 4px 10px rgba(17, 138, 178, 0.3)' }}
+                    onMouseEnter={(e) => { e.target.style.transform = 'scale(1.05)'; e.target.style.background = 'var(--color-bosque-helecho)'; }}
+                    onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.background = 'var(--color-fauna-marino)'; }}
+                >
                     Mapa
                 </button>
-                <button onClick={() => navigate('/historia')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+                <button 
+                    onClick={() => navigate('/historia')} 
+                    style={{ background: 'var(--color-fauna-marino)', border: 'none', color: 'white', padding: '0.6rem 1.2rem', borderRadius: '50px', fontWeight: '700', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--fuente-principal)', transition: 'all 0.3s ease', boxShadow: '0 4px 10px rgba(17, 138, 178, 0.3)' }}
+                    onMouseEnter={(e) => { e.target.style.transform = 'scale(1.05)'; e.target.style.background = 'var(--color-bosque-helecho)'; }}
+                    onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.background = 'var(--color-fauna-marino)'; }}
+                >
                     Historia
                 </button>
                 <button 
                     onClick={() => navigate('/login')} 
                     style={{ 
-                        background: 'var(--color-coral)', 
+                        background: 'var(--color-fauna-flor)', // Rojo Heliconia
                         border: 'none', 
                         color: 'white', 
-                        padding: '0.5rem 1.2rem', 
-                        borderRadius: '30px', 
-                        fontWeight: 'bold', 
+                        padding: '0.6rem 1.5rem', 
+                        borderRadius: '50px', 
+                        fontWeight: '800', 
                         cursor: 'pointer',
-                        fontFamily: 'var(--fuente-principal)'
+                        fontFamily: 'var(--fuente-principal)',
+                        boxShadow: '0 6px 15px rgba(231, 29, 54, 0.4)',
+                        transition: 'all 0.3s ease'
                     }}
+                    onMouseEnter={(e) => { e.target.style.transform = 'scale(1.05)'; e.target.style.filter = 'brightness(1.1)'; }}
+                    onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; e.target.style.filter = 'none'; }}
                 >
                     Acceder
                 </button>

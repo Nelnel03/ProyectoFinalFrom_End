@@ -5,7 +5,8 @@
   box-shadow: var(--sombra-profunda);
   width: 100%;
   max-width: 450px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-ocre-silvestre);
+  background: var(--color-crema-organico);
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -34,7 +35,7 @@
 .form-group input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #cbd5e1;
+  border: 1.5px solid var(--color-ocre-silvestre);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s;
@@ -42,8 +43,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--color-mar-turquesa);
-  box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.1);
+  border-color: var(--color-bosque-helecho);
+  box-shadow: 0 0 0 4px rgba(88, 129, 87, 0.15);
 }
 
 .login-btn {
@@ -58,14 +59,14 @@
   font-family: var(--fuente-principal);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(34, 139, 34, 0.2);
+  box-shadow: 0 4px 12px rgba(58, 90, 64, 0.25);
   margin-top: 1rem;
 }
 
 .login-btn:hover {
   background-color: var(--color-mar-turquesa);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 180, 216, 0.3);
+  box-shadow: 0 6px 15px rgba(88, 129, 87, 0.35);
 }
 
 .error-message {

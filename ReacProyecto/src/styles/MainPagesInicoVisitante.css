@@ -12,11 +12,11 @@
 .visitante-header {
   text-align: center;
   margin-bottom: 0;
-  background: linear-gradient(135deg, var(--color-mar-profundo), var(--color-mar-turquesa));
+  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
   width: 100vw;
   padding: 80px 20px 120px;
   animation: fadeInDown 0.8s ease-out;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(58, 90, 64, 0.15);
 }
 
 .visitante-header h1 {
@@ -42,7 +42,7 @@
   border-radius: 20px;
   padding: 40px;
   box-shadow: var(--sombra-profunda);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-ocre-silvestre);
   animation: fadeInUp 0.8s ease-out;
   margin-top: -30px;
   position: relative;

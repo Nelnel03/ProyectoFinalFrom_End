@@ -54,18 +54,18 @@ const History = () => {
     ];
 
     return (
-        <div className="history-dashboard-wrapper" style={{ backgroundColor: '#f4f7f6', minHeight: '100vh', paddingBottom: '4rem', fontFamily: '"Inter", "Montserrat", sans-serif' }}>
+        <div className="history-dashboard-wrapper" style={{ backgroundColor: 'var(--color-crema-organico)', minHeight: '100vh', paddingBottom: '4rem', fontFamily: 'var(--fuente-principal)' }}>
 
             <style>{`
                 .history-dashboard-wrapper * { box-sizing: border-box; }
                 .glass-header {
-                    background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
-                    border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; padding: 1rem 2rem;
+                    background: rgba(218, 215, 205, 0.9); backdrop-filter: blur(12px);
+                    border-bottom: 2px solid var(--color-ocre-silvestre); position: sticky; top: 0; z-index: 50; padding: 1.2rem 2.5rem;
                 }
                 .hover-card {
                     background: white; border-radius: 16px; padding: 1.5rem; text-align: center;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    cursor: pointer; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.04);
+                    box-shadow: 0 4px 15px rgba(58, 90, 64, 0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer; position: relative; overflow: hidden; border: 1.5px solid var(--color-ocre-silvestre);
                 }
                 .hover-card:hover {
                     transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.08);
@@ -80,7 +80,7 @@ const History = () => {
                     display: flex; align-items: center; gap: 15px; padding: 1rem; border-radius: 12px;
                     cursor: pointer; transition: background 0.2s; border-left: 4px solid transparent;
                 }
-                .interactive-node.active { background: white; border-left: 4px solid #1a73e8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+                .interactive-node.active { background: white; border-left: 5px solid var(--color-bosque-musgo); box-shadow: 0 8px 20px rgba(58, 90, 64, 0.1); }
                 .interactive-node:hover:not(.active) { background: rgba(255,255,255,0.5); }
 
                 .quiz-option {
@@ -97,7 +97,7 @@ const History = () => {
                     padding: 0.5rem 1.2rem; border-radius: 30px; border: 1px solid #ddd;
                     background: white; cursor: pointer; transition: all 0.2s; font-weight: 500; color: #555;
                 }
-                .filter-btn.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+                .filter-btn.active { background: var(--color-bosque-musgo); color: white; border-color: var(--color-bosque-musgo); }
                 
                 @keyframes bounceMedal {
                     0% { transform: scale(0); opacity: 0; }
@@ -108,12 +108,12 @@ const History = () => {
             `}</style>
 
             {/* BARRA DE PROGRESO */}
-            <div style={{ position: 'fixed', top: 0, left: 0, height: '4px', background: '#1a73e8', width: `${scrollProgress}%`, zIndex: 9999, transition: 'width 0.1s ease' }}></div>
+            <div style={{ position: 'fixed', top: 0, left: 0, height: '4px', background: 'var(--color-bosque-musgo)', width: `${scrollProgress}%`, zIndex: 9999, transition: 'width 0.1s ease' }}></div>
 
             {/* HEADER TIPO DASHBOARD ESTUDIANTE */}
             <header className="glass-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <div style={{ background: '#1a73e8', padding: '10px', borderRadius: '12px' }}>
+                    <div style={{ background: 'var(--color-bosque-musgo)', padding: '10px', borderRadius: '12px', border: '1px solid var(--color-ocre-silvestre)' }}>
                         <Brain color="white" size={26} />
                     </div>
                     <div>
@@ -136,7 +136,7 @@ const History = () => {
 
                 {/* SECCIÓN: ¿QUÉ QUIERES APRENDER HOY? (Hover Cards) */}
                 <section>
-                    <h2 style={{ fontSize: '1.8rem', color: '#1f2937', marginBottom: '1.5rem', fontWeight: '700', paddingLeft: '10px', borderLeft: '4px solid #1a73e8' }}>¿Qué descubriremos hoy?</h2>
+                    <h2 style={{ fontSize: '1.8rem', color: 'var(--color-tierra-sombra)', marginBottom: '1.5rem', fontWeight: '800', paddingLeft: '10px', borderLeft: '5px solid var(--color-bosque-musgo)', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>¿Qué descubriremos hoy?</h2>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '1.2rem' }}>
                         {exploreTopics.map((topic, i) => (
                             <div key={i} className="hover-card" style={{ '--card-color': topic.color }} onClick={() => setSelectedTopic(i)}>
@@ -155,9 +155,9 @@ const History = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
 
                     {/* SECCIÓN: MAPA DE CONOCIMIENTO (Línea de tiempo) */}
-                    <section style={{ background: '#f5f7fa', padding: '2rem', borderRadius: '20px', border: '1px solid #eaeaea' }}>
+                    <section style={{ background: 'rgba(58, 90, 64, 0.05)', padding: '2rem', borderRadius: '20px', border: '1px solid var(--color-ocre-silvestre)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2rem' }}>
-                            <Target size={28} color="#1a73e8" />
+                            <Target size={28} color="var(--color-bosque-musgo)" />
                             <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#1f2937' }}>Ruta de Aprendizaje</h2>
                         </div>
 
@@ -173,7 +173,7 @@ const History = () => {
                                         onClick={() => setActiveNode(node.id)}
                                         style={{ position: 'relative', zIndex: 1 }}
                                     >
-                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: activeNode === node.id ? '#1a73e8' : 'white', border: `2px solid ${activeNode === node.id ? '#1a73e8' : '#e5e7eb'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: activeNode === node.id ? 'white' : '#9ca3af', transition: 'all 0.2s' }}>
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: activeNode === node.id ? 'var(--color-bosque-musgo)' : 'white', border: `2px solid ${activeNode === node.id ? 'var(--color-bosque-musgo)' : 'var(--color-ocre-silvestre)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: activeNode === node.id ? 'white' : 'var(--color-bosque-helecho)', transition: 'all 0.2s' }}>
                                             {node.id}
                                         </div>
                                         <span style={{ fontWeight: activeNode === node.id ? '700' : '500', color: activeNode === node.id ? '#1f2937' : '#6b7280' }}>
@@ -183,8 +183,8 @@ const History = () => {
                                 ))}
                             </div>
                             {/* Contenido dinámico */}
-                            <div style={{ flex: 1, background: 'white', padding: '1.5rem', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ background: '#eff6ff', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a73e8', marginBottom: '1rem' }}>
+                            <div style={{ flex: 1, background: 'white', padding: '1.5rem', borderRadius: '16px', boxShadow: '0 10px 30px rgba(58, 90, 64, 0.1)', display: 'flex', flexDirection: 'column', border: '1.5px solid var(--color-ocre-silvestre)' }}>
+                                <div style={{ background: 'rgba(58, 90, 64, 0.1)', width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-bosque-musgo)', marginBottom: '1rem' }}>
                                     {knowledgeNodes.find(n => n.id === activeNode)?.icon}
                                 </div>
                                 <h3 style={{ margin: '0 0 10px 0', color: '#1f2937', fontSize: '1.2rem' }}>{knowledgeNodes.find(n => n.id === activeNode)?.title}</h3>
@@ -282,7 +282,7 @@ const History = () => {
                     </section>
 
                     {/* SECCIÓN: ZONA DE COMUNIDAD */}
-                    <section style={{ background: 'linear-gradient(135deg, #1a73e8, #4338ca)', padding: '2rem', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden' }}>
+                    <section style={{ background: 'linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra))', padding: '2rem', borderRadius: '20px', color: 'white', position: 'relative', overflow: 'hidden', border: '2px solid var(--color-ocre-silvestre)' }}>
                         <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1 }}>
                             <MessageSquare size={150} color="white" />
                         </div>
@@ -320,7 +320,7 @@ const History = () => {
                                 </div>
                             </div>
 
-                            <button style={{ width: '100%', padding: '12px', marginTop: '1.5rem', background: 'white', color: '#1a73e8', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
+                            <button style={{ width: '100%', padding: '12px', marginTop: '1.5rem', background: 'white', color: 'var(--color-bosque-musgo)', border: 'none', borderRadius: '12px', fontWeight: '800', cursor: 'pointer', transition: 'transform 0.2s', fontFamily: 'var(--fuente-principal)' }} onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
                                 Entrar al Foro
                             </button>
                         </div>
