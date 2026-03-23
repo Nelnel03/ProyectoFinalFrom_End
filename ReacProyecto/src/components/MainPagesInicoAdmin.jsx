@@ -11,6 +11,7 @@ import UsuariosTab from './admin/UsuariosTab';
 import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
+import ReportesTab from './admin/ReportesTab';
 
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
@@ -972,6 +973,12 @@ function MainPagesInicoAdmin() {
             🦴 Abonos / Stock ({abonos.length})
           </button>
           <button
+            className={`admin-tab ${tab === 'reportes' ? 'active' : ''}`}
+            onClick={() => { setTab('reportes'); }}
+          >
+            📋 Reportes Actividad
+          </button>
+          <button
             className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
             onClick={() => { setTab('agregar'); resetForm(); }}
           >
@@ -1061,6 +1068,11 @@ function MainPagesInicoAdmin() {
             handleEditarAbono={handleEditarAbono}
             handleEliminarAbono={handleEliminarAbono}
           />
+        )}
+
+        {/* ──── TAB: REPORTES ──── */}
+        {tab === 'reportes' && (
+          <ReportesTab />
         )}
 
         {/* ──── TAB: FORMULARIO ──── */}

@@ -270,6 +270,34 @@ async function deleteAbonos(id) {
   }
 }
 
+// ========================
+// REPORTES VOLUNTARIADO
+// ========================
+
+async function getReportesVoluntariado() {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`);
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al obtener los reportes de voluntariado", error);
+  }
+}
+
+async function postReporteVoluntariado(reporte) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al enviar el reporte de voluntariado", error);
+  }
+}
+
 export {
   getUsuarios,
   postUsuarios,
@@ -291,6 +319,8 @@ export {
   postAbonos,
   putAbonos,
   deleteAbonos,
+  getReportesVoluntariado,
+  postReporteVoluntariado,
 };
 
 const services = {
@@ -314,6 +344,8 @@ const services = {
   postAbonos,
   putAbonos,
   deleteAbonos,
+  getReportesVoluntariado,
+  postReporteVoluntariado,
 };
 
 export default services;

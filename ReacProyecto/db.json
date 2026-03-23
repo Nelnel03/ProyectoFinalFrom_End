@@ -41,10 +41,10 @@
       "descripcion": "asdfghjklñ{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
-      "estado": "vivo",
+      "estado": "muerto",
       "fechaRegistro": "2026-03-17",
       "id": "2440",
-      "fechaMuerto": null,
+      "fechaMuerto": "2026-03-23",
       "historialAbono": [
         {
           "abono": "Abono ",
@@ -150,7 +150,7 @@
       "id": "11f2",
       "tipo": "guanacaste",
       "planificados": 0,
-      "muertos": 0
+      "muertos": 1
     }
   ],
   "abonos": [

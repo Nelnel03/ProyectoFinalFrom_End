@@ -32,7 +32,16 @@ function Nav() {
           >
             Inicio
           </NavLink>
-          {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
+
+          {/* Si es voluntario, mostrar acceso directo a reportes */}
+          {auth && sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario' ? (
+            <NavLink 
+              to="/user" 
+              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+            >
+              📋 Reportar Trabajo
+            </NavLink>
+          ) : (
             <NavLink 
               to="/voluntariado" 
               className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
@@ -40,6 +49,7 @@ function Nav() {
               Voluntariado
             </NavLink>
           )}
+
           {!auth ? (
             <NavLink 
               to="/login" 
@@ -48,16 +58,15 @@ function Nav() {
               Iniciar Sesión / Registro
             </NavLink>
           ) : (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {location.pathname !== '/user' && location.pathname !== '/admin' && (
-                <NavLink 
-                  to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
-                  className="visitor-login-btn"
-                  style={{ backgroundColor: '#1a4d2e' }}
-                >
-                  🚀 Ir a mi Panel
-                </NavLink>
-              )}
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <NavLink 
+                to={JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user'}
+                className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+                style={{ fontWeight: '700' }}
+              >
+                👤 Mi Perfil
+              </NavLink>
+
               <button 
                 onClick={() => {
                   sessionStorage.removeItem('isAuthenticated');
@@ -66,9 +75,9 @@ function Nav() {
                   window.location.href = '/';
                 }}
                 className="visitor-login-btn"
-                style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer' }}
+                style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer', padding: '8px 15px' }}
               >
-                🚪 Cerrar Sesión
+                🚪 Salir
               </button>
             </div>
           )}
