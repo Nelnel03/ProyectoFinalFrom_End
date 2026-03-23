@@ -1,0 +1,96 @@
+﻿{
+  "arboles": [
+    {
+      "id": "c2ed",
+      "nombre": "├írbol de Guanacaste ",
+      "nombreCientifico": "Enterolobium cyclocarpum",
+      "tipo": "Guanacaste",
+      "progreso": "0%",
+      "familia": "Leguminosas",
+      "altura": "25-35 metros",
+      "crecimiento": "1.5 a 2 metros por a├▒o",
+      "clima": "tropical",
+      "descripcion": "├írbol clacico de costa rica y muy grande ",
+      "cuidados": "fgrgg",
+      "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
+      "estado": "vivo",
+      "fechaRegistro": "2026-03-17"
+    },
+    {
+      "nombre": "├írbol de Guanacaste ",
+      "nombreCientifico": "Enterolobium cyclocarpum",
+      "tipo": "guanacaste",
+      "progreso": "10%",
+      "familia": "Leguminosas",
+      "altura": "25-35 metros",
+      "crecimiento": "1.5 a 2 metros por a├▒o",
+      "clima": "tropical",
+      "descripcion": "├írbol clacico de costa rica y muy grande ",
+      "cuidados": "fgrgg",
+      "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
+      "estado": "muerto",
+      "fechaRegistro": "2026-03-17",
+      "id": "2440",
+      "fechaMuerto": "2026-03-17"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": "a7ab",
+      "nombre": "usuario",
+      "email": "Usuario@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "id": "admin1",
+      "nombre": "Administrador",
+      "email": "admin@gmail.com",
+      "password": "admin1234",
+      "rol": "admin"
+    },
+    {
+      "id": "7634",
+      "nombre": "Nelnel",
+      "email": "nelson@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "id": "bdce",
+      "nombre": "leal",
+      "email": "leal@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "id": "d374",
+      "nombre": "Andr├®s leal",
+      "email": "alealvfwd@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "user",
+      "resetToken": "njig41nqox26omjx0zhsf",
+      "resetTokenExpiry": "2026-03-20T21:23:46.044Z"
+    },
+    {
+      "id": "9ba2",
+      "nombre": "Andr├®s Leal V",
+      "email": "andresgerardolv@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "user",
+      "resetToken": "o5phuesjo69r3drsixzy7i",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
+    }
+  ],
+  "stats_tipos": [
+    {
+      "id": "11f2",
+      "tipo": "guanacaste",
+      "planificados": 0,
+      "muertos": 1
+    }
+  ],
+  "reportes": [],
+  "reportes_robados": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
@@ -29,7 +29,7 @@ function MainPagesLogin() {
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        setError('Formato de correo inválido');
+        setError('Formato de correo inv├ílido');
         setLoading(false);
         return;
       }
@@ -39,8 +39,8 @@ function MainPagesLogin() {
       if (viewMode === 'forgot') {
         const user = usuarios.find(u => u.email === email);
         if (!user) {
-          // Por seguridad, mostrar mensaje genérico
-          setSuccessMsg('Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña. Revisa la consola o alertas (modo simulación).');
+          // Por seguridad, mostrar mensaje gen├®rico
+          setSuccessMsg('Si el correo est├í registrado, recibir├ís instrucciones para restablecer tu contrase├▒a. Revisa la consola o alertas (modo simulaci├│n).');
         } else {
           // Generar token
           const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -49,7 +49,7 @@ function MainPagesLogin() {
           const updatedUser = { ...user, resetToken: token, resetTokenExpiry: expiry.toISOString() };
           await services.putUsuarios(updatedUser, user.id);
           
-          setSuccessMsg('Enviando enlace de recuperación a tu correo...');
+          setSuccessMsg('Enviando enlace de recuperaci├│n a tu correo...');
           
           const resetLink = `${window.location.origin}/reset-password?token=${token}`;
           const templateParams = {
@@ -68,17 +68,17 @@ function MainPagesLogin() {
               }
             );
 
-            setSuccessMsg('¡Correo enviado exitosamente! Revisa tu bandeja de entrada o carpeta de spam.');
+            setSuccessMsg('┬íCorreo enviado exitosamente! Revisa tu bandeja de entrada o carpeta de spam.');
             Swal.fire({
-              title: '¡Correo Enviado!',
-              text: 'Se ha enviado un enlace de recuperación a tu correo electrónico.',
+              title: '┬íCorreo Enviado!',
+              text: 'Se ha enviado un enlace de recuperaci├│n a tu correo electr├│nico.',
               icon: 'success',
               confirmButtonColor: '#2e6b46',
               confirmButtonText: 'Entendido'
             });
           } catch (emailError) {
             console.error('Error al enviar el correo con EmailJS:', emailError);
-            setError('No se pudo enviar el correo de recuperación. Por favor, verifica tu configuración de EmailJS o intenta más tarde.');
+            setError('No se pudo enviar el correo de recuperaci├│n. Por favor, verifica tu configuraci├│n de EmailJS o intenta m├ís tarde.');
             setSuccessMsg('');
           }
         }
@@ -86,26 +86,26 @@ function MainPagesLogin() {
       }
 
       if (viewMode === 'register') {
-        // Validación de correo existente
+        // Validaci├│n de correo existente
         const emailExiste = usuarios.find(u => u.email === email);
         if (emailExiste) {
-          setError('El correo electrónico ya está registrado.');
+          setError('El correo electr├│nico ya est├í registrado.');
           return;
         }
 
         if (password.length < 8) {
-          setError('La contraseña debe tener al menos 8 caracteres.');
+          setError('La contrase├▒a debe tener al menos 8 caracteres.');
           return;
         }
 
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
         if (!passwordRegex.test(password)) {
-          setError('La contraseña debe contener al menos 1 letra mayúscula, 1 minúscula y 1 número.');
+          setError('La contrase├▒a debe contener al menos 1 letra may├║scula, 1 min├║scula y 1 n├║mero.');
           return;
         }
 
-        // Crear nuevo usuario con contraseña simuladamente "segura"
-        // En producción se usa bcrypt en el Backend
+        // Crear nuevo usuario con contrase├▒a simuladamente "segura"
+        // En producci├│n se usa bcrypt en el Backend
         const hashedPassword = btoa(password + "_SECURE_SALT");
         const nuevoUsuario = {
           nombre,
@@ -119,79 +119,26 @@ function MainPagesLogin() {
         if (result) {
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('user', JSON.stringify(result));
-          
-          Swal.fire({
-            title: '¡Registro Exitoso!',
-            text: 'Tu cuenta ha sido creada correctamente.',
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
-          });
-
-          setTimeout(() => {
-            navigate('/user');
-          }, 1500);
+          navigate('/user');
         } else {
-          setError('Ocurrió un error al registrarse. Intenta nuevamente.');
+          setError('Ocurri├│ un error al registrarse. Intenta nuevamente.');
         }
 
       } else if (viewMode === 'login') {
         const hashedPassword = btoa(password + "_SECURE_SALT");
-        // Lógica de inicio de sesión: compatible con contraseñas del db.json y nuevas encriptadas
+        // L├│gica de inicio de sesi├│n: compatible con contrase├▒as del db.json y nuevas encriptadas
         const user = usuarios.find(u => u.email === email && (u.password === password || u.password === hashedPassword));
 
         if (user) {
-          // Lógica de primer login para voluntarios (debe cambiar contraseña)
-          if (user.rol === 'voluntario' && user.debeCambiarPassword) {
-            const { value: newPassword } = await Swal.fire({
-              title: 'Primer Inicio de Sesión',
-              text: 'Como nuevo voluntario, debes cambiar tu contraseña temporal.',
-              input: 'password',
-              inputPlaceholder: 'Ingresa tu nueva contraseña',
-              showCancelButton: true,
-              confirmButtonText: 'Cambiar y Entrar',
-              cancelButtonText: 'Cancelar',
-              inputValidator: (value) => {
-                if (!value) return 'La nueva contraseña es obligatoria';
-                if (value.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
-                const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
-                if (!passRegex.test(value)) return 'Debe contener al menos 1 mayúscula, 1 minúscula y 1 número';
-              }
-            });
-
-            if (newPassword) {
-              const updatedHashedPassword = btoa(newPassword + "_SECURE_SALT");
-              const updatedUser = { ...user, password: updatedHashedPassword, debeCambiarPassword: false };
-              await services.putUsuarios(updatedUser, user.id);
-              // Actualizamos el objeto user para el resto del flujo
-              user.password = updatedHashedPassword;
-              user.debeCambiarPassword = false;
-            } else {
-              setLoading(false);
-              return; // Canceló el cambio, no entra
-            }
-          }
-
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('user', JSON.stringify(user));
-          
-          Swal.fire({
-            title: '¡Bienvenido!',
-            text: `Sesión iniciada como ${user.nombre}`,
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
-          });
-
-          setTimeout(() => {
-            if (user.rol === 'admin') {
-              navigate('/admin');
-            } else {
-              navigate('/user');
-            }
-          }, 1500);
+          if (user.rol === 'admin') {
+            navigate('/admin');
+          } else {
+            navigate('/user');
+          }
         } else {
-          setError('Correo o contraseña incorrectos');
+          setError('Correo o contrase├▒a incorrectos');
         }
       }
     } catch (err) {
@@ -217,7 +164,7 @@ function MainPagesLogin() {
       <div className="login-card">
         <h2>
           {viewMode === 'register' ? 'Crear una cuenta' : 
-           viewMode === 'forgot' ? 'Recuperar Contraseña' : 'Iniciar Sesión'}
+           viewMode === 'forgot' ? 'Recuperar Contrase├▒a' : 'Iniciar Sesi├│n'}
         </h2>
         
         {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
@@ -232,13 +179,13 @@ function MainPagesLogin() {
                 value={nombre} 
                 onChange={(e) => setNombre(e.target.value)} 
                 required 
-                placeholder="Ej: Juan Pérez"
+                placeholder="Ej: Juan P├®rez"
               />
             </div>
           )}
 
           <div className="form-group">
-            <label>Correo Electrónico</label>
+            <label>Correo Electr├│nico</label>
             <input 
               type="text" 
               value={email} 
@@ -249,12 +196,12 @@ function MainPagesLogin() {
 
           {(viewMode === 'login' || viewMode === 'register') && (
             <div className="form-group" style={{ position: 'relative' }}>
-              <label>Contraseña</label>
+              <label>Contrase├▒a</label>
               <input 
                 type="password" 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
-                placeholder="••••••••"
+                placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó"
               />
               {viewMode === 'login' && (
                 <button 
@@ -266,7 +213,7 @@ function MainPagesLogin() {
                     textDecoration: 'underline', marginTop: '8px', display: 'block', width: '100%', textAlign: 'right'
                   }}
                 >
-                  ¿Olvidaste tu contraseña?
+                  ┬┐Olvidaste tu contrase├▒a?
                 </button>
               )}
             </div>
@@ -275,15 +222,15 @@ function MainPagesLogin() {
           <button type="submit" disabled={loading} className="login-btn">
             {loading ? 'Cargando...' : 
              viewMode === 'register' ? 'Registrarse' : 
-             viewMode === 'forgot' ? 'Enviar enlace de recuperación' : 'Entrar'}
+             viewMode === 'forgot' ? 'Enviar enlace de recuperaci├│n' : 'Entrar'}
           </button>
         </form>
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.95rem' }}>
           <span style={{ color: '#4b5563' }}>
-            {viewMode === 'register' ? '¿Ya tienes una cuenta? ' : 
-             viewMode === 'login' ? '¿No tienes cuenta? ' : 
-             '¿Recordaste tu contraseña? '}
+            {viewMode === 'register' ? '┬┐Ya tienes una cuenta? ' : 
+             viewMode === 'login' ? '┬┐No tienes cuenta? ' : 
+             '┬┐Recordaste tu contrase├▒a? '}
           </span>
           <button 
             type="button" 
@@ -299,7 +246,7 @@ function MainPagesLogin() {
               fontSize: '0.95rem'
             }}
           >
-            {viewMode === 'register' || viewMode === 'forgot' ? 'Inicia sesión' : 'Regístrate'}
+            {viewMode === 'register' || viewMode === 'forgot' ? 'Inicia sesi├│n' : 'Reg├¡strate'}
           </button>
         </div>
       </div>

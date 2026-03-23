@@ -1,15 +1,15 @@
-{
+﻿{
   "arboles": [
     {
-      "nombre": "árbol de Guanacaste",
+      "nombre": "├írbol de Guanacaste",
       "nombreCientifico": "Enterolobium cyclocarpum",
       "tipo": "Guanacaste",
       "progreso": "0%",
       "familia": "Leguminosas",
       "altura": "25-35 metros",
-      "crecimiento": "1.5 a 2 metros por año",
+      "crecimiento": "1.5 a 2 metros por a├▒o",
       "clima": "tropical",
-      "descripcion": "qwertyuiop´ñlkjhgfdsazxcvbnm,",
+      "descripcion": "qwertyuiop┬┤├▒lkjhgfdsazxcvbnm,",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
       "estado": "vivo",
@@ -30,15 +30,15 @@
       ]
     },
     {
-      "nombre": "árbol de Guanacaste",
+      "nombre": "├írbol de Guanacaste",
       "nombreCientifico": "Enterolobium cyclocarpum",
       "tipo": "guanacaste",
       "progreso": "10%",
       "familia": "Leguminosas",
       "altura": "25-35 metros",
-      "crecimiento": "1.5 a 2 metros por año",
+      "crecimiento": "1.5 a 2 metros por a├▒o",
       "clima": "tropical",
-      "descripcion": "asdfghjklñ{",
+      "descripcion": "asdfghjkl├▒{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
       "estado": "muerto",
@@ -73,10 +73,10 @@
       "progreso": "0%",
       "familia": "Combretaceae",
       "altura": "10-25 metros",
-      "crecimiento": "1.5 a 2 metros por año",
+      "crecimiento": "1.5 a 2 metros por a├▒o",
       "clima": "tropical",
-      "descripcion": "Se desarrolla hasta una envergadura de 35 m, con una corona de ramas simétricas horizontales dirigidas hacia arriba. Cuando el árbol envejece, la corona de ramas se hace más aplanada, hasta formar una especie de jarrón.\n\nLas hojas son grandes, de 15 a 25 cm de longitud y de 10 a 14 cm de anchura, ovoides, verde oscuro y coriáceo brillante. Son caducifolias, desprendiéndose en la época seca; antes de caer cambian el color a rosado rojizo o amarillo parduzco, que se deben a pigmentos tales como la violaxantina, la luteína y la zeaxantina.\n\n",
-      "cuidados": "requiere un suelo bien drenado y temperaturas cálidas para crecer adecuadamente. Es importante regarlo regularmente, especialmente en su juventud, y realizar podas para mantener su forma y salud.",
+      "descripcion": "Se desarrolla hasta una envergadura de 35 m, con una corona de ramas sim├®tricas horizontales dirigidas hacia arriba. Cuando el ├írbol envejece, la corona de ramas se hace m├ís aplanada, hasta formar una especie de jarr├│n.\n\nLas hojas son grandes, de 15 a 25 cm de longitud y de 10 a 14 cm de anchura, ovoides, verde oscuro y cori├íceo brillante. Son caducifolias, desprendi├®ndose en la ├®poca seca; antes de caer cambian el color a rosado rojizo o amarillo parduzco, que se deben a pigmentos tales como la violaxantina, la lute├¡na y la zeaxantina.\n\n",
+      "cuidados": "requiere un suelo bien drenado y temperaturas c├ílidas para crecer adecuadamente. Es importante regarlo regularmente, especialmente en su juventud, y realizar podas para mantener su forma y salud.",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.0lyUU6ToXswBlaCSYGkJvgAAAA%3Fpid%3DApi&f=1&ipt=5a7368bc95cb05f1c9f225fdb55f0f86ede8307f2c3951937f4d613234cf41e5&ipo=images",
       "estado": "vivo",
       "fechaRegistro": "2026-03-18",
@@ -143,24 +143,6 @@
       "email": "s@gmail.com",
       "password": "12345678",
       "rol": "user"
-    },
-    {
-      "id": "d374",
-      "nombre": "Andrés leal",
-      "email": "alealvfwd@gmail.com",
-      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
-      "rol": "user",
-      "resetToken": "njig41nqox26omjx0zhsf",
-      "resetTokenExpiry": "2026-03-20T21:23:46.044Z"
-    },
-    {
-      "id": "9ba2",
-      "nombre": "Andrés Leal V",
-      "email": "andresgerardolv@gmail.com",
-      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
-      "rol": "user",
-      "resetToken": "o5phuesjo69r3drsixzy7i",
-      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
     }
   ],
   "stats_tipos": [
@@ -211,8 +193,5 @@
       "fechaIngreso": "2026-03-19"
     }
   ],
-  "reportes": [],
-  "reportes_robados": [],
-  "reportes_voluntariado": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

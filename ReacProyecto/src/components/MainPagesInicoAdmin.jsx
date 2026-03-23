@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
+import AdminReports from './AdminReports';
+import AdminReportesRobo from './AdminReportesRobo';
 import '../styles/Arboles.css';
 import '../styles/MainPagesInicoAdmin.css';
 import ResumenTab from './admin/ResumenTab';
@@ -59,9 +61,10 @@ function MainPagesInicoAdmin() {
   const [form, setForm] = useState(FORM_INICIAL);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios' | 'voluntariados'
-  const [tipoFiltro, setTipoFiltro] = useState('');
+
+  const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios'
+  const [tipoFiltro, setTipoFiltro] = useState('mimbro');
+
   const [modoNuevoTipo, setModoNuevoTipo] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [statsTipos, setStatsTipos] = useState([]);
@@ -90,6 +93,30 @@ function MainPagesInicoAdmin() {
   ]));
 
   // ── Autenticación y carga inicial ───────────────────────────────────────────
+  const mostrarMensaje = useCallback((texto, tipo = 'success') => {
+    setMensaje({ texto, tipo });
+    setTimeout(() => setMensaje({ texto: '', tipo: '' }), 3500);
+  }, []);
+
+  const cargarArboles = useCallback(async () => {
+    setCargando(true);
+    try {
+      const [datosArboles, datosStats, datosUsuarios] = await Promise.all([
+        services.getArboles(),
+        services.getStatsTipos(),
+        services.getUsuarios()
+      ]);
+      setArboles(datosArboles || []);
+      setStatsTipos(datosStats || []);
+      setUsuarios(datosUsuarios || []);
+    } catch (err) {
+      console.error(err);
+      mostrarMensaje('Error al cargar la información.', 'error');
+    } finally {
+      setCargando(false);
+    }
+  }, [mostrarMensaje]);
+
   useEffect(() => {
     const isAuthenticated = sessionStorage.getItem('isAuthenticated');
     const userData = sessionStorage.getItem('user');
@@ -107,29 +134,8 @@ function MainPagesInicoAdmin() {
 
     setAdminName(user.nombre);
     cargarArboles();
-  }, [navigate]);
 
-  const cargarArboles = async () => {
-    setCargando(true);
-    try {
-      const [datosArboles, datosStats, datosUsuarios, datosEmpleados, datosAbonos] = await Promise.all([
-        services.getArboles(),
-        services.getStatsTipos(),
-        services.getUsuarios(),
-        services.getVoluntariados(),
-        services.getAbonos()
-      ]);
-      setArboles(datosArboles || []);
-      setStatsTipos(datosStats || []);
-      setUsuarios(datosUsuarios || []);
-      setVoluntariados(datosEmpleados || []);
-      setAbonos(datosAbonos || []);
-    } catch (err) {
-      mostrarMensaje('Error al cargar la información.', 'error');
-    } finally {
-      setCargando(false);
-    }
-  };
+  }, [navigate, cargarArboles]);
 
   // Efecto para asegurar que tipoFiltro tenga un valor si estamos en la pestaña de seguimiento
   useEffect(() => {
@@ -214,6 +220,8 @@ function MainPagesInicoAdmin() {
       await cargarArboles();
     } catch (err) {
       Swal.fire('Error', 'No se pudo procesar el usuario', 'error');
+      console.error(err);
+      mostrarMensaje('Error al procesar el usuario', 'error');
     }
   };
 
@@ -244,6 +252,7 @@ function MainPagesInicoAdmin() {
         Swal.fire('Eliminado', 'El usuario ha sido eliminado', 'success');
         await cargarArboles();
       } catch (err) {
+        console.error(err);
         Swal.fire('Error', 'No se pudo eliminar el usuario', 'error');
       }
     }
@@ -510,163 +519,12 @@ function MainPagesInicoAdmin() {
       setStatsTipos(nuevosStats);
       mostrarMensaje(`Estadísticas de "${tipo}" actualizadas.`);
     } catch (e) {
+      console.error(e);
       mostrarMensaje('Error al actualizar estadísticas del tipo.', 'error');
     }
   };
 
-  const mostrarMensaje = (texto, tipo = 'success') => {
-    Swal.fire({
-      title: tipo === 'success' ? 'Éxito' : 'Error',
-      text: texto,
-      icon: tipo,
-      timer: 3000,
-      showConfirmButton: false,
-      toast: true,
-      position: 'top-end'
-    });
-  };
 
-  // ── Handlers de Abonos ──────────────────────────────────────────────────────
-  const resetFormAbono = () => {
-    setFormAbono(ABONO_FORM_INICIAL);
-    setModoEdicionAbono(false);
-    setIdEditandoAbono(null);
-  };
-
-  const handleLimpiarHistorialAbono = async (arbol) => {
-    const confirm = await Swal.fire({
-      title: '¿Limpiar historial?',
-      text: `Se borrará el registro de los ${arbol.historialAbono?.length} abonos aplicados a "${arbol.nombre}".`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, limpiar',
-      cancelButtonText: 'No'
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        const arbolActualizado = { ...arbol, historialAbono: [] };
-        await services.putArboles(arbolActualizado, arbol.id);
-        Swal.fire('Historial Limpiado', '', 'success');
-        await cargarArboles();
-      } catch (e) {
-        Swal.fire('Error', 'No se pudo limpiar el historial.', 'error');
-      }
-    }
-  };
-
-  const handleAbonoSubmit = async (e) => {
-    e.preventDefault();
-    const trimmedNombre = formAbono.nombre.trim();
-    if (!trimmedNombre) {
-      Swal.fire('Error', 'El nombre es obligatorio', 'error');
-      return;
-    }
-
-    const stockFinal = parseInt(formAbono.stock) || 0;
-
-    if (stockFinal < 0) {
-      Swal.fire('Error', 'El stock no puede ser un número negativo', 'error');
-      return;
-    }
-
-    try {
-      const abonoFinal = { ...formAbono, stock: stockFinal };
-      if (modoEdicionAbono) {
-        await services.putAbonos(abonoFinal, idEditandoAbono);
-        Swal.fire('Éxito', 'Abono actualizado', 'success');
-      } else {
-        await services.postAbonos(abonoFinal);
-        Swal.fire('Éxito', 'Abono registrado', 'success');
-      }
-      resetFormAbono();
-      await cargarArboles();
-    } catch (err) {
-      Swal.fire('Error', 'No se pudo guardar el abono', 'error');
-    }
-  };
-
-  const handleEditarAbono = (abono) => {
-    setFormAbono(abono);
-    setModoEdicionAbono(true);
-    setIdEditandoAbono(abono.id);
-    setTab('abonos');
-  };
-
-  const handleEliminarAbono = async (id, nombre) => {
-    const confirm = await Swal.fire({
-      title: '¿Confirmar eliminación?',
-      text: `Eliminarás "${nombre}" del inventario.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#ef4444'
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await services.deleteAbonos(id);
-        Swal.fire('Eliminado', 'Abono borrado', 'success');
-        await cargarArboles();
-      } catch (err) {
-        Swal.fire('Error', 'No se pudo eliminar', 'error');
-      }
-    }
-  };
-
-  const handleAbonarArbol = async (arbol) => {
-    if (abonos.length === 0) {
-      Swal.fire('Inventario vacío', 'No hay abonos registrados para aplicar.', 'warning');
-      return;
-    }
-
-    const { value: abonoSeleccionadoId } = await Swal.fire({
-      title: '🌿 Aplicar Abono/Fertilizante',
-      text: `Selecciona el producto para el árbol "${arbol.nombre}":`,
-      input: 'select',
-      inputOptions: abonos.reduce((acc, curr) => {
-        acc[curr.id] = `${curr.nombre} (Stock: ${curr.stock} ${curr.unidad})`;
-        return acc;
-      }, {}),
-      inputPlaceholder: 'Selecciona un producto...',
-      showCancelButton: true,
-      confirmButtonText: 'Aplicar 1 unidad',
-      inputValidator: (value) => {
-        if (!value) return 'Debes seleccionar un producto';
-        const ab = abonos.find(a => a.id === value);
-        if (ab.stock <= 0) return 'No queda stock de este producto';
-      }
-    });
-
-    if (abonoSeleccionadoId) {
-      try {
-        const abonoEncontrado = abonos.find(a => a.id === abonoSeleccionadoId);
-        
-        // 1. Restar stock
-        const abonoActualizado = { ...abonoEncontrado, stock: abonoEncontrado.stock - 1 };
-        await services.putAbonos(abonoActualizado, abonoSeleccionadoId);
-
-        // 2. Registrar en historial del árbol
-        const now = new Date();
-        const nuevoRegistro = {
-          abono: abonoEncontrado.nombre,
-          fecha: now.toISOString().split('T')[0],
-          hora: now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-          idAbono: abonoSeleccionadoId
-        };
-        
-        const arbolActualizado = {
-          ...arbol,
-          historialAbono: [...(arbol.historialAbono || []), nuevoRegistro]
-        };
-        await services.putArboles(arbolActualizado, arbol.id);
-
-        await Swal.fire('¡Árbol Abonado!', `Se aplicó "${abonoEncontrado.nombre}" correctamente.`, 'success');
-        await cargarArboles();
-      } catch (e) {
-        Swal.fire('Error', 'No se pudo registrar la fertilización.', 'error');
-      }
-    }
-  };
 
   // ── Handlers del formulario ─────────────────────────────────────────────────
   const handleChange = (e) => {
@@ -813,7 +671,11 @@ function MainPagesInicoAdmin() {
       setTab('lista');
       await cargarArboles();
     } catch (err) {
-      Swal.fire('Error', 'No se pudo guardar el árbol. Revise la conexión.', 'error');
+
+
+      console.error(err);
+      mostrarMensaje('Error al guardar el árbol. Revise la conexión.', 'error');
+
     }
   };
 
@@ -843,6 +705,7 @@ function MainPagesInicoAdmin() {
       Swal.fire('¡Eliminado!', `El árbol "${arbol.nombre}" ha sido eliminado.`, 'success');
       await cargarArboles();
     } catch (err) {
+      console.error(err);
       Swal.fire('Error', 'No se pudo eliminar el árbol.', 'error');
     }
   };
@@ -891,6 +754,7 @@ function MainPagesInicoAdmin() {
            setTab('lista');
            await cargarArboles();
         } catch(e) {
+           console.error(e);
            Swal.fire('Error de red', 'No se pudieron eliminar todos los registros.', 'error');
         } finally {
            setCargando(false);
@@ -984,6 +848,28 @@ function MainPagesInicoAdmin() {
           >
             {modoEdicion ? '✏️ Editar Árbol' : '➕ Agregar Árbol'}
           </button>
+
+
+          <button
+            className={`admin-tab ${tab === 'seguimiento' ? 'active' : ''}`}
+            onClick={() => { setTab('seguimiento'); resetForm(); }}
+          >
+            🌱 Seguimiento por Tipo
+          </button>
+          <button
+            className={`admin-tab ${tab === 'reportes' ? 'active' : ''}`}
+            onClick={() => { setTab('reportes'); resetForm(); }}
+          >
+            ✉️ Reportes
+          </button>
+          <button
+            className={`admin-tab ${tab === 'reportar_robos' ? 'active' : ''}`}
+            onClick={() => { setTab('reportar_robos'); resetForm(); }}
+            style={{ color: '#ef4444', borderColor: tab === 'reportar_robos' ? '#ef4444' : 'transparent' }}
+          >
+            🚨 Árboles Robados
+          </button>
+
         </div>
 
         {/* ──── TAB: RESUMEN ──── */}
@@ -1025,6 +911,201 @@ function MainPagesInicoAdmin() {
             handleEditar={handleEditar} 
           />
         )}
+
+
+        {/* ──── TAB: SEGUIMIENTO ──── */}
+        {tab === 'seguimiento' && (
+          <div>
+            <div className="admin-section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap' }}>
+                <h2>Seguimiento Específico</h2>
+                <select 
+                  value={tipoFiltro} 
+                  onChange={(e) => setTipoFiltro(e.target.value)}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', fontWeight: '500', color: '#1a402a', outline: 'none' }}
+                >
+                  {tiposDisponibles.map(tipo => (
+                    <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: '5px' }}>
+                <p style={{ fontWeight: 'bold', color: '#2e6b46', margin: 0 }}>
+                  Total: {arboles.filter(a => a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)).length} árboles de tipo "{tipoFiltro}"
+                </p>
+                <button 
+                  onClick={() => handleEliminarTipo(tipoFiltro)}
+                  style={{  
+                    backgroundColor: '#10b981', /* Esmeralda vibrante */
+                    color: 'white',
+                    padding: '10px 24px',
+                    borderRadius: '50px',
+                    textDecoration: 'none',
+                    fontWeight: '700',
+                    transition: 'transform 0.2s, background-color 0.2s',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  🧨 Eliminar este Tipo y sus Árboles
+                </button>
+              </div>
+
+              {/* Nueva sección: Edición de estadísticas manuales */}
+              <div style={{ 
+                width: '100%', 
+                background: 'rgba(52, 211, 153, 0.05)', 
+                padding: '1.5rem', 
+                borderRadius: '12px',
+                border: '1px solid rgba(52, 211, 153, 0.2)',
+                marginTop: '1rem'
+              }}>
+                <h3 style={{ fontSize: '1rem', color: '#6ee7b7', marginBottom: '1rem' }}>📊 Control de Estadísticas para "{tipoFiltro}"</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                  <div className="admin-form-group">
+                    <label>🌳 Árboles Planificados</label>
+                    <input 
+                      type="number" 
+                      placeholder="Cantidad a sembrar..."
+                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
+                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label>🍂 Árboles Muertos</label>
+                    <input 
+                      type="number" 
+                      placeholder="Cantidad de pérdidas..."
+                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
+                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group" style={{ opacity: 0.7 }}>
+                    <label>✅ Sembrados Actuales</label>
+                    <input 
+                      type="text" 
+                      disabled
+                      value={arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-arboles-lista" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', marginTop: '1.5rem' }}>
+              {arboles
+                .filter(a => (a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)) && a.estado !== 'muerto')
+                .map((arbol, index) => (
+                <div key={arbol.id} className="admin-arbol-card" style={{ display: 'block', padding: '1.5rem' }}>
+                  <h3 style={{ margin: '0 0 15px 0', color: '#1a402a', fontSize: '1.2rem' }}>
+                    #{index + 1} - {arbol.nombre}
+                  </h3>
+                  
+                  <div style={{ marginBottom: '15px' }}>
+                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Estado Actual:</label>
+                    <select 
+                      value={arbol.estado} 
+                      onChange={async (e) => {
+                        const nuevoEstado = e.target.value;
+                        const estadoAnterior = arbol.estado;
+
+                        // Pedir confirmación si el cambio es hacia o desde "muerto"
+                        if ((nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') || 
+                            (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto')) {
+                          
+                          const result = await Swal.fire({
+                            title: '¿Confirmar cambio de estado?',
+                            text: nuevoEstado === 'muerto' 
+                              ? `¿Estás seguro de marcar "${arbol.nombre}" como MUERTO? Se registrará como pérdida en las estadísticas.`
+                              : `¿Deseas cambiar el estado de "${arbol.nombre}" a "${nuevoEstado}"?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#2e6b46',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Sí, cambiar',
+                            cancelButtonText: 'Cancelar'
+                          });
+
+                          if (!result.isConfirmed) {
+                             e.target.value = estadoAnterior; 
+                             return;
+                          }
+                        }
+
+                        const arbolActual = { 
+                          ...arbol, 
+                          estado: nuevoEstado,
+                          fechaMuerto: nuevoEstado === 'muerto' ? new Date().toISOString().split('T')[0] : null
+                        };
+                        
+                        try {
+                          await services.putArboles(arbolActual, arbol.id);
+                          
+                          const tipoKey = arbol.tipo || 'mimbro';
+                          const currentStat = statsTipos.find(s => s.tipo === tipoKey.toLowerCase());
+                          
+                          // Lógica automática de estadísticas de muertos
+                          if (nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') {
+                             const newDeadCount = (currentStat?.muertos || 0) + 1;
+                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
+                          } else if (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto') {
+                             const newDeadCount = Math.max(0, (currentStat?.muertos || 0) - 1);
+                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
+                          }
+
+                          mostrarMensaje(`Estado de "${arbol.nombre}" actualizado.`);
+                          cargarArboles();
+                        } catch (err) {
+                          console.error(err);
+                          mostrarMensaje('Error al actualizar estado', 'error');
+                        }
+                      }}
+                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
+                    >
+                      <option value="vivo">Vivo</option>
+                      <option value="en_riesgo">En riesgo</option>
+                      <option value="muerto">Muerto</option>
+                      <option value="protegido">Protegido</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Progreso en el tiempo:</label>
+                    <input 
+                      type="text" 
+                      defaultValue={arbol.progreso || '0%'} 
+                      onBlur={async (e) => {
+                         if (e.target.value === (arbol.progreso || '0%')) return;
+                         const updatedArbol = { ...arbol, progreso: e.target.value };
+                         try {
+                           await services.putArboles(updatedArbol, arbol.id);
+                           mostrarMensaje(`Progreso actualizado para ${arbol.nombre}`);
+                           cargarArboles();
+                         } catch (err) {
+                           console.error(err);
+                           mostrarMensaje('Error al actualizar progreso', 'error');
+                         }
+                      }}
+                      placeholder="Ej: Creció 10cm, 50% de meta..."
+                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
+                    />
+                    <small style={{ color: '#66937a', display: 'block', marginTop: '6px' }}>
+                      * Escribe el progreso y haz clic fuera del cuadro para guardar
+                    </small>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ──── TAB: REPORTES ──── */}
+        {tab === 'reportes' && (
+          <AdminReports />
+        )}
+
 
         {/* ──── TAB: USUARIOS ──── */}
         {tab === 'usuarios' && (
@@ -1089,6 +1170,20 @@ function MainPagesInicoAdmin() {
             resetForm={resetForm}
             setTab={setTab}
           />
+        )}
+
+        {/* ──── TAB: REPORTES ──── */}
+        {tab === 'reportes' && (
+          <div className="admin-reports-container">
+            <AdminReports />
+          </div>
+        )}
+
+        {/* ──── TAB: REPORTES ROBOS ──── */}
+        {tab === 'reportar_robos' && (
+          <div className="admin-reports-container">
+            <AdminReportesRobo />
+          </div>
         )}
       </main>
     </div>
