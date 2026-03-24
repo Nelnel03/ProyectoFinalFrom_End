@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import services from "../services/services.jsx";
 import "../styles/UserReports.css";
 
@@ -21,16 +21,37 @@ function validate(reporte) {
   return errors;
 }
 
-function UserReportesRobo({ user }) {
+function UserReportesRobo({ user, onDone }) {
   const [reporte, setReporte] = useState({
     tipo_arbol:  "",
     ubicacion:   "",
     descripcion: "",
   });
-  const [errors,  setErrors]  = useState({});
-  const [touched, setTouched] = useState({});
+
+  const [misReportes, setMisReportes] = useState([]);
+
   const [estadoEnvio, setEstadoEnvio] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);
+  const [cargandoHistorial, setCargandoHistorial] = useState(true);
+
+  useEffect(() => {
+    cargarMisReportes();
+  }, [user?.id]);
+
+  const cargarMisReportes = async () => {
+    if (!user?.id) return;
+    setCargandoHistorial(true);
+    try {
+      const todos = await services.getReportesRobados();
+      // Filtrar por el ID del usuario actual
+      const filtrados = (todos || []).filter(r => r.userId === user.id);
+      setMisReportes(filtrados.reverse()); // Los más recientes primero
+    } catch (error) {
+      console.error("Error al cargar historial de robos:", error);
+    } finally {
+      setCargandoHistorial(false);
+    }
+  };
 
   const handleChange = (e) => {
     const updated = { ...reporte, [e.target.name]: e.target.value };
@@ -59,17 +80,20 @@ function UserReportesRobo({ user }) {
     try {
       const nuevoReporte = {
         ...reporte,
-        userId:    user?.id    || "anonimo",
-        userName:  user?.nombre || "Anónimo",
-        userEmail: user?.email  || "Sin correo",
-        fecha:     new Date().toISOString(),
-        estado:    "Pendiente",
+
+        userId: user?.id || 'anonimo',
+        userName: user?.nombre || 'Anónimo',
+        userEmail: user?.email || 'Sin correo',
+        fecha: new Date().toISOString(),
+        estado: "Pendiente"
+
       };
       await services.postReportesRobados(nuevoReporte);
       setEstadoEnvio({ tipo: "success", texto: "Reporte de árbol robado enviado exitosamente." });
-      setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" });
-      setErrors({});
-      setTouched({});
+
+      setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" }); 
+      if (onDone) setTimeout(onDone, 1500);
+
     } catch (error) {
       console.error(error);
       setEstadoEnvio({ tipo: "error", texto: "Hubo un error al enviar el reporte." });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-const PrivateRoutes = ({ children, roleRequired }) => {
+const PrivateRoutes = ({ children, roleRequired, rolesAllowed = [] }) => {
   const isAuth = localStorage.getItem('isAuthenticated') === 'true';
   const userStr = localStorage.getItem('user');
   let user = {};
@@ -18,8 +18,13 @@ const PrivateRoutes = ({ children, roleRequired }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Si se define rol requerido único
   if (roleRequired && user.rol !== roleRequired) {
-    // Si no tiene el rol, redirige a la página principal (o a un "acceso denegado")
+    return <Navigate to="/" replace />;
+  }
+
+  // Si se define lista de roles permitidos
+  if (rolesAllowed.length > 0 && !rolesAllowed.includes(user.rol)) {
     return <Navigate to="/" replace />;
   }
 

@@ -5,7 +5,11 @@ import ArbolesSection from './ArbolesSection';
 import UserProfile from './UserProfile';
 import UserReports from './UserReports';
 import UserReportesRobo from './UserReportesRobo';
-import BuzonEnviados from './BuzonEnviados';
+
+
+import ReporteForm from './ReporteForm';
+import MisReportesTab from './MisReportesTab';
+
 import '../styles/MainPagesInicoVisitante.css';
 
 function MainPagesInicoUser() {
@@ -16,7 +20,7 @@ function MainPagesInicoUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -60,7 +64,10 @@ function MainPagesInicoUser() {
         <section className="visitante-intro"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}
         >
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-evenly', width: '100%', flexWrap: 'wrap' }}>
+
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+
             <button
               onClick={() => setCurrentTab('coleccion')}
               style={{
@@ -105,6 +112,38 @@ function MainPagesInicoUser() {
               }}
             >
               ✉️ Soporte/Reportes
+            </button>
+            {user?.rol === 'voluntario' && (
+              <button
+                onClick={() => setCurrentTab('reporte_voluntario')}
+                style={{
+                  padding: '10px 22px',
+                  backgroundColor: currentTab === 'reporte_voluntario' ? '#1a4d2e' : '#f3f4f6',
+                  color: currentTab === 'reporte_voluntario' ? 'white' : '#4b5563',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+              >
+                👷 Reportar Actividad
+              </button>
+            )}
+            <button
+              onClick={() => setCurrentTab('mis_reportes')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'mis_reportes' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'mis_reportes' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              📝 Mis Reportes
             </button>
             <button
               onClick={() => setCurrentTab('reporte_robo')}
@@ -163,11 +202,19 @@ function MainPagesInicoUser() {
           )}
 
           {currentTab === 'reportes' && (
-            <UserReports user={user} />
+            <UserReports user={user} onDone={() => setCurrentTab('mis_reportes')} />
           )}
 
           {currentTab === 'reporte_robo' && (
-            <UserReportesRobo user={user} />
+            <UserReportesRobo user={user} onDone={() => setCurrentTab('mis_reportes')} />
+          )}
+
+          {currentTab === 'mis_reportes' && (
+            <MisReportesTab user={user} />
+          )}
+
+          {currentTab === 'reporte_voluntario' && user?.rol === 'voluntario' && (
+            <ReporteForm user={user} onReportSubmitted={() => setCurrentTab('mis_reportes')} />
           )}
 
           {currentTab === 'buzon' && (

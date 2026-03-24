@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
 import '../styles/MainPagesInicoVisitante.css';
@@ -51,6 +52,8 @@ function MainPagesInicoVisitante() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
+
+
 
       </main>
     </div>
