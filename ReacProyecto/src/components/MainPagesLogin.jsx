@@ -45,6 +45,8 @@ function MainPagesLogin() {
     }
 
     try {
+
+
       const usuarios = await services.getUsuarios();
       const user = usuarios.find(u => u.email === trimmedEmail && u.password === trimmedPassword);
 

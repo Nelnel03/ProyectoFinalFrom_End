@@ -179,8 +179,10 @@
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
 
+
       "password": "12345678",
       "rol": "user"
+
 
     }
   ],
@@ -192,6 +194,7 @@
       "muertos": 1
     }
   ],
+
   "abonos": [
     {
       "id": "1ede",
@@ -239,6 +242,7 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
+
 
     }
   ],

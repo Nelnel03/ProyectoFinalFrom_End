@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
 
+
 import '../styles/PremiumDashboard.css';
+
 
 
 function MainPagesInicoUser() {
@@ -49,6 +51,7 @@ function MainPagesInicoUser() {
 
   return (
 
+
     <div className="dashboard-premium">
       <div className="premium-header">
         <div className="user-premium-header-flex">
@@ -62,12 +65,14 @@ function MainPagesInicoUser() {
                     <div className="badge">Voluntario Activo</div>
                 )}
             </div>
+
             <button
                 onClick={handleLogout}
                 className="btn-logout-premium user-btn-logout-margin"
             >
                 🚪 Cerrar Sesión
             </button>
+
         </div>
       </div>
 
@@ -77,6 +82,7 @@ function MainPagesInicoUser() {
           <p className="user-collection-desc">
             Explora las especies registradas en el sistema. Puedes ver detalles técnicos, estados de salud y progresos de crecimiento.
           </p>
+=
         </section>
 
         {cargando ? (
@@ -87,6 +93,8 @@ function MainPagesInicoUser() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
+
+
 
       </main>
     </div>

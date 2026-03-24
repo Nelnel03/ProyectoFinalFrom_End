@@ -291,6 +291,7 @@ function MainPagesInicoAdmin() {
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     
+
     const trimmedNombre = formUsuario.nombre.trim();
     const trimmedEmail = formUsuario.email.trim();
     const trimmedPassword = formUsuario.password.trim();
@@ -323,6 +324,7 @@ function MainPagesInicoAdmin() {
     );
     if (emailDuplicado) {
       Swal.fire('Atención', 'Este correo electrónico ya está registrado por otro usuario', 'warning');
+
       return;
     }
 
