@@ -42,8 +42,9 @@ const USER_FORM_INICIAL = {
 
 const VOLUNTARIADO_FORM_INICIAL = {
   nombre: '',
-  area: '', // Antes puesto
+  area: '',
   email: '',
+  password: '', // Nuevo: contraseña obligatoria
   telefono: '',
   fechaIngreso: new Date().toISOString().split('T')[0]
 };
@@ -73,7 +74,6 @@ function MainPagesInicoAdmin() {
   const [modoEdicionUsuario, setModoEdicionUsuario] = useState(false);
   const [idEditandoUsuario, setIdEditandoUsuario] = useState(null);
 
-  const [voluntariados, setVoluntariados] = useState([]);
   const [formVoluntariado, setFormVoluntariado] = useState(VOLUNTARIADO_FORM_INICIAL);
   const [modoEdicionVoluntariado, setModoEdicionVoluntariado] = useState(false);
   const [idEditandoVoluntariado, setIdEditandoVoluntariado] = useState(null);
@@ -82,6 +82,9 @@ function MainPagesInicoAdmin() {
   const [formAbono, setFormAbono] = useState(ABONO_FORM_INICIAL);
   const [modoEdicionAbono, setModoEdicionAbono] = useState(false);
   const [idEditandoAbono, setIdEditandoAbono] = useState(null);
+
+  const [reportesVolCount, setReportesVolCount] = useState(0);
+  const [reportesCount, setReportesCount] = useState(0);
 
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
   const [busqueda, setBusqueda] = useState(''); // Nuevo estado para búsqueda por texto
@@ -101,14 +104,23 @@ function MainPagesInicoAdmin() {
   const cargarArboles = useCallback(async () => {
     setCargando(true);
     try {
-      const [datosArboles, datosStats, datosUsuarios] = await Promise.all([
+      const [datosArboles, datosStats, datosUsuarios, datosAbonos] = await Promise.all([
         services.getArboles(),
         services.getStatsTipos(),
-        services.getUsuarios()
+        services.getUsuarios(),
+        services.getAbonos()
       ]);
       setArboles(datosArboles || []);
       setStatsTipos(datosStats || []);
       setUsuarios(datosUsuarios || []);
+      setAbonos(datosAbonos || []);
+      
+      const [reportesVol, reportesGen] = await Promise.all([
+        services.getReportesVoluntariado(),
+        services.getReportes()
+      ]);
+      setReportesVolCount(reportesVol.length);
+      setReportesCount(reportesGen.length);
     } catch (err) {
       console.error(err);
       mostrarMensaje('Error al cargar la información.', 'error');
@@ -118,8 +130,8 @@ function MainPagesInicoAdmin() {
   }, [mostrarMensaje]);
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-    const userData = sessionStorage.getItem('user');
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const userData = localStorage.getItem('user');
 
     if (!isAuthenticated || !userData) {
       navigate('/login');
@@ -289,6 +301,12 @@ function MainPagesInicoAdmin() {
       return;
     }
 
+    const password = formVoluntariado.password?.trim() || '';
+    if (!modoEdicionVoluntariado && (!password || password.length < 6)) {
+      Swal.fire('Error', 'La contraseña es obligatoria y debe tener al menos 6 caracteres', 'error');
+      return;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmedEmail)) {
       Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
@@ -332,23 +350,29 @@ function MainPagesInicoAdmin() {
         area: trimmedArea,
         email: trimmedEmail,
         telefono: trimmedTelefono,
-        rol: 'voluntario'
+        rol: 'voluntario',
+        password: password || undefined // Si estamos editando y está vacío, no se envía
       };
+
+      // Si no hay password en el form (durante edición), mantenemos el que tiene
+      if (modoEdicionVoluntariado && !password) {
+        delete voluntariadoFinal.password;
+      }
 
       if (modoEdicionVoluntariado) {
         await services.putVoluntariados(voluntariadoFinal, idEditandoVoluntariado);
-        Swal.fire('Éxito', 'Voluntario actualizado con éxito', 'success');
+        Swal.fire('Éxito', 'Ficha del voluntario actualizada', 'success');
       } else {
-        // Al crear uno nuevo, asignar password por defecto y forzar cambio
-        const nuevoVoluntarioUser = {
+        // Al crear uno nuevo, ya incluimos el password del formulario
+        const nuevoVoluntario = {
           ...voluntariadoFinal,
-          password: 'Voluntario123', // Password por defecto
-          debeCambiarPassword: true // Flag para forzar cambio en primer login
+          password: password,
+          debeCambiarPassword: false 
         };
-        await services.postVoluntariados(nuevoVoluntarioUser);
+        await services.postVoluntariados(nuevoVoluntario);
         Swal.fire({
           title: 'Registrado',
-          html: `Voluntario creado con éxito.<br><b>Contraseña temporal:</b> Voluntario123`,
+          text: `Voluntario "${trimmedNombre}" creado con éxito. Ya puede iniciar sesión con su correo y contraseña.`,
           icon: 'success'
         });
       }
@@ -360,7 +384,7 @@ function MainPagesInicoAdmin() {
   };
 
   const handleEditarVoluntariado = (vol) => {
-    setFormVoluntariado(vol);
+    setFormVoluntariado({ ...vol, password: '' });
     setModoEdicionVoluntariado(true);
     setIdEditandoVoluntariado(vol.id);
     setTab('voluntariados'); // Asegurar que estamos en la pestaña
@@ -442,7 +466,12 @@ function MainPagesInicoAdmin() {
         
         await services.putUsuarios(usuarioActualizado, user.id);
         
-        Swal.fire('¡Éxito!', `"${user.nombre}" ahora es voluntario.`, 'success');
+        Swal.fire({
+          title: '¡Conversión Exitosa!',
+          text: `"${user.nombre}" ahora es parte del equipo de voluntarios.`,
+          icon: 'success',
+          confirmButtonColor: '#20402a'
+        });
         setTab('voluntariados');
         await cargarArboles();
       } catch (error) {
@@ -452,12 +481,7 @@ function MainPagesInicoAdmin() {
   };
 
   const handleConvertirVoluntariadoAUsuario = async (vol) => {
-    // Verificar si ya existe un usuario con ese correo
-    const userExists = usuarios.find(u => u.email.toLowerCase() === vol.email.toLowerCase());
-    if (userExists) {
-      Swal.fire('Atención', `Ya existe un usuario con el correo ${vol.email}. No se puede duplicar.`, 'warning');
-      return;
-    }
+    // Ya no es necesario verificar duplicados de correo aquí porque estamos editando el MISMO registro
 
     const { value: password } = await Swal.fire({
       title: '👤 Convertir a Usuario',
@@ -773,23 +797,186 @@ function MainPagesInicoAdmin() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
     navigate('/');
+  };
+
+  // ── Handlers de Abonos ──────────────────────────────────────────────────────
+  const handleAbonoSubmit = async (e) => {
+    e.preventDefault();
+    const trimmedNombre = formAbono.nombre.trim();
+    const trimmedUnidad = formAbono.unidad.trim();
+    const parsedStock = parseInt(formAbono.stock);
+
+    if (!trimmedNombre || isNaN(parsedStock) || !trimmedUnidad) {
+      Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+      return;
+    }
+
+    try {
+      const abonoFinal = {
+        ...formAbono,
+        nombre: trimmedNombre,
+        unidad: trimmedUnidad,
+        stock: parsedStock
+      };
+
+      if (modoEdicionAbono) {
+        await services.putAbonos(abonoFinal, idEditandoAbono);
+        Swal.fire('Éxito', 'Inventario actualizado', 'success');
+      } else {
+        await services.postAbonos(abonoFinal);
+        Swal.fire('Éxito', 'Nuevo abono registrado', 'success');
+      }
+      resetFormAbono();
+      const nuevosAbonos = await services.getAbonos();
+      setAbonos(nuevosAbonos || []);
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo procesar el abono', 'error');
+    }
+  };
+
+  const handleEditarAbono = (abono) => {
+    setFormAbono(abono);
+    setModoEdicionAbono(true);
+    setIdEditandoAbono(abono.id);
+    // Scroll al formulario
+    setTimeout(() => {
+      document.querySelector('.admin-abono-form-card')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleEliminarAbono = async (id, nombre) => {
+    const confirm = await Swal.fire({
+      title: '¿Eliminar producto?',
+      text: `¿Estás seguro de eliminar "${nombre}" del inventario?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.deleteAbonos(id);
+        const nuevosAbonos = await services.getAbonos();
+        setAbonos(nuevosAbonos || []);
+        Swal.fire('Eliminado', 'Producto removido del inventario', 'success');
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar el producto', 'error');
+      }
+    }
+  };
+
+  const resetFormAbono = () => {
+    setFormAbono(ABONO_FORM_INICIAL);
+    setModoEdicionAbono(false);
+    setIdEditandoAbono(null);
+  };
+
+  const handleAbonarArbol = async (arbol) => {
+    if (abonos.length === 0) {
+      Swal.fire('Inventario vacío', 'No hay abonos registrados en el sistema.', 'warning');
+      return;
+    }
+
+    const inputOptions = {};
+    abonos.forEach(a => {
+      inputOptions[a.id] = `${a.nombre} (Stock: ${a.stock} ${a.unidad})`;
+    });
+
+    const { value: abonoId } = await Swal.fire({
+      title: '🥗 Aplicar Abono',
+      input: 'select',
+      inputOptions,
+      inputPlaceholder: 'Selecciona un abono...',
+      showCancelButton: true,
+      confirmButtonText: 'Abonar ahora',
+      confirmButtonColor: '#2e6b46',
+      inputValidator: (value) => {
+        if (!value) return 'Debes seleccionar un producto';
+        const selected = abonos.find(a => a.id === value);
+        if (selected?.stock <= 0) return 'No hay stock disponible de este producto';
+      }
+    });
+
+    if (abonoId) {
+      const selected = abonos.find(a => a.id === abonoId);
+      const historial = arbol.historialAbono || [];
+      const nuevoRegistro = {
+        abono: selected.nombre,
+        fecha: new Date().toISOString().split('T')[0],
+        hora: new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' }),
+        idAbono: selected.id
+      };
+
+      try {
+        // Actualizar árbol
+        await services.putArboles({
+          ...arbol,
+          historialAbono: [...historial, nuevoRegistro]
+        }, arbol.id);
+
+        // Actualizar stock del abono
+        await services.putAbonos({
+          ...selected,
+          stock: selected.stock - 1
+        }, selected.id);
+
+        await cargarArboles();
+        const nuevosAbonos = await services.getAbonos();
+        setAbonos(nuevosAbonos || []);
+        
+        Swal.fire('¡Éxito!', `Se ha abonado "${arbol.nombre}" con "${selected.nombre}".`, 'success');
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo registrar el abono.', 'error');
+      }
+    }
+  };
+
+  const handleLimpiarHistorialAbono = async (arbol) => {
+    const confirm = await Swal.fire({
+      title: '¿Limpiar historial?',
+      text: `¿Deseas borrar todos los registros de abono de "${arbol.nombre}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar todo'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.putArboles({
+          ...arbol,
+          historialAbono: []
+        }, arbol.id);
+        await cargarArboles();
+        Swal.fire('Limpiado', 'El historial ha sido borrado.', 'success');
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo limpiar el historial.', 'error');
+      }
+    }
   };
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="admin-container">
       {/* Header */}
-      <header className="admin-header">
-        <div>
-          <h1>🌳 Panel de Administración</h1>
-          <p>Bienvenido, <strong>{adminName}</strong> — Gestión de especies forestales</p>
+      <header className="admin-header-banner">
+        <div className="admin-banner-content">
+          <span className="admin-brand">BIOMON ADI</span>
+          <div className="admin-header-main-row">
+            <h1>🌳 PANEL DE CONTROL</h1>
+            <button className="admin-logout-btn" onClick={handleLogout}>
+              <span className="logout-dot"></span> Cerrar Sesión
+            </button>
+          </div>
+          <p className="admin-welcome-text">
+            Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
+          </p>
         </div>
-        <button className="admin-logout-btn" onClick={handleLogout}>
-          🚪 Cerrar sesión
-        </button>
       </header>
 
       <main className="admin-main">
@@ -799,77 +986,69 @@ function MainPagesInicoAdmin() {
         )}
 
         {/* Tabs de navegación */}
-        <div className="admin-tabs">
-          <button
-            className={`admin-tab ${tab === 'resumen' ? 'active' : ''}`}
-            onClick={() => { setTab('resumen'); resetForm(); }}
-          >
-            📊 Resumen General
-          </button>
-          <button
-            className={`admin-tab ${tab === 'lista' ? 'active' : ''}`}
-            onClick={() => { setTab('lista'); resetForm(); }}
-          >
-            📋 Lista de Árboles ({arboles.filter(a => a.estado !== 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'bajas' ? 'active' : ''}`}
-            onClick={() => { setTab('bajas'); resetForm(); }}
-          >
-            🍂 Registro de Bajas ({arboles.filter(a => a.estado === 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'usuarios' ? 'active' : ''}`}
-            onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
-          >
-            👥 Usuarios
-          </button>
-          <button
-            className={`admin-tab ${tab === 'voluntariados' ? 'active' : ''}`}
-            onClick={() => { setTab('voluntariados'); resetFormVoluntariado(); }}
-          >
-            🤝 Voluntariados
-          </button>
-          <button
-            className={`admin-tab ${tab === 'abonos' ? 'active' : ''}`}
-            onClick={() => { setTab('abonos'); resetFormAbono(); }}
-          >
-            🦴 Abonos / Stock ({abonos.length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'reportes' ? 'active' : ''}`}
-            onClick={() => { setTab('reportes'); }}
-          >
-            📋 Reportes Actividad
-          </button>
-          <button
-            className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
-            onClick={() => { setTab('agregar'); resetForm(); }}
-          >
-            {modoEdicion ? '✏️ Editar Árbol' : '➕ Agregar Árbol'}
-          </button>
-
-
-          <button
-            className={`admin-tab ${tab === 'seguimiento' ? 'active' : ''}`}
-            onClick={() => { setTab('seguimiento'); resetForm(); }}
-          >
-            🌱 Seguimiento por Tipo
-          </button>
-          <button
-            className={`admin-tab ${tab === 'reportes' ? 'active' : ''}`}
-            onClick={() => { setTab('reportes'); resetForm(); }}
-          >
-            ✉️ Reportes
-          </button>
-          <button
-            className={`admin-tab ${tab === 'reportar_robos' ? 'active' : ''}`}
-            onClick={() => { setTab('reportar_robos'); resetForm(); }}
-            style={{ color: '#ef4444', borderColor: tab === 'reportar_robos' ? '#ef4444' : 'transparent' }}
-          >
-            🚨 Árboles Robados
-          </button>
-
+        <div className="admin-tabs-container">
+          <div className="admin-tabs-pills">
+            <button
+              className={`admin-tab-pill ${tab === 'resumen' ? 'active' : ''}`}
+              onClick={() => { setTab('resumen'); resetForm(); }}
+            >
+              📊 Resumen
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'lista' ? 'active' : ''}`}
+              onClick={() => { setTab('lista'); resetForm(); }}
+            >
+              📋 Árboles ({arboles.filter(a => a.estado !== 'muerto').length})
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'bajas' ? 'active' : ''}`}
+              onClick={() => { setTab('bajas'); resetForm(); }}
+            >
+              🍂 Bajas ({arboles.filter(a => a.estado === 'muerto').length})
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'usuarios' ? 'active' : ''}`}
+              onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
+            >
+              👥 Usuarios
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'voluntariados' ? 'active' : ''}`}
+              onClick={() => { setTab('voluntariados'); resetFormVoluntariado(); }}
+            >
+              🤝 Voluntariados
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'abonos' ? 'active' : ''}`}
+              onClick={() => { setTab('abonos'); resetFormAbono(); }}
+            >
+              🦴 Abonos ({abonos.length})
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'actividad' ? 'active' : ''}`}
+              onClick={() => { setTab('actividad'); }}
+            >
+              👷 Actividad ({reportesVolCount})
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'mensajes' ? 'active' : ''}`}
+              onClick={() => { setTab('mensajes'); }}
+            >
+              💬 Mensajes ({reportesCount})
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'robos' ? 'active' : ''}`}
+              onClick={() => { setTab('robos'); }}
+            >
+              🚨 Robos
+            </button>
+            <button
+              className={`admin-tab-pill ${tab === 'agregar' ? 'active' : ''}`}
+              onClick={() => { setTab('agregar'); resetForm(); }}
+            >
+              ➕ {modoEdicion ? 'Editar' : 'Agregar'}
+            </button>
+          </div>
         </div>
 
         {/* ──── TAB: RESUMEN ──── */}
@@ -1101,10 +1280,6 @@ function MainPagesInicoAdmin() {
           </div>
         )}
 
-        {/* ──── TAB: REPORTES ──── */}
-        {tab === 'reportes' && (
-          <AdminReports />
-        )}
 
 
         {/* ──── TAB: USUARIOS ──── */}
@@ -1130,7 +1305,7 @@ function MainPagesInicoAdmin() {
             formVoluntariado={formVoluntariado}
             setFormVoluntariado={setFormVoluntariado}
             resetFormVoluntariado={resetFormVoluntariado}
-            voluntariados={voluntariados}
+            voluntariados={usuarios}
             handleEditarVoluntariado={handleEditarVoluntariado}
             handleEliminarVoluntariado={handleEliminarVoluntariado}
             handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario}
@@ -1146,14 +1321,29 @@ function MainPagesInicoAdmin() {
             setFormAbono={setFormAbono}
             resetFormAbono={resetFormAbono}
             abonos={abonos}
+            arboles={arboles}
             handleEditarAbono={handleEditarAbono}
             handleEliminarAbono={handleEliminarAbono}
           />
         )}
 
-        {/* ──── TAB: REPORTES ──── */}
-        {tab === 'reportes' && (
+        {/* ──── TAB: ACTIVIDAD (Voluntariado) ──── */}
+        {tab === 'actividad' && (
           <ReportesTab />
+        )}
+
+        {/* ──── TAB: MENSAJES (Soporte) ──── */}
+        {tab === 'mensajes' && (
+          <div className="admin-reports-container">
+            <AdminReports />
+          </div>
+        )}
+
+        {/* ──── TAB: ROBOS ──── */}
+        {tab === 'robos' && (
+          <div className="admin-reports-container">
+            <AdminReportesRobo />
+          </div>
         )}
 
         {/* ──── TAB: FORMULARIO ──── */}
@@ -1170,20 +1360,6 @@ function MainPagesInicoAdmin() {
             resetForm={resetForm}
             setTab={setTab}
           />
-        )}
-
-        {/* ──── TAB: REPORTES ──── */}
-        {tab === 'reportes' && (
-          <div className="admin-reports-container">
-            <AdminReports />
-          </div>
-        )}
-
-        {/* ──── TAB: REPORTES ROBOS ──── */}
-        {tab === 'reportar_robos' && (
-          <div className="admin-reports-container">
-            <AdminReportesRobo />
-          </div>
         )}
       </main>
     </div>

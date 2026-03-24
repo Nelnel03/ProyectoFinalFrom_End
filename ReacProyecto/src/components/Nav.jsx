@@ -5,9 +5,8 @@ import '../styles/Nav.css';
 function Nav() {
   const location = useLocation();
 
-
   const auth = localStorage.getItem('isAuthenticated') === 'true';
-
+  const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -31,15 +30,28 @@ function Nav() {
             Inicio
           </NavLink>
 
-          {/* Si es voluntario, mostrar acceso directo a reportes */}
-          {auth && sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario' ? (
-            <NavLink 
-              to="/user" 
-              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
-            >
-              📋 Reportar Trabajo
-            </NavLink>
-          ) : (
+          {/* Navegación Condicional por Rol */}
+          {auth && userData && (
+            <>
+              {userData.rol === 'voluntario' ? (
+                <NavLink 
+                  to="/dashboard-voluntario" 
+                  className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+                >
+                  📋 Panel de Servicio
+                </NavLink>
+              ) : userData.rol === 'user' ? (
+                <NavLink 
+                  to="/dashboard-user" 
+                  className={({ isActive }) => (isActive && !location.search ? "visitor-link active" : "visitor-link")}
+                >
+                  🌳 Mi Bosque
+                </NavLink>
+              ) : null}
+            </>
+          )}
+
+          {!auth && (
             <NavLink 
               to="/voluntariado" 
               className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
@@ -58,23 +70,21 @@ function Nav() {
           ) : (
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <NavLink 
-                to={JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user'}
-                className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
+                to={userData?.rol === 'admin' ? '/admin' : (userData?.rol === 'voluntario' ? '/dashboard-voluntario' : '/dashboard-user?tab=perfil')}
+                className={({ isActive }) => (isActive && location.search.includes('tab=perfil') ? "visitor-link active" : "visitor-link")}
                 style={{ fontWeight: '700' }}
               >
-                👤 Mi Perfil
+                👤 Mi Panel
               </NavLink>
 
               <button 
                 onClick={() => {
-
-
                   localStorage.removeItem('isAuthenticated');
                   localStorage.removeItem('user');
-0
+                  // Redirigir al inicio después de cerrar sesión
                   window.location.href = '/';
                 }}
-                className="visitor-login-btn"
+                className="visitor-login-btn logout-btn"
                 style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer', padding: '8px 15px' }}
               >
                 🚪 Salir

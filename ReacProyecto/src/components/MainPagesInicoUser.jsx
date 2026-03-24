@@ -2,36 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
-
 import UserProfile from './UserProfile';
 import UserReports from './UserReports';
 import UserReportesRobo from './UserReportesRobo';
-
+import ReporteForm from './ReporteForm';
+import MisReportesTab from './MisReportesTab';
 import '../styles/MainPagesInicoVisitante.css';
 
 function MainPagesInicoUser() {
   const [user, setUser] = useState(null);
   const [arboles, setArboles] = useState([]);
   const [cargando, setCargando] = useState(true);
-
   const [currentTab, setCurrentTab] = useState('coleccion');
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    const userData = sessionStorage.getItem('user');
+    const userData = localStorage.getItem('user');
     if (userData) {
-
-
       const parsedUser = JSON.parse(userData);
       setUser(parsedUser);
-
     }
 
     cargarArboles();
@@ -50,13 +45,12 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
   return (
-
     <div className="visitante-container">
       <header className="visitante-header" style={{ background: 'linear-gradient(135deg, #1a4d2e 0%, #2e6b46 100%)', padding: '3rem 1rem' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>🌳 ¡Hola, {user?.nombre}!</h1>
@@ -67,7 +61,7 @@ function MainPagesInicoUser() {
         <section className="visitante-intro"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}
         >
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <button
               onClick={() => setCurrentTab('coleccion')}
               style={{
@@ -113,6 +107,38 @@ function MainPagesInicoUser() {
             >
               ✉️ Soporte/Reportes
             </button>
+            {user?.rol === 'voluntario' && (
+              <button
+                onClick={() => setCurrentTab('reporte_voluntario')}
+                style={{
+                  padding: '10px 22px',
+                  backgroundColor: currentTab === 'reporte_voluntario' ? '#1a4d2e' : '#f3f4f6',
+                  color: currentTab === 'reporte_voluntario' ? 'white' : '#4b5563',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+              >
+                👷 Reportar Actividad
+              </button>
+            )}
+            <button
+              onClick={() => setCurrentTab('mis_reportes')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'mis_reportes' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'mis_reportes' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              📝 Mis Reportes
+            </button>
             <button
               onClick={() => setCurrentTab('reporte_robo')}
               style={{
@@ -129,28 +155,7 @@ function MainPagesInicoUser() {
               🚨 Reportar Robo
             </button>
           </div>
-
-          <button
-            onClick={() => setActiveTab('coleccion')}
-            style={{
-              flex: 1,
-              padding: '12px',
-              borderRadius: '10px',
-              border: 'none',
-              backgroundColor: activeTab === 'coleccion' ? '#1a4d2e' : 'transparent',
-              color: activeTab === 'coleccion' ? 'white' : '#4b5563',
-              fontWeight: '700',
-              cursor: 'pointer',
-
-              fontWeight: '600',
-              fontSize: '0.9rem',
-
-            }}
-          >
-            🌳 Colección Forestal
-          </button>
-        </div>
-
+        </section>
 
         <div style={{ marginTop: '2rem' }}>
           {currentTab === 'coleccion' && (
@@ -164,13 +169,11 @@ function MainPagesInicoUser() {
               {cargando ? (
                 <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
                   Cargando especies forestales...
-
                 </div>
               ) : (
                 <ArbolesSection arboles={arboles} />
               )}
             </div>
-
           )}
           
           {currentTab === 'perfil' && (
@@ -178,14 +181,21 @@ function MainPagesInicoUser() {
           )}
 
           {currentTab === 'reportes' && (
-            <UserReports user={user} />
+            <UserReports user={user} onDone={() => setCurrentTab('mis_reportes')} />
           )}
 
           {currentTab === 'reporte_robo' && (
-            <UserReportesRobo user={user} />
+            <UserReportesRobo user={user} onDone={() => setCurrentTab('mis_reportes')} />
+          )}
+
+          {currentTab === 'mis_reportes' && (
+            <MisReportesTab user={user} />
+          )}
+
+          {currentTab === 'reporte_voluntario' && user?.rol === 'voluntario' && (
+            <ReporteForm user={user} onReportSubmitted={() => setCurrentTab('mis_reportes')} />
           )}
         </div>
-
       </main>
     </div>
   );

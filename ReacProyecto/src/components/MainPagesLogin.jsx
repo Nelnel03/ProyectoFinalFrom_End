@@ -13,22 +13,27 @@ function MainPagesLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [rol, setRol] = useState('user'); // Default to user
+  const [habilidades, setHabilidades] = useState('');
+  const [disponibilidad, setDisponibilidad] = useState('');
+  const [necesidades, setNecesidades] = useState('');
   const navigate = useNavigate();
 
   const handleAuth = async (e) => {
     e.preventDefault();
+    const emailTrimmed = email.trim();
     setError('');
     setLoading(true);
 
     try {
-      if (!email || email.trim() === '') {
+      if (!emailTrimmed || emailTrimmed === '') {
         setError('El correo es obligatorio');
         setLoading(false);
         return;
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
+      if (!emailRegex.test(emailTrimmed)) {
         setError('Formato de correo inválido');
         setLoading(false);
         return;
@@ -37,7 +42,7 @@ function MainPagesLogin() {
       const usuarios = await services.getUsuarios();
 
       if (viewMode === 'forgot') {
-        const user = usuarios.find(u => u.email === email);
+        const user = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase());
         if (!user) {
           // Por seguridad, mostrar mensaje genérico
           setSuccessMsg('Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña. Revisa la consola o alertas (modo simulación).');
@@ -87,7 +92,7 @@ function MainPagesLogin() {
 
       if (viewMode === 'register') {
         // Validación de correo existente
-        const emailExiste = usuarios.find(u => u.email === email);
+        const emailExiste = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase());
         if (emailExiste) {
           setError('El correo electrónico ya está registrado.');
           return;
@@ -111,7 +116,12 @@ function MainPagesLogin() {
           nombre,
           email,
           password: hashedPassword,
-          rol: 'user'
+          rol: rol,
+          // Campos específicos segun el rol
+          habilidades: rol === 'voluntario' ? habilidades : null,
+          disponibilidad: rol === 'voluntario' ? disponibilidad : null,
+          necesidades: rol === 'user' ? necesidades : null,
+          fechaRegistro: new Date().toISOString()
         };
 
         const result = await services.postUsuarios(nuevoUsuario);
@@ -129,7 +139,11 @@ function MainPagesLogin() {
           });
 
           setTimeout(() => {
-            navigate('/user');
+            if (rol === 'voluntario') {
+                navigate('/dashboard-voluntario');
+            } else {
+                navigate('/dashboard-user');
+            }
           }, 1500);
         } else {
           setError('Ocurrió un error al registrarse. Intenta nuevamente.');
@@ -138,7 +152,7 @@ function MainPagesLogin() {
       } else if (viewMode === 'login') {
         const hashedPassword = btoa(password + "_SECURE_SALT");
         // Lógica de inicio de sesión: compatible con contraseñas del db.json y nuevas encriptadas
-        const user = usuarios.find(u => u.email === email && (u.password === password || u.password === hashedPassword));
+        const user = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase() && (u.password === password || u.password === hashedPassword));
 
         if (user) {
           // Lógica de primer login para voluntarios (debe cambiar contraseña)
@@ -186,8 +200,10 @@ function MainPagesLogin() {
           setTimeout(() => {
             if (user.rol === 'admin') {
               navigate('/admin');
+            } else if (user.rol === 'voluntario') {
+              navigate('/dashboard-voluntario');
             } else {
-              navigate('/user');
+              navigate('/dashboard-user');
             }
           }, 1500);
         } else {
@@ -225,16 +241,66 @@ function MainPagesLogin() {
 
         <form onSubmit={handleAuth}>
           {viewMode === 'register' && (
-            <div className="form-group">
-              <label>Nombre Completo</label>
-              <input 
-                type="text" 
-                value={nombre} 
-                onChange={(e) => setNombre(e.target.value)} 
-                required 
-                placeholder="Ej: Juan Pérez"
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label>Nombre Completo</label>
+                <input 
+                  type="text" 
+                  value={nombre} 
+                  onChange={(e) => setNombre(e.target.value)} 
+                  required 
+                  placeholder="Ej: Juan Pérez"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Tipo de Cuenta</label>
+                <select 
+                  value={rol} 
+                  onChange={(e) => setRol(e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+                >
+                  <option value="user">Usuario (Consumo/Apoyo)</option>
+                  <option value="voluntario">Voluntario (Servicio/Profesional)</option>
+                </select>
+              </div>
+
+              {rol === 'voluntario' ? (
+                <>
+                  <div className="form-group">
+                    <label>Habilidades (Separadas por comas)</label>
+                    <input 
+                      type="text" 
+                      value={habilidades} 
+                      onChange={(e) => setHabilidades(e.target.value)} 
+                      placeholder="Ej: Botánica, Logística, Educación"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Disponibilidad</label>
+                    <input 
+                      type="text" 
+                      value={disponibilidad} 
+                      onChange={(e) => setDisponibilidad(e.target.value)} 
+                      placeholder="Ej: Fines de semana, 10am-4pm"
+                      required
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="form-group">
+                  <label>¿Qué buscas en nuestra plataforma? (Necesidades)</label>
+                  <textarea 
+                    value={necesidades} 
+                    onChange={(e) => setNecesidades(e.target.value)} 
+                    placeholder="Ej: Quiero adoptar un árbol, me interesa la educación ambiental..."
+                    rows="2"
+                    required
+                  />
+                </div>
+              )}
+            </>
           )}
 
           <div className="form-group">

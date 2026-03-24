@@ -8,8 +8,8 @@ function ReporteForm({ user, onReportSubmitted }) {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [comentarios, setComentarios] = useState('');
+  const [pruebas, setPruebas] = useState('');
   const [enviando, setEnviando] = useState(false);
-  const [tiempoTranscurrido, setTiempoTranscurrido] = useState('00:00:00');
 
   const tareasDisponibles = [
     "Mantenimiento",
@@ -18,32 +18,17 @@ function ReporteForm({ user, onReportSubmitted }) {
     "Colocación de abonos"
   ];
 
-  // Recuperar sesión activa de sessionStorage al cargar
+  // Recuperar sesión activa de localStorage al cargar
   useEffect(() => {
-    const savedSession = sessionStorage.getItem(`vol_session_${user.id}`);
+    if (!user?.id) return;
+    const savedSession = localStorage.getItem(`vol_session_${user.id}`);
     if (savedSession) {
       const { start, task } = JSON.parse(savedSession);
       setStartTime(new Date(start));
       setTipoTarea(task);
       setFase('trabajando');
     }
-  }, [user.id]);
-
-  // Timer para mostrar tiempo en vivo
-  useEffect(() => {
-    let interval;
-    if (fase === 'trabajando' && startTime) {
-      interval = setInterval(() => {
-        const now = new Date();
-        const diff = now - startTime;
-        const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
-        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-        setTiempoTranscurrido(`${h}:${m}:${s}`);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [fase, startTime]);
+  }, [user?.id]);
 
   const handleIniciarTrabajo = () => {
     if (!tipoTarea) {
@@ -53,17 +38,21 @@ function ReporteForm({ user, onReportSubmitted }) {
     const now = new Date();
     setStartTime(now);
     setFase('trabajando');
-    sessionStorage.setItem(`vol_session_${user.id}`, JSON.stringify({
-      start: now.toISOString(),
-      task: tipoTarea
-    }));
+    if (user?.id) {
+        localStorage.setItem(`vol_session_${user.id}`, JSON.stringify({
+          start: now.toISOString(),
+          task: tipoTarea
+        }));
+    }
   };
 
   const handleFinalizarTrabajo = () => {
     const now = new Date();
     setEndTime(now);
     setFase('revision');
-    sessionStorage.removeItem(`vol_session_${user.id}`);
+    if (user?.id) {
+        localStorage.removeItem(`vol_session_${user.id}`);
+    }
   };
 
   const calcularHoras = () => {
@@ -74,17 +63,24 @@ function ReporteForm({ user, onReportSubmitted }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!pruebas.trim()) {
+      Swal.fire('Atención', 'Debes adjuntar pruebas de tu trabajo (URL o descripción de evidencia).', 'warning');
+      return;
+    }
+
     setEnviando(true);
 
     const horasTrabajadas = calcularHoras();
     const nuevoReporte = {
-      voluntarioId: user.id,
-      voluntarioNombre: user.nombre,
+      voluntarioId: user?.id || 'anonimo',
+      voluntarioNombre: user?.nombre || 'Anónimo',
       tipoTarea,
       horaInicio: startTime.toLocaleTimeString(),
       horaFin: endTime.toLocaleTimeString(),
       horas: parseFloat(horasTrabajadas),
       tareas: comentarios || `Trabajo de ${tipoTarea}`,
+      pruebas,
       fecha: new Date().toISOString().split('T')[0],
       timestamp: new Date().toISOString(),
       estado: 'enviado'
@@ -113,7 +109,9 @@ function ReporteForm({ user, onReportSubmitted }) {
         confirmButtonText: 'Sí, cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          sessionStorage.removeItem(`vol_session_${user.id}`);
+          if (user?.id) {
+            localStorage.removeItem(`vol_session_${user.id}`);
+          }
           setFase('inicio');
           setStartTime(null);
           setTipoTarea('');
@@ -187,24 +185,21 @@ function ReporteForm({ user, onReportSubmitted }) {
       {fase === 'trabajando' && (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👷</div>
-          <h2 style={{ color: '#1a4d2e', marginBottom: '0.5rem' }}>Trabajando en:</h2>
+          <h2 style={{ color: '#1a4d2e', marginBottom: '0.5rem' }}>Tarea en progreso</h2>
           <h3 style={{ color: '#2e6b46', marginBottom: '2rem', fontSize: '1.5rem' }}>{tipoTarea}</h3>
           
           <div style={{
-            fontSize: '3.5rem',
-            fontWeight: '800',
-            fontFamily: 'monospace',
-            color: '#1a4d2e',
             backgroundColor: '#f0fdf4',
-            padding: '1rem',
+            padding: '2rem',
             borderRadius: '15px',
             marginBottom: '2rem',
             border: '2px solid #34d399'
           }}>
-            {tiempoTranscurrido}
+            <p style={{ color: '#1a4d2e', fontSize: '1.2rem', fontWeight: 'bold' }}>El tiempo se está registrando...</p>
+            <p style={{ color: '#6b7280', margin: '10px 0 0 0' }}>Puedes cerrar esta página y volver cuando termines.</p>
           </div>
 
-          <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Empezaste a las: {startTime.toLocaleTimeString()}</p>
+          <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Iniciado a las: {startTime ? startTime.toLocaleTimeString() : '--:--'}</p>
 
           <div style={{ display: 'flex', gap: '15px' }}>
             <button
@@ -254,14 +249,34 @@ function ReporteForm({ user, onReportSubmitted }) {
             borderLeft: '4px solid #1a4d2e'
           }}>
             <p><strong>Labor:</strong> {tipoTarea}</p>
-            <p><strong>Inicio:</strong> {startTime.toLocaleTimeString()}</p>
-            <p><strong>Fin:</strong> {endTime.toLocaleTimeString()}</p>
+            <p><strong>Inicio:</strong> {startTime ? startTime.toLocaleTimeString() : '--:--'}</p>
+            <p><strong>Fin:</strong> {endTime ? endTime.toLocaleTimeString() : '--:--'}</p>
             <p style={{ fontSize: '1.2rem', color: '#1a4d2e', marginTop: '10px' }}>
               <strong>Total Horas:</strong> {calcularHoras()}
             </p>
           </div>
 
           <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '1.2rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#1a4d2e' }}>
+                📸 Pruebas del trabajo (Link o descripción):
+              </label>
+              <input
+                type="text"
+                value={pruebas}
+                onChange={(e) => setPruebas(e.target.value)}
+                placeholder="Pega aquí el link de tus fotos o describe la evidencia..."
+                required
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: '2px solid #34d399',
+                  fontSize: '1rem'
+                }}
+              />
+            </div>
+
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                 Comentarios adicionales (opcional):
@@ -269,7 +284,7 @@ function ReporteForm({ user, onReportSubmitted }) {
               <textarea
                 value={comentarios}
                 onChange={(e) => setComentarios(e.target.value)}
-                placeholder="Describe brevemente lo que hiciste..."
+                placeholder="Describe qué lograste hoy..."
                 rows="3"
                 style={{
                   width: '100%',

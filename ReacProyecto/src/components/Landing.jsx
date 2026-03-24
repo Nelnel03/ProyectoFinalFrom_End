@@ -25,7 +25,7 @@ const Landing = () => {
                         Explora la asombrosa variedad de flora y fauna en Puntarenas. Únete a nuestra comunidad de voluntarios para registrar, monitorear y asegurar la conservación de nuestro ecosistema forestal.
                     </p>
                     <button 
-                        onClick={() => navigate('/auth')}
+                        onClick={() => navigate('/login')}
                         style={{ background: '#A3B18A', color: '#1a1a1a', border: 'none', padding: '1.2rem 3rem', fontSize: '1.2rem', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.3)', transition: 'transform 0.2s' }}
                     >
                         Comenzar Ahora <ArrowRight size={22} />

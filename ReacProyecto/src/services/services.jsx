@@ -370,7 +370,21 @@ async function deleteReportesRobados(id) {
     const datos = await respuesta.json();
     return datos;
   } catch (error) {
-    console.error("Error al eliminar reporte de árbol robado", error);
+    console.error("Error al eliminar el reporte de robo", error);
+  }
+}
+
+async function putReportesRobados(reporte, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_robados/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al actualizar el reporte de robo", error);
   }
 }
 
@@ -432,6 +446,7 @@ const services = {
   postReportes,
   getReportesRobados,
   postReportesRobados,
+  putReportesRobados,
   deleteReportesRobados,
 };
 

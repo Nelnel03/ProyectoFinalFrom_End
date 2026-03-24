@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import services from "../services/services.jsx";
 import "../styles/UserReports.css";
 
-function UserReports({ user }) {
+function UserReports({ user, onDone }) {
   const [reporte, setReporte] = useState({
     asunto: "",
     mensaje: "",
@@ -31,7 +31,8 @@ function UserReports({ user }) {
 
       await services.postReportes(nuevoReporte);
       setEstadoEnvio({ tipo: "success", texto: "Reporte enviado exitosamente." });
-      setReporte({ asunto: "", mensaje: "" }); // Limpiar formulario
+      setReporte({ asunto: "", mensaje: "" }); 
+      if (onDone) setTimeout(onDone, 1500);
     } catch (error) {
       console.error(error);
       setEstadoEnvio({ tipo: "error", texto: "Hubo un error al enviar el reporte." });

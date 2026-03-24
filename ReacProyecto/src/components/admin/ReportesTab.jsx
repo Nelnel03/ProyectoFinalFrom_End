@@ -114,6 +114,28 @@ function ReportesTab() {
                 <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#1a4d2e' }}>Observaciones:</strong>
                 {reporte.tareas}
               </div>
+
+              {reporte.pruebas && (
+                <div style={{ 
+                  marginTop: '1rem',
+                  backgroundColor: '#ecfdf5', 
+                  padding: '1rem', 
+                  borderRadius: '8px',
+                  fontSize: '0.95rem',
+                  color: '#065f46',
+                  lineHeight: '1.5',
+                  border: '1px solid #34d399'
+                }}>
+                  <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#1a4d2e' }}>📸 Evidencia / Pruebas:</strong>
+                  {reporte.pruebas.startsWith('http') ? (
+                    <a href={reporte.pruebas} target="_blank" rel="noopener noreferrer" style={{ color: '#059669', fontWeight: 'bold' }}>
+                      🔗 Ver Evidencia Adjunta
+                    </a>
+                  ) : (
+                    reporte.pruebas
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
