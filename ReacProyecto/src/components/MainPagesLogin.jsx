@@ -33,7 +33,14 @@ function MainPagesLogin() {
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailTrimmed)) {
+
+      if (!email.includes('@') || !email.includes('.')) {
+        setError('El correo debe contener obligatoriamente "." y "@"');
+        setLoading(false);
+        return;
+      }
+      if (!emailRegex.test(email)) {
+
         setError('Formato de correo inválido');
         setLoading(false);
         return;

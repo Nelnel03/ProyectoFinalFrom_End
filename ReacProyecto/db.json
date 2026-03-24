@@ -195,11 +195,23 @@
       "email": "bvega@fwdcostarica.com",
       "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
       "rol": "user",
+<<<<<<< HEAD
       "habilidades": null,
       "disponibilidad": null,
       "necesidades": "casita",
       "fechaRegistro": "2026-03-23T20:22:59.414Z",
       "id": "nwJvLLCaUgg"
+=======
+      "resetToken": "o5phuesjo69r3drsixzy7i",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
+    },
+    {
+      "id": "cb07",
+      "nombre": "alv",
+      "email": "alealvarela@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+>>>>>>> 6a0078bf41681d5cc3a84d1b0f1d7deb1932fc6d
     }
   ],
   "stats_tipos": [
