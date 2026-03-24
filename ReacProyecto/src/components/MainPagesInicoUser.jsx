@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
+
 import '../styles/PremiumDashboard.css';
+
 
 function MainPagesInicoUser() {
   const [userName, setUserName] = useState('');
@@ -12,13 +14,13 @@ function MainPagesInicoUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    const userData = sessionStorage.getItem('user');
+    const userData = localStorage.getItem('user');
     if (userData) {
       const user = JSON.parse(userData);
       setUserName(user.nombre);
@@ -40,12 +42,13 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
   return (
+
     <div className="dashboard-premium">
       <div className="premium-header">
         <div className="user-premium-header-flex">
@@ -84,6 +87,7 @@ function MainPagesInicoUser() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
+
       </main>
     </div>
   );

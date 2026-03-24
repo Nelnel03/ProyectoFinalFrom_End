@@ -22,7 +22,9 @@ const Landing = () => {
                     <button 
                         onClick={() => navigate('/login')}
 
+
                         className="hero-button"
+
 
                     >
                         Comenzar Ahora <ArrowRight size={22} />

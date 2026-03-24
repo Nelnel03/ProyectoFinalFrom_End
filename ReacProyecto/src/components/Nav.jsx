@@ -4,6 +4,7 @@ import '../styles/Nav.css';
 
 function Nav() {
   const location = useLocation();
+
   const navigate = useNavigate();
   const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
 
@@ -11,6 +12,7 @@ function Nav() {
   useEffect(() => {
     setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
   }, [location]);
+
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -34,6 +36,7 @@ function Nav() {
           >
             Inicio
           </NavLink>
+
           <NavLink
             to="/historia"
             className={({ isActive }) => (isActive ? 'visitor-link active' : 'visitor-link')}
@@ -44,15 +47,18 @@ function Nav() {
             <NavLink
               to="/voluntariado"
               className={({ isActive }) => (isActive ? 'visitor-link active' : 'visitor-link')}
+
             >
               Voluntariado
             </NavLink>
           )}
+
           {!auth ? (
             <NavLink to="/login" className="visitor-login-btn">
               Iniciar Sesión / Registro
             </NavLink>
           ) : (
+
             <div className="visitor-auth-actions">
               {location.pathname !== '/user' && location.pathname !== '/admin' && (
                 <NavLink
@@ -70,8 +76,9 @@ function Nav() {
                   navigate('/');
                 }}
                 className="visitor-login-btn visitor-btn-logout"
+
               >
-                🚪 Cerrar Sesión
+                🚪 Salir
               </button>
             </div>
           )}

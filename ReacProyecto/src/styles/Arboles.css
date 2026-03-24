@@ -326,22 +326,56 @@
 
 /* ===========================
    PANEL ADMIN - ÁRBOLES
-=========================== */
-
+===========================*/
 .admin-container {
+
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
   min-height: 100vh;
   background-color: var(--color-crema-organico); /* Usar el fondo vibrante claro */
   color: var(--color-tierra-sombra); /* Texto oscuro para contraste */
+
   padding: 0;
+  color: #333;
 }
 
-.admin-header {
-  background: rgba(255,255,255,0.04);
-  border-bottom: 1px solid rgba(52, 211, 153, 0.15);
-  padding: 1.6rem 2.5rem;
+.admin-header-banner {
+  background-color: #20402a; /* Verde oscuro del diseño */
+  padding: 3rem 4rem;
+  margin: 20px 20px 0 20px;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+.admin-banner-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-brand {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.admin-header-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.admin-header-main-row h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin: 0;
   display: flex;
   align-items: center;
+
   justify-content: space-between;
   backdrop-filter: blur(10px);
 }
@@ -360,22 +394,45 @@
   font-size: 0.85rem;
   color: var(--color-bosque-helecho); /* Más brillante */
   margin: 0.2rem 0 0;
+
 }
 
 .admin-logout-btn {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171; /* Rojo más encendido */
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
+  background-color: #ed4444; /* Rojo vibrante */
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 100px; /* Completamente redondeado */
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  font-size: 0.88rem;
-  font-weight: 600;
-  transition: background 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(237, 68, 68, 0.3);
 }
+
 .admin-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.28);
-  transform: scale(1.03);
+  background-color: #d63c3c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(237, 68, 68, 0.4);
+}
+
+.logout-dot {
+  width: 8px;
+  height: 14px;
+  background-color: #b91c1c;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.admin-welcome-text {
+  font-size: 1.1rem;
+  color: #d1d5d1;
+  margin: 0;
+  opacity: 0.9;
 }
 
 .admin-main {
@@ -384,17 +441,29 @@
   margin: 0 auto;
 }
 
-.admin-tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(52, 211, 153, 0.15);
-  padding-bottom: 0;
+.admin-tabs-container {
+  background-color: white;
+  margin: 0 20px;
+  padding: 3.5rem 3rem 0;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
 }
 
-.admin-tab {
-  background: none;
+.admin-tabs-pills {
+  background-color: #f2f4f1; /* Gris claro de fondo para las píldoras */
+  padding: 10px;
+  border-radius: 100px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: fit-content;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.admin-tab-pill {
+  background-color: white;
   border: none;
+
   color: var(--color-bosque-helecho);
   font-size: 0.95rem;
   font-weight: 700;
@@ -410,9 +479,25 @@
 }
 .admin-tab:hover {
   color: var(--color-ocre-silvestre);
+
 }
 
-/* Formulario Admin */
+.admin-tab-pill:hover {
+  background-color: #e8eae8;
+  transform: translateY(-1px);
+}
+
+.admin-tab-pill.active {
+  background-color: #20402a; /* Verde oscuro para el activo */
+  color: white;
+  box-shadow: 0 6px 15px rgba(32, 64, 42, 0.3);
+}
+
+.admin-main {
+  padding: 2rem 3rem 4rem;
+  max-width: 1500px;
+  margin: 0 auto;
+}
 .admin-form-card {
   background: rgba(255,255,255,0.05);
   border-radius: 20px;

@@ -16,6 +16,7 @@ function MainPagesLogin() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const validateEmail = (emailValue) => {
@@ -27,9 +28,12 @@ function MainPagesLogin() {
   };
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
+    const emailTrimmed = email.trim();
     setError('');
     setLoading(true);
+
 
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
@@ -96,6 +100,7 @@ function MainPagesLogin() {
     } catch (err) {
       console.error('Error en login:', err);
       Swal.fire('Error', 'Hubo un problema al conectar con el servidor', 'error');
+
     } finally {
       setLoading(false);
     }
@@ -153,6 +158,7 @@ function MainPagesLogin() {
 
       setIsRegistering(false);
       setNombre('');
+
       setTelefono('');
       setDireccion('');
       setFechaNacimiento('');
@@ -161,12 +167,14 @@ function MainPagesLogin() {
     } catch (err) {
       console.error('Error en registro:', err);
       Swal.fire('Error', 'No se pudo completar el registro', 'error');
+
     }
   };
 
   return (
     <div className="visitante-container">
       <header className="visitante-header">
+
 
         <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
 
@@ -225,6 +233,7 @@ function MainPagesLogin() {
                   required
                 />
               </div>
+
             </>
           )}
 
@@ -238,6 +247,7 @@ function MainPagesLogin() {
               required
             />
           </div>
+
 
           <div className="form-group">
             <label>Contraseña</label>
@@ -259,6 +269,7 @@ function MainPagesLogin() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+
                 placeholder="••••••••"
                 maxLength="15"
               />

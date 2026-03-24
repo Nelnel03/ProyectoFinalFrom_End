@@ -41,10 +41,10 @@
       "descripcion": "asdfghjklñ{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
-      "estado": "vivo",
+      "estado": "muerto",
       "fechaRegistro": "2026-03-17",
       "id": "2440",
-      "fechaMuerto": null,
+      "fechaMuerto": "2026-03-23",
       "historialAbono": [
         {
           "abono": "Abono ",
@@ -103,14 +103,20 @@
       "nombre": "leal",
       "email": "leal@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "voluntario",
+      "area": "senbrador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
     },
     {
       "id": "a8d3",
       "nombre": "Sol",
       "email": "sol@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "voluntario",
+      "area": "plantador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
     },
     {
       "id": "0029",
@@ -132,7 +138,7 @@
     },
     {
       "id": "ca99",
-      "nombre": "a",
+      "nombre": "GG",
       "email": "g@gmail.com",
       "password": "12345678",
       "rol": "user"
@@ -172,8 +178,48 @@
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
+<<<<<<< HEAD
       "password": "12345678",
       "rol": "user"
+=======
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "voluntario",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
+      "area": "plantador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
+    },
+    {
+      "id": "6bb7",
+      "nombre": "Charlie",
+      "email": "carlos.v@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Sembrado",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-17"
+    },
+    {
+      "id": "1005",
+      "nombre": "Usuario Ejemplo",
+      "email": "usuario-vol@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Mantenimiento",
+      "telefono": "88887777",
+      "fechaIngreso": "2026-03-19"
+    },
+    {
+      "nombre": "Barry Vega",
+      "email": "bvega@fwdcostarica.com",
+      "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
+      "rol": "user",
+      "habilidades": null,
+      "disponibilidad": null,
+      "necesidades": "casita",
+      "fechaRegistro": "2026-03-23T20:22:59.414Z",
+      "id": "nwJvLLCaUgg"
+>>>>>>> bef09720ae4bba32fa95efd1c4df6bf25f42bea2
     }
   ],
   "stats_tipos": [
@@ -181,7 +227,7 @@
       "id": "11f2",
       "tipo": "guanacaste",
       "planificados": 0,
-      "muertos": 0
+      "muertos": 1
     }
   ],
   "abonos": [
@@ -205,8 +251,9 @@
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
-  "voluntariados": [
+  "reportes": [
     {
+<<<<<<< HEAD
       "id": "6bb7",
       "nombre": "Charlie",
       "puesto": "Sembrado y Mantenimiento",
@@ -230,9 +277,59 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
+=======
+      "asunto": "un arbol se seco",
+      "mensaje": "se seco un  arbol por que ustedes gonoreas no les echaron agua",
+      "userId": "bdce",
+      "userName": "leal",
+      "userEmail": "leal@gmail.com",
+      "fecha": "2026-03-23T16:57:40.973Z",
+      "estado": "Pendiente",
+      "id": "7hIBJShQtmw"
     }
   ],
-  "reportes": [],
-  "reportes_robados": [],
+  "reportes_robados": [
+    {
+      "tipo_arbol": "sdfghj",
+      "ubicacion": "asdfghj",
+      "descripcion": "qwertyuiop´ñlkjhgfdszxcvbnm",
+      "userId": "admin1",
+      "userName": "Administrador",
+      "userEmail": "admin@gmail.com",
+      "fecha": "2026-03-23T17:47:15.326Z",
+      "estado": "En Investigacion",
+      "id": "veapaE1Cfk8"
+    }
+  ],
+  "reportes_voluntariado": [
+    {
+      "voluntarioId": "a8d3",
+      "voluntarioNombre": "Sol",
+      "tipoTarea": "Mantenimiento",
+      "horaInicio": "11:22:15",
+      "horaFin": "11:22:29",
+      "horas": 0,
+      "tareas": "quiero buena paga y a tiempo por mi arduo trabajo en la comunidad.",
+      "fecha": "2026-03-23",
+      "timestamp": "2026-03-23T17:22:58.141Z",
+      "estado": "enviado",
+      "id": "pZqmx-H4MHc"
+    },
+    {
+      "voluntarioId": "a8d3",
+      "voluntarioNombre": "Sol",
+      "tipoTarea": "Mantenimiento",
+      "horaInicio": "11:35:17",
+      "horaFin": "11:35:48",
+      "horas": 0.01,
+      "tareas": "qwertyuiopñlkjhgfdsazxcvbnm",
+      "pruebas": "shdhefi",
+      "fecha": "2026-03-23",
+      "timestamp": "2026-03-23T17:36:10.242Z",
+      "estado": "enviado",
+      "id": "QPLSvaIo4zc"
+>>>>>>> bef09720ae4bba32fa95efd1c4df6bf25f42bea2
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

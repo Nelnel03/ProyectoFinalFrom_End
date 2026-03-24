@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
+
+
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
 import '../styles/MainPagesInicoVisitante.css';
@@ -30,6 +33,7 @@ function MainPagesInicoVisitante() {
     }
   };
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -60,6 +64,7 @@ function MainPagesInicoVisitante() {
     }
   };
 
+
   return (
     <div className="visitante-container">
       <header className="visitante-header">
@@ -87,6 +92,7 @@ function MainPagesInicoVisitante() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
+
 
 
         {sessionStorage.getItem('isAuthenticated') !== 'true' && (
@@ -151,6 +157,7 @@ function MainPagesInicoVisitante() {
             </div>
           </>
         )}
+
 
       </main>
     </div>

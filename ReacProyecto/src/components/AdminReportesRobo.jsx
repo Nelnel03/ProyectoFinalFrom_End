@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import services from '../services/services';
+
 import '../styles/AdminReports.css';
+
+
 
 function AdminReportesRobo() {
   const [reportes, setReportes] = useState([]);
@@ -23,17 +26,57 @@ function AdminReportesRobo() {
   };
 
   const handleEliminar = async (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este reporte de robo?")) {
+    const confirm = await Swal.fire({
+      title: '¿Eliminar reporte?',
+      text: "Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar'
+    });
+
+    if (confirm.isConfirmed) {
       await services.deleteReportesRobados(id);
       cargarReportes();
+      Swal.fire('Eliminado', 'El reporte ha sido borrado.', 'success');
+    }
+  };
+
+  const handleCambiarEstado = async (reporte, nuevoEstado) => {
+    try {
+      const reporteActualizado = { ...reporte, estado: nuevoEstado };
+      await services.putReportesRobados(reporteActualizado, reporte.id);
+      
+      // Actualizar estado local para feedback inmediato
+      setReportes(prev => prev.map(r => r.id === reporte.id ? reporteActualizado : r));
+      
+      Swal.fire({
+        title: 'Estado Actualizado',
+        text: `El reporte ahora está en estado: ${nuevoEstado}`,
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    } catch (error) {
+      Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
+    }
+  };
+
+  const getStatusColor = (estado) => {
+    switch (estado?.toLowerCase()) {
+      case 'resuelto': return { bg: '#dcfce7', text: '#166534' };
+      case 'en investigacion': return { bg: '#fef9c3', text: '#854d0e' };
+      case 'pendiente': default: return { bg: '#fee2e2', text: '#991b1b' };
     }
   };
 
   return (
     <div>
       <div className="admin-section-header">
+
         <h2 className="admin-reports-robo-header">🚨 Reportes de Árboles Robados</h2>
         <p className="admin-reports-header-subtitle">Alertas de sustracción o tala ilegal reportadas por los usuarios</p>
+
       </div>
 
       {cargando ? (
@@ -46,6 +89,7 @@ function AdminReportesRobo() {
           <p>La bandeja está vacía. No hay reportes de árboles robados actualmente.</p>
         </div>
       ) : (
+
         <div className="admin-reports-list">
           {reportes.slice().reverse().map((reporte) => (
             <div key={reporte.id} className="admin-report-card admin-report-card-robo">
@@ -62,9 +106,29 @@ function AdminReportesRobo() {
                   </span>
                   <div className="admin-report-card-date">
                     {new Date(reporte.fecha).toLocaleString()}
+
                   </div>
+                  <button 
+                    onClick={() => handleEliminar(reporte.id)}
+                    style={{
+                      backgroundColor: '#fee2e2',
+                      color: '#b91c1c',
+                      border: 'none',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#fecaca'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#fee2e2'}
+                  >
+                    🗑️ Eliminar Reporte
+                  </button>
                 </div>
               </div>
+
               <p className="admin-report-card-message-robo">
                 <strong>Descripción:</strong><br/>
                 {reporte.descripcion}
@@ -82,6 +146,7 @@ function AdminReportesRobo() {
               </div>
             </div>
           ))}
+
         </div>
       )}
     </div>

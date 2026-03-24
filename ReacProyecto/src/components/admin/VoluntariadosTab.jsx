@@ -77,6 +77,18 @@ function VoluntariadosTab({
               className="admin-user-input"
             />
           </div>
+
+          <div className="admin-form-group" style={{ margin: 0 }}>
+            <label className="admin-user-input-label">Contraseña de Acceso</label>
+            <input
+              type="password"
+              required={!modoEdicionVoluntariado}
+              value={formVoluntariado.password || ''}
+              onChange={(e) => setFormVoluntariado({...formVoluntariado, password: e.target.value})}
+              placeholder={modoEdicionVoluntariado ? "Dejar en blanco para no cambiar" : "Mínimo 6 caracteres"}
+              className="admin-user-input"
+            />
+          </div>
           
           <div className="admin-user-form-footer">
             <button type="submit" className="admin-btn-user-submit">
