@@ -1,7 +1,7 @@
 .visitante-container {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
-  background-color: #f4fdf8; /* Soft green tint */
+  background-color: #ffffff;
   color: #1a3322;
   display: flex;
   flex-direction: column;
