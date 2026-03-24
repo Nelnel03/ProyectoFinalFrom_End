@@ -37,7 +37,7 @@
 
 .visitante-content {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   background: var(--color-caracola);
   border-radius: 20px;
   padding: 40px;
@@ -84,4 +84,35 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.visitante-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.visitante-loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #44614d;
+}
+
+.visitante-separator-line {
+  border-top: 1px solid rgba(46, 107, 70, 0.15);
+  margin: 2.5rem 0;
+}
+
+.visitante-register-wrapper {
+  margin: 0 auto;
+  box-shadow: none;
+  border: 1px solid #eee;
+}
+
+.visitante-register-title {
+  text-align: center;
+  color: #0b532d;
+  margin-bottom: 1.5rem;
 }

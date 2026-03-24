@@ -167,11 +167,9 @@ function MainPagesLogin() {
   return (
     <div className="visitante-container">
       <header className="visitante-header">
-        <img
-          src="/src/assets/logo.png"
-          alt="Logo"
-          style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }}
-        />
+
+        <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
+
         <h1>BIOMON ADI</h1>
         <p>Monitoreo de árboles, especies y estado de vida</p>
       </header>
@@ -272,23 +270,17 @@ function MainPagesLogin() {
           </button>
         </form>
 
-        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          <p style={{ color: 'var(--color-texto)', fontSize: '0.9rem' }}>
+        <div className="login-footer-container">
+          <p className="login-footer-text">
             {isRegistering ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}
             <button
               onClick={() => {
                 setIsRegistering(!isRegistering);
                 setError('');
               }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-mar-profundo)',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                marginLeft: '5px',
-                textDecoration: 'underline'
-              }}
+
+              className="login-footer-link"
+
             >
               {isRegistering ? 'Inicia Sesión' : 'Regístrate aquí'}
             </button>

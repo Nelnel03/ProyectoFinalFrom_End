@@ -23,8 +23,8 @@ function Nav() {
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
         <NavLink to="/" className="visitor-logo">
-          <img src="/src/assets/logo.png" alt="Logo" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-          <span style={{ fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>BioMon ADI</span>
+          <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+          <span className="visitor-logo-text">BioMon ADI</span>
         </NavLink>
 
         <div className="visitor-nav-links">
@@ -53,12 +53,11 @@ function Nav() {
               Iniciar Sesión / Registro
             </NavLink>
           ) : (
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="visitor-auth-actions">
               {location.pathname !== '/user' && location.pathname !== '/admin' && (
                 <NavLink
                   to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
-                  className="visitor-login-btn"
-                  style={{ backgroundColor: 'var(--color-mar-profundo)' }}
+                  className="visitor-login-btn visitor-btn-panel"
                 >
                   🚀 Panel
                 </NavLink>
@@ -70,8 +69,7 @@ function Nav() {
                   setAuth(false);
                   navigate('/');
                 }}
-                className="visitor-login-btn"
-                style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer' }}
+                className="visitor-login-btn visitor-btn-logout"
               >
                 🚪 Cerrar Sesión
               </button>

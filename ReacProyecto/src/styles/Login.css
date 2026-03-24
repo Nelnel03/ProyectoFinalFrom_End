@@ -78,3 +78,24 @@
   font-size: 0.875rem;
   text-align: center;
 }
+
+/* --- ESTILOS EXTRAIDOS DE COMPONENTES ONLINE --- */
+.login-footer-container {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.login-footer-text {
+  color: var(--color-texto);
+  font-size: 0.9rem;
+}
+
+.login-footer-link {
+  background: none;
+  border: none;
+  color: var(--color-mar-profundo);
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 5px;
+  text-decoration: underline;
+}

@@ -232,3 +232,125 @@ body {
   color: var(--primary-saturada);
   font-size: 1.25rem;
 }
+
+/* --- ESTILOS EXTRAIDOS DE COMPONENTES ONLINE --- */
+.user-premium-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.user-premium-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.8;
+}
+
+.user-premium-greeting {
+  opacity: 0.9;
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  max-width: 600px;
+}
+
+.user-btn-logout-margin {
+  margin-left: auto;
+}
+
+.user-glass-main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.user-section-title {
+  margin-bottom: 3rem;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
+  padding-bottom: 2rem;
+}
+
+.user-collection-heading {
+  color: #344E41;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.user-collection-desc {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 800px;
+}
+
+.user-loading-container {
+  text-align: center;
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.user-loading-spinner {
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top: 4px solid #344E41;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.user-loading-text {
+  color: #666;
+  font-weight: 600;
+}
+
+.premium-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.premium-header-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.8;
+}
+
+.premium-header-welcome {
+  opacity: 0.9;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.glass-card-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.premium-tabs-container {
+  margin-bottom: 3.5rem;
+  overflow-x: auto;
+  padding: 10px;
+}
+
+.admin-msg {
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.admin-msg.success {
+  background: rgba(52, 211, 153, 0.2);
+  color: #065f46;
+}
+
+.admin-msg.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+}

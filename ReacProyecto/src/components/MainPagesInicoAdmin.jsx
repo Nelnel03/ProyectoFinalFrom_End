@@ -767,141 +767,56 @@ function MainPagesInicoAdmin() {
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="admin-container">
-      {/* Header */}
-      <header className="admin-header">
-        <div>
-          <h1>🌳 Panel de Administración</h1>
-          <p>Bienvenido, <strong>{adminName}</strong> — Gestión de especies forestales</p>
+
+    <div className="dashboard-premium">
+      <header className="premium-header">
+        <div className="premium-header-flex">
+          <div>
+            <h2 className="premium-header-subtitle">BioMon ADI</h2>
+            <h1>🌳 Panel de Control</h1>
+            <p className="premium-header-welcome">
+              Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
+            </p>
+          </div>
+          <button className="btn-logout-premium" onClick={handleLogout}>
+            🚪 Cerrar Sesión
+          </button>
+
         </div>
         <button className="admin-logout-btn" onClick={handleLogout}>
           🚪 Cerrar sesión
         </button>
       </header>
 
-      <main className="admin-main">
-        {/* Mensaje de feedback */}
+
+      <main className="glass-card glass-card-container">
         {mensaje.texto && (
-          <div className={`admin-msg ${mensaje.tipo}`}>{mensaje.texto}</div>
-        )}
-
-        {/* Tabs de navegación */}
-        <div className="admin-tabs">
-          <button
-            className={`admin-tab ${tab === 'resumen' ? 'active' : ''}`}
-            onClick={() => { setTab('resumen'); resetForm(); }}
-          >
-            📊 Resumen General
-          </button>
-          <button
-            className={`admin-tab ${tab === 'lista' ? 'active' : ''}`}
-            onClick={() => { setTab('lista'); resetForm(); }}
-          >
-            📋 Lista de Árboles ({arboles.filter(a => a.estado !== 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'bajas' ? 'active' : ''}`}
-            onClick={() => { setTab('bajas'); resetForm(); }}
-          >
-            🍂 Registro de Bajas ({arboles.filter(a => a.estado === 'muerto').length})
-          </button>
-          <button
-            className={`admin-tab ${tab === 'usuarios' ? 'active' : ''}`}
-            onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
-          >
-            👥 Gestión Usuarios
-          </button>
-          <button
-            className={`admin-tab ${tab === 'agregar' ? 'active' : ''}`}
-            onClick={() => { setTab('agregar'); resetForm(); }}
-          >
-            {modoEdicion ? '✏️ Editar Árbol' : '➕ Agregar Árbol'}
-          </button>
-          <button
-            className={`admin-tab ${tab === 'seguimiento' ? 'active' : ''}`}
-            onClick={() => { setTab('seguimiento'); resetForm(); }}
-          >
-            🌱 Seguimiento por Tipo
-          </button>
-        </div>
-
-        {/* ──── TAB: RESUMEN ──── */}
-        {tab === 'resumen' && (
-          <div className="admin-resumen-container">
-            <div className="admin-section-header">
-               <h2>Estadísticas de la Plantación</h2>
-               <p style={{ color: '#66937a' }}>Distribución total de especies en el sistema</p>
-            </div>
-
-            <div className="admin-stats-grid">
-               <div className="admin-stat-main-card">
-                  <span className="admin-stat-icon">🌲</span>
-                  <div className="admin-stat-info">
-                     <h3>{arboles.length}</h3>
-                     <p>Censo Total</p>
-                  </div>
-               </div>
-
-               <div className="admin-stat-main-card" style={{ borderColor: '#60a5fa' }}>
-                  <span className="admin-stat-icon" style={{ backgroundColor: '#eff6ff', color: '#3b82f6' }}>🌿</span>
-                  <div className="admin-stat-info">
-                     <h3>{tiposDisponibles.length}</h3>
-                     <p>Especies/Tipos</p>
-                  </div>
-               </div>
-            </div>
-
-            <div className="admin-types-breakdown">
-               <h3>Desglose por Tipo de Árbol</h3>
-               <div className="admin-types-grid">
-                  {tiposDisponibles.map(tipo => {
-                     const aliveCount = arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipo.toLowerCase() && a.estado !== 'muerto').length;
-                     const stat = statsTipos.find(s => s.tipo === tipo.toLowerCase());
-                     return (
-                        <div key={tipo} className="admin-type-stat-card">
-                           <div className="admin-type-stat-header">
-                              <span className="admin-type-name">{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>
-                              <span className="admin-type-count" title="Árboles vivos">{aliveCount}</span>
-                           </div>
-                           <div className="admin-type-progress-bar">
-                              <div 
-                                 className="admin-type-progress-fill" 
-                                 style={{ width: `${arboles.length > 0 ? (aliveCount / arboles.length) * 100 : 0}%` }}
-                              ></div>
-                           </div>
-                           <div style={{ display: 'flex', gap: '10px', fontSize: '0.8rem', marginBottom: '1rem', color: '#86bfa4' }}>
-                              <span>📋 Plan: {stat?.planificados || 0}</span>
-                              <span style={{ color: '#fca5a5' }}>🍂 Muerto: {stat?.muertos || 0}</span>
-                           </div>
-                           <p className="admin-type-percentage">
-                              {arboles.length > 0 ? ((aliveCount / arboles.length) * 100).toFixed(1) : 0}% de vitalidad global
-                           </p>
-                           <button 
-                              className="admin-type-view-btn"
-                              onClick={() => {
-                                 setTipoFiltro(tipo);
-                                 setTab('seguimiento');
-                              }}
-                           >
-                              Ver detalles →
-                           </button>
-                        </div>
-                     );
-                  })}
-               </div>
-            </div>
+          <div className={`admin-msg ${mensaje.tipo}`}>
+            {mensaje.texto}
           </div>
         )}
 
-        {/* ──── TAB: LISTA ──── */}
-        {tab === 'lista' && (
-          <div>
-            <div className="admin-section-header">
-              <h2>Especies Registradas</h2>
-              <button className="admin-add-btn" onClick={() => setTab('agregar')}>
-                ➕ Nuevo Árbol
-              </button>
-            </div>
+        {/* Tabs de navegación Premium */}
+        <div className="premium-tabs premium-tabs-container">
+          {[
+            { id: 'resumen', label: '📊 Resumen', reset: resetForm },
+            { id: 'lista', label: `📋 Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },
+            { id: 'bajas', label: `🍂 Bajas (${arboles.filter(a => a.estado === 'muerto').length})`, reset: resetForm },
+            { id: 'usuarios', label: '👥 Usuarios', reset: resetFormUsuario },
+            { id: 'voluntariados', label: '🤝 Voluntariados', reset: resetFormVoluntariado },
+            { id: 'abonos', label: `🦴 Abonos (${abonos.length})`, reset: resetFormAbono },
+            { id: 'agregar', label: modoEdicion ? '✏️ Editar' : '➕ Agregar', reset: resetForm }
+          ].map(t => (
+            <button
+              key={t.id}
+              className={`premium-tab ${tab === t.id ? 'active' : ''}`}
+              onClick={() => { setTab(t.id); t.reset(); }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
 
             {cargando ? (
               <div style={{ textAlign: 'center', color: '#86bfa4', padding: '3rem' }}>

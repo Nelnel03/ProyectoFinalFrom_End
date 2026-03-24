@@ -1,0 +1,73 @@
+.navbar-main {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(0, 119, 182, 0.95);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 1010;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-logo-container {
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  cursor: pointer;
+}
+
+.navbar-logo-img {
+  width: 45px; 
+  height: 45px; 
+  border-radius: 50%;
+}
+
+.navbar-logo-title {
+  margin: 0; 
+  font-weight: bold; 
+  color: var(--color-caracola); 
+  font-size: 1.2rem; 
+  font-family: var(--fuente-acento); 
+  text-transform: uppercase;
+}
+
+.navbar-links-container {
+  display: flex; 
+  gap: 1.5rem; 
+  align-items: center;
+}
+
+.navbar-btn-link {
+  background: transparent; 
+  border: none; 
+  color: var(--color-caracola); 
+  font-weight: 600; 
+  cursor: pointer; 
+  font-size: 0.95rem; 
+  font-family: var(--fuente-principal);
+}
+
+.navbar-btn-link:hover {
+  text-decoration: underline;
+  color: var(--color-sol);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.navbar-btn-acceder {
+  background: var(--color-coral); 
+  border: none; 
+  color: white; 
+  padding: 0.5rem 1.2rem; 
+  border-radius: 30px; 
+  font-weight: bold; 
+  cursor: pointer;
+  font-family: var(--fuente-principal);
+}
+
+.navbar-btn-acceder:hover {
+  background: #ff6b35; /* Un coral un poco más oscuro o vibrante */
+}

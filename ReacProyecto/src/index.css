@@ -170,3 +170,9 @@ header.main-header::before {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-mar-profundo);
 }
+
+.app-main-layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

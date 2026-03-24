@@ -27,16 +27,14 @@ function MainPagesInicoVisitante() {
   return (
     <div className="visitante-container">
       <header className="visitante-header">
-        <img
-          src="/src/assets/logo.png"
-          alt="Logo"
-          style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }}
-        />
+
+        <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
+
         <h1>BIOMON ADI</h1>
         <p>Monitoreo de árboles, especies y estado de vida</p>
       </header>
 
-      <main className="visitante-content" style={{ maxWidth: '1100px' }}>
+      <main className="visitante-content">
         <section className="visitante-intro">
           <h2>Bienvenido al Sistema</h2>
           <p>
@@ -47,12 +45,77 @@ function MainPagesInicoVisitante() {
         </section>
 
         {cargando ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
+          <div className="visitante-loading-state">
             Cargando especies forestales...
           </div>
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
+
+
+        {sessionStorage.getItem('isAuthenticated') !== 'true' && (
+          <>
+            {/* Separador */}
+            <div className="visitante-separator-line" />
+
+            {/* Formulario de registro */}
+            <div className="user-register-form-wrapper visitante-register-wrapper">
+              <h3 className="visitante-register-title">
+                 🔐 Crea tu cuenta
+              </h3>
+
+              {mensaje && <div className="registro-exito-msg">{mensaje}</div>}
+
+              <form onSubmit={handleSubmit}>
+                <div className="user-form-group">
+                  <label htmlFor="nombre">Nombre Completo</label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    required
+                    placeholder="Ej: Juan Pérez"
+                  />
+                </div>
+
+                <div className="user-form-group">
+                  <label htmlFor="email">Correo Electrónico</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="ejemplo@correo.com"
+                  />
+                </div>
+
+                <div className="user-form-group">
+                  <label htmlFor="password">Contraseña</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    placeholder="Mínimo 6 caracteres"
+                    minLength="6"
+                    maxLength="15"
+                  />
+                </div>
+
+                <button type="submit" className="user-register-btn">
+                  Registrarme ahora
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+
       </main>
     </div>
   );

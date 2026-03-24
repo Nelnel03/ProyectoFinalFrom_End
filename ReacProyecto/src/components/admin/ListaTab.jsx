@@ -1,4 +1,6 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
+import '../../styles/Arboles.css';
 
 function ListaTab({ 
   busqueda, 
@@ -64,7 +66,7 @@ function ListaTab({
             </div>
             
             <div className="admin-tracking-stats">
-              <div className="admin-form-group" style={{ margin: 0 }}>
+              <div className="admin-form-group admin-form-group-no-margin">
                 <label className="admin-tracking-label-plan">📅 Planificados</label>
                 <input 
                   type="number" 
@@ -73,7 +75,7 @@ function ListaTab({
                   className="admin-tracking-input"
                 />
               </div>
-              <div className="admin-form-group" style={{ margin: 0 }}>
+              <div className="admin-form-group admin-form-group-no-margin">
                 <label className="admin-tracking-label-dead">🍂 Bajas de este tipo</label>
                 <input 
                   type="number" 
@@ -82,7 +84,7 @@ function ListaTab({
                   className="admin-tracking-input"
                 />
               </div>
-              <div className="admin-form-group" style={{ margin: 0, opacity: 0.8 }}>
+              <div className="admin-form-group admin-form-group-no-margin admin-opacity-muted">
                 <label className="admin-tracking-label-alive">🌲 Vivos en sistema</label>
                 <input 
                   type="text" 
@@ -115,7 +117,7 @@ function ListaTab({
               const matchesType = !tipoFiltro || (a.tipo || '').toLowerCase() === tipoFiltro.toLowerCase();
               return matchesSearch && matchesType;
             }).length === 0 ? (
-            <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem', fontSize: '1rem' }}>
+            <div className="admin-no-results">
               <p>No se encontraron árboles con los filtros aplicados.</p>
             </div>
           ) : (
@@ -130,21 +132,15 @@ function ListaTab({
                 })
                 .map((arbol) => (
                 <div key={arbol.id} className="admin-arbol-card">
-                  {arbol.imagenUrl ? (
+                  {arbol.imagenUrl && (
                     <img
                       src={arbol.imagenUrl}
                       alt={arbol.nombre}
                       className="admin-arbol-card-img"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
+                      onError={(e) => e.target.classList.add('error')}
                     />
-                  ) : null}
-                  <div
-                    className="admin-arbol-card-img-placeholder"
-                    style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
-                  >
+                  )}
+                  <div className="admin-arbol-card-img-placeholder">
                     🌳
                   </div>
 
