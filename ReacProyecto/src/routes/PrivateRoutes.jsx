@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoutes = ({ children, roleRequired, rolesAllowed = [] }) => {
-  const isAuth = localStorage.getItem('isAuthenticated') === 'true';
-  const userStr = localStorage.getItem('user');
+  const isAuth = sessionStorage.getItem('isAuthenticated') === 'true';
+  const userStr = sessionStorage.getItem('user');
   let user = {};
   
   try {

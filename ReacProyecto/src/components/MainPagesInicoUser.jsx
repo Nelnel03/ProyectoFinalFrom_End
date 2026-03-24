@@ -14,13 +14,13 @@ function MainPagesInicoUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    const userData = localStorage.getItem('user');
+    const userData = sessionStorage.getItem('user');
     if (userData) {
       const user = JSON.parse(userData);
       setUserName(user.nombre);
@@ -42,8 +42,8 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('user');
     navigate('/');
   };
 

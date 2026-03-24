@@ -178,48 +178,10 @@
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
-<<<<<<< HEAD
+
       "password": "12345678",
       "rol": "user"
-=======
-      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
-      "rol": "voluntario",
-      "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
-      "area": "plantador",
-      "telefono": "11111111",
-      "fechaIngreso": "2026-03-23"
-    },
-    {
-      "id": "6bb7",
-      "nombre": "Charlie",
-      "email": "carlos.v@gmail.com",
-      "password": "voluntario123",
-      "rol": "voluntario",
-      "area": "Sembrado",
-      "telefono": "11111111",
-      "fechaIngreso": "2026-03-17"
-    },
-    {
-      "id": "1005",
-      "nombre": "Usuario Ejemplo",
-      "email": "usuario-vol@gmail.com",
-      "password": "voluntario123",
-      "rol": "voluntario",
-      "area": "Mantenimiento",
-      "telefono": "88887777",
-      "fechaIngreso": "2026-03-19"
-    },
-    {
-      "nombre": "Barry Vega",
-      "email": "bvega@fwdcostarica.com",
-      "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
-      "rol": "user",
-      "habilidades": null,
-      "disponibilidad": null,
-      "necesidades": "casita",
-      "fechaRegistro": "2026-03-23T20:22:59.414Z",
-      "id": "nwJvLLCaUgg"
->>>>>>> bef09720ae4bba32fa95efd1c4df6bf25f42bea2
+
     }
   ],
   "stats_tipos": [
@@ -253,7 +215,7 @@
   ],
   "reportes": [
     {
-<<<<<<< HEAD
+
       "id": "6bb7",
       "nombre": "Charlie",
       "puesto": "Sembrado y Mantenimiento",
@@ -277,58 +239,7 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
-=======
-      "asunto": "un arbol se seco",
-      "mensaje": "se seco un  arbol por que ustedes gonoreas no les echaron agua",
-      "userId": "bdce",
-      "userName": "leal",
-      "userEmail": "leal@gmail.com",
-      "fecha": "2026-03-23T16:57:40.973Z",
-      "estado": "Pendiente",
-      "id": "7hIBJShQtmw"
-    }
-  ],
-  "reportes_robados": [
-    {
-      "tipo_arbol": "sdfghj",
-      "ubicacion": "asdfghj",
-      "descripcion": "qwertyuiop´ñlkjhgfdszxcvbnm",
-      "userId": "admin1",
-      "userName": "Administrador",
-      "userEmail": "admin@gmail.com",
-      "fecha": "2026-03-23T17:47:15.326Z",
-      "estado": "En Investigacion",
-      "id": "veapaE1Cfk8"
-    }
-  ],
-  "reportes_voluntariado": [
-    {
-      "voluntarioId": "a8d3",
-      "voluntarioNombre": "Sol",
-      "tipoTarea": "Mantenimiento",
-      "horaInicio": "11:22:15",
-      "horaFin": "11:22:29",
-      "horas": 0,
-      "tareas": "quiero buena paga y a tiempo por mi arduo trabajo en la comunidad.",
-      "fecha": "2026-03-23",
-      "timestamp": "2026-03-23T17:22:58.141Z",
-      "estado": "enviado",
-      "id": "pZqmx-H4MHc"
-    },
-    {
-      "voluntarioId": "a8d3",
-      "voluntarioNombre": "Sol",
-      "tipoTarea": "Mantenimiento",
-      "horaInicio": "11:35:17",
-      "horaFin": "11:35:48",
-      "horas": 0.01,
-      "tareas": "qwertyuiopñlkjhgfdsazxcvbnm",
-      "pruebas": "shdhefi",
-      "fecha": "2026-03-23",
-      "timestamp": "2026-03-23T17:36:10.242Z",
-      "estado": "enviado",
-      "id": "QPLSvaIo4zc"
->>>>>>> bef09720ae4bba32fa95efd1c4df6bf25f42bea2
+
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
