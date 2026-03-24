@@ -5,6 +5,7 @@ import ArbolesSection from './ArbolesSection';
 import UserProfile from './UserProfile';
 import UserReports from './UserReports';
 import UserReportesRobo from './UserReportesRobo';
+import BuzonEnviados from './BuzonEnviados';
 import '../styles/MainPagesInicoVisitante.css';
 
 function MainPagesInicoUser() {
@@ -50,16 +51,16 @@ function MainPagesInicoUser() {
 
   return (
     <div className="visitante-container">
-      <header className="visitante-header" style={{ background: 'linear-gradient(135deg, #1a4d2e 0%, #2e6b46 100%)', padding: '3rem 1rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>🌳 ¡Hola, {user?.nombre}!</h1>
-        <p style={{ opacity: 0.9, fontSize: '1.1rem' }}>Panel de Usuario - Gestiona tu información y explora</p>
+      <header className="visitante-header" style={{ background: '#ffffff', padding: '3rem 1rem' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1a4d2e' }}>🌳 ¡Hola, {user?.nombre}!</h1>
+        <p style={{ opacity: 0.9, fontSize: '1.1rem', color: '#4b5563' }}>Panel de Usuario - Gestiona tu información y explora</p>
       </header>
 
-      <main className="visitante-content" style={{ maxWidth: '1100px' }}>
+      <main className="visitante-content" style={{ maxWidth: '1100px', background: '#ffffff' }}>
         <section className="visitante-intro"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}
         >
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-evenly', width: '100%', flexWrap: 'wrap' }}>
             <button
               onClick={() => setCurrentTab('coleccion')}
               style={{
@@ -120,22 +121,22 @@ function MainPagesInicoUser() {
             >
               🚨 Reportar Robo
             </button>
+            <button
+              onClick={() => setCurrentTab('buzon')}
+              style={{
+                padding: '10px 22px',
+                backgroundColor: currentTab === 'buzon' ? '#1a4d2e' : '#f3f4f6',
+                color: currentTab === 'buzon' ? 'white' : '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              📬 Buzón de Enviados
+            </button>
           </div>
-          <button
-            onClick={handleLogout}
-            style={{
-              padding: '10px 22px',
-              backgroundColor: '#ef4444',
-              color: 'white',
-              border: 'none',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '0.9rem',
-            }}
-          >
-            🚪 Cerrar Sesión
-          </button>
         </section>
 
         <div style={{ marginTop: '2rem' }}>
@@ -167,6 +168,10 @@ function MainPagesInicoUser() {
 
           {currentTab === 'reporte_robo' && (
             <UserReportesRobo user={user} />
+          )}
+
+          {currentTab === 'buzon' && (
+            <BuzonEnviados user={user} />
           )}
         </div>
       </main>

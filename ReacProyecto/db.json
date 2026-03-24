@@ -83,7 +83,7 @@
     },
     {
       "id": "cb07",
-      "nombre": "alv",
+      "nombre": "ANDRES GERARDO LEAL VARELA",
       "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
@@ -97,7 +97,30 @@
       "muertos": 1
     }
   ],
-  "reportes": [],
-  "reportes_robados": [],
+  "reportes": [
+    {
+      "id": "22cb",
+      "asunto": "mondongo",
+      "mensaje": "mondongo \n",
+      "userId": "cb07",
+      "userName": "Andres ",
+      "userEmail": "alealvarela@gmail.com",
+      "fecha": "2026-03-24T15:59:38.270Z",
+      "estado": "Pendiente"
+    }
+  ],
+  "reportes_robados": [
+    {
+      "id": "b706",
+      "tipo_arbol": "cosa ",
+      "ubicacion": "cosa ",
+      "descripcion": "cosa ",
+      "userId": "cb07",
+      "userName": "Andres ",
+      "userEmail": "alealvarela@gmail.com",
+      "fecha": "2026-03-24T16:05:44.512Z",
+      "estado": "Pendiente"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
