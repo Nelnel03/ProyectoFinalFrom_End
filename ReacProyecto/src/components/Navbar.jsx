@@ -1,5 +1,4 @@
 import React from 'react';
-import { Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {

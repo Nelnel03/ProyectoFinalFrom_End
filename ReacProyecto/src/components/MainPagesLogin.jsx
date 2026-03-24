@@ -15,25 +15,28 @@ function MainPagesLogin() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const validateEmail = (email) => {
-    return String(email)
+  const validateEmail = (emailValue) => {
+    return String(emailValue)
       .toLowerCase()
       .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        /^(([^<>()[\]\\.,;:\s@"]+(.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
     if (!validateEmail(trimmedEmail)) {
       Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
+      setLoading(false);
       return;
     }
 
@@ -43,34 +46,35 @@ function MainPagesLogin() {
 
       if (user) {
         if (user.debeCambiarPassword) {
-            const { value: newPassword } = await Swal.fire({
-                title: 'Primer Inicio de Sesión',
-                text: 'Como nuevo voluntario, debes cambiar tu contraseña temporal.',
-                input: 'password',
-                inputPlaceholder: 'Ingresa tu nueva contraseña',
-                showCancelButton: true,
-                confirmButtonText: 'Cambiar y Entrar',
-                cancelButtonText: 'Cancelar',
-                inputValidator: (value) => {
-                    if (!value) return 'La nueva contraseña es obligatoria';
-                    if (value.length < 6) return 'Mínimo 6 caracteres';
-                    if (value.length > 15) return 'Máximo 15 caracteres';
-                }
-            });
-
-            if (newPassword) {
-                const updatedUser = { ...user, password: newPassword, debeCambiarPassword: false };
-                await services.putUsuarios(updatedUser, user.id);
-                user.password = newPassword;
-                user.debeCambiarPassword = false;
-            } else {
-                return;
+          const { value: newPassword } = await Swal.fire({
+            title: 'Primer Inicio de Sesión',
+            text: 'Como nuevo voluntario, debes cambiar tu contraseña temporal.',
+            input: 'password',
+            inputPlaceholder: 'Ingresa tu nueva contraseña',
+            showCancelButton: true,
+            confirmButtonText: 'Cambiar y Entrar',
+            cancelButtonText: 'Cancelar',
+            inputValidator: (value) => {
+              if (!value) return 'La nueva contraseña es obligatoria';
+              if (value.length < 6) return 'Mínimo 6 caracteres';
+              if (value.length > 15) return 'Máximo 15 caracteres';
             }
+          });
+
+          if (newPassword) {
+            const updatedUser = { ...user, password: newPassword, debeCambiarPassword: false };
+            await services.putUsuarios(updatedUser, user.id);
+            user.password = newPassword;
+            user.debeCambiarPassword = false;
+          } else {
+            setLoading(false);
+            return;
+          }
         }
 
         sessionStorage.setItem('isAuthenticated', 'true');
         sessionStorage.setItem('user', JSON.stringify(user));
-        
+
         Swal.fire({
           title: '¡Bienvenido!',
           text: `Sesión iniciada como ${user.nombre}`,
@@ -90,8 +94,10 @@ function MainPagesLogin() {
         Swal.fire('Error', 'Correo o contraseña incorrectos', 'error');
       }
     } catch (err) {
-      console.error("Error en login:", err);
+      console.error('Error en login:', err);
       Swal.fire('Error', 'Hubo un problema al conectar con el servidor', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -146,10 +152,14 @@ function MainPagesLogin() {
       });
 
       setIsRegistering(false);
+      setNombre('');
+      setTelefono('');
+      setDireccion('');
+      setFechaNacimiento('');
       setPassword('');
       setConfirmPassword('');
     } catch (err) {
-      console.error("Error en registro:", err);
+      console.error('Error en registro:', err);
       Swal.fire('Error', 'No se pudo completar el registro', 'error');
     }
   };
@@ -157,54 +167,64 @@ function MainPagesLogin() {
   return (
     <div className="visitante-container">
       <header className="visitante-header">
-        <img src="/src/assets/logo.png" alt="Logo" style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }} />
+        <img
+          src="/src/assets/logo.png"
+          alt="Logo"
+          style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }}
+        />
         <h1>BIOMON ADI</h1>
         <p>Monitoreo de árboles, especies y estado de vida</p>
       </header>
 
       <div className="login-card">
         <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
-        
+
+        {error && (
+          <div style={{ color: '#c0392b', background: '#fdecea', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+            {error}
+          </div>
+        )}
+
         <form onSubmit={isRegistering ? handleRegister : handleLogin}>
           {isRegistering && (
             <>
               <div className="form-group">
                 <label>Nombre Completo</label>
-                <input 
-                  type="text" 
-                  value={nombre} 
-                  onChange={(e) => setNombre(e.target.value)} 
-                  required 
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
                   placeholder="Ej: Juan Pérez"
                 />
               </div>
               <div className="form-group">
                 <label>Número de Teléfono</label>
-                <input 
-                  type="tel" 
-                  value={telefono} 
-                  onChange={(e) => setTelefono(e.target.value)} 
-                  required 
+                <input
+                  type="tel"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  required
                   placeholder="8888-8888"
                 />
               </div>
               <div className="form-group">
                 <label>Dirección</label>
-                <input 
-                  type="text" 
-                  value={direccion} 
-                  onChange={(e) => setDireccion(e.target.value)} 
-                  required 
+                <input
+                  type="text"
+                  value={direccion}
+                  onChange={(e) => setDireccion(e.target.value)}
+                  required
                   placeholder="Calle, Ciudad, Provincia"
                 />
               </div>
               <div className="form-group">
                 <label>Fecha de Nacimiento</label>
-                <input 
-                  type="date" 
-                  value={fechaNacimiento} 
-                  onChange={(e) => setFechaNacimiento(e.target.value)} 
-                  required 
+                <input
+                  type="date"
+                  value={fechaNacimiento}
+                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                  required
                 />
               </div>
             </>
@@ -212,22 +232,22 @@ function MainPagesLogin() {
 
           <div className="form-group">
             <label>Correo Electrónico</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@correo.com"
+              required
             />
           </div>
 
           <div className="form-group">
             <label>Contraseña</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               placeholder="••••••••"
               maxLength="15"
             />
@@ -236,35 +256,35 @@ function MainPagesLogin() {
           {isRegistering && (
             <div className="form-group">
               <label>Confirmar Contraseña</label>
-              <input 
-                type="password" 
-                value={confirmPassword} 
-                onChange={(e) => setConfirmPassword(e.target.value)} 
-                required 
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
                 placeholder="••••••••"
                 maxLength="15"
               />
             </div>
           )}
 
-          <button type="submit" className="login-btn">
-            {isRegistering ? 'Registrarse' : 'Entrar'}
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Cargando...' : isRegistering ? 'Registrarse' : 'Entrar'}
           </button>
         </form>
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
           <p style={{ color: 'var(--color-texto)', fontSize: '0.9rem' }}>
             {isRegistering ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}
-            <button 
+            <button
               onClick={() => {
                 setIsRegistering(!isRegistering);
                 setError('');
               }}
-              style={{ 
-                background: 'none', 
-                border: 'none', 
-                color: 'var(--color-mar-profundo)', 
-                fontWeight: 'bold', 
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--color-mar-profundo)',
+                fontWeight: 'bold',
                 cursor: 'pointer',
                 marginLeft: '5px',
                 textDecoration: 'underline'

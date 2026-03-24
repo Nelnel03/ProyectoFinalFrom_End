@@ -9,7 +9,7 @@
       "altura": "25-35 metros",
       "crecimiento": "1.5 a 2 metros por año",
       "clima": "tropical",
-      "descripcion": "qwertyuiop´ñlkjhgfdsazxcvbnm,",
+      "descripcion": "qwertyuiopñlkjhgfdsazxcvbnm,",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
       "estado": "vivo",
@@ -160,6 +160,20 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
+    },
+    {
+      "id": "d374",
+      "nombre": "Andrés leal",
+      "email": "alealvfwd@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "id": "9ba2",
+      "nombre": "Andrés Leal V",
+      "email": "andresgerardolv@gmail.com",
+      "password": "12345678",
+      "rol": "user"
     }
   ],
   "stats_tipos": [
@@ -218,5 +232,7 @@
       "fechaIngreso": "2026-03-20"
     }
   ],
+  "reportes": [],
+  "reportes_robados": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
