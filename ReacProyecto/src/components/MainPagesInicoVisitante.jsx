@@ -7,6 +7,12 @@ import '../styles/MainPagesInicoUser.css';
 function MainPagesInicoVisitante() {
   const [arboles, setArboles] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    password: ''
+  });
+  const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
     cargarArboles();
@@ -21,6 +27,36 @@ function MainPagesInicoVisitante() {
       console.error('Error al cargar árboles:', err);
     } finally {
       setCargando(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const newUser = {
+        ...formData,
+        rol: 'user',
+        telefono: 'N/A',
+        direccion: 'N/A',
+        fechaNacimiento: new Date().toISOString().split('T')[0]
+      };
+      await services.postUsuarios(newUser);
+      setMensaje('¡Registro exitoso! Iniciando sesión...');
+      // Simulamos inicio de sesión
+      sessionStorage.setItem('isAuthenticated', 'true');
+      sessionStorage.setItem('user', JSON.stringify(newUser));
+      window.location.href = '/user';
+    } catch (error) {
+      console.error('Error al registrarse:', error);
+      alert('Hubo un problema al crear tu cuenta.');
     }
   };
 

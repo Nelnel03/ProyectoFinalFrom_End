@@ -1,23 +1,23 @@
 
-
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
 import InicioAdimin from '../pages/InicioAdimin';
 import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
+import LandingPage from '../pages/LandingPage';
+import HistoryForm from '../pages/HistoryForm';
+import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
 
 function MainLayout() {
+  const location = useLocation();
 
-
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-
-  const layoutClass = isAuthenticated ? "main-content-layout" : "main-content-layout visitor-layout";
-
+  const isPremiumRoute = location.pathname.startsWith('/user') || location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <div className="app-main-layout-container">
