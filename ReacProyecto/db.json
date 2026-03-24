@@ -87,6 +87,13 @@
       "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
+    },
+    {
+      "nombre": "GG",
+      "email": "g@gmail.com",
+      "password": "MTIzNDU2NzhBYV9TRUNVUkVfU0FMVA==",
+      "rol": "user",
+      "id": "kMl3NBy01-k"
     }
   ],
   "stats_tipos": [
