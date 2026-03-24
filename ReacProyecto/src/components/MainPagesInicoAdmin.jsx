@@ -108,6 +108,17 @@ function MainPagesInicoAdmin() {
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     
+    const email = formUsuario.email.trim();
+    if (!email.includes('@') || !email.includes('.')) {
+      Swal.fire('Error', 'El correo debe contener obligatoriamente "." y "@"', 'error');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Swal.fire('Error', 'Formato de correo inválido', 'error');
+      return;
+    }
+
     const action = modoEdicionUsuario ? 'actualizar' : 'crear';
     const confirm = await Swal.fire({
       title: `¿Confirmar ${action}?`,
