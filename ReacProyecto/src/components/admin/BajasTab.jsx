@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function BajasTab({ arboles, handleEditar }) {
   const bajas = arboles.filter(a => a.estado === 'muerto');
@@ -16,7 +17,7 @@ function BajasTab({ arboles, handleEditar }) {
           <p>No hay registros de bajas en el sistema.</p>
         </div>
       ) : (
-        <div className="admin-arboles-lista" style={{ gridTemplateColumns: '1fr', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="admin-arboles-lista admin-arboles-lista-vertical">
           {bajas
             .sort((a,b) => new Date(b.fechaMuerto || 0) - new Date(a.fechaMuerto || 0))
             .map((arbol) => (
@@ -41,11 +42,10 @@ function BajasTab({ arboles, handleEditar }) {
                      {arbol.fechaMuerto ? arbol.fechaMuerto.split('-').reverse().join('/') : 'Sin fecha'}
                   </p>
                </div>
-               <div style={{ display: 'flex', gap: '0.5rem' }}>
+               <div className="admin-flex-row-gap">
                   <button 
-                     className="admin-edit-btn" 
+                     className="admin-edit-btn admin-btn-small" 
                      onClick={() => handleEditar(arbol)}
-                     style={{ padding: '8px 12px', fontSize: '0.85rem' }}
                   >
                      ✏️ Restaurar/Editar
                   </button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function AbonosTab({
   modoEdicionAbono,
@@ -52,7 +53,7 @@ function AbonosTab({
               placeholder="Ej: kg"
             />
           </div>
-          <div className="admin-form-group" style={{ gridColumn: 'span 2' }}>
+          <div className="admin-form-group admin-form-group-full">
             <label>URL de Imagen (Opcional)</label>
             <input
               type="url"
@@ -80,13 +81,15 @@ function AbonosTab({
           <div key={abono.id} className="admin-abono-stat-card">
             <div className="admin-abono-card-body">
               <div className="admin-abono-icon">
-                {abono.imagenUrl ? (
-                  <img src={abono.imagenUrl} alt={abono.nombre} className="admin-abono-img-preview" onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }} />
-                ) : null}
-                <span style={{ display: abono.imagenUrl ? 'none' : 'block' }}>🔋</span>
+                {abono.imagenUrl && (
+                  <img 
+                    src={abono.imagenUrl} 
+                    alt={abono.nombre} 
+                    className="admin-abono-img-preview" 
+                    onError={(e) => e.target.classList.add('error')} 
+                  />
+                )}
+                <span>🔋</span>
               </div>
               <div className="admin-abono-info">
                 <h4>{abono.nombre}</h4>

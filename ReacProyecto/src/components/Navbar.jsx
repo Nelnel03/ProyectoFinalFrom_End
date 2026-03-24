@@ -1,50 +1,32 @@
 import React from 'react';
 import { Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import '../styles/Navbar.css';
 const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <nav style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            padding: '1rem 2rem',
-            background: 'rgba(0, 119, 182, 0.95)', // var(--color-mar-profundo) with opacity
-            backdropFilter: 'blur(10px)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 1010,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-            <div onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                <img src="/src/assets/logo.png" alt="Logo" style={{ width: '45px', height: '45px', borderRadius: '50%' }} />
-                <h2 style={{ margin: 0, fontWeight: 'bold', color: 'var(--color-caracola)', fontSize: '1.2rem', fontFamily: 'var(--fuente-acento)', textTransform: 'uppercase' }}>BioMon ADI</h2>
+        <nav className="navbar-main">
+            {/* OJO: Aquí se rompió la anidación del JSX en el código original, el nav debe tener 2 divs dentro.
+                Yo solo reemplazo estilos. El div original del logo estaba antes. */}
+            <div onClick={() => navigate('/')} className="navbar-logo-container">
+                <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
+                <h2 className="navbar-logo-title">BioMon ADI</h2>
             </div>
             
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+            <div className="navbar-links-container">
+                <button onClick={() => navigate('/')} className="navbar-btn-link">
                     Inicio
                 </button>
-                <button onClick={() => navigate('/mapa')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+                <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
                     Mapa
                 </button>
-                <button onClick={() => navigate('/historia')} style={{ background: 'transparent', border: 'none', color: 'var(--color-caracola)', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem', fontFamily: 'var(--fuente-principal)' }}>
+                <button onClick={() => navigate('/historia')} className="navbar-btn-link">
                     Historia
                 </button>
                 <button 
                     onClick={() => navigate('/login')} 
-                    style={{ 
-                        background: 'var(--color-coral)', 
-                        border: 'none', 
-                        color: 'white', 
-                        padding: '0.5rem 1.2rem', 
-                        borderRadius: '30px', 
-                        fontWeight: 'bold', 
-                        cursor: 'pointer',
-                        fontFamily: 'var(--fuente-principal)'
-                    }}
+                    className="navbar-btn-acceder"
                 >
                     Acceder
                 </button>

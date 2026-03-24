@@ -17,7 +17,7 @@ function MainLayout() {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-main-layout-container">
       {isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />)}
       
       <div className="main-content-layout">

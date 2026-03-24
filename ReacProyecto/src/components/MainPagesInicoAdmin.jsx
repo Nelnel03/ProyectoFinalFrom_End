@@ -918,11 +918,11 @@ function MainPagesInicoAdmin() {
   return (
     <div className="dashboard-premium">
       <header className="premium-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+        <div className="premium-header-flex">
           <div>
-            <h2 style={{ textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.9rem', marginBottom: '0.8rem', opacity: 0.8 }}>BioMon ADI</h2>
+            <h2 className="premium-header-subtitle">BioMon ADI</h2>
             <h1>🌳 Panel de Control</h1>
-            <p style={{ opacity: 0.9, fontSize: '1.2rem', marginTop: '1rem' }}>
+            <p className="premium-header-welcome">
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
@@ -932,22 +932,15 @@ function MainPagesInicoAdmin() {
         </div>
       </header>
 
-      <main className="glass-card" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <main className="glass-card glass-card-container">
         {mensaje.texto && (
-          <div className={`admin-msg ${mensaje.tipo}`} style={{ 
-            padding: '1rem', 
-            borderRadius: '12px', 
-            marginBottom: '2rem',
-            background: mensaje.tipo === 'success' ? 'rgba(52, 211, 153, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-            color: mensaje.tipo === 'success' ? '#065f46' : '#991b1b',
-            fontWeight: '700'
-          }}>
+          <div className={`admin-msg ${mensaje.tipo}`}>
             {mensaje.texto}
           </div>
         )}
 
         {/* Tabs de navegación Premium */}
-        <div className="premium-tabs" style={{ marginBottom: '3.5rem', overflowX: 'auto', padding: '10px' }}>
+        <div className="premium-tabs premium-tabs-container">
           {[
             { id: 'resumen', label: '📊 Resumen', reset: resetForm },
             { id: 'lista', label: `📋 Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },

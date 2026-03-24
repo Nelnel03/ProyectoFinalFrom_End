@@ -109,12 +109,12 @@ function MainPagesInicoVisitante() {
   return (
     <div className="visitante-container">
       <header className="visitante-header">
-        <img src="/src/assets/logo.png" alt="Logo" style={{ width: '120px', height: '120px', marginBottom: '1rem', borderRadius: '50%', boxShadow: '0 8px 16px rgba(0,0,0,0.2)' }} />
+        <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
         <h1>BIOMON ADI</h1>
         <p>Monitoreo de árboles, especies y estado de vida</p>
       </header>
 
-      <main className="visitante-content" style={{ maxWidth: '1100px' }}>
+      <main className="visitante-content">
         <section className="visitante-intro">
           <h2>Bienvenido al Sistema</h2>
           <p>
@@ -126,7 +126,7 @@ function MainPagesInicoVisitante() {
 
         {/* Tarjetas de árboles visibles para visitantes */}
         {cargando ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
+          <div className="visitante-loading-state">
             Cargando especies forestales...
           </div>
         ) : (
@@ -136,16 +136,11 @@ function MainPagesInicoVisitante() {
         {sessionStorage.getItem('isAuthenticated') !== 'true' && (
           <>
             {/* Separador */}
-            <div style={{
-              borderTop: '1px solid rgba(46, 107, 70, 0.15)',
-              margin: '2.5rem 0',
-            }} />
+            <div className="visitante-separator-line" />
 
             {/* Formulario de registro */}
-            <div className="user-register-form-wrapper"
-              style={{ margin: '0 auto', boxShadow: 'none', border: '1px solid #eee' }}
-            >
-              <h3 style={{ textAlign: 'center', color: '#0b532d', marginBottom: '1.5rem' }}>
+            <div className="user-register-form-wrapper visitante-register-wrapper">
+              <h3 className="visitante-register-title">
                  🔐 Crea tu cuenta
               </h3>
 

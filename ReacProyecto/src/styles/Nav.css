@@ -113,3 +113,34 @@ body {
     padding: 0 1rem;
   }
 }
+
+/* --- ESTILOS EXTRAIDOS DE COMPONENTES ONLINE --- */
+.visitor-logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.visitor-logo-text {
+  font-family: var(--fuente-acento);
+  text-transform: uppercase;
+}
+
+.visitor-auth-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.visitor-btn-panel {
+  background-color: var(--color-mar-profundo) !important;
+}
+
+.visitor-btn-logout {
+  background-color: #ef4444 !important;
+  border: none;
+  cursor: pointer;
+}
+
+.visitor-btn-logout:hover {
+  background-color: #dc2626 !important;
+}
