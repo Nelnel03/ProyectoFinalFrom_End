@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function UsuariosTab({
   modoEdicionUsuario,
@@ -14,8 +15,8 @@ function UsuariosTab({
   return (
     <div>
       <div className="admin-section-header">
-        <h2 style={{ color: '#ffffff' }}>👥 Gestión de Usuarios</h2>
-        <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar accesos y cuentas del sistema</p>
+        <h2 className="admin-section-title-white">👥 Gestión de Usuarios</h2>
+        <p className="admin-section-subtitle-green">Administrar accesos y cuentas del sistema</p>
       </div>
 
       <div id="user-form-container" className="admin-form-card admin-user-form-container">
@@ -25,7 +26,7 @@ function UsuariosTab({
         </h3>
         
         <form onSubmit={handleUserSubmit} className="admin-user-form">
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Nombre Completo</label>
             <input
               type="text"
@@ -37,7 +38,7 @@ function UsuariosTab({
             />
           </div>
           
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Correo Electrónico</label>
             <input
               type="email"
@@ -49,7 +50,7 @@ function UsuariosTab({
             />
           </div>
           
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Contraseña</label>
             <input
               type="password"
@@ -62,7 +63,7 @@ function UsuariosTab({
             />
           </div>
           
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Rol de Acceso</label>
             <select
               value={formUsuario.rol}

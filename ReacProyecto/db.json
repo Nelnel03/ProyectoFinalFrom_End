@@ -9,7 +9,7 @@
       "altura": "25-35 metros",
       "crecimiento": "1.5 a 2 metros por año",
       "clima": "tropical",
-      "descripcion": "qwertyuiop´ñlkjhgfdsazxcvbnm,",
+      "descripcion": "qwertyuiopñlkjhgfdsazxcvbnm,",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
       "estado": "vivo",
@@ -41,10 +41,10 @@
       "descripcion": "asdfghjklñ{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
-      "estado": "muerto",
+      "estado": "vivo",
       "fechaRegistro": "2026-03-17",
       "id": "2440",
-      "fechaMuerto": "2026-03-23",
+      "fechaMuerto": null,
       "historialAbono": [
         {
           "abono": "Abono ",
@@ -62,6 +62,12 @@
           "fecha": "2026-03-19",
           "hora": "15:42",
           "idAbono": "1ee4"
+        },
+        {
+          "idAbono": "1ee4",
+          "nombreAbono": "abono organico",
+          "fecha": "2026-03-25",
+          "hora": "06:05 p. m."
         }
       ]
     },
@@ -151,18 +157,34 @@
       "rol": "user"
     },
     {
+      "id": "admin_m",
+      "nombre": "Administrador Maestro",
+      "email": "master@gmail.com",
+      "password": "admin1234",
+      "rol": "admin"
+    },
+    {
+      "id": "vol_p",
+      "nombre": "Voluntario de Prueba",
+      "email": "voluntario@gmail.com",
+      "password": "12345678",
+      "rol": "voluntario",
+      "area": "Reforestación",
+      "telefono": "8888-8888",
+      "fechaIngreso": "2026-03-20"
+    },
+    {
       "id": "d374",
       "nombre": "Andrés leal",
       "email": "alealvfwd@gmail.com",
-      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
-      "rol": "user",
-      "resetToken": "njig41nqox26omjx0zhsf",
-      "resetTokenExpiry": "2026-03-20T21:23:46.044Z"
+      "password": "12345678",
+      "rol": "user"
     },
     {
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
+
       "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
       "rol": "voluntario",
       "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
@@ -195,13 +217,13 @@
       "email": "bvega@fwdcostarica.com",
       "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
       "rol": "user",
-<<<<<<< HEAD
+
       "habilidades": null,
       "disponibilidad": null,
       "necesidades": "casita",
       "fechaRegistro": "2026-03-23T20:22:59.414Z",
       "id": "nwJvLLCaUgg"
-=======
+
       "resetToken": "o5phuesjo69r3drsixzy7i",
       "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
     },
@@ -211,7 +233,10 @@
       "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
->>>>>>> 6a0078bf41681d5cc3a84d1b0f1d7deb1932fc6d
+
+      "password": "12345678",
+      "rol": "user"
+
     }
   ],
   "stats_tipos": [
@@ -219,7 +244,7 @@
       "id": "11f2",
       "tipo": "guanacaste",
       "planificados": 0,
-      "muertos": 1
+      "muertos": 0
     }
   ],
   "abonos": [
@@ -238,63 +263,36 @@
     {
       "id": "1ee4",
       "nombre": "abono organico",
-      "stock": 199,
+      "stock": 198,
       "unidad": "500g",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
   "reportes": [
     {
-      "asunto": "un arbol se seco",
-      "mensaje": "se seco un  arbol por que ustedes gonoreas no les echaron agua",
-      "userId": "bdce",
-      "userName": "leal",
-      "userEmail": "leal@gmail.com",
-      "fecha": "2026-03-23T16:57:40.973Z",
-      "estado": "Pendiente",
-      "id": "7hIBJShQtmw"
-    }
-  ],
-  "reportes_robados": [
-    {
-      "tipo_arbol": "sdfghj",
-      "ubicacion": "asdfghj",
-      "descripcion": "qwertyuiop´ñlkjhgfdszxcvbnm",
-      "userId": "admin1",
-      "userName": "Administrador",
-      "userEmail": "admin@gmail.com",
-      "fecha": "2026-03-23T17:47:15.326Z",
-      "estado": "En Investigacion",
-      "id": "veapaE1Cfk8"
-    }
-  ],
-  "reportes_voluntariado": [
-    {
-      "voluntarioId": "a8d3",
-      "voluntarioNombre": "Sol",
-      "tipoTarea": "Mantenimiento",
-      "horaInicio": "11:22:15",
-      "horaFin": "11:22:29",
-      "horas": 0,
-      "tareas": "quiero buena paga y a tiempo por mi arduo trabajo en la comunidad.",
-      "fecha": "2026-03-23",
-      "timestamp": "2026-03-23T17:22:58.141Z",
-      "estado": "enviado",
-      "id": "pZqmx-H4MHc"
+      "id": "6bb7",
+      "nombre": "Charlie",
+      "puesto": "Sembrado y Mantenimiento",
+      "email": "carlos.v@gmail.com",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-17",
+      "area": "Mantenimiento"
     },
     {
-      "voluntarioId": "a8d3",
-      "voluntarioNombre": "Sol",
-      "tipoTarea": "Mantenimiento",
-      "horaInicio": "11:35:17",
-      "horaFin": "11:35:48",
-      "horas": 0.01,
-      "tareas": "qwertyuiopñlkjhgfdsazxcvbnm",
-      "pruebas": "shdhefi",
-      "fecha": "2026-03-23",
-      "timestamp": "2026-03-23T17:36:10.242Z",
-      "estado": "enviado",
-      "id": "QPLSvaIo4zc"
+      "id": "10e5",
+      "nombre": "usuario",
+      "email": "Usuario@gmail.com",
+      "area": "       ",
+      "telefono": "87657687566",
+      "fechaIngreso": "2026-03-19"
+    },
+    {
+      "id": "vol_p",
+      "nombre": "Voluntario de Prueba",
+      "email": "voluntario@gmail.com",
+      "area": "Reforestación",
+      "telefono": "8888-8888",
+      "fechaIngreso": "2026-03-20"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

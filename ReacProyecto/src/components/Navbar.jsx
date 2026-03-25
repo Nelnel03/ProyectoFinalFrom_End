@@ -1,57 +1,72 @@
-import React from 'react';
-import { Leaf } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import '../styles/Navbar.css';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
+    const userJson = sessionStorage.getItem('user');
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    useEffect(() => {
+        setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
+    }, [location]);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('isAuthenticated');
+        sessionStorage.removeItem('user');
+        setAuth(false);
+        navigate('/');
+    };
 
     return (
-        <nav style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            padding: '1rem 2rem',
-            background: 'rgba(52, 78, 65, 0.95)', // Estilo coherente con BioMon ADI
-            backdropFilter: 'blur(10px)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 1010,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ background: '#A3B18A', padding: '0.4rem', borderRadius: '50%', display: 'flex' }}>
-                    <Leaf size={24} color="#344E41" />
-                </div>
-                <h2 style={{ margin: 0, fontWeight: 'bold', color: '#DAD7CD', fontSize: '1.2rem' }}>BioMon ADI</h2>
+        <nav className="navbar-main">
+            <div onClick={() => navigate('/')} className="navbar-logo-container">
+                <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
+                <h2 className="navbar-logo-title">BioMon ADI</h2>
             </div>
             
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: '#DAD7CD', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem' }}>
-                    Inicio
-                </button>
-                <button onClick={() => navigate('/mapa')} style={{ background: 'transparent', border: 'none', color: '#DAD7CD', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem' }}>
+            <div className="navbar-links-container">
+                {!location.pathname.startsWith('/admin') && (
+                    <button onClick={() => navigate('/')} className="navbar-btn-link">
+                        Inicio
+                    </button>
+                )}
+
+                <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
                     Mapa
                 </button>
-                <button onClick={() => navigate('/historia')} style={{ background: 'transparent', border: 'none', color: '#DAD7CD', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem' }}>
-                    Historia
-                </button>
-                <button 
-                    onClick={() => navigate('/login')} 
-                    style={{ 
-                        background: '#A3B18A', 
-                        border: 'none', 
-                        color: '#1a1a1a', 
-                        padding: '0.5rem 1.2rem', 
-                        borderRadius: '30px', 
-                        fontWeight: 'bold', 
-                        cursor: 'pointer' 
-                    }}
-                >
-                    Acceder
-                </button>
+                {!location.pathname.startsWith('/admin') && (
+                    <button onClick={() => navigate('/historia')} className="navbar-btn-link">
+                        Historia
+                    </button>
+                )}
+
+
+                {!auth ? (
+                    <button 
+                        onClick={() => navigate('/login')} 
+                        className="navbar-btn-acceder"
+                    >
+                        Acceder
+                    </button>
+                ) : (
+                    <div className="navbar-auth-actions">
+
+                        <button 
+                            onClick={handleLogout} 
+                            className="navbar-btn-logout"
+                        >
+                            🚪 Salir
+                        </button>
+                    </div>
+                )}
+
             </div>
         </nav>
     );
 };
 
 export default Navbar;
+

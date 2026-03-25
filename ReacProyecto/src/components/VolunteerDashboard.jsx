@@ -29,7 +29,7 @@ function VolunteerDashboard() {
 
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
+    const userData = sessionStorage.getItem('user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
       if (parsedUser.rol !== 'voluntario') {

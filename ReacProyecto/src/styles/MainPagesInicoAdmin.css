@@ -1,23 +1,24 @@
 /* ESTILOS PARA EL PANEL DE ADMINISTRACIÓN (MainPagesInicoAdmin.jsx) */
 
 .admin-section-header p {
-  color: #66937a;
+  color: var(--color-mar-turquesa);
 }
 
 .admin-stat-main-card.blue-border {
-  border-color: #60a5fa;
+  border-color: #4bfc5a;
 }
 
 .admin-stat-icon.blue {
   background-color: #eff6ff;
-  color: #3b82f6;
+  color: #196916;
 }
 
 .admin-type-progress-fill {
   height: 100%;
-  background-color: #10b981;
+  background-color: var(--color-mar-turquesa);
   border-radius: 4px;
   transition: width 0.3s ease;
+  width: var(--progress-width, 0%);
 }
 
 .admin-type-stat-footer {
@@ -25,11 +26,11 @@
   gap: 10px;
   font-size: 0.8rem;
   margin-bottom: 1rem;
-  color: #86bfa4;
+  color: var(--color-bosque-musgo);
 }
 
 .admin-type-stat-footer .muerto {
-  color: #fca5a5;
+  color: #ff7474;
 }
 
 .admin-section-header-flex {
@@ -62,18 +63,17 @@
 .admin-search-input {
   padding: 10px 15px;
   border-radius: 8px;
-  border: 1px solid #34d399;
+  border: 1px solid var(--color-mar-turquesa);
   background-color: rgba(255,255,255,0.1);
   color: white;
   width: 220px;
-  outline: none;
 }
 
 .admin-filter-select {
   padding: 10px 15px;
   border-radius: 8px;
-  border: 1px solid #34d399;
-  background-color: #1a402a;
+  border: 1px solid var(--color-mar-turquesa);
+  background-color: var(--color-mar-profundo);
   color: white;
   cursor: pointer;
   outline: none;
@@ -101,17 +101,18 @@
 
 .admin-tracking-header h3 {
   font-size: 1rem;
-  color: #6ee7b7;
+  color: var(--color-bosque-helecho);
   margin: 0;
 }
 
 .admin-btn-delete-type {
-  background-color: #ef4444;
+  background-color: var(--color-bosque-helecho);
   color: white;
   padding: 6px 15px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   border: none;
   cursor: pointer;
 }
@@ -124,17 +125,17 @@
 
 .admin-tracking-label-plan {
   font-size: 0.75rem;
-  color: #86bfa4;
+  color: var(--color-tierra-sombra);
 }
 
 .admin-tracking-label-dead {
   font-size: 0.75rem;
-  color: #fca5a5;
+  color: #d01d1d; /* Rojo más oscuro para contraste */
 }
 
 .admin-tracking-label-alive {
   font-size: 0.75rem;
-  color: #6ee7b7;
+  color: var(--color-bosque-musgo);
 }
 
 .admin-tracking-input {
@@ -151,7 +152,7 @@
 
 .admin-loading-msg {
   text-align: center;
-  color: #86bfa4;
+  color: var(--color-ocre-silvestre);
   padding: 3rem;
 }
 
@@ -267,10 +268,11 @@
 
 .admin-user-form-title {
   margin: 0 0 1.5rem 0;
-  color: #10b981;
+  color: var(--color-mar-turquesa);
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  font-family: var(--fuente-acento);
 }
 
 .admin-user-form-title-icon {
@@ -283,12 +285,13 @@
   gap: 1.5rem;
   padding: 1.5rem;
   border-radius: 12px;
-  border: 2px solid #10b981;
+  border: 2px solid var(--color-mar-turquesa);
 }
 
 .admin-user-input-label {
   color: #ffffff;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   font-size: 1rem;
   margin-bottom: 8px;
   display: block;
@@ -328,14 +331,14 @@
 .admin-btn-user-submit {
   flex: 1;
   padding: 12px 24px;
-  background-color: #10b981;
+  background-color: var(--color-mar-turquesa);
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 800;
   font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.4);
 }
 
 .admin-btn-user-cancel {
@@ -359,9 +362,10 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(45, 106, 79, 0.1);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  background-color: white;
+  background-color: #fdfdfd;
+  border-radius: 15px;
 }
 
 .admin-user-card-header {
@@ -401,6 +405,7 @@
   font-size: 0.95rem;
   color: #000000;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   opacity: 0.8;
 }
 
@@ -411,7 +416,7 @@
   padding: 8px 12px;
   background-color: #e0f2f1;
   border-radius: 8px;
-  border: 1px solid #10b981;
+  border: 1px solid var(--color-bosque-helecho);
 }
 
 .admin-user-id-label {
@@ -448,7 +453,7 @@
 
 .admin-user-role-badge.user {
   background-color: #bae6fd;
-  color: #0284c7;
+  color: #3ac702;
   border: 1px solid #7dd3fc;
 }
 
@@ -475,7 +480,8 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
-  color: #374151;
+  background-color: var(--color-bosque-musgo);
+  color: #385137;
   font-size: 0.85rem;
 }
 
@@ -487,6 +493,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   color: #b91c1c;
   font-size: 0.85rem;
 }
@@ -500,7 +507,7 @@
   flex: 1 1 100%;
   padding: 10px;
   background-color: #ecfdf5;
-  border: 1px solid #10b981;
+  border: 1px solid #10b935;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 800;
@@ -516,8 +523,9 @@
 .admin-vol-area {
   margin: 2px 0 0 0;
   font-size: 0.95rem;
-  color: #059669;
+  color: var(--color-bosque-helecho);
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
 }
 
 .admin-vol-contact-box {
@@ -539,7 +547,7 @@
 
 .admin-vol-date {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: #94b8a3;
   font-weight: bold;
   text-align: right;
 }
@@ -548,11 +556,11 @@
   flex: 1 1 100%;
   padding: 10px;
   background-color: #eff6ff;
-  border: 1px solid #3b82f6;
+  border: 1px solid #67f63b;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 800;
-  color: #1d4ed8;
+  color: #49d81d;
   font-size: 0.85rem;
   margin-top: 4px;
 }
@@ -574,12 +582,31 @@
   cursor: pointer;
 }
 
+.admin-img-preview.error {
+  display: none !important;
+}
+
 .admin-img-preview-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   height: 100%;
+}
+
+/* Si la imagen tiene error, mostramos el placeholder hermano */
+.admin-img-preview.error + .admin-img-preview-placeholder {
+  display: flex !important;
+}
+
+/* Si hay una imagen sin error antes, ocultamos el placeholder */
+.admin-img-preview:not(.error) + .admin-img-preview-placeholder {
+  display: none;
+}
+
+.admin-select-option-bold {
+  font-weight: bold;
+  color: #2e6b46;
 }
 
 /* --- SECCIÓN ABONOS --- */
@@ -593,11 +620,11 @@
   background: #1a402a;
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid #34d399;
+  border: 1px solid var(--color-bosque-helecho);
 }
 
 .admin-abono-form-card h3 {
-  color: #6ee7b7;
+  color: var(--color-bosque-helecho);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -615,13 +642,14 @@
 }
 
 .admin-btn-save-abono {
-  background-color: #10b981;
+  background-color: var(--color-bosque-musgo);
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
 }
 
 .admin-btn-cancel-abono {
@@ -640,10 +668,11 @@
 }
 
 .admin-abono-stat-card {
-  background: white;
+  background: #fdfdfd;
   border-radius: 12px;
   padding: 1.2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(45, 106, 79, 0.1);
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -668,10 +697,20 @@
   border: 1px solid #d1fae5;
 }
 
-.admin-abono-img-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.admin-abono-img-preview.error {
+  display: none !important;
+}
+
+.admin-abono-img-preview.error + span {
+  display: block !important;
+}
+
+.admin-abono-img-preview:not(.error) + span {
+  display: none !important;
+}
+
+.admin-form-group-full {
+  grid-column: span 2;
 }
 
 .admin-abono-info h4 {
@@ -687,7 +726,7 @@
 .stock-number {
   font-size: 1.4rem;
   font-weight: 900;
-  color: #059669;
+  color: var(--color-bosque-helecho);
   margin-right: 5px;
 }
 
@@ -711,6 +750,7 @@
   padding: 8px;
   border-radius: 6px;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   color: #475569;
   cursor: pointer;
   font-size: 0.8rem;
@@ -728,7 +768,7 @@
 /* Botón Abonar en lista de árboles */
 .admin-btn-abonar {
   background-color: #ecfdf5;
-  color: #059669;
+  color: var(--color-bosque-helecho);
   border: 1px solid #10b981;
   padding: 8px 12px;
   border-radius: 6px;
@@ -764,6 +804,7 @@
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 700;
+  background-color: var(--color-bosque-musgo);
   border: 1px solid #bbf7d0;
 }
 
@@ -804,4 +845,45 @@
 
 .admin-input-full {
   width: 100%;
+}
+
+.admin-arboles-lista-vertical {
+  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-flex-row-gap {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-btn-small {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.admin-section-title-white {
+  color: #ffffff;
+}
+
+.admin-section-subtitle-green {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.admin-form-group-no-margin {
+  margin: 0 !important;
+}
+
+.admin-no-results {
+  text-align: center;
+  color: #4d7a63;
+  padding: 3rem;
+  font-size: 1rem;
+}
+
+.admin-opacity-muted {
+  opacity: 0.8;
 }

@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -6,6 +7,7 @@ import AdminReports from './AdminReports';
 import AdminReportesRobo from './AdminReportesRobo';
 import '../styles/Arboles.css';
 import '../styles/MainPagesInicoAdmin.css';
+import '../styles/PremiumDashboard.css';
 import ResumenTab from './admin/ResumenTab';
 import ListaTab from './admin/ListaTab';
 import BajasTab from './admin/BajasTab';
@@ -13,7 +15,6 @@ import UsuariosTab from './admin/UsuariosTab';
 import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
-import ReportesTab from './admin/ReportesTab';
 
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
@@ -42,9 +43,8 @@ const USER_FORM_INICIAL = {
 
 const VOLUNTARIADO_FORM_INICIAL = {
   nombre: '',
-  area: '',
+  area: '', // Antes puesto
   email: '',
-  password: '', // Nuevo: contraseña obligatoria
   telefono: '',
   fechaIngreso: new Date().toISOString().split('T')[0]
 };
@@ -62,10 +62,9 @@ function MainPagesInicoAdmin() {
   const [form, setForm] = useState(FORM_INICIAL);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [idEditando, setIdEditando] = useState(null);
-
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [tab, setTab] = useState('resumen'); // 'lista' | 'agregar' | 'seguimiento' | 'resumen' | 'bajas' | 'usuarios'
   const [tipoFiltro, setTipoFiltro] = useState('mimbro');
-
   const [modoNuevoTipo, setModoNuevoTipo] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [statsTipos, setStatsTipos] = useState([]);
@@ -74,6 +73,7 @@ function MainPagesInicoAdmin() {
   const [modoEdicionUsuario, setModoEdicionUsuario] = useState(false);
   const [idEditandoUsuario, setIdEditandoUsuario] = useState(null);
 
+  const [voluntariados, setVoluntariados] = useState([]);
   const [formVoluntariado, setFormVoluntariado] = useState(VOLUNTARIADO_FORM_INICIAL);
   const [modoEdicionVoluntariado, setModoEdicionVoluntariado] = useState(false);
   const [idEditandoVoluntariado, setIdEditandoVoluntariado] = useState(null);
@@ -82,9 +82,6 @@ function MainPagesInicoAdmin() {
   const [formAbono, setFormAbono] = useState(ABONO_FORM_INICIAL);
   const [modoEdicionAbono, setModoEdicionAbono] = useState(false);
   const [idEditandoAbono, setIdEditandoAbono] = useState(null);
-
-  const [reportesVolCount, setReportesVolCount] = useState(0);
-  const [reportesCount, setReportesCount] = useState(0);
 
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
   const [busqueda, setBusqueda] = useState(''); // Nuevo estado para búsqueda por texto
@@ -104,23 +101,18 @@ function MainPagesInicoAdmin() {
   const cargarArboles = useCallback(async () => {
     setCargando(true);
     try {
-      const [datosArboles, datosStats, datosUsuarios, datosAbonos] = await Promise.all([
+      const [datosArboles, datosStats, datosUsuarios, datosAbonos, datosVoluntariados] = await Promise.all([
         services.getArboles(),
         services.getStatsTipos(),
         services.getUsuarios(),
-        services.getAbonos()
+        services.getAbonos(),
+        services.getVoluntariados()
       ]);
       setArboles(datosArboles || []);
       setStatsTipos(datosStats || []);
       setUsuarios(datosUsuarios || []);
       setAbonos(datosAbonos || []);
-      
-      const [reportesVol, reportesGen] = await Promise.all([
-        services.getReportesVoluntariado(),
-        services.getReportes()
-      ]);
-      setReportesVolCount(reportesVol.length);
-      setReportesCount(reportesGen.length);
+      setVoluntariados(datosVoluntariados || []);
     } catch (err) {
       console.error(err);
       mostrarMensaje('Error al cargar la información.', 'error');
@@ -130,8 +122,8 @@ function MainPagesInicoAdmin() {
   }, [mostrarMensaje]);
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    const userData = localStorage.getItem('user');
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    const userData = sessionStorage.getItem('user');
 
     if (!isAuthenticated || !userData) {
       navigate('/login');
@@ -146,15 +138,155 @@ function MainPagesInicoAdmin() {
 
     setAdminName(user.nombre);
     cargarArboles();
-
   }, [navigate, cargarArboles]);
 
-  // Efecto para asegurar que tipoFiltro tenga un valor si estamos en la pestaña de seguimiento
-  useEffect(() => {
-    if (tab === 'seguimiento' && !tipoFiltro && tiposDisponibles.length > 0) {
-      setTipoFiltro(tiposDisponibles[0]);
+  const handleAbonoSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (modoEdicionAbono) {
+        await services.putAbonos(formAbono, idEditandoAbono);
+        Swal.fire('Actualizado', 'Insumo actualizado correctamente', 'success');
+      } else {
+        await services.postAbonos(formAbono);
+        Swal.fire('Registrado', 'Nuevo abono agregado al sistema', 'success');
+      }
+      resetFormAbono();
+      await cargarArboles();
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo guardar el abono', 'error');
     }
-  }, [tab, tiposDisponibles, tipoFiltro]);
+  };
+
+  const handleEditarAbono = (abono) => {
+    setFormAbono(abono);
+    setModoEdicionAbono(true);
+    setIdEditandoAbono(abono.id);
+  };
+
+  const handleEliminarAbono = async (id, nombre) => {
+    const confirm = await Swal.fire({
+      title: '¿Eliminar producto?',
+      text: `¿Estás seguro de quitar "${nombre}" del inventario?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonColor: '#d33'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.deleteAbonos(id);
+        Swal.fire('Eliminado', 'Producto removido', 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar', 'error');
+      }
+    }
+  };
+
+  const resetFormAbono = () => {
+    setFormAbono(ABONO_FORM_INICIAL);
+    setModoEdicionAbono(false);
+    setIdEditandoAbono(null);
+  };
+
+  const handleAbonarArbol = async (arbol) => {
+    if (abonos.length === 0) {
+      Swal.fire('Atención', 'No hay abonos registrados en el inventario. Agrega uno primero.', 'warning');
+      setTab('abonos');
+      return;
+    }
+
+    const { value: abonoId } = await Swal.fire({
+      title: `Abonar "${arbol.nombre}"`,
+      text: 'Selecciona el producto a aplicar:',
+      input: 'select',
+      inputOptions: abonos.reduce((acc, ab) => {
+        acc[ab.id] = `${ab.nombre} (${ab.stock} ${ab.unidad})`;
+        return acc;
+      }, {}),
+      inputPlaceholder: 'Selecciona un abono...',
+      showCancelButton: true,
+      confirmButtonText: 'Aplicar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (abonoId) {
+      const abonoSelected = abonos.find(a => a.id === abonoId);
+      if (!abonoSelected || parseInt(abonoSelected.stock) <= 0) {
+        Swal.fire('Error', 'No hay suficiente stock de este producto.', 'error');
+        return;
+      }
+
+      try {
+        // Actualizar stock del abono
+        const newStock = parseInt(abonoSelected.stock) - 1;
+        await services.putAbonos({ ...abonoSelected, stock: newStock }, abonoId);
+
+        // Actualizar historial del árbol
+        const nuevoHistorial = [...(arbol.historialAbono || [])];
+        nuevoHistorial.push({
+          idAbono: abonoId,
+          nombreAbono: abonoSelected.nombre,
+          fecha: new Date().toISOString().split('T')[0],
+          hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+
+        await services.putArboles({ ...arbol, historialAbono: nuevoHistorial }, arbol.id);
+        
+        Swal.fire('Éxito', `Has aplicado ${abonoSelected.nombre} a ${arbol.nombre}.`, 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo completar la operación.', 'error');
+      }
+    }
+  };
+
+  const handleLimpiarHistorialAbono = async (arbol) => {
+    const confirm = await Swal.fire({
+      title: '¿Limpiar historial?',
+      text: `Se borrará el registro de abonos para "${arbol.nombre}".`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, limpiar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await services.putArboles({ ...arbol, historialAbono: [] }, arbol.id);
+        Swal.fire('Limpio', 'Historial reiniciado.', 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo limpiar el historial.', 'error');
+      }
+    }
+  };
+
+  const handleUpdateStatTipo = async (tipo, field, value) => {
+    try {
+      const tipoLower = tipo.toLowerCase();
+      const existingStat = statsTipos.find(s => s.tipo.toLowerCase() === tipoLower);
+      
+      if (existingStat) {
+        const updatedStat = { ...existingStat, [field]: parseInt(value) || 0 };
+        await services.putStatsTipos(updatedStat, existingStat.id);
+      } else {
+        const newStat = {
+          tipo: tipoLower,
+          planificados: field === 'planificados' ? parseInt(value) || 0 : 0,
+          muertos: field === 'muertos' ? parseInt(value) || 0 : 0
+        };
+        await services.postStatsTipos(newStat);
+      }
+      // Recargar para sincronizar
+      const nuevosStats = await services.getStatsTipos();
+      setStatsTipos(nuevosStats);
+    } catch (e) {
+      console.error(e);
+      mostrarMensaje('Error al actualizar estadísticas del tipo.', 'error');
+    }
+  };
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
@@ -164,39 +296,32 @@ function MainPagesInicoAdmin() {
     const trimmedEmail = formUsuario.email.trim();
     const trimmedPassword = formUsuario.password.trim();
 
-    // Validaciones básicas
     if (!trimmedNombre) {
       Swal.fire('Error', 'El nombre del usuario es obligatorio', 'error');
       return;
     }
-
     if (trimmedNombre.length < 4) {
       Swal.fire('Error', 'El nombre del usuario debe tener al menos 4 letras', 'error');
       return;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmedEmail)) {
       Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
       return;
     }
-
     if (!modoEdicionUsuario && trimmedPassword.length < 6) {
       Swal.fire('Error', 'La contraseña debe tener al menos 6 caracteres', 'error');
       return;
     }
-
     if (trimmedPassword.length > 15) {
       Swal.fire('Error', 'La contraseña no puede exceder los 15 caracteres', 'error');
       return;
     }
 
-    // Verificar si el email ya existe en la lista local (excluyendo el actual si es edición)
     const emailDuplicado = usuarios.find(u => 
       u.email.toLowerCase() === trimmedEmail.toLowerCase() && 
       (!modoEdicionUsuario || u.id !== idEditandoUsuario)
     );
-
     if (emailDuplicado) {
       Swal.fire('Atención', 'Este correo electrónico ya está registrado por otro usuario', 'warning');
 
@@ -220,7 +345,7 @@ function MainPagesInicoAdmin() {
         ...formUsuario,
         nombre: trimmedNombre,
         email: trimmedEmail,
-        password: trimmedPassword || formUsuario.password // Mantener si vacía en edición
+        password: trimmedPassword || formUsuario.password
       };
 
       if (modoEdicionUsuario) {
@@ -233,8 +358,6 @@ function MainPagesInicoAdmin() {
       resetFormUsuario();
       await cargarArboles();
     } catch (err) {
-      Swal.fire('Error', 'No se pudo procesar el usuario', 'error');
-      console.error(err);
       mostrarMensaje('Error al procesar el usuario', 'error');
     }
   };
@@ -243,7 +366,6 @@ function MainPagesInicoAdmin() {
     setFormUsuario(user);
     setModoEdicionUsuario(true);
     setIdEditandoUsuario(user.id);
-    // Scroll al formulario para mejor visibilidad
     setTimeout(() => {
       document.getElementById('user-form-container')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -278,69 +400,32 @@ function MainPagesInicoAdmin() {
     setIdEditandoUsuario(null);
   };
 
-  // ── Handlers de Voluntariados ──────────────────────────────────────────────
   const handleVoluntariadoSubmit = async (e) => {
     e.preventDefault();
-
     const trimmedNombre = formVoluntariado.nombre.trim();
     const trimmedArea = formVoluntariado.area.trim();
     const trimmedEmail = formVoluntariado.email.trim();
     const trimmedTelefono = formVoluntariado.telefono.trim();
 
-    // Validaciones
-    if (!trimmedNombre) {
-      Swal.fire('Error', 'El nombre del voluntario es obligatorio', 'error');
+    if (!trimmedNombre || trimmedNombre.length < 4 || !trimmedArea) {
+      Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
       return;
     }
 
-    if (trimmedNombre.length < 4) {
-      Swal.fire('Error', 'El nombre del voluntario debe tener al menos 4 letras', 'error');
-      return;
-    }
-
-    if (!trimmedArea) {
-      Swal.fire('Error', 'El área/cargo es obligatoria', 'error');
-      return;
-    }
-
-    const password = formVoluntariado.password?.trim() || '';
-    if (!modoEdicionVoluntariado && (!password || password.length < 6)) {
-      Swal.fire('Error', 'La contraseña es obligatoria y debe tener al menos 6 caracteres', 'error');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedEmail)) {
-      Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
-      return;
-    }
-
-    const phoneRegex = /^\d{8}$/;
-    if (!phoneRegex.test(trimmedTelefono)) {
-      Swal.fire('Error', 'El teléfono debe contener estrictamente 8 números', 'error');
-      return;
-    }
-
-    // Verificar duplicados en la tabla de usuarios
     const emailDuplicado = usuarios.find(u => 
       u.email.toLowerCase() === trimmedEmail.toLowerCase() && 
       (!modoEdicionVoluntariado || u.id !== idEditandoVoluntariado)
     );
-
     if (emailDuplicado) {
-      Swal.fire('Atención', 'Este correo ya está registrado en el sistema (como usuario o voluntario)', 'warning');
+      Swal.fire('Atención', 'Este correo ya está registrado.', 'warning');
       return;
     }
 
-    const action = modoEdicionVoluntariado ? 'actualizar' : 'registrar';
-    
     const confirm = await Swal.fire({
-      title: `¿Confirmar ${action}?`,
-      text: `¿Deseas ${action} la ficha del voluntario "${trimmedNombre}"?`,
+      title: '¿Confirmar registro?',
+      text: `¿Deseas guardar la ficha del voluntario "${trimmedNombre}"?`,
       icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, confirmar',
-      cancelButtonText: 'Cancelar'
+      showCancelButton: true
     });
 
     if (!confirm.isConfirmed) return;
@@ -352,31 +437,20 @@ function MainPagesInicoAdmin() {
         area: trimmedArea,
         email: trimmedEmail,
         telefono: trimmedTelefono,
-        rol: 'voluntario',
-        password: password || undefined // Si estamos editando y está vacío, no se envía
+        rol: 'voluntario'
       };
-
-      // Si no hay password en el form (durante edición), mantenemos el que tiene
-      if (modoEdicionVoluntariado && !password) {
-        delete voluntariadoFinal.password;
-      }
 
       if (modoEdicionVoluntariado) {
         await services.putVoluntariados(voluntariadoFinal, idEditandoVoluntariado);
-        Swal.fire('Éxito', 'Ficha del voluntario actualizada', 'success');
+        Swal.fire('Éxito', 'Voluntario actualizado', 'success');
       } else {
-        // Al crear uno nuevo, ya incluimos el password del formulario
-        const nuevoVoluntario = {
+        const nuevoVoluntarioUser = {
           ...voluntariadoFinal,
-          password: password,
-          debeCambiarPassword: false 
+          password: 'Voluntario123',
+          debeCambiarPassword: true
         };
-        await services.postVoluntariados(nuevoVoluntario);
-        Swal.fire({
-          title: 'Registrado',
-          text: `Voluntario "${trimmedNombre}" creado con éxito. Ya puede iniciar sesión con su correo y contraseña.`,
-          icon: 'success'
-        });
+        await services.postVoluntariados(nuevoVoluntarioUser);
+        Swal.fire('Registrado', 'Voluntario creado. Password: Voluntario123', 'success');
       }
       resetFormVoluntariado();
       await cargarArboles();
@@ -386,11 +460,9 @@ function MainPagesInicoAdmin() {
   };
 
   const handleEditarVoluntariado = (vol) => {
-    setFormVoluntariado({ ...vol, password: '' });
+    setFormVoluntariado(vol);
     setModoEdicionVoluntariado(true);
     setIdEditandoVoluntariado(vol.id);
-    setTab('voluntariados'); // Asegurar que estamos en la pestaña
-    // Scroll al formulario para mejor visibilidad
     setTimeout(() => {
       document.getElementById('voluntariado-form-container')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -398,22 +470,18 @@ function MainPagesInicoAdmin() {
 
   const handleEliminarVoluntariado = async (id, nombre) => {
     const confirm = await Swal.fire({
-      title: '¿Dar de baja voluntario?',
-      text: `¿Estás seguro de eliminar a "${nombre}" de la lista de voluntarios?`,
+      title: '¿Eliminar voluntario?',
+      text: `¿Estás seguro de quitar a "${nombre}"?`,
       icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      showCancelButton: true
     });
-
     if (confirm.isConfirmed) {
       try {
         await services.deleteVoluntariados(id);
-        Swal.fire('Eliminado', 'Voluntario eliminado correctamente', 'success');
+        Swal.fire('Eliminado', 'Voluntario eliminado', 'success');
         await cargarArboles();
       } catch (err) {
-        Swal.fire('Error', 'No se pudo eliminar al voluntario', 'error');
+        Swal.fire('Error', 'No se pudo eliminar', 'error');
       }
     }
   };
@@ -424,131 +492,64 @@ function MainPagesInicoAdmin() {
     setIdEditandoVoluntariado(null);
   };
 
-  // ── Conversiones ──────────────────────────────────────────────────────────
   const handleConvertirUsuarioAVoluntariado = async (user) => {
     const { value: formValues } = await Swal.fire({
       title: '🤝 Convertir a Voluntario',
       html:
-        `<div style="text-align: left; margin-bottom: 5px; font-weight: bold;">Cual será su área?</div>` +
-        `<input id="swal-input1" class="swal2-input" placeholder="Área de Interés / Cargo" style="margin-top: 5px;">` +
-        `<div style="text-align: left; margin-top: 15px; margin-bottom: 5px; font-weight: bold;">Teléfono de contacto:</div>` +
-        `<input id="swal-input2" class="swal2-input" placeholder="8 números" maxlength="8" oninput="this.value = this.value.replace(/\\D/g, '')" style="margin-top: 5px;">`,
-      focusConfirm: false,
+        `<input id="swal-input1" class="swal2-input" placeholder="Área de Interés">` +
+        `<input id="swal-input2" class="swal2-input" placeholder="Teléfono" maxlength="8">`,
       showCancelButton: true,
-      confirmButtonText: 'Confirmar Conversión',
-      cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const area = document.getElementById('swal-input1').value;
         const telefono = document.getElementById('swal-input2').value;
-        
         if (!area || !telefono) {
-          Swal.showValidationMessage('Por favor llena todos los campos');
+          Swal.showValidationMessage('Llena todos los campos');
           return false;
         }
-
-        const phoneRegex = /^\d{8}$/;
-        if (!phoneRegex.test(telefono)) {
-          Swal.showValidationMessage('El teléfono debe tener estrictamente 8 números');
-          return false;
-        }
-
         return { area, telefono };
       }
     });
 
     if (formValues) {
       try {
-        const usuarioActualizado = {
-          ...user,
-          rol: 'voluntario',
-          area: formValues.area,
-          telefono: formValues.telefono,
-          fechaIngreso: new Date().toISOString().split('T')[0]
-        };
-        
-        await services.putUsuarios(usuarioActualizado, user.id);
-        
-        Swal.fire({
-          title: '¡Conversión Exitosa!',
-          text: `"${user.nombre}" ahora es parte del equipo de voluntarios.`,
-          icon: 'success',
-          confirmButtonColor: '#20402a'
-        });
+        const updated = { ...user, rol: 'voluntario', ...formValues, fechaIngreso: new Date().toISOString().split('T')[0] };
+        await services.putUsuarios(updated, user.id);
+        Swal.fire('Éxito', `${user.nombre} ahora es voluntario.`, 'success');
         setTab('voluntariados');
         await cargarArboles();
-      } catch (error) {
-        Swal.fire('Error', 'No se pudo realizar la conversión.', 'error');
+      } catch (e) {
+        Swal.fire('Error', 'No se pudo convertir.', 'error');
       }
     }
   };
 
   const handleConvertirVoluntariadoAUsuario = async (vol) => {
-    // Ya no es necesario verificar duplicados de correo aquí porque estamos editando el MISMO registro
-
     const { value: password } = await Swal.fire({
       title: '👤 Convertir a Usuario',
-      text: `Ingresa una contraseña para la nueva cuenta de "${vol.nombre}":`,
       input: 'password',
-      inputPlaceholder: 'Contraseña de acceso',
+      inputPlaceholder: 'Contraseña nueva',
       showCancelButton: true,
-      confirmButtonText: 'Crear Usuario',
-      cancelButtonText: 'Cancelar',
-      inputValidator: (value) => {
-        if (!value) return 'Debes ingresar una contraseña';
-        if (value.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
-        if (value.length > 15) return 'La contraseña no puede exceder los 15 caracteres';
-      }
+      inputValidator: (v) => !v && 'Debes ingresar una contraseña'
     });
 
     if (password) {
       try {
-        const usuarioActualizado = {
-          ...vol,
-          password: password,
-          rol: 'user',
-          debeCambiarPassword: false // Ya la está definiendo el admin aquí
-        };
-        // Limpiar campos de voluntario si se desea, o dejarlos
-        delete usuarioActualizado.area;
-        delete usuarioActualizado.telefono;
-        delete usuarioActualizado.fechaIngreso;
-
-        await services.putUsuarios(usuarioActualizado, vol.id);
-        
-        Swal.fire('¡Éxito!', `"${vol.nombre}" ahora tiene acceso como usuario normal.`, 'success');
+        const updated = { ...vol, password, rol: 'user' };
+        delete updated.area;
+        delete updated.telefono;
+        delete updated.fechaIngreso;
+        await services.putUsuarios(updated, vol.id);
+        Swal.fire('Éxito', `${vol.nombre} ahora es usuario normal.`, 'success');
         setTab('usuarios');
         await cargarArboles();
-      } catch (error) {
-        Swal.fire('Error', 'No se pudo actualizar la cuenta del usuario.', 'error');
+      } catch (e) {
+        Swal.fire('Error', 'No se pudo convertir.', 'error');
       }
     }
   };
 
-  const handleUpdateStatTipo = async (tipo, field, value) => {
-    try {
-      const tipoLower = tipo.toLowerCase();
-      const existingStat = statsTipos.find(s => s.tipo.toLowerCase() === tipoLower);
-      
-      if (existingStat) {
-        const updatedStat = { ...existingStat, [field]: parseInt(value) || 0 };
-        await services.putStatsTipos(updatedStat, existingStat.id);
-      } else {
-        const newStat = {
-          tipo: tipoLower,
-          planificados: field === 'planificados' ? parseInt(value) || 0 : 0,
-          muertos: field === 'muertos' ? parseInt(value) || 0 : 0
-        };
-        await services.postStatsTipos(newStat);
-      }
-      // Recargar para sincronizar
-      const nuevosStats = await services.getStatsTipos();
-      setStatsTipos(nuevosStats);
-      mostrarMensaje(`Estadísticas de "${tipo}" actualizadas.`);
-    } catch (e) {
-      console.error(e);
-      mostrarMensaje('Error al actualizar estadísticas del tipo.', 'error');
-    }
-  };
+
+
 
 
 
@@ -697,11 +698,7 @@ function MainPagesInicoAdmin() {
       setTab('lista');
       await cargarArboles();
     } catch (err) {
-
-
-      console.error(err);
       mostrarMensaje('Error al guardar el árbol. Revise la conexión.', 'error');
-
     }
   };
 
@@ -799,569 +796,158 @@ function MainPagesInicoAdmin() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('user');
     navigate('/');
-  };
-
-  // ── Handlers de Abonos ──────────────────────────────────────────────────────
-  const handleAbonoSubmit = async (e) => {
-    e.preventDefault();
-    const trimmedNombre = formAbono.nombre.trim();
-    const trimmedUnidad = formAbono.unidad.trim();
-    const parsedStock = parseInt(formAbono.stock);
-
-    if (!trimmedNombre || isNaN(parsedStock) || !trimmedUnidad) {
-      Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
-      return;
-    }
-
-    try {
-      const abonoFinal = {
-        ...formAbono,
-        nombre: trimmedNombre,
-        unidad: trimmedUnidad,
-        stock: parsedStock
-      };
-
-      if (modoEdicionAbono) {
-        await services.putAbonos(abonoFinal, idEditandoAbono);
-        Swal.fire('Éxito', 'Inventario actualizado', 'success');
-      } else {
-        await services.postAbonos(abonoFinal);
-        Swal.fire('Éxito', 'Nuevo abono registrado', 'success');
-      }
-      resetFormAbono();
-      const nuevosAbonos = await services.getAbonos();
-      setAbonos(nuevosAbonos || []);
-    } catch (err) {
-      Swal.fire('Error', 'No se pudo procesar el abono', 'error');
-    }
-  };
-
-  const handleEditarAbono = (abono) => {
-    setFormAbono(abono);
-    setModoEdicionAbono(true);
-    setIdEditandoAbono(abono.id);
-    // Scroll al formulario
-    setTimeout(() => {
-      document.querySelector('.admin-abono-form-card')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
-  const handleEliminarAbono = async (id, nombre) => {
-    const confirm = await Swal.fire({
-      title: '¿Eliminar producto?',
-      text: `¿Estás seguro de eliminar "${nombre}" del inventario?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await services.deleteAbonos(id);
-        const nuevosAbonos = await services.getAbonos();
-        setAbonos(nuevosAbonos || []);
-        Swal.fire('Eliminado', 'Producto removido del inventario', 'success');
-      } catch (err) {
-        Swal.fire('Error', 'No se pudo eliminar el producto', 'error');
-      }
-    }
-  };
-
-  const resetFormAbono = () => {
-    setFormAbono(ABONO_FORM_INICIAL);
-    setModoEdicionAbono(false);
-    setIdEditandoAbono(null);
-  };
-
-  const handleAbonarArbol = async (arbol) => {
-    if (abonos.length === 0) {
-      Swal.fire('Inventario vacío', 'No hay abonos registrados en el sistema.', 'warning');
-      return;
-    }
-
-    const inputOptions = {};
-    abonos.forEach(a => {
-      inputOptions[a.id] = `${a.nombre} (Stock: ${a.stock} ${a.unidad})`;
-    });
-
-    const { value: abonoId } = await Swal.fire({
-      title: '🥗 Aplicar Abono',
-      input: 'select',
-      inputOptions,
-      inputPlaceholder: 'Selecciona un abono...',
-      showCancelButton: true,
-      confirmButtonText: 'Abonar ahora',
-      confirmButtonColor: '#2e6b46',
-      inputValidator: (value) => {
-        if (!value) return 'Debes seleccionar un producto';
-        const selected = abonos.find(a => a.id === value);
-        if (selected?.stock <= 0) return 'No hay stock disponible de este producto';
-      }
-    });
-
-    if (abonoId) {
-      const selected = abonos.find(a => a.id === abonoId);
-      const historial = arbol.historialAbono || [];
-      const nuevoRegistro = {
-        abono: selected.nombre,
-        fecha: new Date().toISOString().split('T')[0],
-        hora: new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' }),
-        idAbono: selected.id
-      };
-
-      try {
-        // Actualizar árbol
-        await services.putArboles({
-          ...arbol,
-          historialAbono: [...historial, nuevoRegistro]
-        }, arbol.id);
-
-        // Actualizar stock del abono
-        await services.putAbonos({
-          ...selected,
-          stock: selected.stock - 1
-        }, selected.id);
-
-        await cargarArboles();
-        const nuevosAbonos = await services.getAbonos();
-        setAbonos(nuevosAbonos || []);
-        
-        Swal.fire('¡Éxito!', `Se ha abonado "${arbol.nombre}" con "${selected.nombre}".`, 'success');
-      } catch (err) {
-        Swal.fire('Error', 'No se pudo registrar el abono.', 'error');
-      }
-    }
-  };
-
-  const handleLimpiarHistorialAbono = async (arbol) => {
-    const confirm = await Swal.fire({
-      title: '¿Limpiar historial?',
-      text: `¿Deseas borrar todos los registros de abono de "${arbol.nombre}"?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      confirmButtonText: 'Sí, borrar todo'
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await services.putArboles({
-          ...arbol,
-          historialAbono: []
-        }, arbol.id);
-        await cargarArboles();
-        Swal.fire('Limpiado', 'El historial ha sido borrado.', 'success');
-      } catch (err) {
-        Swal.fire('Error', 'No se pudo limpiar el historial.', 'error');
-      }
-    }
   };
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="admin-container">
-      {/* Header */}
-      <header className="admin-header-banner">
-        <div className="admin-banner-content">
-          <span className="admin-brand">BIOMON ADI</span>
-          <div className="admin-header-main-row">
-            <h1>🌳 PANEL DE CONTROL</h1>
-            <button className="admin-logout-btn" onClick={handleLogout}>
-              <span className="logout-dot"></span> Cerrar Sesión
+    <div className="dashboard-premium">
+      <header className="premium-header">
+        <div className="premium-header-flex">
+          <div>
+            <h2 className="premium-header-subtitle">BioMon ADI</h2>
+            <h1>🌳 Panel de Control</h1>
+            <p className="premium-header-welcome">
+              Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
+            </p>
+          </div>
+          <div className="admin-header-actions">
+            <button className="btn-logout-premium" onClick={handleLogout}>
+              🚪 Cerrar Sesión
             </button>
           </div>
-          <p className="admin-welcome-text">
-            Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
-          </p>
         </div>
       </header>
 
-      <main className="admin-main">
-        {/* Mensaje de feedback */}
+      <main className="glass-card glass-card-container">
         {mensaje.texto && (
-          <div className={`admin-msg ${mensaje.tipo}`}>{mensaje.texto}</div>
+          <div className={`admin-msg ${mensaje.tipo}`}>
+            {mensaje.texto}
+          </div>
         )}
 
-        {/* Tabs de navegación */}
-        <div className="admin-tabs-container">
-          <div className="admin-tabs-pills">
+        <div className="premium-tabs premium-tabs-container">
+          {[
+            { id: 'resumen', label: '📊 Resumen', reset: resetForm },
+            { id: 'lista', label: `📋 Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },
+            { id: 'bajas', label: `🍂 Bajas (${arboles.filter(a => a.estado === 'muerto').length})`, reset: resetForm },
+            { id: 'usuarios', label: '👥 Usuarios', reset: resetFormUsuario },
+            { id: 'voluntariados', label: '🤝 Voluntariados', reset: resetFormVoluntariado },
+            { id: 'abonos', label: `🦴 Abonos (${abonos.length})`, reset: resetFormAbono },
+            { id: 'agregar', label: modoEdicion ? '✏️ Editar' : '➕ Agregar', reset: resetForm }
+          ].map(t => (
             <button
-              className={`admin-tab-pill ${tab === 'resumen' ? 'active' : ''}`}
-              onClick={() => { setTab('resumen'); resetForm(); }}
+              key={t.id}
+              className={`premium-tab ${tab === t.id ? 'active' : ''}`}
+              onClick={() => { setTab(t.id); t.reset(); }}
             >
-              📊 Resumen
+              {t.label}
             </button>
-            <button
-              className={`admin-tab-pill ${tab === 'lista' ? 'active' : ''}`}
-              onClick={() => { setTab('lista'); resetForm(); }}
-            >
-              📋 Árboles ({arboles.filter(a => a.estado !== 'muerto').length})
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'bajas' ? 'active' : ''}`}
-              onClick={() => { setTab('bajas'); resetForm(); }}
-            >
-              🍂 Bajas ({arboles.filter(a => a.estado === 'muerto').length})
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'usuarios' ? 'active' : ''}`}
-              onClick={() => { setTab('usuarios'); resetFormUsuario(); }}
-            >
-              👥 Usuarios
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'voluntariados' ? 'active' : ''}`}
-              onClick={() => { setTab('voluntariados'); resetFormVoluntariado(); }}
-            >
-              🤝 Voluntariados
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'abonos' ? 'active' : ''}`}
-              onClick={() => { setTab('abonos'); resetFormAbono(); }}
-            >
-              🦴 Abonos ({abonos.length})
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'actividad' ? 'active' : ''}`}
-              onClick={() => { setTab('actividad'); }}
-            >
-              👷 Actividad ({reportesVolCount})
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'mensajes' ? 'active' : ''}`}
-              onClick={() => { setTab('mensajes'); }}
-            >
-              💬 Mensajes ({reportesCount})
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'robos' ? 'active' : ''}`}
-              onClick={() => { setTab('robos'); }}
-            >
-              🚨 Robos
-            </button>
-            <button
-              className={`admin-tab-pill ${tab === 'agregar' ? 'active' : ''}`}
-              onClick={() => { setTab('agregar'); resetForm(); }}
-            >
-              ➕ {modoEdicion ? 'Editar' : 'Agregar'}
-            </button>
-          </div>
+          ))}
         </div>
 
-        {/* ──── TAB: RESUMEN ──── */}
-        {tab === 'resumen' && (
-          <ResumenTab 
-            arboles={arboles} 
-            tiposDisponibles={tiposDisponibles} 
-            statsTipos={statsTipos} 
-            setTipoFiltro={setTipoFiltro} 
-            setTab={setTab} 
-          />
-        )}
-
-        {/* ──── TAB: LISTA ──── */}
-        {tab === 'lista' && (
-          <ListaTab 
-            busqueda={busqueda} 
-            setBusqueda={setBusqueda}
-            tipoFiltro={tipoFiltro}
-            setTipoFiltro={setTipoFiltro}
-            tiposDisponibles={tiposDisponibles}
-            setTab={setTab}
-            handleEliminarTipo={handleEliminarTipo}
-            statsTipos={statsTipos}
-            handleUpdateStatTipo={handleUpdateStatTipo}
-            arboles={arboles}
-            cargando={cargando}
-            handleEditar={handleEditar}
-            handleAbonarArbol={handleAbonarArbol}
-            handleEliminar={handleEliminar}
-            handleLimpiarHistorialAbono={handleLimpiarHistorialAbono}
-          />
-        )}
-
-        {/* ──── TAB: BAJAS ──── */}
-        {tab === 'bajas' && (
-          <BajasTab 
-            arboles={arboles} 
-            handleEditar={handleEditar} 
-          />
-        )}
-
-
-        {/* ──── TAB: SEGUIMIENTO ──── */}
-        {tab === 'seguimiento' && (
-          <div>
-            <div className="admin-section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap' }}>
-                <h2>Seguimiento Específico</h2>
-                <select 
-                  value={tipoFiltro} 
-                  onChange={(e) => setTipoFiltro(e.target.value)}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #c5d6cc', fontSize: '1rem', fontWeight: '500', color: '#1a402a', outline: 'none' }}
-                >
-                  {tiposDisponibles.map(tipo => (
-                    <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
-                  ))}
-                </select>
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: '5px' }}>
-                <p style={{ fontWeight: 'bold', color: '#2e6b46', margin: 0 }}>
-                  Total: {arboles.filter(a => a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)).length} árboles de tipo "{tipoFiltro}"
-                </p>
-                <button 
-                  onClick={() => handleEliminarTipo(tipoFiltro)}
-                  style={{  
-                    backgroundColor: '#10b981', /* Esmeralda vibrante */
-                    color: 'white',
-                    padding: '10px 24px',
-                    borderRadius: '50px',
-                    textDecoration: 'none',
-                    fontWeight: '700',
-                    transition: 'transform 0.2s, background-color 0.2s',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  🧨 Eliminar este Tipo y sus Árboles
-                </button>
-              </div>
-
-              {/* Nueva sección: Edición de estadísticas manuales */}
-              <div style={{ 
-                width: '100%', 
-                background: 'rgba(52, 211, 153, 0.05)', 
-                padding: '1.5rem', 
-                borderRadius: '12px',
-                border: '1px solid rgba(52, 211, 153, 0.2)',
-                marginTop: '1rem'
-              }}>
-                <h3 style={{ fontSize: '1rem', color: '#6ee7b7', marginBottom: '1rem' }}>📊 Control de Estadísticas para "{tipoFiltro}"</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                  <div className="admin-form-group">
-                    <label>🌳 Árboles Planificados</label>
-                    <input 
-                      type="number" 
-                      placeholder="Cantidad a sembrar..."
-                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
-                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'planificados', e.target.value)}
-                    />
-                  </div>
-                  <div className="admin-form-group">
-                    <label>🍂 Árboles Muertos</label>
-                    <input 
-                      type="number" 
-                      placeholder="Cantidad de pérdidas..."
-                      value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
-                      onChange={(e) => handleUpdateStatTipo(tipoFiltro, 'muertos', e.target.value)}
-                    />
-                  </div>
-                  <div className="admin-form-group" style={{ opacity: 0.7 }}>
-                    <label>✅ Sembrados Actuales</label>
-                    <input 
-                      type="text" 
-                      disabled
-                      value={arboles.filter(a => (a.tipo || 'mimbro').toLowerCase() === tipoFiltro.toLowerCase() && a.estado !== 'muerto').length}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="admin-arboles-lista" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', marginTop: '1.5rem' }}>
-              {arboles
-                .filter(a => (a.tipo === tipoFiltro || a.nombre.toLowerCase().includes(tipoFiltro)) && a.estado !== 'muerto')
-                .map((arbol, index) => (
-                <div key={arbol.id} className="admin-arbol-card" style={{ display: 'block', padding: '1.5rem' }}>
-                  <h3 style={{ margin: '0 0 15px 0', color: '#1a402a', fontSize: '1.2rem' }}>
-                    #{index + 1} - {arbol.nombre}
-                  </h3>
-                  
-                  <div style={{ marginBottom: '15px' }}>
-                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Estado Actual:</label>
-                    <select 
-                      value={arbol.estado} 
-                      onChange={async (e) => {
-                        const nuevoEstado = e.target.value;
-                        const estadoAnterior = arbol.estado;
-
-                        // Pedir confirmación si el cambio es hacia o desde "muerto"
-                        if ((nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') || 
-                            (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto')) {
-                          
-                          const result = await Swal.fire({
-                            title: '¿Confirmar cambio de estado?',
-                            text: nuevoEstado === 'muerto' 
-                              ? `¿Estás seguro de marcar "${arbol.nombre}" como MUERTO? Se registrará como pérdida en las estadísticas.`
-                              : `¿Deseas cambiar el estado de "${arbol.nombre}" a "${nuevoEstado}"?`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#2e6b46',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Sí, cambiar',
-                            cancelButtonText: 'Cancelar'
-                          });
-
-                          if (!result.isConfirmed) {
-                             e.target.value = estadoAnterior; 
-                             return;
-                          }
-                        }
-
-                        const arbolActual = { 
-                          ...arbol, 
-                          estado: nuevoEstado,
-                          fechaMuerto: nuevoEstado === 'muerto' ? new Date().toISOString().split('T')[0] : null
-                        };
-                        
-                        try {
-                          await services.putArboles(arbolActual, arbol.id);
-                          
-                          const tipoKey = arbol.tipo || 'mimbro';
-                          const currentStat = statsTipos.find(s => s.tipo === tipoKey.toLowerCase());
-                          
-                          // Lógica automática de estadísticas de muertos
-                          if (nuevoEstado === 'muerto' && estadoAnterior !== 'muerto') {
-                             const newDeadCount = (currentStat?.muertos || 0) + 1;
-                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
-                          } else if (nuevoEstado !== 'muerto' && estadoAnterior === 'muerto') {
-                             const newDeadCount = Math.max(0, (currentStat?.muertos || 0) - 1);
-                             await handleUpdateStatTipo(tipoKey, 'muertos', newDeadCount);
-                          }
-
-                          mostrarMensaje(`Estado de "${arbol.nombre}" actualizado.`);
-                          cargarArboles();
-                        } catch (err) {
-                          console.error(err);
-                          mostrarMensaje('Error al actualizar estado', 'error');
-                        }
-                      }}
-                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
-                    >
-                      <option value="vivo">Vivo</option>
-                      <option value="en_riesgo">En riesgo</option>
-                      <option value="muerto">Muerto</option>
-                      <option value="protegido">Protegido</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label style={{ fontWeight: '600', display: 'block', marginBottom: '5px', fontSize: '0.9rem' }}>Progreso en el tiempo:</label>
-                    <input 
-                      type="text" 
-                      defaultValue={arbol.progreso || '0%'} 
-                      onBlur={async (e) => {
-                         if (e.target.value === (arbol.progreso || '0%')) return;
-                         const updatedArbol = { ...arbol, progreso: e.target.value };
-                         try {
-                           await services.putArboles(updatedArbol, arbol.id);
-                           mostrarMensaje(`Progreso actualizado para ${arbol.nombre}`);
-                           cargarArboles();
-                         } catch (err) {
-                           console.error(err);
-                           mostrarMensaje('Error al actualizar progreso', 'error');
-                         }
-                      }}
-                      placeholder="Ej: Creció 10cm, 50% de meta..."
-                      style={{ padding: '8px', borderRadius: '6px', border: '1px solid #c5d6cc', width: '100%', fontSize: '0.95rem' }}
-                    />
-                    <small style={{ color: '#66937a', display: 'block', marginTop: '6px' }}>
-                      * Escribe el progreso y haz clic fuera del cuadro para guardar
-                    </small>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {cargando ? (
+          <div className="admin-loading-container">
+            <div className="admin-loader"></div>
+            <p>Sincronizando con el bosque...</p>
           </div>
-        )}
+        ) : (
+          <div className="admin-tab-content">
+            {tab === 'resumen' && (
+              <ResumenTab 
+                arboles={arboles} 
+                tiposDisponibles={tiposDisponibles}
+                statsTipos={statsTipos} 
+                setTipoFiltro={setTipoFiltro}
+                setTab={setTab}
+              />
+            )}
 
+            {tab === 'lista' && (
+              <ListaTab 
+                arboles={arboles} 
+                busqueda={busqueda} 
+                setBusqueda={setBusqueda} 
+                tipoFiltro={tipoFiltro}
+                setTipoFiltro={setTipoFiltro}
+                tiposDisponibles={tiposDisponibles}
+                setTab={setTab}
+                handleEliminarTipo={handleEliminarTipo}
+                statsTipos={statsTipos}
+                handleUpdateStatTipo={handleUpdateStatTipo}
+                cargando={false}
+                handleEditar={handleEditar} 
+                handleAbonarArbol={handleAbonarArbol}
+                handleEliminar={handleEliminar}
+                handleLimpiarHistorialAbono={handleLimpiarHistorialAbono}
+              />
+            )}
 
+            {tab === 'bajas' && (
+              <BajasTab 
+                arboles={arboles} 
+                handleEditar={handleEditar} 
+              />
+            )}
 
-        {/* ──── TAB: USUARIOS ──── */}
-        {tab === 'usuarios' && (
-          <UsuariosTab 
-            modoEdicionUsuario={modoEdicionUsuario}
-            handleUserSubmit={handleUserSubmit}
-            formUsuario={formUsuario}
-            setFormUsuario={setFormUsuario}
-            resetFormUsuario={resetFormUsuario}
-            usuarios={usuarios}
-            handleEditarUsuario={handleEditarUsuario}
-            handleEliminarUsuario={handleEliminarUsuario}
-            handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado}
-          />
-        )}
+            {tab === 'usuarios' && (
+              <UsuariosTab 
+                modoEdicionUsuario={modoEdicionUsuario}
+                handleUserSubmit={handleUserSubmit}
+                formUsuario={formUsuario}
+                setFormUsuario={setFormUsuario}
+                resetFormUsuario={resetFormUsuario}
+                usuarios={usuarios}
+                handleEditarUsuario={handleEditarUsuario}
+                handleEliminarUsuario={handleEliminarUsuario}
+                handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado}
+              />
+            )}
 
-        {/* ──── TAB: VOLUNTARIADOS ──── */}
-        {tab === 'voluntariados' && (
-          <VoluntariadosTab 
-            modoEdicionVoluntariado={modoEdicionVoluntariado}
-            handleVoluntariadoSubmit={handleVoluntariadoSubmit}
-            formVoluntariado={formVoluntariado}
-            setFormVoluntariado={setFormVoluntariado}
-            resetFormVoluntariado={resetFormVoluntariado}
-            voluntariados={usuarios}
-            handleEditarVoluntariado={handleEditarVoluntariado}
-            handleEliminarVoluntariado={handleEliminarVoluntariado}
-            handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario}
-          />
-        )}
+            {tab === 'voluntariados' && (
+              <VoluntariadosTab 
+                modoEdicionVoluntariado={modoEdicionVoluntariado}
+                handleVoluntariadoSubmit={handleVoluntariadoSubmit}
+                formVoluntariado={formVoluntariado}
+                setFormVoluntariado={setFormVoluntariado}
+                resetFormVoluntariado={resetFormVoluntariado}
+                voluntariados={voluntariados}
+                handleEditarVoluntariado={handleEditarVoluntariado}
+                handleEliminarVoluntariado={handleEliminarVoluntariado}
+                handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario}
+              />
+            )}
 
-        {/* ──── TAB: ABONOS ──── */}
-        {tab === 'abonos' && (
-          <AbonosTab 
-            modoEdicionAbono={modoEdicionAbono}
-            handleAbonoSubmit={handleAbonoSubmit}
-            formAbono={formAbono}
-            setFormAbono={setFormAbono}
-            resetFormAbono={resetFormAbono}
-            abonos={abonos}
-            arboles={arboles}
-            handleEditarAbono={handleEditarAbono}
-            handleEliminarAbono={handleEliminarAbono}
-          />
-        )}
+            {tab === 'abonos' && (
+              <AbonosTab 
+                modoEdicionAbono={modoEdicionAbono}
+                handleAbonoSubmit={handleAbonoSubmit}
+                formAbono={formAbono}
+                setFormAbono={setFormAbono}
+                resetFormAbono={resetFormAbono}
+                abonos={abonos}
+                handleEditarAbono={handleEditarAbono}
+                handleEliminarAbono={handleEliminarAbono}
+              />
+            )}
 
-        {/* ──── TAB: ACTIVIDAD (Voluntariado) ──── */}
-        {tab === 'actividad' && (
-          <ReportesTab />
-        )}
-
-        {/* ──── TAB: MENSAJES (Soporte) ──── */}
-        {tab === 'mensajes' && (
-          <div className="admin-reports-container">
-            <AdminReports />
+            {tab === 'agregar' && (
+              <ArbolFormTab 
+                modoEdicion={modoEdicion}
+                handleSubmit={handleSubmit}
+                form={form}
+                handleChange={handleChange}
+                modoNuevoTipo={modoNuevoTipo}
+                setModoNuevoTipo={setModoNuevoTipo}
+                tiposDisponibles={tiposDisponibles}
+                resetForm={resetForm}
+                setTab={setTab}
+                setForm={setForm}
+              />
+            )}
           </div>
-        )}
-
-        {/* ──── TAB: ROBOS ──── */}
-        {tab === 'robos' && (
-          <div className="admin-reports-container">
-            <AdminReportesRobo />
-          </div>
-        )}
-
-        {/* ──── TAB: FORMULARIO ──── */}
-        {tab === 'agregar' && (
-          <ArbolFormTab 
-            modoEdicion={modoEdicion}
-            handleSubmit={handleSubmit}
-            form={form}
-            handleChange={handleChange}
-            modoNuevoTipo={modoNuevoTipo}
-            tiposDisponibles={tiposDisponibles}
-            setModoNuevoTipo={setModoNuevoTipo}
-            setForm={setForm}
-            resetForm={resetForm}
-            setTab={setTab}
-          />
         )}
       </main>
     </div>

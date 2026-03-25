@@ -36,7 +36,7 @@ function UserDashboard() {
       setCurrentTab(tabFromUrl);
     }
 
-    const userData = localStorage.getItem('user');
+    const userData = sessionStorage.getItem('user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
       if (parsedUser.rol !== 'user') {

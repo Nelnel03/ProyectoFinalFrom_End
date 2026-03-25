@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function VoluntariadosTab({
   modoEdicionVoluntariado,
@@ -14,8 +15,8 @@ function VoluntariadosTab({
   return (
     <div>
       <div className="admin-section-header">
-        <h2 style={{ color: '#ffffff' }}>🤝 Gestión de Voluntarios</h2>
-        <p style={{ color: '#10b981', fontWeight: '600' }}>Administrar la base de datos de voluntarios y sus áreas</p>
+        <h2 className="admin-section-title-white">🤝 Gestión de Voluntarios</h2>
+        <p className="admin-section-subtitle-green">Administrar la base de datos de voluntarios y sus áreas</p>
       </div>
 
       <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
@@ -25,7 +26,7 @@ function VoluntariadosTab({
         </h3>
         
         <form onSubmit={handleVoluntariadoSubmit} className="admin-user-form">
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Nombre Completo</label>
             <input
               type="text"
@@ -37,7 +38,7 @@ function VoluntariadosTab({
             />
           </div>
           
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Área de Interés / Cargo</label>
             <input
               type="text"
@@ -49,7 +50,7 @@ function VoluntariadosTab({
             />
           </div>
 
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Correo Electrónico</label>
             <input
               type="email"
@@ -61,7 +62,7 @@ function VoluntariadosTab({
             />
           </div>
 
-          <div className="admin-form-group" style={{ margin: 0 }}>
+          <div className="admin-form-group admin-form-group-no-margin">
             <label className="admin-user-input-label">Teléfono</label>
             <input
               type="text"

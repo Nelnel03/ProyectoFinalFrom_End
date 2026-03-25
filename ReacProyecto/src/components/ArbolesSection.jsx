@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import services from '../services/services';
 import '../styles/Arboles.css';
+import '../styles/PremiumDashboard.css';
 
 // ── Modal con toda la información del árbol ──────────────────────────────────
 function ArbolModal({ arbol, onClose }) {
+  const [imgError, setImgError] = useState(false);
   if (!arbol) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-contenido" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-cerrar" onClick={onClose} title="Cerrar">✕</button>
+        <button 
+          className="modal-cerrar" 
+          onClick={onClose} 
+          title="Cerrar"
+        >✕</button>
 
-        {arbol.imagenUrl ? (
+        {arbol.imagenUrl && !imgError ? (
           <img
             src={arbol.imagenUrl}
             alt={arbol.nombre}
             className="modal-img"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'flex';
-            }}
+            onError={() => setImgError(true)}
           />
-        ) : null}
-        <div
-          className="modal-img-placeholder"
-          style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
-        >
-          
-        </div>
+
+        ) : (
+          <div className="modal-img-placeholder">
+            🌳
+          </div>
+        )}
+
 
         <div className="modal-body">
           <h2 className="modal-nombre">{arbol.nombre}</h2>
@@ -36,58 +39,35 @@ function ArbolModal({ arbol, onClose }) {
           </p>
 
           <div className="modal-info-grid">
-            {arbol.familia && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Familia</div>
-                <div className="modal-info-value">{arbol.familia}</div>
+            {[
+                { label: 'Familia', value: arbol.familia },
+                { label: 'Altura', value: arbol.altura },
+                { label: 'Crecimiento', value: arbol.crecimiento },
+                { label: 'Clima', value: arbol.clima },
+                { label: 'Registrado', value: arbol.fechaRegistro },
+                { label: 'Estado', value: arbol.estado }
+            ].map((item, idx) => item.value ? (
+              <div className="modal-info-item" key={idx}>
+                <div className="modal-info-label">{item.label}</div>
+                <div className="modal-info-value">{item.value}</div>
               </div>
-            )}
-            {arbol.altura && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Altura</div>
-                <div className="modal-info-value">{arbol.altura}</div>
-              </div>
-            )}
-            {arbol.crecimiento && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Crecimiento</div>
-                <div className="modal-info-value">{arbol.crecimiento}</div>
-              </div>
-            )}
-            {arbol.clima && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Clima</div>
-                <div className="modal-info-value">{arbol.clima}</div>
-              </div>
-            )}
-            {arbol.fechaRegistro && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Registrado</div>
-                <div className="modal-info-value">{arbol.fechaRegistro}</div>
-              </div>
-            )}
-            {arbol.estado && (
-              <div className="modal-info-item">
-                <div className="modal-info-label">Estado</div>
-                <div className="modal-info-value" style={{ textTransform: 'capitalize' }}>
-                  {arbol.estado}
-                </div>
-              </div>
-            )}
+            ) : null)}
           </div>
 
           {arbol.descripcion && (
-            <>
+            <div className="modal-section">
               <h3 className="modal-section-title">📋 Descripción</h3>
               <p className="modal-section-text">{arbol.descripcion}</p>
-            </>
+            </div>
           )}
 
           {arbol.cuidados && (
-            <>
-              <h3 className="modal-section-title"> Cuidados</h3>
+
+            <div className="modal-section">
+              <h3 className="modal-section-title">🌱 Cuidados</h3>
+
               <p className="modal-section-text">{arbol.cuidados}</p>
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -98,7 +78,6 @@ function ArbolModal({ arbol, onClose }) {
 // ── Tarjeta individual de árbol ───────────────────────────────────────────────
 function ArbolCard({ arbol, count, onClick }) {
   const [imgError, setImgError] = useState(false);
-
   const titulo = count !== undefined ? (arbol.tipo || 'Sin clasificar') : arbol.nombre;
 
   return (
@@ -118,39 +97,28 @@ function ArbolCard({ arbol, count, onClick }) {
       )}
 
       <div className="arbol-card-body">
-        <h3 className="arbol-card-nombre" style={{ textTransform: 'capitalize' }}>{titulo}</h3>
+        <h3 className="arbol-card-nombre">{titulo}</h3>
         {arbol.nombreCientifico && (
           <p className="arbol-card-cientifico">{arbol.nombreCientifico}</p>
         )}
         
         {count !== undefined ? (
-          <div className="arbol-stats-mini-grid">
-            <div className="arbol-stat-pill planted">
-              <span className="pill-dot"></span>
-              <strong>{count}</strong> Sembrados
-            </div>
-            {arbol.stats && arbol.stats.planificados > 0 && (
-              <div className="arbol-stat-pill planned">
-                <span className="pill-dot"></span>
-                <strong>{arbol.stats.planificados}</strong> Planeados
-              </div>
-            )}
-            {arbol.stats && arbol.stats.muertos > 0 && (
-              <div className="arbol-stat-pill dead">
-                <span className="pill-dot"></span>
-                <strong>{arbol.stats.muertos}</strong> Muertos
-              </div>
-            )}
+          <div className="arbol-card-badge-container">
+            <span className="arbol-card-badge dark">
+              <strong>{count}</strong> Registrados
+            </span>
           </div>
         ) : (
-          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+          <div className="arbol-card-badge-container">
             <span className="arbol-card-badge">{arbol.estado || 'Registrado'}</span>
           </div>
         )}
         
-        <p className="arbol-card-hint"> Click para ver más información</p>
+
+        <p className="arbol-card-hint">CLICK PARA DETALLES</p>
+
       </div>
-    </div>
+    </div> 
   );
 }
 
@@ -163,7 +131,6 @@ function ArbolesSection({ arboles }) {
     services.getStatsTipos().then(res => setStats(res || []));
   }, []);
 
-  // Agrupamos los árboles por su tipo
   const arbolesAgrupados = arboles && arboles.length > 0 ? Object.values(arboles.reduce((acc, arbol) => {
     const tipo = (arbol.tipo || 'Sin clasificar').toLowerCase();
     const isAlive = arbol.estado !== 'muerto';
@@ -186,10 +153,13 @@ function ArbolesSection({ arboles }) {
 
   return (
     <section className="arboles-section">
-      <h2 className="arboles-section-title"> Especies Registradas</h2>
-      <p className="arboles-section-subtitle">
-        Explora nuestra base de datos forestal agrupada por tipo de árbol — haz click en una tarjeta para ver información exhaustiva de la especie.
-      </p>
+
+      <div className="arboles-section-header">
+        <h2 className="arboles-section-title">🌿 Especies Registradas</h2>
+        <p className="arboles-section-subtitle">
+          Explora la diversidad forestal de nuestro corredor biológico.
+        </p>
+      </div>
 
       {arbolesAgrupados.length > 0 ? (
         <div className="arboles-grid">
