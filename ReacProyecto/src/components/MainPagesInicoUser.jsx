@@ -9,6 +9,8 @@ import '../styles/PremiumDashboard.css';
 
 
 
+import Swal from 'sweetalert2';
+
 function MainPagesInicoUser() {
   const [userName, setUserName] = useState('');
   const [arboles, setArboles] = useState([]);
@@ -44,10 +46,24 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
-    navigate('/');
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Estás seguro de que deseas salir de tu portal forestal?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#283618',
+      cancelButtonColor: '#bc6c25',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'No, Quedarme',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        navigate('/');
+      }
+    });
   };
+
 
   return (
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
@@ -14,11 +15,24 @@ const Navbar = () => {
     }, [location]);
 
     const handleLogout = () => {
-        sessionStorage.removeItem('isAuthenticated');
-        sessionStorage.removeItem('user');
-        setAuth(false);
-        navigate('/');
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: "¿Estás seguro de que quieres salir?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#344e41',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, Salir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.clear(); // Limpiamos todo para estar seguros
+                setAuth(false);
+                navigate('/');
+            }
+        });
     };
+
 
     return (
         <nav className="navbar-main">

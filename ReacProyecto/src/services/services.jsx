@@ -305,6 +305,31 @@ async function postReportes(reporte) {
   }
 }
 
+async function putReportes(reporte, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    return await respuesta.json();
+  } catch (error) {
+    console.error("Error al actualizar reporte", error);
+  }
+}
+
+async function deleteReportes(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar el reporte", error);
+  }
+}
+
 async function getReportesRobados() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
@@ -380,6 +405,8 @@ const services = {
   postReporteVoluntariado,
   getReportes,
   postReportes,
+  putReportes,
+  deleteReportes,
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,
@@ -412,6 +439,8 @@ export {
   postReporteVoluntariado,
   getReportes,
   postReportes,
+  putReportes,
+  deleteReportes,
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,

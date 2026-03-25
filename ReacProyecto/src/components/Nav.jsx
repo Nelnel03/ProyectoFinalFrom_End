@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../styles/Nav.css';
 
 function Nav() {
@@ -13,6 +14,25 @@ function Nav() {
     setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
   }, [location]);
 
+  const handleLogout = () => {
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Deseas finalizar tu sesión actual?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#283618',
+      cancelButtonColor: '#bc6c25',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        setAuth(false);
+        navigate('/');
+      }
+    });
+  };
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -69,12 +89,7 @@ function Nav() {
                 </NavLink>
               )}
               <button
-                onClick={() => {
-                  sessionStorage.removeItem('isAuthenticated');
-                  sessionStorage.removeItem('user');
-                  setAuth(false);
-                  navigate('/');
-                }}
+                onClick={handleLogout}
                 className="visitor-login-btn visitor-btn-logout"
 
               >
@@ -87,5 +102,6 @@ function Nav() {
     </nav>
   );
 }
+
 
 export default Nav;

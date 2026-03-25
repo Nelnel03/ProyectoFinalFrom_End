@@ -28,6 +28,8 @@ function UserReportesRobo({ user, onDone }) {
     descripcion: "",
   });
 
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [misReportes, setMisReportes] = useState([]);
 
   const [estadoEnvio, setEstadoEnvio] = useState({ tipo: "", texto: "" });

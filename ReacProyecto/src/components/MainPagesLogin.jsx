@@ -187,6 +187,8 @@ function MainPagesLogin() {
         <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
 
 
+
+
         {error && (
           <div className="login-error-msg">
             {error}
