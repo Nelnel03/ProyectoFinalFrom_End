@@ -195,14 +195,22 @@
       "email": "bvega@fwdcostarica.com",
       "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
       "rol": "user",
-
-
       "habilidades": null,
       "disponibilidad": null,
       "necesidades": "casita",
       "fechaRegistro": "2026-03-23T20:22:59.414Z",
       "id": "nwJvLLCaUgg"
-
+    },
+    {
+      "nombre": "momo8",
+      "email": "momo@gmail.com",
+      "password": "12345678",
+      "rol": "user",
+      "habilidades": null,
+      "disponibilidad": null,
+      "necesidades": "plantas",
+      "fechaRegistro": "2026-03-24T21:10:16.292Z",
+      "id": "OCXKU3GP6_g"
     }
   ],
   "stats_tipos": [
@@ -213,7 +221,6 @@
       "muertos": 1
     }
   ],
-
   "abonos": [
     {
       "id": "1ede",
@@ -247,12 +254,10 @@
       "id": "7hIBJShQtmw"
     }
   ],
-
   "reportes_robados": [
     {
       "tipo_arbol": "sdfghj",
       "ubicacion": "asdfghj",
-
       "descripcion": "qwertyuiop´ñlkjhgfdszxcvbnm",
       "userId": "admin1",
       "userName": "Administrador",
@@ -289,7 +294,6 @@
       "timestamp": "2026-03-23T17:36:10.242Z",
       "estado": "enviado",
       "id": "QPLSvaIo4zc"
-
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
