@@ -186,7 +186,7 @@ function MainPagesLogin() {
         <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
 
         {error && (
-          <div style={{ color: '#c0392b', background: '#fdecea', padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+          <div className="login-error-msg">
             {error}
           </div>
         )}
