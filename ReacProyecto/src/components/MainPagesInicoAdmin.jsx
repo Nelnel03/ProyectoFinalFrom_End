@@ -15,6 +15,7 @@ import UsuariosTab from './admin/UsuariosTab';
 import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
+import BuzonTab from './admin/BuzonTab';
 
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
@@ -796,9 +797,22 @@ function MainPagesInicoAdmin() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
-    navigate('/');
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Estás seguro de que quieres salir?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#283618',
+      cancelButtonColor: '#bc6c25',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        navigate('/');
+      }
+    });
   };
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -813,13 +827,9 @@ function MainPagesInicoAdmin() {
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
-          <div className="admin-header-actions">
-            <button className="btn-logout-premium" onClick={handleLogout}>
-              🚪 Cerrar Sesión
-            </button>
-          </div>
         </div>
       </header>
+
 
       <main className="glass-card glass-card-container">
         {mensaje.texto && (
@@ -836,7 +846,8 @@ function MainPagesInicoAdmin() {
             { id: 'usuarios', label: '👥 Usuarios', reset: resetFormUsuario },
             { id: 'voluntariados', label: '🤝 Voluntariados', reset: resetFormVoluntariado },
             { id: 'abonos', label: `🦴 Abonos (${abonos.length})`, reset: resetFormAbono },
-            { id: 'agregar', label: modoEdicion ? '✏️ Editar' : '➕ Agregar', reset: resetForm }
+            { id: 'buzon', label: '📬 Buzón', reset: resetForm },
+            { id: 'agregar', label: modoEdicion ? ' Editar' : ' Agregar', reset: resetForm }
           ].map(t => (
             <button
               key={t.id}
@@ -932,6 +943,8 @@ function MainPagesInicoAdmin() {
                 handleEliminarAbono={handleEliminarAbono}
               />
             )}
+
+            {tab === 'buzon' && <BuzonTab />}
 
             {tab === 'agregar' && (
               <ArbolFormTab 

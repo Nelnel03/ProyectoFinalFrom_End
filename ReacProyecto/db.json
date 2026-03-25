@@ -217,13 +217,11 @@
       "email": "bvega@fwdcostarica.com",
       "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
       "rol": "user",
-
       "habilidades": null,
       "disponibilidad": null,
       "necesidades": "casita",
       "fechaRegistro": "2026-03-23T20:22:59.414Z",
-      "id": "nwJvLLCaUgg"
-
+      "id": "nwJvLLCaUgg",
       "resetToken": "o5phuesjo69r3drsixzy7i",
       "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
     },
@@ -233,10 +231,6 @@
       "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
-
-      "password": "12345678",
-      "rol": "user"
-
     }
   ],
   "stats_tipos": [
@@ -270,29 +264,14 @@
   ],
   "reportes": [
     {
-      "id": "6bb7",
-      "nombre": "Charlie",
-      "puesto": "Sembrado y Mantenimiento",
-      "email": "carlos.v@gmail.com",
-      "telefono": "11111111",
-      "fechaIngreso": "2026-03-17",
-      "area": "Mantenimiento"
-    },
-    {
-      "id": "10e5",
-      "nombre": "usuario",
-      "email": "Usuario@gmail.com",
-      "area": "       ",
-      "telefono": "87657687566",
-      "fechaIngreso": "2026-03-19"
-    },
-    {
-      "id": "vol_p",
-      "nombre": "Voluntario de Prueba",
-      "email": "voluntario@gmail.com",
-      "area": "Reforestación",
-      "telefono": "8888-8888",
-      "fechaIngreso": "2026-03-20"
+      "id": "2ed3",
+      "asunto": "sdfghjk",
+      "mensaje": "dfrtyuikjnbvcwertyjjhgf",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-25T02:17:08.657Z",
+      "estado": "Pendiente"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
