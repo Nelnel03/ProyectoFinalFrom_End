@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function ArbolFormTab({ 
   modoEdicion, 
@@ -47,7 +48,7 @@ function ArbolFormTab({
                 {tiposDisponibles.map(tipo => (
                   <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
                 ))}
-                <option value="___nuevo___" style={{ fontWeight: 'bold', color: '#2e6b46' }}>➕ Añadir otro tipo...</option>
+                <option value="___nuevo___" className="admin-select-option-bold">➕ Añadir otro tipo...</option>
               </select>
             ) : (
               <div className="admin-type-input-group">
@@ -178,23 +179,15 @@ function ArbolFormTab({
             />
             {/* Preview de imagen */}
             <div className="admin-img-preview-wrap">
-              {form.imagenUrl ? (
+              {form.imagenUrl && (
                 <img
                   src={form.imagenUrl}
                   alt="Vista previa"
                   className="admin-img-preview"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
+                  onError={(e) => e.target.classList.add('error')}
                 />
-              ) : null}
-              <div
-                className="admin-img-preview-placeholder"
-                style={{
-                  display: form.imagenUrl ? 'none' : 'flex',
-                }}
-              >
+              )}
+              <div className="admin-img-preview-placeholder">
                 <span className="admin-img-no-preview">🖼️</span>
               </div>
             </div>

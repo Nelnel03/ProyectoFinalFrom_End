@@ -3,11 +3,29 @@ import services from "../services/services.jsx";
 import "../styles/UserReports.css";
 
 
+
+function validate(reporte) {
+  const errors = {};
+  const asunto = reporte.asunto.trim();
+  const mensaje = reporte.mensaje.trim();
+
+  if (!asunto)                  errors.asunto  = "El asunto es obligatorio.";
+  else if (asunto.length < 5)   errors.asunto  = "El asunto debe tener al menos 5 caracteres.";
+
+  if (!mensaje)                 errors.mensaje = "El mensaje es obligatorio.";
+  else if (mensaje.length < 15) errors.mensaje = "El mensaje debe tener al menos 15 caracteres.";
+
+  return errors;
+}
+
 function UserReports({ user, onDone }) {
   const [reporte, setReporte] = useState({
     asunto: "",
     mensaje: "",
   });
+
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
   const [estadoEnvio, setEstadoEnvio] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);

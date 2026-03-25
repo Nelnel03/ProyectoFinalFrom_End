@@ -1,8 +1,10 @@
 .visitante-container {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--fuente-principal);
   min-height: 100vh;
-  background-color: #ffffff;
-  color: #1a3322;
+
+  background-color: var(--color-arena);
+  color: var(--color-texto);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,39 +13,49 @@
 
 .visitante-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 0;
+  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
+  width: 100vw;
+  padding: 80px 20px 120px;
   animation: fadeInDown 0.8s ease-out;
+  box-shadow: 0 4px 15px rgba(58, 90, 64, 0.15);
 }
 
 .visitante-header h1 {
-  font-size: 2.8rem;
-  color: #0b532d;
+  font-family: var(--fuente-acento);
+  font-size: 3.5rem;
+  color: var(--color-caracola);
   margin-bottom: 10px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: 1px;
 }
 
 .visitante-header p {
-  font-size: 1.2rem;
-  color: #2e6b46;
+  font-size: 1.3rem;
+  color: var(--color-caracola);
   font-weight: 500;
+  opacity: 0.9;
 }
 
 .visitante-content {
   width: 100%;
-  max-width: 900px;
-  background: white;
+  max-width: 1100px;
+  background: var(--color-caracola);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 10px 30px rgba(11, 83, 45, 0.08);
-  border: 1px solid rgba(46, 107, 70, 0.1);
+  box-shadow: var(--sombra-profunda);
+  border: 1px solid var(--color-ocre-silvestre);
   animation: fadeInUp 0.8s ease-out;
+  margin-top: -30px;
+  position: relative;
+  z-index: 10;
 }
 
 .visitante-intro h2 {
-  font-size: 1.8rem;
-  color: #1a3322;
-  margin-bottom: 15px;
+  font-family: var(--fuente-acento);
+  font-size: 2.2rem;
+  color: var(--color-mar-profundo);
+  margin-bottom: 20px;
   font-weight: 700;
 }
 
@@ -74,4 +86,35 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.visitante-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.visitante-loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #44614d;
+}
+
+.visitante-separator-line {
+  border-top: 1px solid rgba(46, 107, 70, 0.15);
+  margin: 2.5rem 0;
+}
+
+.visitante-register-wrapper {
+  margin: 0 auto;
+  box-shadow: none;
+  border: 1px solid #eee;
+}
+
+.visitante-register-title {
+  text-align: center;
+  color: #0b532d;
+  margin-bottom: 1.5rem;
 }

@@ -28,6 +28,10 @@ function UserReportesRobo({ user, onDone }) {
     descripcion: "",
   });
 
+
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+
   const [misReportes, setMisReportes] = useState([]);
 
   const [estadoEnvio, setEstadoEnvio] = useState({ tipo: "", texto: "" });
@@ -93,6 +97,12 @@ function UserReportesRobo({ user, onDone }) {
 
       setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" }); 
       if (onDone) setTimeout(onDone, 1500);
+
+
+      setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" });
+      setErrors({});
+      setTouched({});
+
 
     } catch (error) {
       console.error(error);

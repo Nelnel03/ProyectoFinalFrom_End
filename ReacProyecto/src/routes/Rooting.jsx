@@ -1,45 +1,67 @@
+
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
+import InicioUser from '../pages/InicioUser';
+import InicioAdimin from '../pages/InicioAdimin';
+import Login from '../pages/Login';
+import ResetPassword from '../pages/ResetPassword';
+import LandingPage from '../pages/LandingPage';
 import HistoryForm from '../pages/HistoryForm';
 import Voluntariado from '../pages/Voluntariado';
-import ResetPassword from '../pages/ResetPassword';
-import Login from '../pages/Login';
 import Nav from '../components/Nav';
+import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
-import LandingPage from '../pages/LandingPage';
 import UserDashboard from '../components/UserDashboard';
 import VolunteerDashboard from '../components/VolunteerDashboard';
-import InicioAdimin from '../pages/InicioAdimin';
 
 function MainLayout() {
   const location = useLocation();
+  const isAuth = sessionStorage.getItem('isAuthenticated') === 'true';
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const isAuth = localStorage.getItem('isAuthenticated') === 'true';
+  const isPremiumRoute = 
+    location.pathname.startsWith('/user') || 
+    location.pathname.startsWith('/admin') || 
+    location.pathname.startsWith('/dashboard-user') || 
+    location.pathname.startsWith('/dashboard-voluntario');
+
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/reset-password';
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Ocultamos el Nav global para el admin, ya que usualmente tienen su propio dashboard/sidebar */}
-      {!isAdminRoute && <Nav />}
-      
+    <div className="app-main-layout-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* 
+          Condicional para el Nav/Navbar:
+          Si es una ruta tipo dashboard/admin, mostramos el Navbar.
+          Si es visitante normal, mostramos el Nav global.
+          Si es login o reset, no mostramos nada (form minimal).
+      */}
+      {!isAuthRoute && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+
+
+
       <div className="main-content-layout">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
+          <Route path="/voluntariado" element={<Voluntariado />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
-          {/* Redirección de seguridad para la ruta antigua */}
+          {/* Redirección para la ruta antigua /user a los nuevos dashboards */}
           <Route 
             path="/user" 
             element={
               isAuth ? (
                 (() => {
-                  const u = JSON.parse(localStorage.getItem('user') || '{}');
+                  const u = JSON.parse(sessionStorage.getItem('user') || '{}');
                   return u.rol === 'voluntario' ? <Navigate to="/dashboard-voluntario" replace /> : <Navigate to="/dashboard-user" replace />;
                 })()
               ) : <Navigate to="/login" replace />
             } 
           />
+
           <Route 
             path="/dashboard-user" 
             element={
@@ -66,9 +88,6 @@ function MainLayout() {
               </PrivateRoutes>
             } 
           />
-          <Route path="/voluntariado" element={<Voluntariado />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
     </div>
@@ -83,4 +102,4 @@ function Rooting() {
   );
 }
 
-export default Rooting;
+export default Rooting;

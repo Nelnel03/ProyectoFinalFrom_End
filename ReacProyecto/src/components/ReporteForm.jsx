@@ -75,6 +75,7 @@ function ReporteForm({ user, onReportSubmitted }) {
     const nuevoReporte = {
       voluntarioId: user?.id || 'anonimo',
       voluntarioNombre: user?.nombre || 'Anónimo',
+      voluntarioEmail: user?.email || 'Sin correo',
       tipoTarea,
       horaInicio: startTime.toLocaleTimeString(),
       horaFin: endTime.toLocaleTimeString(),

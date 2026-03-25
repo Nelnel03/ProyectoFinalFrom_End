@@ -1,7 +1,6 @@
-/* --- DASHBOARD SIDEBAR (Admin/User) --- */
 .main-navigation {
-  background-color: #0b532d;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-bosque-musgo);
+  box-shadow: 4px 0 15px rgba(58, 90, 64, 0.2);
   padding: 2.5rem 0;
   position: fixed;
   top: 0;
@@ -15,17 +14,17 @@
 
 /* --- VISITOR TOP NAV --- */
 .visitor-nav {
-  background-color: #ffffff;
-  height: 70px;
+  background-color: var(--color-crema-organico);
+  height: 80px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(58, 90, 64, 0.08);
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 3px solid var(--color-ocre-silvestre);
 }
 
 .visitor-nav-container {
@@ -39,9 +38,9 @@
 }
 
 .visitor-logo {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  color: #1a4d2e;
+  color: var(--color-bosque-musgo);
   text-decoration: none;
   font-family: 'Outfit', sans-serif;
   display: flex;
@@ -57,30 +56,31 @@
 
 .visitor-link {
   text-decoration: none;
-  color: #4a5568;
-  font-weight: 600;
+  color: var(--color-tierra-sombra);
+  font-weight: 500;
   font-size: 1rem;
   transition: color 0.2s;
 }
 
 .visitor-link:hover, .visitor-link.active {
-  color: #2e6b46;
+  color: var(--color-bosque-helecho);
 }
 
 .visitor-login-btn {
-  background-color: #10b981; /* Emerald-500 muy saturado */
+  background-color: var(--color-bosque-musgo);
   color: white;
-  padding: 10px 24px;
+  padding: 12px 28px;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 700;
-  transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 15px rgba(58, 90, 64, 0.2);
 }
 
 .visitor-login-btn:hover {
-  background-color: #059669; /* Emerald-600 */
+  background-color: var(--color-bosque-helecho);
   transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(88, 129, 87, 0.3);
 }
 
 /* --- LAYOUT ADJUSTMENTS --- */
@@ -112,4 +112,35 @@ body {
   .visitor-nav-container {
     padding: 0 1rem;
   }
+}
+
+/* --- ESTILOS EXTRAIDOS DE COMPONENTES ONLINE --- */
+.visitor-logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.visitor-logo-text {
+  font-family: var(--fuente-acento);
+  text-transform: uppercase;
+}
+
+.visitor-auth-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.visitor-btn-panel {
+  background-color: var(--color-mar-profundo) !important;
+}
+
+.visitor-btn-logout {
+  background-color: #ef4444 !important;
+  border: none;
+  cursor: pointer;
+}
+
+.visitor-btn-logout:hover {
+  background-color: #dc2626 !important;
 }

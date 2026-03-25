@@ -1,8 +1,4 @@
-const BASE_URL = "http://localhost:3000";
-
-// ========================
-// USUARIOS
-// ========================
+const BASE_URL = "http://localhost:3005";
 
 async function getUsuarios() {
   try {
@@ -55,10 +51,6 @@ async function deleteUsuarios(id) {
   }
 }
 
-// ========================
-// ÁRBOLES
-// ========================
-
 async function getArboles() {
   try {
     const respuesta = await fetch(`${BASE_URL}/arboles`);
@@ -109,10 +101,6 @@ async function deleteArboles(id) {
     console.error("Error al eliminar el árbol", error);
   }
 }
-
-// ========================
-// STATS POR TIPO
-// ========================
 
 async function getStatsTipos() {
   try {
@@ -165,10 +153,6 @@ async function deleteStatsTipos(id) {
   }
 }
 
-// ========================
-// VOLUNTARIADOS
-// ========================
-
 async function getVoluntariados() {
   try {
     const respuestaServidor = await fetch(`${BASE_URL}/usuarios?rol=voluntario`);
@@ -219,10 +203,6 @@ async function deleteVoluntariados(id) {
     console.error("Error al eliminar el voluntariado", error);
   }
 }
-
-// ========================
-// ABONOS / FERTILIZANTES
-// ========================
 
 async function getAbonos() {
   try {
@@ -275,15 +255,12 @@ async function deleteAbonos(id) {
   }
 }
 
-// ========================
-// REPORTES VOLUNTARIADO
-// ========================
-
 async function getReportesVoluntariado() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener los reportes de voluntariado", error);
     return [];
@@ -304,15 +281,12 @@ async function postReporteVoluntariado(reporte) {
   }
 }
 
-// ========================
-// REPORTES GENERALES
-// ========================
-
 async function getReportes() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes", error);
     return [];
@@ -333,15 +307,37 @@ async function postReportes(reporte) {
   }
 }
 
-// ========================
-// REPORTES ÁRBOLES ROBADOS
-// ========================
+async function putReportes(reporte, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    return await respuesta.json();
+  } catch (error) {
+    console.error("Error al actualizar reporte", error);
+  }
+}
+
+async function deleteReportes(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar el reporte", error);
+  }
+}
 
 async function getReportesRobados() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes de árboles robados", error);
     return [];
@@ -381,43 +377,11 @@ async function putReportesRobados(reporte, id) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reporte),
     });
-    const datos = await respuesta.json();
-    return datos;
+    return await respuesta.json();
   } catch (error) {
-    console.error("Error al actualizar el reporte de robo", error);
+    console.error("Error al actualizar reporte de robo", error);
   }
 }
-
-
-export {
-  getUsuarios,
-  postUsuarios,
-  putUsuarios,
-  deleteUsuarios,
-  getArboles,
-  postArboles,
-  putArboles,
-  deleteArboles,
-  getStatsTipos,
-  postStatsTipos,
-  putStatsTipos,
-  deleteStatsTipos,
-  getVoluntariados,
-  postVoluntariados,
-  putVoluntariados,
-  deleteVoluntariados,
-  getAbonos,
-  postAbonos,
-  putAbonos,
-  deleteAbonos,
-  getReportesVoluntariado,
-  postReporteVoluntariado,
-  getReportes,
-  postReportes,
-  getReportesRobados,
-  postReportesRobados,
-  deleteReportesRobados,
-};
 
 const services = {
   getUsuarios,
@@ -444,6 +408,8 @@ const services = {
   postReporteVoluntariado,
   getReportes,
   postReportes,
+  putReportes,
+  deleteReportes,
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,
@@ -451,3 +417,35 @@ const services = {
 };
 
 export default services;
+export {
+  getUsuarios,
+  postUsuarios,
+  putUsuarios,
+  deleteUsuarios,
+  getArboles,
+  postArboles,
+  putArboles,
+  deleteArboles,
+  getStatsTipos,
+  postStatsTipos,
+  putStatsTipos,
+  deleteStatsTipos,
+  getVoluntariados,
+  postVoluntariados,
+  putVoluntariados,
+  deleteVoluntariados,
+  getAbonos,
+  postAbonos,
+  putAbonos,
+  deleteAbonos,
+  getReportesVoluntariado,
+  postReporteVoluntariado,
+  getReportes,
+  postReportes,
+  putReportes,
+  deleteReportes,
+  getReportesRobados,
+  postReportesRobados,
+  putReportesRobados,
+  deleteReportesRobados,
+};

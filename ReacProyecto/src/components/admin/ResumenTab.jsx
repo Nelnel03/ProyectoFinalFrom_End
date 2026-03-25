@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/MainPagesInicoAdmin.css';
 
 function ResumenTab({ arboles, tiposDisponibles, statsTipos, setTipoFiltro, setTab }) {
   return (
@@ -41,7 +42,7 @@ function ResumenTab({ arboles, tiposDisponibles, statsTipos, setTipoFiltro, setT
                 <div className="admin-type-progress-bar">
                   <div 
                     className="admin-type-progress-fill" 
-                    style={{ width: `${arboles.length > 0 ? (aliveCount / arboles.length) * 100 : 0}%` }}
+                    style={{ '--progress-width': `${arboles.length > 0 ? (aliveCount / arboles.length) * 100 : 0}%` }}
                   ></div>
                 </div>
                 <div className="admin-type-stat-footer">

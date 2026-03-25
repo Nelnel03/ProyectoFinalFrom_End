@@ -1,35 +1,35 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
-import UserProfile from './UserProfile';
-import UserReports from './UserReports';
-import UserReportesRobo from './UserReportesRobo';
 
 
-import ReporteForm from './ReporteForm';
-import MisReportesTab from './MisReportesTab';
 
-import '../styles/MainPagesInicoVisitante.css';
+import '../styles/PremiumDashboard.css';
+
+
+
+import Swal from 'sweetalert2';
+
 
 function MainPagesInicoUser() {
-  const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState('');
   const [arboles, setArboles] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [currentTab, setCurrentTab] = useState('coleccion');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    const userData = localStorage.getItem('user');
+    const userData = sessionStorage.getItem('user');
     if (userData) {
-      const parsedUser = JSON.parse(userData);
-      setUser(parsedUser);
+      const user = JSON.parse(userData);
+      setUserName(user.nombre);
     }
 
     cargarArboles();
@@ -48,182 +48,78 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
-    navigate('/');
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Estás seguro de que deseas salir de tu portal forestal?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#283618',
+      cancelButtonColor: '#bc6c25',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'No, Quedarme',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        navigate('/');
+      }
+    });
   };
 
+
+
   return (
-    <div className="visitante-container">
-      <header className="visitante-header" style={{ background: '#ffffff', padding: '3rem 1rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1a4d2e' }}>🌳 ¡Hola, {user?.nombre}!</h1>
-        <p style={{ opacity: 0.9, fontSize: '1.1rem', color: '#4b5563' }}>Panel de Usuario - Gestiona tu información y explora</p>
-      </header>
-
-      <main className="visitante-content" style={{ maxWidth: '1100px', background: '#ffffff' }}>
-        <section className="visitante-intro"
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}
-        >
 
 
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div className="dashboard-premium">
+      <div className="premium-header">
+        <div className="user-premium-header-flex">
+            <div>
+                <h2 className="user-premium-subtitle">BioMon ADI</h2>
+                <h1>🌳 ¡Hola! {userName}</h1>
+                <p className="user-premium-greeting">
+                    Tu portal personal de monitoreo forestal. Explora y protege la biodiversidad local.
+                </p>
+                {sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario' && (
+                    <div className="badge">Voluntario Activo</div>
+                )}
+            </div>
+
 
             <button
-              onClick={() => setCurrentTab('coleccion')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'coleccion' ? '#1a4d2e' : '#f3f4f6',
-                color: currentTab === 'coleccion' ? 'white' : '#4b5563',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
+                onClick={handleLogout}
+                className="btn-logout-premium user-btn-logout-margin"
             >
-              🌳 Colección Forestal
+                🚪 Cerrar Sesión
             </button>
-            <button
-              onClick={() => setCurrentTab('perfil')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'perfil' ? '#1a4d2e' : '#f3f4f6',
-                color: currentTab === 'perfil' ? 'white' : '#4b5563',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
-            >
-              👤 Mi Perfil
-            </button>
-            <button
-              onClick={() => setCurrentTab('reportes')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'reportes' ? '#1a4d2e' : '#f3f4f6',
-                color: currentTab === 'reportes' ? 'white' : '#4b5563',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
-            >
-              ✉️ Soporte/Reportes
-            </button>
-            {user?.rol === 'voluntario' && (
-              <button
-                onClick={() => setCurrentTab('reporte_voluntario')}
-                style={{
-                  padding: '10px 22px',
-                  backgroundColor: currentTab === 'reporte_voluntario' ? '#1a4d2e' : '#f3f4f6',
-                  color: currentTab === 'reporte_voluntario' ? 'white' : '#4b5563',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  transition: 'all 0.2s',
-                }}
-              >
-                👷 Reportar Actividad
-              </button>
-            )}
-            <button
-              onClick={() => setCurrentTab('mis_reportes')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'mis_reportes' ? '#1a4d2e' : '#f3f4f6',
-                color: currentTab === 'mis_reportes' ? 'white' : '#4b5563',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
-            >
-              📝 Mis Reportes
-            </button>
-            <button
-              onClick={() => setCurrentTab('reporte_robo')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'reporte_robo' ? '#ef4444' : '#fef2f2',
-                color: currentTab === 'reporte_robo' ? 'white' : '#ef4444',
-                border: '1px solid #fca5a5',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
-            >
-              🚨 Reportar Robo
-            </button>
-            <button
-              onClick={() => setCurrentTab('buzon')}
-              style={{
-                padding: '10px 22px',
-                backgroundColor: currentTab === 'buzon' ? '#1a4d2e' : '#f3f4f6',
-                color: currentTab === 'buzon' ? 'white' : '#4b5563',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s',
-              }}
-            >
-              📬 Buzón de Enviados
-            </button>
-          </div>
+
+        </div>
+      </div>
+
+      <main className="glass-card user-glass-main">
+        <section className="user-section-title">
+          <h2 className="user-collection-heading">Tu Colección Forestal</h2>
+          <p className="user-collection-desc">
+            Explora las especies registradas en el sistema. Puedes ver detalles técnicos, estados de salud y progresos de crecimiento.
+          </p>
+=
         </section>
 
-        <div style={{ marginTop: '2rem' }}>
-          {currentTab === 'coleccion' && (
-            <div>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h2 style={{ color: '#1a4d2e', margin: 0 }}>Colección Forestal</h2>
-                <p>
-                  Consulta todas las especies forestales registradas. Como usuario, puedes ver toda la información de la página en tiempo real.
-                </p>
-              </div>
-              {cargando ? (
-                <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
-                  Cargando especies forestales...
-                </div>
-              ) : (
-                <ArbolesSection arboles={arboles} />
-              )}
-            </div>
-          )}
-          
-          {currentTab === 'perfil' && (
-            <UserProfile user={user} onUpdateUser={setUser} />
-          )}
+        {cargando ? (
+          <div className="user-loading-container">
+            <div className="loading-spinner user-loading-spinner"></div>
+            <p className="user-loading-text">Sincronizando datos del bosque...</p>
+          </div>
+        ) : (
+          <ArbolesSection arboles={arboles} />
+        )}
 
-          {currentTab === 'reportes' && (
-            <UserReports user={user} onDone={() => setCurrentTab('mis_reportes')} />
-          )}
 
-          {currentTab === 'reporte_robo' && (
-            <UserReportesRobo user={user} onDone={() => setCurrentTab('mis_reportes')} />
-          )}
 
-          {currentTab === 'mis_reportes' && (
-            <MisReportesTab user={user} />
-          )}
-
-          {currentTab === 'reporte_voluntario' && user?.rol === 'voluntario' && (
-            <ReporteForm user={user} onReportSubmitted={() => setCurrentTab('mis_reportes')} />
-          )}
-
-          {currentTab === 'buzon' && (
-            <BuzonEnviados user={user} />
-          )}
-        </div>
       </main>
     </div>
   );
 }
 
 export default MainPagesInicoUser;
+

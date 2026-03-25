@@ -2,373 +2,298 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import services from '../services/services';
-import * as emailjs from '@emailjs/browser';
+import '../styles/MainPagesInicoVisitante.css';
 import '../styles/Login.css';
 
 function MainPagesLogin() {
-  const [viewMode, setViewMode] = useState('login'); // 'login' | 'register' | 'forgot'
-  const [nombre, setNombre] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
-  const [rol, setRol] = useState('user'); // Default to user
-  const [habilidades, setHabilidades] = useState('');
-  const [disponibilidad, setDisponibilidad] = useState('');
-  const [necesidades, setNecesidades] = useState('');
+
   const navigate = useNavigate();
 
-  const handleAuth = async (e) => {
+  const validateEmail = (emailValue) => {
+    return String(emailValue)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const handleLogin = async (e) => {
+
     e.preventDefault();
     const emailTrimmed = email.trim();
     setError('');
     setLoading(true);
 
+
+
+
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    if (!validateEmail(trimmedEmail)) {
+      Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
+      setLoading(false);
+      return;
+    }
+
     try {
-      if (!emailTrimmed || emailTrimmed === '') {
-        setError('El correo es obligatorio');
-        setLoading(false);
-        return;
-      }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailRegex.test(emailTrimmed)) {
 
-        setError('Formato de correo inválido');
-        setLoading(false);
-        return;
-      }
 
       const usuarios = await services.getUsuarios();
+      const user = usuarios.find(u => u.email === trimmedEmail && u.password === trimmedPassword);
 
-      if (viewMode === 'forgot') {
-        const user = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase());
-        if (!user) {
-          // Por seguridad, mostrar mensaje genérico
-          setSuccessMsg('Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña. Revisa la consola o alertas (modo simulación).');
-        } else {
-          // Generar token
-          const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-          const expiry = new Date(new Date().getTime() + 15 * 60000); // 15 mins
-          
-          const updatedUser = { ...user, resetToken: token, resetTokenExpiry: expiry.toISOString() };
-          await services.putUsuarios(updatedUser, user.id);
-          
-          setSuccessMsg('Enviando enlace de recuperación a tu correo...');
-          
-          const resetLink = `${window.location.origin}/reset-password?token=${token}`;
-          const templateParams = {
-            to_email: email,
-            reset_link: resetLink,
-            user_name: user.nombre || 'Usuario'
-          };
-
-          try {
-            await emailjs.send(
-              'YOUR_SERVICE_ID', // Reemplaza con tu Service ID de EmailJS
-              'YOUR_TEMPLATE_ID', // Reemplaza con tu Template ID de EmailJS
-              templateParams,
-              {
-                publicKey: 'YOUR_PUBLIC_KEY' // Reemplaza con tu Public Key de EmailJS
-              }
-            );
-
-            setSuccessMsg('¡Correo enviado exitosamente! Revisa tu bandeja de entrada o carpeta de spam.');
-            Swal.fire({
-              title: '¡Correo Enviado!',
-              text: 'Se ha enviado un enlace de recuperación a tu correo electrónico.',
-              icon: 'success',
-              confirmButtonColor: '#2e6b46',
-              confirmButtonText: 'Entendido'
-            });
-          } catch (emailError) {
-            console.error('Error al enviar el correo con EmailJS:', emailError);
-            setError('No se pudo enviar el correo de recuperación. Por favor, verifica tu configuración de EmailJS o intenta más tarde.');
-            setSuccessMsg('');
-          }
-        }
-        return;
-      }
-
-      if (viewMode === 'register') {
-        // Validación de correo existente
-        const emailExiste = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase());
-        if (emailExiste) {
-          setError('El correo electrónico ya está registrado.');
-          return;
-        }
-
-        if (password.length < 8) {
-          setError('La contraseña debe tener al menos 8 caracteres.');
-          return;
-        }
-
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
-        if (!passwordRegex.test(password)) {
-          setError('La contraseña debe contener al menos 1 letra mayúscula, 1 minúscula y 1 número.');
-          return;
-        }
-
-        // Crear nuevo usuario con contraseña simuladamente "segura"
-        // En producción se usa bcrypt en el Backend
-        const hashedPassword = btoa(password + "_SECURE_SALT");
-        const nuevoUsuario = {
-          nombre,
-          email,
-          password: hashedPassword,
-          rol: rol,
-          // Campos específicos segun el rol
-          habilidades: rol === 'voluntario' ? habilidades : null,
-          disponibilidad: rol === 'voluntario' ? disponibilidad : null,
-          necesidades: rol === 'user' ? necesidades : null,
-          fechaRegistro: new Date().toISOString()
-        };
-
-        const result = await services.postUsuarios(nuevoUsuario);
-        
-        if (result) {
-          localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('user', JSON.stringify(result));
-          
-          Swal.fire({
-            title: '¡Registro Exitoso!',
-            text: 'Tu cuenta ha sido creada correctamente.',
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
+      if (user) {
+        if (user.debeCambiarPassword) {
+          const { value: newPassword } = await Swal.fire({
+            title: 'Primer Inicio de Sesión',
+            text: 'Como nuevo voluntario, debes cambiar tu contraseña temporal.',
+            input: 'password',
+            inputPlaceholder: 'Ingresa tu nueva contraseña',
+            showCancelButton: true,
+            confirmButtonText: 'Cambiar y Entrar',
+            cancelButtonText: 'Cancelar',
+            inputValidator: (value) => {
+              if (!value) return 'La nueva contraseña es obligatoria';
+              if (value.length < 6) return 'Mínimo 6 caracteres';
+              if (value.length > 15) return 'Máximo 15 caracteres';
+            }
           });
 
-          setTimeout(() => {
-            if (rol === 'voluntario') {
-                navigate('/dashboard-voluntario');
-            } else {
-                navigate('/dashboard-user');
-            }
-          }, 1500);
-        } else {
-          setError('Ocurrió un error al registrarse. Intenta nuevamente.');
-        }
-
-      } else if (viewMode === 'login') {
-        const hashedPassword = btoa(password + "_SECURE_SALT");
-        // Lógica de inicio de sesión: compatible con contraseñas del db.json y nuevas encriptadas
-        const user = usuarios.find(u => u.email.toLowerCase() === emailTrimmed.toLowerCase() && (u.password === password || u.password === hashedPassword));
-
-        if (user) {
-          // Lógica de primer login para voluntarios (debe cambiar contraseña)
-          if (user.rol === 'voluntario' && user.debeCambiarPassword) {
-            const { value: newPassword } = await Swal.fire({
-              title: 'Primer Inicio de Sesión',
-              text: 'Como nuevo voluntario, debes cambiar tu contraseña temporal.',
-              input: 'password',
-              inputPlaceholder: 'Ingresa tu nueva contraseña',
-              showCancelButton: true,
-              confirmButtonText: 'Cambiar y Entrar',
-              cancelButtonText: 'Cancelar',
-              inputValidator: (value) => {
-                if (!value) return 'La nueva contraseña es obligatoria';
-                if (value.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
-                const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
-                if (!passRegex.test(value)) return 'Debe contener al menos 1 mayúscula, 1 minúscula y 1 número';
-              }
-            });
-
-            if (newPassword) {
-              const updatedHashedPassword = btoa(newPassword + "_SECURE_SALT");
-              const updatedUser = { ...user, password: updatedHashedPassword, debeCambiarPassword: false };
-              await services.putUsuarios(updatedUser, user.id);
-              // Actualizamos el objeto user para el resto del flujo
-              user.password = updatedHashedPassword;
-              user.debeCambiarPassword = false;
-            } else {
-              setLoading(false);
-              return; // Canceló el cambio, no entra
-            }
+          if (newPassword) {
+            const updatedUser = { ...user, password: newPassword, debeCambiarPassword: false };
+            await services.putUsuarios(updatedUser, user.id);
+            user.password = newPassword;
+            user.debeCambiarPassword = false;
+          } else {
+            setLoading(false);
+            return;
           }
-
-          localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('user', JSON.stringify(user));
-          
-          Swal.fire({
-            title: '¡Bienvenido!',
-            text: `Sesión iniciada como ${user.nombre}`,
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
-          });
-
-          setTimeout(() => {
-            if (user.rol === 'admin') {
-              navigate('/admin');
-            } else if (user.rol === 'voluntario') {
-              navigate('/dashboard-voluntario');
-            } else {
-              navigate('/dashboard-user');
-            }
-          }, 1500);
-        } else {
-          setError('Correo o contraseña incorrectos');
         }
+
+        sessionStorage.setItem('isAuthenticated', 'true');
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        Swal.fire({
+          title: '¡Bienvenido!',
+          text: `Sesión iniciada como ${user.nombre}`,
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        setTimeout(() => {
+          if (user.rol === 'admin') {
+            navigate('/admin');
+          } else {
+            navigate('/user');
+          }
+        }, 1500);
+      } else {
+        Swal.fire('Error', 'Correo o contraseña incorrectos', 'error');
       }
     } catch (err) {
-      console.error("Error en auth:", err);
-      setError('Hubo un problema al conectar con el servidor');
+      console.error('Error en login:', err);
+      Swal.fire('Error', 'Hubo un problema al conectar con el servidor', 'error');
+
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleMode = (mode) => {
-    setViewMode(mode);
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setError('');
-    setSuccessMsg('');
-    setPassword('');
-    if (mode === 'register') {
+
+    if (!nombre.trim() || !email.trim() || !telefono.trim() || !password.trim()) {
+      Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+      return;
+    }
+
+    if (!validateEmail(email.trim())) {
+      Swal.fire('Error', 'Correo electrónico no válido', 'error');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Swal.fire('Error', 'Las contraseñas no coinciden', 'error');
+      return;
+    }
+
+    if (password.length < 8) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 8 caracteres', 'error');
+      return;
+    }
+
+    const vowelCount = (nombre.match(/[aeiouáéíóúü]/gi) || []).length;
+    if (vowelCount < 2) {
+      Swal.fire('Error', 'El nombre completo debe contener al menos dos vocales', 'error');
+      return;
+    }
+
+    if (email.trim().length < 11) {
+      Swal.fire('Error', 'El correo electrónico debe tener al menos 11 caracteres', 'error');
+      return;
+    }
+
+
+    try {
+      const usuarios = await services.getUsuarios();
+      if (usuarios.find(u => u.email === email.trim())) {
+        Swal.fire('Error', 'El correo ya está registrado', 'error');
+        return;
+      }
+
+      const newUser = {
+        nombre: nombre.trim(),
+        email: email.trim(),
+        telefono: telefono.trim(),
+        password: password.trim(),
+        rol: 'user'
+      };
+
+      await services.postUsuarios(newUser);
+
+      Swal.fire({
+        title: '¡Registro Exitoso!',
+        text: 'Ahora puedes iniciar sesión con tus credenciales',
+        icon: 'success',
+        confirmButtonText: 'Genial'
+      });
+
+      setIsRegistering(false);
       setNombre('');
+
+      setTelefono('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      console.error('Error en registro:', err);
+      Swal.fire('Error', 'No se pudo completar el registro', 'error');
+
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="login-minimal-wrapper">
       <div className="login-card">
-        <h2>
-          {viewMode === 'register' ? 'Crear una cuenta' : 
-           viewMode === 'forgot' ? 'Recuperar Contraseña' : 'Iniciar Sesión'}
-        </h2>
-        
-        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
-        {successMsg && <div className="success-message" style={{ color: 'green', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#e6ffe6', padding: '10px', borderRadius: '5px' }}>{successMsg}</div>}
+        <button 
+          className="login-back-btn" 
+          onClick={() => navigate('/')}
+          title="Volver a la página principal"
+        >
+          ← Volver al Inicio
+        </button>
 
-        <form onSubmit={handleAuth}>
-          {viewMode === 'register' && (
+        <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+
+
+
+
+        {error && (
+          <div className="login-error-msg">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={isRegistering ? handleRegister : handleLogin}>
+          {isRegistering && (
             <>
               <div className="form-group">
                 <label>Nombre Completo</label>
-                <input 
-                  type="text" 
-                  value={nombre} 
-                  onChange={(e) => setNombre(e.target.value)} 
-                  required 
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  required
                   placeholder="Ej: Juan Pérez"
                 />
               </div>
-
               <div className="form-group">
-                <label>Tipo de Cuenta</label>
-                <select 
-                  value={rol} 
-                  onChange={(e) => setRol(e.target.value)}
-                  style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
-                >
-                  <option value="user">Usuario (Consumo/Apoyo)</option>
-                  <option value="voluntario">Voluntario (Servicio/Profesional)</option>
-                </select>
+                <label>Número de Teléfono</label>
+                <input
+                  type="tel"
+                  value={telefono}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    if (val.length <= 8) setTelefono(val);
+                  }}
+                  required
+                  placeholder="88888888"
+                  maxLength="8"
+                />
               </div>
-
-              {rol === 'voluntario' ? (
-                <>
-                  <div className="form-group">
-                    <label>Habilidades (Separadas por comas)</label>
-                    <input 
-                      type="text" 
-                      value={habilidades} 
-                      onChange={(e) => setHabilidades(e.target.value)} 
-                      placeholder="Ej: Botánica, Logística, Educación"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Disponibilidad</label>
-                    <input 
-                      type="text" 
-                      value={disponibilidad} 
-                      onChange={(e) => setDisponibilidad(e.target.value)} 
-                      placeholder="Ej: Fines de semana, 10am-4pm"
-                      required
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className="form-group">
-                  <label>¿Qué buscas en nuestra plataforma? (Necesidades)</label>
-                  <textarea 
-                    value={necesidades} 
-                    onChange={(e) => setNecesidades(e.target.value)} 
-                    placeholder="Ej: Quiero adoptar un árbol, me interesa la educación ambiental..."
-                    rows="2"
-                    required
-                  />
-                </div>
-              )}
             </>
           )}
 
           <div className="form-group">
             <label>Correo Electrónico</label>
-            <input 
-              type="text" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@correo.com"
+              required
             />
           </div>
 
-          {(viewMode === 'login' || viewMode === 'register') && (
-            <div className="form-group" style={{ position: 'relative' }}>
-              <label>Contraseña</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+
+          <div className="form-group">
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+              maxLength="15"
+            />
+          </div>
+
+          {isRegistering && (
+            <div className="form-group">
+              <label>Confirmar Contraseña</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+
                 placeholder="••••••••"
+                maxLength="15"
               />
-              {viewMode === 'login' && (
-                <button 
-                  type="button" 
-                  onClick={() => toggleMode('forgot')}
-                  style={{ 
-                    background: 'none', border: 'none', 
-                    color: '#2e6b46', fontSize: '0.85rem', cursor: 'pointer',
-                    textDecoration: 'underline', marginTop: '8px', display: 'block', width: '100%', textAlign: 'right'
-                  }}
-                >
-                  ¿Olvidaste tu contraseña?
-                </button>
-              )}
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="login-btn">
-            {loading ? 'Cargando...' : 
-             viewMode === 'register' ? 'Registrarse' : 
-             viewMode === 'forgot' ? 'Enviar enlace de recuperación' : 'Entrar'}
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Cargando...' : isRegistering ? 'Registrarse' : 'Entrar'}
           </button>
         </form>
 
-        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.95rem' }}>
-          <span style={{ color: '#4b5563' }}>
-            {viewMode === 'register' ? '¿Ya tienes una cuenta? ' : 
-             viewMode === 'login' ? '¿No tienes cuenta? ' : 
-             '¿Recordaste tu contraseña? '}
-          </span>
-          <button 
-            type="button" 
-            onClick={() => toggleMode(viewMode === 'register' || viewMode === 'forgot' ? 'login' : 'register')}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: '#1a4d2e', 
-              fontWeight: '700', 
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              padding: 0,
-              fontSize: '0.95rem'
-            }}
-          >
-            {viewMode === 'register' || viewMode === 'forgot' ? 'Inicia sesión' : 'Regístrate'}
-          </button>
+        <div className="login-footer-container">
+          <p className="login-footer-text">
+            {isRegistering ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}
+            <button
+              onClick={() => {
+                setIsRegistering(!isRegistering);
+                setError('');
+              }}
+
+              className="login-footer-link"
+
+            >
+              {isRegistering ? 'Inicia Sesión' : 'Regístrate aquí'}
+            </button>
+          </p>
         </div>
       </div>
     </div>

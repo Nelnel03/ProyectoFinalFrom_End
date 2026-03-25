@@ -1,16 +1,42 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../styles/Nav.css';
 
 function Nav() {
   const location = useLocation();
 
-  const auth = localStorage.getItem('isAuthenticated') === 'true';
-  const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  const navigate = useNavigate();
+  const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
+
+  // Sincronizar el estado de autenticación cuando cambie la ruta
+  useEffect(() => {
+    setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
+  }, [location]);
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Deseas finalizar tu sesión actual?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#283618',
+      cancelButtonColor: '#bc6c25',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        setAuth(false);
+        navigate('/');
+      }
+    });
+  };
 
   // Ocultamos el Nav global SÓLO para el admin, ya que usuario y visitante sí lo usan.
   const isAdminRoute = location.pathname.startsWith('/admin');
-  
+
   if (isAdminRoute && auth) {
     return null;
   }
@@ -19,73 +45,53 @@ function Nav() {
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
         <NavLink to="/" className="visitor-logo">
-          🌳 EcoControl
+          <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+          <span className="visitor-logo-text">BioMon ADI</span>
         </NavLink>
-        
+
         <div className="visitor-nav-links">
-          <NavLink 
-            to="/" 
-            className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive && location.pathname === '/' ? 'visitor-link active' : 'visitor-link')}
           >
             Inicio
           </NavLink>
 
-          {/* Navegación Condicional por Rol */}
-          {auth && userData && (
-            <>
-              {userData.rol === 'voluntario' ? (
-                <NavLink 
-                  to="/dashboard-voluntario" 
-                  className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
-                >
-                  📋 Panel de Servicio
-                </NavLink>
-              ) : userData.rol === 'user' ? (
-                <NavLink 
-                  to="/dashboard-user" 
-                  className={({ isActive }) => (isActive && !location.search ? "visitor-link active" : "visitor-link")}
-                >
-                  🌳 Mi Bosque
-                </NavLink>
-              ) : null}
-            </>
-          )}
+          <NavLink
+            to="/historia"
+            className={({ isActive }) => (isActive ? 'visitor-link active' : 'visitor-link')}
+          >
+            Historia
+          </NavLink>
+          {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
+            <NavLink
+              to="/voluntariado"
+              className={({ isActive }) => (isActive ? 'visitor-link active' : 'visitor-link')}
 
-          {!auth && (
-            <NavLink 
-              to="/voluntariado" 
-              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
             >
               Voluntariado
             </NavLink>
           )}
 
           {!auth ? (
-            <NavLink 
-              to="/login" 
-              className="visitor-login-btn"
-            >
+            <NavLink to="/login" className="visitor-login-btn">
               Iniciar Sesión / Registro
             </NavLink>
           ) : (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <NavLink 
-                to={userData?.rol === 'admin' ? '/admin' : (userData?.rol === 'voluntario' ? '/dashboard-voluntario' : '/dashboard-user?tab=perfil')}
-                className={({ isActive }) => (isActive && location.search.includes('tab=perfil') ? "visitor-link active" : "visitor-link")}
-                style={{ fontWeight: '700' }}
-              >
-                👤 Mi Panel
-              </NavLink>
 
-              <button 
-                onClick={() => {
-                  localStorage.removeItem('isAuthenticated');
-                  localStorage.removeItem('user');
-                  // Redirigir al inicio después de cerrar sesión
-                  window.location.href = '/';
-                }}
-                className="visitor-login-btn logout-btn"
-                style={{ backgroundColor: '#ef4444', border: 'none', cursor: 'pointer', padding: '8px 15px' }}
+            <div className="visitor-auth-actions">
+              {location.pathname !== '/user' && location.pathname !== '/admin' && (
+                <NavLink
+                  to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
+                  className="visitor-login-btn visitor-btn-panel"
+                >
+                  🚀 Panel
+                </NavLink>
+              )}
+              <button
+                onClick={handleLogout}
+                className="visitor-login-btn visitor-btn-logout"
+
               >
                 🚪 Salir
               </button>
@@ -96,5 +102,6 @@ function Nav() {
     </nav>
   );
 }
+
 
 export default Nav;

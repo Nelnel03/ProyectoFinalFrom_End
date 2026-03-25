@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import services from '../services/services';
 import Swal from 'sweetalert2';
+import '../styles/AdminReports.css';
+
+
 
 function AdminReportesRobo() {
   const [reportes, setReportes] = useState([]);
@@ -70,93 +73,40 @@ function AdminReportesRobo() {
   return (
     <div>
       <div className="admin-section-header">
-        <h2 style={{ color: '#ef4444' }}>🚨 Reportes de Árboles Robados</h2>
-        <p style={{ color: '#66937a' }}>Control y seguimiento de incidentes reportados</p>
+
+        <h2 className="admin-reports-robo-header">🚨 Reportes de Árboles Robados</h2>
+        <p className="admin-reports-header-subtitle">Alertas de sustracción o tala ilegal reportadas por los usuarios</p>
+
       </div>
 
       {cargando ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#44614d' }}>
+        <div className="admin-reports-loading">
           Cargando reportes de robos...
         </div>
       ) : reportes.length === 0 ? (
-        <div style={{ textAlign: 'center', color: '#4d7a63', padding: '3rem' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🛡️</div>
+        <div className="admin-reports-empty">
+          <div className="admin-reports-empty-icon">🛡️</div>
           <p>La bandeja está vacía. No hay reportes de árboles robados actualmente.</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1.5rem' }}>
-          {reportes.slice().reverse().map((reporte) => {
-            const colors = getStatusColor(reporte.estado);
-            return (
-              <div key={reporte.id} style={{
-                backgroundColor: '#ffffff',
-                border: `1px solid ${colors.bg}`,
-                borderLeft: `6px solid ${colors.text}`,
-                borderRadius: '12px',
-                padding: '1.5rem',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <div>
-                    <h3 style={{ margin: '0 0 0.5rem 0', color: colors.text, fontSize: '1.25rem' }}>
-                      🌳 {reporte.tipo_arbol}
-                    </h3>
-                    <div style={{ display: 'flex', gap: '1rem', color: '#4b5563', fontSize: '0.9rem' }}>
-                      <span>📍 {reporte.ubicacion}</span>
-                      <span>📅 {new Date(reporte.fecha).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ 
-                      display: 'inline-block', 
-                      padding: '4px 12px', 
-                      backgroundColor: colors.bg, 
-                      color: colors.text, 
-                      borderRadius: '20px', 
-                      fontSize: '0.85rem', 
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase'
-                    }}>
-                      {reporte.estado || 'Pendiente'}
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                      <select 
-                        value={reporte.estado || 'Pendiente'}
-                        onChange={(e) => handleCambiarEstado(reporte, e.target.value)}
-                        style={{
-                          padding: '5px 10px',
-                          borderRadius: '6px',
-                          border: '1px solid #d1d5db',
-                          fontSize: '0.85rem',
-                          outline: 'none',
-                          cursor: 'pointer',
-                          backgroundColor: '#f9fafb'
-                        }}
-                      >
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="En Investigacion">En Investigación</option>
-                        <option value="Resuelto">Resuelto</option>
-                      </select>
-                    </div>
+
+        <div className="admin-reports-list">
+          {reportes.slice().reverse().map((reporte) => (
+            <div key={reporte.id} className="admin-report-card admin-report-card-robo">
+              <div className="admin-report-card-header admin-report-card-header-robo">
+                <div>
+                  <h3 className="admin-report-card-title admin-report-card-title-robo">Tipo: {reporte.tipo_arbol}</h3>
+                  <div className="admin-report-card-meta admin-report-card-meta-robo">
+                    <span>📍 {reporte.ubicacion}</span>
                   </div>
                 </div>
+                <div className="admin-report-card-status-wrap">
+                  <span className="admin-report-card-status admin-report-card-status-robo">
+                    {reporte.estado || 'Recibido'}
+                  </span>
+                  <div className="admin-report-card-date">
+                    {new Date(reporte.fecha).toLocaleString()}
 
-                <div style={{ 
-                  backgroundColor: '#f8fafc', 
-                  padding: '1rem', 
-                  borderRadius: '8px',
-                  marginBottom: '1rem',
-                  fontSize: '0.95rem',
-                  color: '#1e293b',
-                  lineHeight: '1.6'
-                }}>
-                  <strong>Descripción del incidente:</strong><br/>
-                  {reporte.descripcion}
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
-                  <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                    👤 Reportado por: <strong>{reporte.userName}</strong> ({reporte.userEmail})
                   </div>
                   <button 
                     onClick={() => handleEliminar(reporte.id)}
@@ -178,8 +128,25 @@ function AdminReportesRobo() {
                   </button>
                 </div>
               </div>
-            );
-          })}
+
+              <p className="admin-report-card-message-robo">
+                <strong>Descripción:</strong><br/>
+                {reporte.descripcion}
+              </p>
+              <div className="admin-report-card-footer">
+                <div className="admin-report-card-reporter">
+                  Reportado por: <strong>{reporte.userName}</strong> ({reporte.userEmail})
+                </div>
+                <button 
+                  onClick={() => handleEliminar(reporte.id)}
+                  className="admin-report-btn-delete"
+                >
+                  🗑️ Eliminar Reporte
+                </button>
+              </div>
+            </div>
+          ))}
+
         </div>
       )}
     </div>
