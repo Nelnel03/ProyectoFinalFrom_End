@@ -1,6 +1,6 @@
 .main-navigation {
-  background-color: var(--color-mar-profundo);
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-bosque-musgo);
+  box-shadow: 4px 0 15px rgba(58, 90, 64, 0.2);
   padding: 2.5rem 0;
   position: fixed;
   top: 0;
@@ -14,17 +14,17 @@
 
 /* --- VISITOR TOP NAV --- */
 .visitor-nav {
-  background-color: var(--color-caracola);
-  height: 70px;
+  background-color: var(--color-crema-organico);
+  height: 80px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(58, 90, 64, 0.08);
   display: flex;
   align-items: center;
-  border-bottom: 2px solid var(--color-mar-turquesa);
+  border-bottom: 3px solid var(--color-ocre-silvestre);
 }
 
 .visitor-nav-container {
@@ -40,7 +40,7 @@
 .visitor-logo {
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--color-mar-profundo);
+  color: var(--color-bosque-musgo);
   text-decoration: none;
   font-family: 'Outfit', sans-serif;
   display: flex;
@@ -56,31 +56,33 @@
 
 .visitor-link {
   text-decoration: none;
-  color: #4a5568;
-  font-weight: 600;
+  color: var(--color-tierra-sombra);
+  font-weight: 500;
   font-size: 1rem;
   transition: color 0.2s;
 }
 
 .visitor-link:hover, .visitor-link.active {
-  color: var(--color-mar-profundo);
+  color: var(--color-bosque-helecho);
 }
 
 .visitor-login-btn {
-  background-color: var(--color-coral);
-  color: rgb(13, 250, 5);
-  padding: 10px 24px;
+
+  background-color: var(--color-bosque-musgo);
+  color: white;
+  padding: 12px 28px;
+
   border-radius: 50px;
   text-decoration: none;
   font-weight: 700;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 127, 80, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 15px rgba(58, 90, 64, 0.2);
 }
 
 .visitor-login-btn:hover {
-  background-color: var(--color-mar-profundo);
+  background-color: var(--color-bosque-helecho);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 119, 182, 0.4);
+  box-shadow: 0 8px 18px rgba(88, 129, 87, 0.3);
 }
 
 /* --- LAYOUT ADJUSTMENTS --- */

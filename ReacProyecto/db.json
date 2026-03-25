@@ -9,7 +9,7 @@
       "altura": "25-35 metros",
       "crecimiento": "1.5 a 2 metros por año",
       "clima": "tropical",
-      "descripcion": "qwertyuiop´ñlkjhgfdsazxcvbnm,",
+      "descripcion": "qwertyuiopñlkjhgfdsazxcvbnm,",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
       "estado": "vivo",
@@ -62,6 +62,12 @@
           "fecha": "2026-03-19",
           "hora": "15:42",
           "idAbono": "1ee4"
+        },
+        {
+          "idAbono": "1ee4",
+          "nombreAbono": "abono organico",
+          "fecha": "2026-03-25",
+          "hora": "06:05 p. m."
         }
       ]
     },
@@ -103,14 +109,20 @@
       "nombre": "leal",
       "email": "leal@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "voluntario",
+      "area": "senbrador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
     },
     {
       "id": "a8d3",
       "nombre": "Sol",
       "email": "sol@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "voluntario",
+      "area": "plantador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
     },
     {
       "id": "0029",
@@ -132,7 +144,7 @@
     },
     {
       "id": "ca99",
-      "nombre": "a",
+      "nombre": "GG",
       "email": "g@gmail.com",
       "password": "12345678",
       "rol": "user"
@@ -160,6 +172,75 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
+    },
+    {
+      "id": "d374",
+      "nombre": "Andrés leal",
+      "email": "alealvfwd@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "id": "9ba2",
+      "nombre": "Andrés Leal V",
+      "email": "andresgerardolv@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "voluntario",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
+      "area": "plantador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
+    },
+    {
+      "id": "6bb7",
+      "nombre": "Charlie",
+      "email": "carlos.v@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Sembrado",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-17"
+    },
+    {
+      "id": "1005",
+      "nombre": "Usuario Ejemplo",
+      "email": "usuario-vol@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Mantenimiento",
+      "telefono": "88887777",
+      "fechaIngreso": "2026-03-19"
+    },
+    {
+      "nombre": "Barry Vega",
+      "email": "bvega@fwdcostarica.com",
+      "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
+      "rol": "user",
+      "habilidades": null,
+      "disponibilidad": null,
+      "necesidades": "casita",
+      "fechaRegistro": "2026-03-23T20:22:59.414Z",
+
+      "id": "nwJvLLCaUgg",
+      "resetToken": "o5phuesjo69r3drsixzy7i",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
+    },
+    {
+      "id": "cb07",
+      "nombre": "alv",
+      "email": "alealvarela@gmail.com",
+      "password": "12345678",
+      "rol": "user"
+    },
+    {
+      "nombre": "sssssss",
+      "email": "g@g.com",
+      "telefono": "ssssssssssssssssssssssss",
+      "direccion": "sssssssssssssssssss",
+      "password": "111111",
+      "rol": "user",
+      "id": "DVAlcBR3ZBo"
+
     }
   ],
   "stats_tipos": [
@@ -186,37 +267,36 @@
     {
       "id": "1ee4",
       "nombre": "abono organico",
-      "stock": 199,
+      "stock": 198,
       "unidad": "500g",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
-  "voluntariados": [
+  "reportes": [
     {
-      "id": "6bb7",
-      "nombre": "Charlie",
-      "puesto": "Sembrado y Mantenimiento",
-      "email": "carlos.v@gmail.com",
-      "telefono": "11111111",
-      "fechaIngreso": "2026-03-17",
-      "area": "Mantenimiento"
+
+      "id": "2ed3",
+      "asunto": "sdfghjk",
+      "mensaje": "dfrtyuikjnbvcwertyjjhgf",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-25T02:17:08.657Z",
+      "estado": "Pendiente"
     },
     {
-      "id": "10e5",
-      "nombre": "usuario",
-      "email": "Usuario@gmail.com",
-      "area": "       ",
-      "telefono": "87657687566",
-      "fechaIngreso": "2026-03-19"
-    },
-    {
-      "id": "vol_p",
-      "nombre": "Voluntario de Prueba",
-      "email": "voluntario@gmail.com",
-      "area": "Reforestación",
-      "telefono": "8888-8888",
-      "fechaIngreso": "2026-03-20"
+      "asunto": "ASDFGHJKdfg",
+      "mensaje": "sdfghjjhgfddfgh",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-25T02:38:56.583Z",
+      "estado": "En Proceso",
+      "id": "voj1VWU0_uQ"
+
     }
   ],
+  "reportes_robados": [],
+  "reportes_voluntariado": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

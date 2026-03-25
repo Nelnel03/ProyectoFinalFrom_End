@@ -21,7 +21,7 @@ function VoluntariadosTab({
 
       <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
         <h3 className="admin-user-form-title">
-          <span className="admin-user-form-title-icon">{modoEdicionVoluntariado ? '' : ''}</span>
+          <span className="admin-user-form-title-icon"></span>
           {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
         </h3>
         
@@ -96,7 +96,7 @@ function VoluntariadosTab({
           <div key={vol.id} className="admin-arbol-card admin-user-card">
             <div className="admin-user-card-header">
               <div className="admin-user-avatar admin-vol-avatar">
-                V
+              
               </div>
               <div className="admin-user-info-text">
                 <h3>{vol.nombre}</h3>

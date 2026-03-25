@@ -1,12 +1,10 @@
 import React from 'react';
 import MainPagesLogin from '../components/MainPagesLogin';
-import Footer from '../components/Footer';
 
 function Login() {
   return (
-    <div>
+    <div className="login-minimal-page">
       <MainPagesLogin />
-      <Footer />
     </div>
   );
 }

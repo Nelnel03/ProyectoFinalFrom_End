@@ -140,7 +140,9 @@ function ListaTab({
                       onError={(e) => e.target.classList.add('error')}
                     />
                   )}
-                  <div className="admin-arbol-card-img-placeholder"></div>
+                  <div className="admin-arbol-card-img-placeholder">
+                     
+                  </div>
 
                   <div className="admin-arbol-card-body">
                     <p className="admin-arbol-card-nombre">{arbol.nombre}</p>
@@ -148,7 +150,7 @@ function ListaTab({
                       {arbol.nombreCientifico || '—'}
                     </p>
                     <p className="admin-card-clima-altura">
-                      {arbol.clima ? `${arbol.clima}` : ''}{' '}
+                      {arbol.clima ? arbol.clima : ''}{' '}
                       {arbol.altura ? `• ${arbol.altura}` : ''}
                     </p>
 

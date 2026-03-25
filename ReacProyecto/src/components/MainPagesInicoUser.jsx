@@ -50,7 +50,7 @@ function MainPagesInicoUser() {
         <div className="user-premium-header-flex">
             <div>
                 <h2 className="user-premium-subtitle">BioMon ADI</h2>
-                <h1>Hola, {userName}</h1>
+                <h1>¡Hola! {userName}</h1>
                 <p className="user-premium-greeting">
                     Tu portal personal de monitoreo forestal. Explora y protege la biodiversidad local.
                 </p>

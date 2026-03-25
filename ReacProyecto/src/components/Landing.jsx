@@ -9,17 +9,23 @@ const Landing = () => {
     return (
         <div className="landing-container">
             {/* Cabecera / Sección Hero */}
+
             <div className="hero-section">
                 <div className="hero-content">
                     <h1 className="hero-title">
                         Descubre y Protege La Angostura
                     </h1>
                     <p className="hero-description">
+
                         Explora la asombrosa variedad de flora y fauna en Puntarenas. Únete a nuestra comunidad de voluntarios para registrar, monitorear y asegurar la conservación de nuestro ecosistema forestal.
                     </p>
                     <button 
                         onClick={() => navigate('/login')}
+
+
                         className="hero-button"
+
+
                     >
                         Comenzar Ahora <ArrowRight size={22} />
                     </button>
@@ -39,12 +45,14 @@ const Landing = () => {
                         onClick={() => navigate('/mapa')}
                         className="locality-card"
                     >
+
                         <div className="locality-icon-container">
                             <MapIcon size={35} color="var(--color-mar-profundo)" />
                         </div>
                         <h3 className="locality-name">Chacarita</h3>
                         <p className="locality-description">El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
                         <div className="locality-link">
+
                             Ver mapa local <ArrowRight size={16} />
                         </div>
                     </div>
@@ -57,9 +65,11 @@ const Landing = () => {
                         <div className="locality-icon-container">
                             <Leaf size={35} color="var(--color-mar-profundo)" />
                         </div>
+
                         <h3 className="locality-name">La Angostura</h3>
                         <p className="locality-description">El pulmón estrecho de la ciudad. Un tómbolo de arena que conecta la península con el continente.</p>
                         <div className="locality-link">
+
                             Leer historia <ArrowRight size={16} />
                         </div>
                     </div>
@@ -72,9 +82,11 @@ const Landing = () => {
                         <div className="locality-icon-container">
                             <Shield size={35} color="var(--color-mar-profundo)" />
                         </div>
+
                         <h3 className="locality-name">El Carmen</h3>
                         <p className="locality-description">Zona de recuperación de manglares al final de la península, protegiendo el entorno del Paseo de los Turistas.</p>
                         <div className="locality-link">
+
                             Ver puntos <ArrowRight size={16} />
                         </div>
                     </div>

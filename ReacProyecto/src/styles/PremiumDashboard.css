@@ -3,16 +3,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --primary: var(--color-mar-profundo);
-  --primary-saturada: #005f8d; 
-  --accent: var(--color-mar-turquesa);
-  --bg-creme: var(--color-arena);
-  --bg-page: var(--color-arena);
-  --text-main: var(--color-texto);
-  --text-label: #2d3748;
-  --shadow: var(--sombra-suave);
-  --radius: 20px;
+  --primary: var(--color-bosque-musgo);
+  --primary-saturada: #283618; /* Sombra tierra muy cálida */
+  --accent: var(--color-bosque-helecho);
+  --bg-creme: #fefae0; /* Arena cálida */
+  --bg-page: #fefae0;
+  --text-main: #283618;
+  --text-label: #3a5a40;
+  --shadow: 0 10px 40px rgba(40, 54, 24, 0.12);
+  --radius: 24px;
 }
+
 
 /* Base Style */
 body {
@@ -31,7 +32,7 @@ body {
 
 /* --- HEADERS (CONTRASTADO) --- */
 .premium-header {
-  background: linear-gradient(135deg, var(--color-mar-profundo), var(--color-mar-turquesa));
+  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
   border-radius: var(--radius);
   padding: 5rem 4rem;
   color: var(--color-caracola);
@@ -62,17 +63,20 @@ body {
 
 /* --- GLASS CARDS (ELEGANTES PERO LEGIBLES) --- */
 .glass-card {
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(254, 250, 224, 0.96); /* Crema cálido semi-transparente */
+  backdrop-filter: blur(20px);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: 0 20px 50px rgba(40, 54, 24, 0.15);
   padding: 3.5rem;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(58, 90, 64, 0.2); /* Verde musgo sutil */
   margin-bottom: 3rem;
 }
 
+
+
 /* --- TABS --- */
 .premium-tabs {
-  background: #edf2f7;
+  background: rgba(58, 90, 64, 0.1);
   padding: 10px;
   border-radius: 50px;
   display: inline-flex;
@@ -101,21 +105,27 @@ body {
 .premium-tab.active {
   background: var(--primary);
   color: #FFFFFF !important;
-  box-shadow: 0 6px 15px rgba(52, 78, 65, 0.25);
+  box-shadow: 0 8px 20px rgba(58, 90, 64, 0.3);
 }
 
 /* --- BOTONES --- */
 .btn-premium, .admin-btn-guardar, .admin-btn-user-submit {
-  background: var(--color-mar-turquesa);
+  background: var(--color-bosque-musgo);
   color: white !important;
   padding: 14px 32px;
   border-radius: 50px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 5px 15px rgba(0, 119, 182, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 5px 15px rgba(58, 90, 64, 0.3);
   font-family: var(--fuente-principal);
+}
+
+.btn-premium:hover, .admin-btn-guardar:hover, .admin-btn-user-submit:hover {
+  background: var(--color-bosque-helecho);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(88, 129, 87, 0.4);
 }
 
 .btn-logout-premium {
@@ -130,13 +140,13 @@ body {
 
 /* --- GRID DE ÁRBOLES --- */
 .arbol-card {
-  background: white;
+  background: #fdfdfd;
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-  transition: all 0.4s ease;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   cursor: pointer;
-  border: 1px solid #edf2f7;
+  border: 1px solid rgba(45, 106, 79, 0.08);
 }
 
 .arbol-card:hover {
@@ -155,7 +165,7 @@ body {
 
 .arbol-card-cientifico {
   font-size: 1rem;
-  color: #2f855a; /* Verde saturado */
+  color: var(--color-bosque-helecho); 
   font-style: italic;
   font-weight: 700;
   margin-bottom: 15px;
@@ -207,10 +217,10 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2rem;
   margin: 3rem 0;
-  background: #f8fafc;
+  background: var(--color-crema-organico);
   padding: 2.5rem;
   border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(58, 90, 64, 0.1);
 }
 
 .modal-info-label {

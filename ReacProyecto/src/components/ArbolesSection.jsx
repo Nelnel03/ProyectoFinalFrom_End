@@ -24,11 +24,13 @@ function ArbolModal({ arbol, onClose }) {
             className="modal-img"
             onError={() => setImgError(true)}
           />
+
         ) : (
           <div className="modal-img-placeholder">
-            🌳
+           
           </div>
         )}
+
 
         <div className="modal-body">
           <h2 className="modal-nombre">{arbol.nombre}</h2>
@@ -54,14 +56,16 @@ function ArbolModal({ arbol, onClose }) {
 
           {arbol.descripcion && (
             <div className="modal-section">
-              <h3 className="modal-section-title">📋 Descripción</h3>
+              <h3 className="modal-section-title">Descripción</h3>
               <p className="modal-section-text">{arbol.descripcion}</p>
             </div>
           )}
 
           {arbol.cuidados && (
+
             <div className="modal-section">
-              <h3 className="modal-section-title">🌱 Cuidados</h3>
+              <h3 className="modal-section-title">Cuidados</h3>
+
               <p className="modal-section-text">{arbol.cuidados}</p>
             </div>
           )}
@@ -87,7 +91,7 @@ function ArbolCard({ arbol, count, onClick }) {
         />
       ) : (
         <div className="arbol-card-img-placeholder">
-          🌳
+          
           <span>Sin imagen</span>
         </div>
       )}
@@ -110,9 +114,11 @@ function ArbolCard({ arbol, count, onClick }) {
           </div>
         )}
         
-        <p className="arbol-card-hint">🔍 CLICK PARA DETALLES</p>
+
+        <p className="arbol-card-hint">CLICK PARA DETALLES</p>
+
       </div>
-    </div>
+    </div> 
   );
 }
 
@@ -147,8 +153,9 @@ function ArbolesSection({ arboles }) {
 
   return (
     <section className="arboles-section">
+
       <div className="arboles-section-header">
-        <h2 className="arboles-section-title">🌿 Especies Registradas</h2>
+        <h2 className="arboles-section-title">Especies Registradas</h2>
         <p className="arboles-section-subtitle">
           Explora la diversidad forestal de nuestro corredor biológico.
         </p>
@@ -167,7 +174,7 @@ function ArbolesSection({ arboles }) {
         </div>
       ) : (
         <div className="arboles-empty">
-          <div className="tree-icon">🌲</div>
+          <div className="tree-icon"></div>
           <p>Aún no hay especies registradas en el sistema.</p>
         </div>
       )}

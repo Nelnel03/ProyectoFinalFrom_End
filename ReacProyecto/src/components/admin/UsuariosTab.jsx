@@ -21,7 +21,7 @@ function UsuariosTab({
 
       <div id="user-form-container" className="admin-form-card admin-user-form-container">
         <h3 className="admin-user-form-title">
-          <span className="admin-user-form-title-icon">{modoEdicionUsuario ? '' : ''}</span>
+          <span className="admin-user-form-title-icon"></span>
           {modoEdicionUsuario ? 'Editar Usuario' : 'Crear Usuarios'}
         </h3>
         
@@ -96,7 +96,7 @@ function UsuariosTab({
           <div key={user.id} className="admin-arbol-card admin-user-card">
             <div className="admin-user-card-header">
               <div className={`admin-user-avatar ${user.rol}`}>
-                {user.rol === 'admin' ? 'A' : 'U'}
+                {user.rol === 'admin' ? 'Admin' : 'User'}
               </div>
               <div className="admin-user-info-text">
                 <h3>{user.nombre}</h3>

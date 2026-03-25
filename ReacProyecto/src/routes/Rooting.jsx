@@ -1,38 +1,85 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import LandingPage from '../pages/LandingPage';
-import HistoryForm from '../pages/HistoryForm';
+
+
+import React from 'react';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
 import InicioAdimin from '../pages/InicioAdimin';
 import Login from '../pages/Login';
+import ResetPassword from '../pages/ResetPassword';
+import LandingPage from '../pages/LandingPage';
+import HistoryForm from '../pages/HistoryForm';
 import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
+import UserDashboard from '../components/UserDashboard';
+import VolunteerDashboard from '../components/VolunteerDashboard';
 
 function MainLayout() {
   const location = useLocation();
-  const isPremiumRoute = location.pathname === '/' || location.pathname === '/historia';
+  const isAuth = sessionStorage.getItem('isAuthenticated') === 'true';
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isPremiumRoute = 
+    location.pathname.startsWith('/user') || 
+    location.pathname.startsWith('/admin') || 
+    location.pathname.startsWith('/dashboard-user') || 
+    location.pathname.startsWith('/dashboard-voluntario');
+
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/reset-password';
 
   return (
-    <div className="app-main-layout-container">
-      {isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />)}
-      
+    <div className="app-main-layout-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* 
+          Condicional para el Nav/Navbar:
+          Si es una ruta tipo dashboard/admin, mostramos el Navbar.
+          Si es visitante normal, mostramos el Nav global.
+          Si es login o reset, no mostramos nada (form minimal).
+      */}
+      {!isAuthRoute && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+
+
+
       <div className="main-content-layout">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
+          <Route path="/voluntariado" element={<Voluntariado />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          
+          {/* Redirección para la ruta antigua /user a los nuevos dashboards */}
           <Route 
             path="/user" 
             element={
-              <PrivateRoutes rolesAllowed={['user', 'voluntario']}>
-                <InicioUser />
+              isAuth ? (
+                (() => {
+                  const u = JSON.parse(sessionStorage.getItem('user') || '{}');
+                  return u.rol === 'voluntario' ? <Navigate to="/dashboard-voluntario" replace /> : <Navigate to="/dashboard-user" replace />;
+                })()
+              ) : <Navigate to="/login" replace />
+            } 
+          />
+
+          <Route 
+            path="/dashboard-user" 
+            element={
+              <PrivateRoutes rolesAllowed={['user']}>
+                <UserDashboard />
               </PrivateRoutes>
             } 
           />
+
+          <Route 
+            path="/dashboard-voluntario" 
+            element={
+              <PrivateRoutes rolesAllowed={['voluntario']}>
+                <VolunteerDashboard />
+              </PrivateRoutes>
+            } 
+          />
+
           <Route 
             path="/admin" 
             element={
@@ -41,8 +88,6 @@ function MainLayout() {
               </PrivateRoutes>
             } 
           />
-          <Route path="/voluntariado" element={<Voluntariado />} />
-          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </div>
@@ -57,4 +102,4 @@ function Rooting() {
   );
 }
 
-export default Rooting;
+export default Rooting;

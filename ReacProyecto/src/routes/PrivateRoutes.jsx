@@ -11,7 +11,7 @@ const PrivateRoutes = ({ children, roleRequired, rolesAllowed = [] }) => {
       user = JSON.parse(userStr);
     }
   } catch (e) {
-    console.error("Error parsing user from sessionStorage", e);
+    console.error("Error parsing user from localStorage", e);
   }
 
   if (!isAuth) {

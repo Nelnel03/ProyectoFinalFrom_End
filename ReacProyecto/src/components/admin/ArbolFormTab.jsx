@@ -15,7 +15,7 @@ function ArbolFormTab({
 }) {
   return (
     <div className="admin-form-card">
-      <h2>{modoEdicion ? '✏️ Editar árbol' : '➕ Registrar nuevo árbol'}</h2>
+      <h2>{modoEdicion ? 'Editar árbol' : 'Registrar nuevo árbol'}</h2>
 
       <form onSubmit={handleSubmit}>
         <div className="admin-form-grid">
@@ -48,7 +48,7 @@ function ArbolFormTab({
                 {tiposDisponibles.map(tipo => (
                   <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
                 ))}
-                <option value="___nuevo___" className="admin-select-option-bold">➕ Añadir otro tipo...</option>
+                <option value="___nuevo___" className="admin-select-option-bold">Añadir otro tipo...</option>
               </select>
             ) : (
               <div className="admin-type-input-group">
@@ -67,7 +67,7 @@ function ArbolFormTab({
                   onClick={() => { setModoNuevoTipo(false); setForm({ ...form, tipo: tiposDisponibles[0] || '' }); }}
                   className="admin-btn-cancel-type"
                 >
-                  ❌ Cancelar
+                  Cancelar
                 </button>
               </div>
             )}
@@ -188,7 +188,7 @@ function ArbolFormTab({
                 />
               )}
               <div className="admin-img-preview-placeholder">
-                <span className="admin-img-no-preview">🖼️</span>
+                <span className="admin-img-no-preview"></span>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ function ArbolFormTab({
             Cancelar
           </button>
           <button type="submit" className="admin-btn-guardar">
-            {modoEdicion ? '💾 Guardar cambios' : '➕ Registrar árbol'}
+            {modoEdicion ? 'Guardar cambios' : 'Registrar árbol'}
           </button>
         </div>
       </form>
