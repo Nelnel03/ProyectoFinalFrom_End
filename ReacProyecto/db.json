@@ -230,6 +230,15 @@
       "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
+    },
+    {
+      "nombre": "sssssss",
+      "email": "g@g.com",
+      "telefono": "ssssssssssssssssssssssss",
+      "direccion": "sssssssssssssssssss",
+      "password": "111111",
+      "rol": "user",
+      "id": "DVAlcBR3ZBo"
     }
   ],
   "stats_tipos": [
