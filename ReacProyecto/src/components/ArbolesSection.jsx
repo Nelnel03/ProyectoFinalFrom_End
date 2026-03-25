@@ -26,7 +26,7 @@ function ArbolModal({ arbol, onClose }) {
           className="modal-img-placeholder"
           style={{ display: arbol.imagenUrl ? 'none' : 'flex' }}
         >
-          🌳
+          
         </div>
 
         <div className="modal-body">
@@ -85,7 +85,7 @@ function ArbolModal({ arbol, onClose }) {
 
           {arbol.cuidados && (
             <>
-              <h3 className="modal-section-title">🌱 Cuidados</h3>
+              <h3 className="modal-section-title"> Cuidados</h3>
               <p className="modal-section-text">{arbol.cuidados}</p>
             </>
           )}
@@ -112,7 +112,7 @@ function ArbolCard({ arbol, count, onClick }) {
         />
       ) : (
         <div className="arbol-card-img-placeholder">
-          🌳
+          
           <span>Sin imagen</span>
         </div>
       )}
@@ -148,7 +148,7 @@ function ArbolCard({ arbol, count, onClick }) {
           </div>
         )}
         
-        <p className="arbol-card-hint">🔍 Click para ver más información</p>
+        <p className="arbol-card-hint"> Click para ver más información</p>
       </div>
     </div>
   );
@@ -186,7 +186,7 @@ function ArbolesSection({ arboles }) {
 
   return (
     <section className="arboles-section">
-      <h2 className="arboles-section-title">🌿 Especies Registradas</h2>
+      <h2 className="arboles-section-title"> Especies Registradas</h2>
       <p className="arboles-section-subtitle">
         Explora nuestra base de datos forestal agrupada por tipo de árbol — haz click en una tarjeta para ver información exhaustiva de la especie.
       </p>
@@ -204,7 +204,7 @@ function ArbolesSection({ arboles }) {
         </div>
       ) : (
         <div className="arboles-empty">
-          <div className="tree-icon">🌲</div>
+          <div className="tree-icon"></div>
           <p>Aún no hay especies registradas en el sistema.</p>
         </div>
       )}
