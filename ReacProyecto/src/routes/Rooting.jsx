@@ -26,14 +26,19 @@ function MainLayout() {
     location.pathname.startsWith('/dashboard-user') || 
     location.pathname.startsWith('/dashboard-voluntario');
 
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/reset-password';
+
   return (
     <div className="app-main-layout-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* 
           Condicional para el Nav/Navbar:
-          Si es una ruta tipo dashboard/admin, mostramos el Navbar (o nada si admin tiene su propio header).
+          Si es una ruta tipo dashboard/admin, mostramos el Navbar.
           Si es visitante normal, mostramos el Nav global.
+          Si es login o reset, no mostramos nada (form minimal).
       */}
-      {isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />)}
+      {!isAuthRoute && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+
+
 
       <div className="main-content-layout">
         <Routes>

@@ -41,10 +41,10 @@
       "descripcion": "asdfghjklñ{",
       "cuidados": "fgrgg",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ftBiVKSFg75-FYxRC9tjfgHaFj%3Fpid%3DApi&f=1&ipt=dfa40ad5d11e88c37ac0c1a1c433b998550fdaead0183dbe6650c738a96f5c06&ipo=images",
-      "estado": "muerto",
+      "estado": "vivo",
       "fechaRegistro": "2026-03-17",
       "id": "2440",
-      "fechaMuerto": "2026-03-23",
+      "fechaMuerto": null,
       "historialAbono": [
         {
           "abono": "Abono ",
@@ -62,6 +62,12 @@
           "fecha": "2026-03-19",
           "hora": "15:42",
           "idAbono": "1ee4"
+        },
+        {
+          "idAbono": "1ee4",
+          "nombreAbono": "abono organico",
+          "fecha": "2026-03-25",
+          "hora": "06:05 p. m."
         }
       ]
     },
@@ -178,12 +184,8 @@
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
-
-
       "password": "12345678",
       "rol": "user"
-
-
     }
   ],
   "stats_tipos": [
@@ -191,10 +193,9 @@
       "id": "11f2",
       "tipo": "guanacaste",
       "planificados": 0,
-      "muertos": 1
+      "muertos": 0
     }
   ],
-
   "abonos": [
     {
       "id": "1ede",
@@ -211,14 +212,13 @@
     {
       "id": "1ee4",
       "nombre": "abono organico",
-      "stock": 199,
+      "stock": 198,
       "unidad": "500g",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
   "reportes": [
     {
-
       "id": "6bb7",
       "nombre": "Charlie",
       "puesto": "Sembrado y Mantenimiento",
@@ -242,8 +242,6 @@
       "area": "Reforestación",
       "telefono": "8888-8888",
       "fechaIngreso": "2026-03-20"
-
-
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -174,18 +174,18 @@ function MainPagesLogin() {
   };
 
   return (
-    <div className="visitante-container">
-      <header className="visitante-header">
-
-
-        <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
-
-        <h1>BIOMON ADI</h1>
-        <p>Monitoreo de árboles, especies y estado de vida</p>
-      </header>
-
+    <div className="login-minimal-wrapper">
       <div className="login-card">
+        <button 
+          className="login-back-btn" 
+          onClick={() => navigate('/')}
+          title="Volver a la página principal"
+        >
+          ← Volver al Inicio
+        </button>
+
         <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+
 
         {error && (
           <div className="login-error-msg">
