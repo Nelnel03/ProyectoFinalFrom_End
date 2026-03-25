@@ -14,12 +14,12 @@ function AbonosTab({
   return (
     <div className="admin-abonos-container">
       <div className="admin-section-header">
-        <h2>🌿 Gestión de Abonos y Fertilizantes</h2>
+        <h2>Gestión de Abonos y Fertilizantes</h2>
         <p>Control de inventario y reposición de insumos</p>
       </div>
 
       <div className="admin-abono-form-card">
-        <h3>{modoEdicionAbono ? '✏️ Reponer / Editar Stock' : '➕ Registrar Nuevo Producto'}</h3>
+        <h3>{modoEdicionAbono ? 'Reponer / Editar Stock' : 'Registrar Nuevo Producto'}</h3>
         <form onSubmit={handleAbonoSubmit} className="admin-abono-form">
           <div className="admin-form-group">
             <label>Nombre del Producto</label>
@@ -65,7 +65,7 @@ function AbonosTab({
           </div>
           <div className="admin-abono-form-actions">
             <button type="submit" className="admin-btn-save-abono">
-              {modoEdicionAbono ? '💾 Guardar Inventario' : '➕ Agregar al Sistema'}
+              {modoEdicionAbono ? 'Guardar Inventario' : 'Agregar al Sistema'}
             </button>
             {modoEdicionAbono && (
               <button type="button" onClick={resetFormAbono} className="admin-btn-cancel-abono">
@@ -89,7 +89,7 @@ function AbonosTab({
                     onError={(e) => e.target.classList.add('error')} 
                   />
                 )}
-                <span>🔋</span>
+                <span></span>
               </div>
               <div className="admin-abono-info">
                 <h4>{abono.nombre}</h4>
@@ -100,8 +100,8 @@ function AbonosTab({
               </div>
             </div>
             <div className="admin-abono-card-footer">
-              <button onClick={() => handleEditarAbono(abono)} className="btn-edit-stock">✏️ Editar Stock</button>
-              <button onClick={() => handleEliminarAbono(abono.id, abono.nombre)} className="btn-delete-abono">🗑️ Eliminar</button>
+              <button onClick={() => handleEditarAbono(abono)} className="btn-edit-stock">Editar Stock</button>
+              <button onClick={() => handleEliminarAbono(abono.id, abono.nombre)} className="btn-delete-abono">Eliminar</button>
             </div>
           </div>
         ))}

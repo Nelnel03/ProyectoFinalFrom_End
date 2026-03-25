@@ -141,7 +141,7 @@ function MainPagesInicoVisitante() {
             {/* Formulario de registro */}
             <div className="user-register-form-wrapper visitante-register-wrapper">
               <h3 className="visitante-register-title">
-                 🔐 Crea tu cuenta
+                 Crea tu cuenta
               </h3>
 
               {mensaje && <div className="registro-exito-msg">{mensaje}</div>}

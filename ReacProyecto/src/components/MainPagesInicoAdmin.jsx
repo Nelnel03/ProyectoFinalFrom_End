@@ -392,7 +392,7 @@ function MainPagesInicoAdmin() {
   // ── Conversiones ──────────────────────────────────────────────────────────
   const handleConvertirUsuarioAVoluntariado = async (user) => {
     const { value: formValues } = await Swal.fire({
-      title: '🤝 Convertir a Voluntario',
+      title: 'Convertir a Voluntario',
       html:
         `<div style="text-align: left; margin-bottom: 5px; font-weight: bold;">Cual será su área?</div>` +
         `<input id="swal-input1" class="swal2-input" placeholder="Área de Interés / Cargo" style="margin-top: 5px;">` +
@@ -451,7 +451,7 @@ function MainPagesInicoAdmin() {
     }
 
     const { value: password } = await Swal.fire({
-      title: '👤 Convertir a Usuario',
+      title: 'Convertir a Usuario',
       text: `Ingresa una contraseña para la nueva cuenta de "${vol.nombre}":`,
       input: 'password',
       inputPlaceholder: 'Contraseña de acceso',
@@ -620,7 +620,7 @@ function MainPagesInicoAdmin() {
     }
 
     const { value: abonoSeleccionadoId } = await Swal.fire({
-      title: '🌿 Aplicar Abono/Fertilizante',
+      title: 'Aplicar Abono/Fertilizante',
       text: `Selecciona el producto para el árbol "${arbol.nombre}":`,
       input: 'select',
       inputOptions: abonos.reduce((acc, curr) => {
@@ -861,7 +861,7 @@ function MainPagesInicoAdmin() {
         : `¿Deseas eliminar las estadísticas del tipo "${tipoDelete}"?`;
 
      const result = await Swal.fire({
-        title: '⚠️ ¿Eliminar este tipo?',
+        title: '¿Eliminar este tipo?',
         text: mensajeConfirmacion,
         icon: 'error',
         showCancelButton: true,
@@ -921,13 +921,13 @@ function MainPagesInicoAdmin() {
         <div className="premium-header-flex">
           <div>
             <h2 className="premium-header-subtitle">BioMon ADI</h2>
-            <h1>🌳 Panel de Control</h1>
+            <h1>Panel de Control</h1>
             <p className="premium-header-welcome">
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
           <button className="btn-logout-premium" onClick={handleLogout}>
-            🚪 Cerrar Sesión
+            Cerrar Sesión
           </button>
         </div>
       </header>
@@ -942,13 +942,13 @@ function MainPagesInicoAdmin() {
         {/* Tabs de navegación Premium */}
         <div className="premium-tabs premium-tabs-container">
           {[
-            { id: 'resumen', label: '📊 Resumen', reset: resetForm },
-            { id: 'lista', label: `📋 Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },
-            { id: 'bajas', label: `🍂 Bajas (${arboles.filter(a => a.estado === 'muerto').length})`, reset: resetForm },
-            { id: 'usuarios', label: '👥 Usuarios', reset: resetFormUsuario },
-            { id: 'voluntariados', label: '🤝 Voluntariados', reset: resetFormVoluntariado },
-            { id: 'abonos', label: `🦴 Abonos (${abonos.length})`, reset: resetFormAbono },
-            { id: 'agregar', label: modoEdicion ? '✏️ Editar' : '➕ Agregar', reset: resetForm }
+            { id: 'resumen', label: 'Resumen', reset: resetForm },
+            { id: 'lista', label: `Árboles (${arboles.filter(a => a.estado !== 'muerto').length})`, reset: resetForm },
+            { id: 'bajas', label: `Bajas (${arboles.filter(a => a.estado === 'muerto').length})`, reset: resetForm },
+            { id: 'usuarios', label: 'Usuarios', reset: resetFormUsuario },
+            { id: 'voluntariados', label: 'Voluntariados', reset: resetFormVoluntariado },
+            { id: 'abonos', label: `Abonos (${abonos.length})`, reset: resetFormAbono },
+            { id: 'agregar', label: modoEdicion ? 'Editar' : 'Agregar', reset: resetForm }
           ].map(t => (
             <button
               key={t.id}

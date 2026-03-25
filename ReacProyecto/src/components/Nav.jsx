@@ -62,7 +62,7 @@ function Nav() {
                   to={sessionStorage.getItem('user') ? (JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/user'}
                   className="visitor-login-btn visitor-btn-panel"
                 >
-                  🚀 Panel
+                  Panel
                 </NavLink>
               )}
               <button 
@@ -74,7 +74,7 @@ function Nav() {
                 }}
                 className="visitor-login-btn visitor-btn-logout"
               >
-                🚪 Cerrar Sesión
+                Cerrar Sesión
               </button>
             </div>
           )}

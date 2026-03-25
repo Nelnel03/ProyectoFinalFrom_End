@@ -15,13 +15,13 @@ function VoluntariadosTab({
   return (
     <div>
       <div className="admin-section-header">
-        <h2 className="admin-section-title-white">🤝 Gestión de Voluntarios</h2>
+        <h2 className="admin-section-title-white">Gestión de Voluntarios</h2>
         <p className="admin-section-subtitle-green">Administrar la base de datos de voluntarios y sus áreas</p>
       </div>
 
       <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
         <h3 className="admin-user-form-title">
-          <span className="admin-user-form-title-icon">{modoEdicionVoluntariado ? '✏️' : '🤝'}</span>
+          <span className="admin-user-form-title-icon">{modoEdicionVoluntariado ? '' : ''}</span>
           {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
         </h3>
         
@@ -80,7 +80,7 @@ function VoluntariadosTab({
           
           <div className="admin-user-form-footer">
             <button type="submit" className="admin-btn-user-submit">
-              {modoEdicionVoluntariado ? '💾 Actualizar Ficha' : '➕ Registrar Voluntario'}
+              {modoEdicionVoluntariado ? 'Actualizar Ficha' : 'Registrar Voluntario'}
             </button>
             {modoEdicionVoluntariado && (
               <button type="button" onClick={resetFormVoluntariado} className="admin-btn-user-cancel">
@@ -96,7 +96,7 @@ function VoluntariadosTab({
           <div key={vol.id} className="admin-arbol-card admin-user-card">
             <div className="admin-user-card-header">
               <div className="admin-user-avatar admin-vol-avatar">
-                🤝
+                V
               </div>
               <div className="admin-user-info-text">
                 <h3>{vol.nombre}</h3>
@@ -105,8 +105,8 @@ function VoluntariadosTab({
             </div>
             
             <div className="admin-vol-contact-box">
-              <p>📧 <strong>Email:</strong> {vol.email}</p>
-              <p>📞 <strong>Tel:</strong> {vol.telefono}</p>
+              <p><strong>Email:</strong> {vol.email}</p>
+              <p><strong>Tel:</strong> {vol.telefono}</p>
             </div>
 
             <div className="admin-vol-date">
@@ -118,19 +118,19 @@ function VoluntariadosTab({
                 onClick={() => handleEditarVoluntariado(vol)} 
                 className="admin-btn-user-edit"
               >
-                ✏️ Editar
+                Editar
               </button>
               <button 
                 onClick={() => handleEliminarVoluntariado(vol.id, vol.nombre)} 
                 className="admin-btn-user-delete"
               >
-                🗑️ Baja
+                Baja
               </button>
               <button 
                 onClick={() => handleConvertirVoluntariadoAUsuario(vol)} 
                 className="admin-vol-btn-convert"
               >
-                👤 Convertir a Usuario
+                Convertir a Usuario
               </button>
             </div>
           </div>
