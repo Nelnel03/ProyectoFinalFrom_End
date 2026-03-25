@@ -908,11 +908,7 @@ function MainPagesInicoAdmin() {
     setModoNuevoTipo(false);
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
-    navigate('/');
-  };
+
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
@@ -926,9 +922,7 @@ function MainPagesInicoAdmin() {
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
-          <button className="btn-logout-premium" onClick={handleLogout}>
-            Cerrar Sesión
-          </button>
+
         </div>
       </header>
 

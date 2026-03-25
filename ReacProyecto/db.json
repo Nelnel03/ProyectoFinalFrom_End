@@ -68,6 +68,12 @@
           "nombreAbono": "abono organico",
           "fecha": "2026-03-25",
           "hora": "06:05 p. m."
+        },
+        {
+          "idAbono": "1ee4",
+          "nombreAbono": "abono organico",
+          "fecha": "2026-03-25",
+          "hora": "15:35"
         }
       ]
     },
@@ -220,7 +226,6 @@
       "disponibilidad": null,
       "necesidades": "casita",
       "fechaRegistro": "2026-03-23T20:22:59.414Z",
-
       "id": "nwJvLLCaUgg",
       "resetToken": "o5phuesjo69r3drsixzy7i",
       "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
@@ -240,7 +245,6 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-
     }
   ],
   "stats_tipos": [
@@ -267,14 +271,13 @@
     {
       "id": "1ee4",
       "nombre": "abono organico",
-      "stock": 198,
+      "stock": 197,
       "unidad": "500g",
       "imagenUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.a1-pQ7JtDaavdFtj4hcGIQHaFj%3Fpid%3DApi&f=1&ipt=1d447f037fa09301a4a47205a83363ebcfe780e1dd4ba49919a5aca96afe02fb&ipo=images"
     }
   ],
   "reportes": [
     {
-
       "id": "2ed3",
       "asunto": "sdfghjk",
       "mensaje": "dfrtyuikjnbvcwertyjjhgf",
@@ -293,7 +296,6 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
-
     }
   ],
   "reportes_robados": [],
