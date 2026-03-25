@@ -24,17 +24,17 @@ function MainVoluntariado() {
         
         <div className="voluntariado-info-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
           <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🌱</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
             <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Restauración Ecológica</h3>
             <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Participa en la selección, siembra y monitoreo de especies nativas bajo estándares científicos.</p>
           </div>
           <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🛡️</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
             <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Vigilancia y Protección</h3>
             <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Colabora con el equipo de patrullaje para prevenir la tala ilegal y asegurar la integridad de la reserva.</p>
           </div>
           <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>📚</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
             <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Gestión de Datos</h3>
             <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Asiste en el censo forestal y el registro digital de cada árbol en nuestra plataforma tecnológica.</p>
           </div>

@@ -7,13 +7,13 @@ function BajasTab({ arboles, handleEditar }) {
   return (
     <div>
       <div className="admin-section-header">
-        <h2>🍂 Registro de Bajas</h2>
+        <h2>Registro de Bajas</h2>
         <p>Historial de piezas forestales declaradas como pérdida</p>
       </div>
 
       {bajas.length === 0 ? (
         <div className="admin-empty-msg">
-          <div className="admin-empty-icon">🍃</div>
+          <div className="admin-empty-icon"></div>
           <p>No hay registros de bajas en el sistema.</p>
         </div>
       ) : (
@@ -25,7 +25,7 @@ function BajasTab({ arboles, handleEditar }) {
                <div className="admin-baja-img-wrap">
                   {arbol.imagenUrl ? (
                      <img src={arbol.imagenUrl} alt={arbol.nombre} className="admin-baja-img" />
-                  ) : <div className="admin-baja-placeholder">🍂</div>}
+                  ) : <div className="admin-baja-placeholder"></div>}
                </div>
                <div className="admin-baja-info">
                   <h3 className="admin-baja-title">{arbol.nombre}</h3>
@@ -47,7 +47,7 @@ function BajasTab({ arboles, handleEditar }) {
                      className="admin-edit-btn admin-btn-small" 
                      onClick={() => handleEditar(arbol)}
                   >
-                     ✏️ Restaurar/Editar
+                     Restaurar/Editar
                   </button>
                </div>
             </div>

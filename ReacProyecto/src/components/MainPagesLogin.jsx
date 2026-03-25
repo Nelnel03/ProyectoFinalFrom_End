@@ -11,8 +11,6 @@ function MainPagesLogin() {
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,6 +33,8 @@ function MainPagesLogin() {
     setLoading(true);
 
 
+
+
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
@@ -45,6 +45,10 @@ function MainPagesLogin() {
     }
 
     try {
+
+
+
+
       const usuarios = await services.getUsuarios();
       const user = usuarios.find(u => u.email === trimmedEmail && u.password === trimmedPassword);
 
@@ -110,7 +114,7 @@ function MainPagesLogin() {
     e.preventDefault();
     setError('');
 
-    if (!nombre.trim() || !email.trim() || !telefono.trim() || !password.trim() || !direccion.trim() || !fechaNacimiento) {
+    if (!nombre.trim() || !email.trim() || !telefono.trim() || !password.trim()) {
       Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
       return;
     }
@@ -125,10 +129,22 @@ function MainPagesLogin() {
       return;
     }
 
-    if (password.length < 6) {
-      Swal.fire('Error', 'La contraseña debe tener al menos 6 caracteres', 'error');
+    if (password.length < 8) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 8 caracteres', 'error');
       return;
     }
+
+    const vowelCount = (nombre.match(/[aeiouáéíóúü]/gi) || []).length;
+    if (vowelCount < 2) {
+      Swal.fire('Error', 'El nombre completo debe contener al menos dos vocales', 'error');
+      return;
+    }
+
+    if (email.trim().length < 11) {
+      Swal.fire('Error', 'El correo electrónico debe tener al menos 11 caracteres', 'error');
+      return;
+    }
+
 
     try {
       const usuarios = await services.getUsuarios();
@@ -141,8 +157,6 @@ function MainPagesLogin() {
         nombre: nombre.trim(),
         email: email.trim(),
         telefono: telefono.trim(),
-        direccion: direccion.trim(),
-        fechaNacimiento: fechaNacimiento,
         password: password.trim(),
         rol: 'user'
       };
@@ -160,8 +174,6 @@ function MainPagesLogin() {
       setNombre('');
 
       setTelefono('');
-      setDireccion('');
-      setFechaNacimiento('');
       setPassword('');
       setConfirmPassword('');
     } catch (err) {
@@ -172,18 +184,20 @@ function MainPagesLogin() {
   };
 
   return (
-    <div className="visitante-container">
-      <header className="visitante-header">
-
-
-        <img src="/src/assets/logo.png" alt="Logo" className="visitante-logo" />
-
-        <h1>BIOMON ADI</h1>
-        <p>Monitoreo de árboles, especies y estado de vida</p>
-      </header>
-
+    <div className="login-minimal-wrapper">
       <div className="login-card">
+        <button 
+          className="login-back-btn" 
+          onClick={() => navigate('/')}
+          title="Volver a la página principal"
+        >
+          ← Volver al Inicio
+        </button>
+
         <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+
+
+
 
         {error && (
           <div className="login-error-msg">
@@ -209,31 +223,15 @@ function MainPagesLogin() {
                 <input
                   type="tel"
                   value={telefono}
-                  onChange={(e) => setTelefono(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    if (val.length <= 8) setTelefono(val);
+                  }}
                   required
-                  placeholder="8888-8888"
+                  placeholder="88888888"
+                  maxLength="8"
                 />
               </div>
-              <div className="form-group">
-                <label>Dirección</label>
-                <input
-                  type="text"
-                  value={direccion}
-                  onChange={(e) => setDireccion(e.target.value)}
-                  required
-                  placeholder="Calle, Ciudad, Provincia"
-                />
-              </div>
-              <div className="form-group">
-                <label>Fecha de Nacimiento</label>
-                <input
-                  type="date"
-                  value={fechaNacimiento}
-                  onChange={(e) => setFechaNacimiento(e.target.value)}
-                  required
-                />
-              </div>
-
             </>
           )}
 

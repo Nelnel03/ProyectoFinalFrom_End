@@ -1,41 +1,86 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../styles/Navbar.css';
+
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [auth, setAuth] = useState(sessionStorage.getItem('isAuthenticated') === 'true');
+    const userJson = sessionStorage.getItem('user');
+    const user = userJson ? JSON.parse(userJson) : null;
+
+    useEffect(() => {
+        setAuth(sessionStorage.getItem('isAuthenticated') === 'true');
+    }, [location]);
+
+    const handleLogout = () => {
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: "¿Estás seguro de que quieres salir?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#344e41',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, Salir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sessionStorage.clear(); // Limpiamos todo para estar seguros
+                setAuth(false);
+                navigate('/');
+            }
+        });
+    };
+
 
     return (
-
         <nav className="navbar-main">
-            {/* OJO: Aquí se rompió la anidación del JSX en el código original, el nav debe tener 2 divs dentro.
-                Yo solo reemplazo estilos. El div original del logo estaba antes. */}
             <div onClick={() => navigate('/')} className="navbar-logo-container">
                 <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
                 <h2 className="navbar-logo-title">BioMon ADI</h2>
             </div>
             
             <div className="navbar-links-container">
-                <button onClick={() => navigate('/')} className="navbar-btn-link">
-                    Inicio
-                </button>
+                {!location.pathname.startsWith('/admin') && (
+                    <button onClick={() => navigate('/')} className="navbar-btn-link">
+                        Inicio
+                    </button>
+                )}
+
                 <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
                     Mapa
                 </button>
-                <button onClick={() => navigate('/historia')} className="navbar-btn-link">
+                {!location.pathname.startsWith('/admin') && (
+                    <button onClick={() => navigate('/historia')} className="navbar-btn-link">
+                        Historia
+                    </button>
+                )}
 
-                    Historia
-                </button>
-                <button 
-                    onClick={() => navigate('/login')} 
 
-                    className="navbar-btn-acceder"
+                {!auth ? (
+                    <button 
+                        onClick={() => navigate('/login')} 
+                        className="navbar-btn-acceder"
+                    >
+                        Acceder
+                    </button>
+                ) : (
+                    <div className="navbar-auth-actions">
 
-                >
-                    Acceder
-                </button>
+                        <button 
+                            onClick={handleLogout} 
+                            className="navbar-btn-logout"
+                        >
+                            Salir
+                        </button>
+                    </div>
+                )}
+
             </div>
         </nav>
     );
 };
 
 export default Navbar;
+

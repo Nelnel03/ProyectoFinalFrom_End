@@ -44,7 +44,7 @@ function VolunteerDashboard() {
   if (!user) {
     return (
       <div style={{ textAlign: 'center', padding: '10rem 2rem', color: '#166534' }}>
-        <h2 style={{ fontSize: '2rem' }}>⌛ Cargando sesión de voluntario...</h2>
+        <h2 style={{ fontSize: '2rem' }}>Cargando sesión de voluntario...</h2>
         <p>Espera un momento mientras preparamos tu centro de servicio.</p>
       </div>
     );
@@ -55,7 +55,7 @@ function VolunteerDashboard() {
   return (
     <div className="visitante-container" style={{ backgroundColor: '#f0fdf4' }}>
       <header className="visitante-header" style={{ background: 'linear-gradient(135deg, #166534 0%, #1a4d2e 100%)', padding: '3rem 1rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>👷 Centro de Servicio</h1>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: '800' }}>Centro de Servicio</h1>
         <p style={{ opacity: 0.9, fontSize: '1.2rem' }}>¡Hola {user?.nombre}! Gestiona tus actividades y horas trabajadas.</p>
       </header>
 
@@ -77,21 +77,21 @@ function VolunteerDashboard() {
             className={`nav-pill ${currentTab === 'gestion_tareas' ? 'active' : ''}`}
             style={{ padding: '10px 20px', borderRadius: '25px', border: 'none', cursor: 'pointer', fontWeight: 'bold', backgroundColor: currentTab === 'gestion_tareas' ? '#166534' : '#f3f4f6', color: currentTab === 'gestion_tareas' ? 'white' : '#4b5563' }}
           >
-            📋 Reportar Labor
+            Reportar Labor
           </button>
           <button 
             onClick={() => setCurrentTab('mis_reportes')}
             className={`nav-pill ${currentTab === 'mis_reportes' ? 'active' : ''}`}
             style={{ padding: '10px 20px', borderRadius: '25px', border: 'none', cursor: 'pointer', fontWeight: 'bold', backgroundColor: currentTab === 'mis_reportes' ? '#166534' : '#f3f4f6', color: currentTab === 'mis_reportes' ? 'white' : '#4b5563' }}
           >
-            📊 Mi Historial
+            Mi Historial
           </button>
           <button 
             onClick={() => setCurrentTab('perfil')}
             className={`nav-pill ${currentTab === 'perfil' ? 'active' : ''}`}
             style={{ padding: '10px 20px', borderRadius: '25px', border: 'none', cursor: 'pointer', fontWeight: 'bold', backgroundColor: currentTab === 'perfil' ? '#166534' : '#f3f4f6', color: currentTab === 'perfil' ? 'white' : '#4b5563' }}
           >
-            🎓 Perfil Profesional
+            Perfil Profesional
           </button>
         </section>
 

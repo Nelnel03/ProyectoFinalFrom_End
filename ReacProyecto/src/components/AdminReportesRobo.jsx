@@ -74,7 +74,7 @@ function AdminReportesRobo() {
     <div>
       <div className="admin-section-header">
 
-        <h2 className="admin-reports-robo-header">🚨 Reportes de Árboles Robados</h2>
+        <h2 className="admin-reports-robo-header">Reportes de Árboles Robados</h2>
         <p className="admin-reports-header-subtitle">Alertas de sustracción o tala ilegal reportadas por los usuarios</p>
 
       </div>
@@ -85,7 +85,7 @@ function AdminReportesRobo() {
         </div>
       ) : reportes.length === 0 ? (
         <div className="admin-reports-empty">
-          <div className="admin-reports-empty-icon">🛡️</div>
+          <div className="admin-reports-empty-icon"></div>
           <p>La bandeja está vacía. No hay reportes de árboles robados actualmente.</p>
         </div>
       ) : (
@@ -97,7 +97,7 @@ function AdminReportesRobo() {
                 <div>
                   <h3 className="admin-report-card-title admin-report-card-title-robo">Tipo: {reporte.tipo_arbol}</h3>
                   <div className="admin-report-card-meta admin-report-card-meta-robo">
-                    <span>📍 {reporte.ubicacion}</span>
+                    <span>{reporte.ubicacion}</span>
                   </div>
                 </div>
                 <div className="admin-report-card-status-wrap">
@@ -124,7 +124,7 @@ function AdminReportesRobo() {
                     onMouseOver={(e) => e.target.style.backgroundColor = '#fecaca'}
                     onMouseOut={(e) => e.target.style.backgroundColor = '#fee2e2'}
                   >
-                    🗑️ Eliminar Reporte
+                    Eliminar Reporte
                   </button>
                 </div>
               </div>
@@ -141,7 +141,7 @@ function AdminReportesRobo() {
                   onClick={() => handleEliminar(reporte.id)}
                   className="admin-report-btn-delete"
                 >
-                  🗑️ Eliminar Reporte
+                  Eliminar Reporte
                 </button>
               </div>
             </div>

@@ -1,8 +1,10 @@
 .visitante-container {
   font-family: var(--fuente-principal);
   min-height: 100vh;
+
   background-color: var(--color-arena);
   color: var(--color-texto);
+
   display: flex;
   flex-direction: column;
   align-items: center;

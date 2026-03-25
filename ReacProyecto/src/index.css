@@ -1,10 +1,11 @@
 :root {
-  /* --- PALETA DE COLORES "BOSQUE VIVO" (Flora y Fauna) --- */
-  --color-bosque-musgo: #2D6A4F;    /* Verde Esmeralda Vibrante */
-  --color-bosque-helecho: #40916C;  /* Verde Hoja Intenso */
-  --color-crema-organico: #F1F7ED;  /* Blanco Hojas Brillo (Fondo) */
-  --color-tierra-sombra: #081C15;   /* Sombra Profunda (Texto) */
-  --color-ocre-silvestre: #95d5b2;  /* Verde Pastel Vivo */
+  /* --- PALETA DE COLORES "BOSQUE CÁLIDO" (Nueva Versión) --- */
+  --color-bosque-musgo: #344e41;    /* Verde Bosque Profundo y Cálido */
+  --color-bosque-helecho: #3a5a40;  /* Verde Helecho Oliva */
+  --color-crema-organico: #fefae0;  /* Crema Cálido (Sol sobre hojas) */
+  --color-tierra-sombra: #283618;   /* Sombra Tierra Verdosa */
+  --color-ocre-silvestre: #a3b18a;  /* Verde Ocre Suave y Cálido */
+
 
   /* Colores de Fauna y Flora (Acentos Vibrantes) */
   --color-fauna-lapa: #FF9E00;      /* Naranja Lapa Roja */

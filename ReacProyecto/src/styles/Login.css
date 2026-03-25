@@ -1,3 +1,5 @@
+
+
 .login-card {
   background: var(--color-caracola);
   padding: 3rem;
@@ -110,4 +112,46 @@
   font-size: 0.9rem;
   border: 1px solid rgba(192, 57, 43, 0.1);
 }
+<<<<<<< HEAD
 
+=======
+.login-back-btn {
+  background: none;
+  border: none;
+  color: var(--color-bosque-helecho);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.login-back-btn:hover {
+  color: var(--color-bosque-musgo);
+  transform: translateX(-4px);
+}
+
+.login-minimal-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-arena);
+  padding: 2rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+>>>>>>> c1e867e2e5203a9e66ae6add120fd807ff50a9b2

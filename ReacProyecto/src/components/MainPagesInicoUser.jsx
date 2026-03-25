@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
-
 import '../styles/PremiumDashboard.css';
-
 
 function MainPagesInicoUser() {
   const [userName, setUserName] = useState('');
@@ -14,7 +12,7 @@ function MainPagesInicoUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -48,13 +46,12 @@ function MainPagesInicoUser() {
   };
 
   return (
-
     <div className="dashboard-premium">
       <div className="premium-header">
         <div className="user-premium-header-flex">
             <div>
                 <h2 className="user-premium-subtitle">BioMon ADI</h2>
-                <h1>🌳 ¡Hola! {userName}</h1>
+                <h1>¡Hola! {userName}</h1>
                 <p className="user-premium-greeting">
                     Tu portal personal de monitoreo forestal. Explora y protege la biodiversidad local.
                 </p>
@@ -66,7 +63,7 @@ function MainPagesInicoUser() {
                 onClick={handleLogout}
                 className="btn-logout-premium user-btn-logout-margin"
             >
-                🚪 Cerrar Sesión
+                Cerrar Sesión
             </button>
         </div>
       </div>
@@ -87,7 +84,6 @@ function MainPagesInicoUser() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
-
       </main>
     </div>
   );

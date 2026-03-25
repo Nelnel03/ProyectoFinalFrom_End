@@ -75,6 +75,7 @@ function ReporteForm({ user, onReportSubmitted }) {
     const nuevoReporte = {
       voluntarioId: user?.id || 'anonimo',
       voluntarioNombre: user?.nombre || 'Anónimo',
+      voluntarioEmail: user?.email || 'Sin correo',
       tipoTarea,
       horaInicio: startTime.toLocaleTimeString(),
       horaFin: endTime.toLocaleTimeString(),
@@ -138,7 +139,7 @@ function ReporteForm({ user, onReportSubmitted }) {
       
       {fase === 'inicio' && (
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ color: '#1a4d2e', marginBottom: '1.5rem' }}>🔧 Iniciar Nueva Tarea</h2>
+          <h2 style={{ color: '#1a4d2e', marginBottom: '1.5rem' }}>Iniciar Nueva Tarea</h2>
           <p style={{ color: '#6b7280', marginBottom: '2rem' }}>Selecciona el tipo de trabajo que vas a realizar hoy.</p>
           
           <div style={{ marginBottom: '2rem' }}>
@@ -177,14 +178,14 @@ function ReporteForm({ user, onReportSubmitted }) {
               boxShadow: '0 4px 10px rgba(26, 77, 46, 0.3)'
             }}
           >
-            ▶️ Iniciar Trabajo
+            Iniciar Trabajo
           </button>
         </div>
       )}
 
       {fase === 'trabajando' && (
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👷</div>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
           <h2 style={{ color: '#1a4d2e', marginBottom: '0.5rem' }}>Tarea en progreso</h2>
           <h3 style={{ color: '#2e6b46', marginBottom: '2rem', fontSize: '1.5rem' }}>{tipoTarea}</h3>
           
@@ -215,7 +216,7 @@ function ReporteForm({ user, onReportSubmitted }) {
                 cursor: 'pointer'
               }}
             >
-              🛑 Cancelar
+              Cancelar
             </button>
             <button
               onClick={handleFinalizarTrabajo}
@@ -231,7 +232,7 @@ function ReporteForm({ user, onReportSubmitted }) {
                 cursor: 'pointer'
               }}
             >
-              🏁 Finalizar y Reportar
+              Finalizar y Reportar
             </button>
           </div>
         </div>
@@ -239,7 +240,7 @@ function ReporteForm({ user, onReportSubmitted }) {
 
       {fase === 'revision' && (
         <div>
-          <h2 style={{ color: '#1a4d2e', marginBottom: '1.5rem', textAlign: 'center' }}>✅ Resumen del Trabajo</h2>
+          <h2 style={{ color: '#1a4d2e', marginBottom: '1.5rem', textAlign: 'center' }}>Resumen del Trabajo</h2>
           
           <div style={{ 
             backgroundColor: '#f9fafb', 
@@ -259,7 +260,7 @@ function ReporteForm({ user, onReportSubmitted }) {
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '1.2rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#1a4d2e' }}>
-                📸 Pruebas del trabajo (Link o descripción):
+                Pruebas del trabajo (Link o descripción):
               </label>
               <input
                 type="text"
@@ -312,7 +313,7 @@ function ReporteForm({ user, onReportSubmitted }) {
                   cursor: 'pointer'
                 }}
               >
-                ⬅️ Atrás
+                Atrás
               </button>
               <button
                 type="submit"
@@ -329,7 +330,7 @@ function ReporteForm({ user, onReportSubmitted }) {
                   cursor: enviando ? 'not-allowed' : 'pointer'
                 }}
               >
-                {enviando ? 'Enviando...' : '🚀 Enviar Reporte'}
+                {enviando ? 'Enviando...' : 'Enviar Reporte'}
               </button>
             </div>
           </form>

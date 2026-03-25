@@ -194,7 +194,7 @@
 }
 
 .modal-contenido {
-  background: #fff;
+  background: #fbfcfb;
   border-radius: 24px;
   max-width: 700px;
   width: 100%;
@@ -442,11 +442,12 @@
 }
 
 .admin-tabs-container {
-  background-color: white;
+  background-color: #fdfdfd;
   margin: 0 20px;
   padding: 3.5rem 3rem 0;
   border-radius: 0 0 24px 24px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  border: 1px solid rgba(45, 106, 79, 0.05);
 }
 
 .admin-tabs-pills {
@@ -461,8 +462,8 @@
 }
 
 .admin-tab-pill {
-  background-color: white;
-  border: none;
+  background-color: #f8faf7;
+  border: 1px solid rgba(45, 106, 79, 0.1);
 
   color: var(--color-bosque-helecho);
   font-size: 0.95rem;
@@ -805,8 +806,8 @@
 }
 
 .admin-stat-main-card {
-  background: white;
-  border: 2px solid var(--color-ocre-silvestre);
+  background: #fdfdfd;
+  border: 2px solid rgba(45, 106, 79, 0.1);
   border-radius: 20px;
   padding: 1.5rem;
   display: flex;

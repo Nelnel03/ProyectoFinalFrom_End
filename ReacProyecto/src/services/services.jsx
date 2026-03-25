@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:3000";
+
+const BASE_URL = "http://localhost:3005";
+
 
 async function getUsuarios() {
   try {
@@ -258,8 +260,9 @@ async function deleteAbonos(id) {
 async function getReportesVoluntariado() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener los reportes de voluntariado", error);
     return [];
@@ -283,8 +286,9 @@ async function postReporteVoluntariado(reporte) {
 async function getReportes() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes", error);
     return [];
@@ -305,11 +309,39 @@ async function postReportes(reporte) {
   }
 }
 
+
+async function putReportes(reporte, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    return await respuesta.json();
+  } catch (error) {
+    console.error("Error al actualizar reporte", error);
+  }
+}
+
+async function deleteReportes(id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
+      method: "DELETE",
+    });
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al eliminar el reporte", error);
+  }
+}
+
+
 async function getReportesRobados() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes de árboles robados", error);
     return [];
@@ -380,6 +412,8 @@ const services = {
   postReporteVoluntariado,
   getReportes,
   postReportes,
+  putReportes,
+  deleteReportes,
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,
@@ -412,6 +446,10 @@ export {
   postReporteVoluntariado,
   getReportes,
   postReportes,
+
+  putReportes,
+  deleteReportes,
+
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,
