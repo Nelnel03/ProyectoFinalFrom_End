@@ -184,6 +184,50 @@
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
+      "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
+      "rol": "voluntario",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
+      "area": "plantador",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-23"
+    },
+    {
+      "id": "6bb7",
+      "nombre": "Charlie",
+      "email": "carlos.v@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Sembrado",
+      "telefono": "11111111",
+      "fechaIngreso": "2026-03-17"
+    },
+    {
+      "id": "1005",
+      "nombre": "Usuario Ejemplo",
+      "email": "usuario-vol@gmail.com",
+      "password": "voluntario123",
+      "rol": "voluntario",
+      "area": "Mantenimiento",
+      "telefono": "88887777",
+      "fechaIngreso": "2026-03-19"
+    },
+    {
+      "nombre": "Barry Vega",
+      "email": "bvega@fwdcostarica.com",
+      "password": "Q2xhcjEyMzRAX1NFQ1VSRV9TQUxU",
+      "rol": "user",
+      "habilidades": null,
+      "disponibilidad": null,
+      "necesidades": "casita",
+      "fechaRegistro": "2026-03-23T20:22:59.414Z",
+      "id": "nwJvLLCaUgg",
+      "resetToken": "o5phuesjo69r3drsixzy7i",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z"
+    },
+    {
+      "id": "cb07",
+      "nombre": "alv",
+      "email": "alealvarela@gmail.com",
       "password": "12345678",
       "rol": "user"
     }
@@ -227,7 +271,19 @@
       "userEmail": "g@gmail.com",
       "fecha": "2026-03-25T02:17:08.657Z",
       "estado": "Pendiente"
+    },
+    {
+      "asunto": "ASDFGHJKdfg",
+      "mensaje": "sdfghjjhgfddfgh",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-25T02:38:56.583Z",
+      "estado": "En Proceso",
+      "id": "voj1VWU0_uQ"
     }
   ],
+  "reportes_robados": [],
+  "reportes_voluntariado": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -258,8 +258,9 @@ async function deleteAbonos(id) {
 async function getReportesVoluntariado() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener los reportes de voluntariado", error);
     return [];
@@ -283,8 +284,9 @@ async function postReporteVoluntariado(reporte) {
 async function getReportes() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes", error);
     return [];
@@ -333,8 +335,9 @@ async function deleteReportes(id) {
 async function getReportesRobados() {
   try {
     const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
+    if (!respuesta.ok) return [];
     const datos = await respuesta.json();
-    return datos;
+    return Array.isArray(datos) ? datos : [];
   } catch (error) {
     console.error("Error al obtener reportes de árboles robados", error);
     return [];

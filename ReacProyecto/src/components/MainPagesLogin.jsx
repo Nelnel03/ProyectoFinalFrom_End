@@ -35,6 +35,7 @@ function MainPagesLogin() {
     setLoading(true);
 
 
+
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
@@ -45,6 +46,7 @@ function MainPagesLogin() {
     }
 
     try {
+
 
 
       const usuarios = await services.getUsuarios();
