@@ -11,7 +11,7 @@ function ResumenTab({ arboles, tiposDisponibles, statsTipos, setTipoFiltro, setT
 
       <div className="admin-stats-grid">
         <div className="admin-stat-main-card">
-          <span className="admin-stat-icon">🌲</span>
+          <span className="admin-stat-icon"></span>
           <div className="admin-stat-info">
             <h3>{arboles.length}</h3>
             <p>Censo Total</p>
@@ -19,7 +19,7 @@ function ResumenTab({ arboles, tiposDisponibles, statsTipos, setTipoFiltro, setT
         </div>
 
         <div className="admin-stat-main-card blue-border">
-          <span className="admin-stat-icon blue">🌿</span>
+          <span className="admin-stat-icon blue"></span>
           <div className="admin-stat-info">
             <h3>{tiposDisponibles.length}</h3>
             <p>Especies/Tipos</p>
@@ -46,8 +46,8 @@ function ResumenTab({ arboles, tiposDisponibles, statsTipos, setTipoFiltro, setT
                   ></div>
                 </div>
                 <div className="admin-type-stat-footer">
-                  <span>📋 Plan: {stat?.planificados || 0}</span>
-                  <span className="muerto">🍂 Muerto: {stat?.muertos || 0}</span>
+                  <span>Plan: {stat?.planificados || 0}</span>
+                  <span className="muerto">Muerto: {stat?.muertos || 0}</span>
                 </div>
                 <p className="admin-type-percentage">
                   {arboles.length > 0 ? ((aliveCount / arboles.length) * 100).toFixed(1) : 0}% de vitalidad global

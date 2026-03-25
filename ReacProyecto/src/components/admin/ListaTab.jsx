@@ -40,14 +40,14 @@ function ListaTab({
               onChange={(e) => setTipoFiltro(e.target.value)}
               className="admin-filter-select"
             >
-              <option value="">🍀 Todos los Tipos</option>
+              <option value="">Todos los Tipos</option>
               {tiposDisponibles.map(tipo => (
                 <option key={tipo} value={tipo}>{tipo.charAt(0).toUpperCase() + tipo.slice(1)}</option>
               ))}
             </select>
 
             <button className="admin-add-btn" onClick={() => setTab('agregar')}>
-              ➕ Nuevo Árbol
+              Nuevo Árbol
             </button>
           </div>
         </div>
@@ -56,18 +56,18 @@ function ListaTab({
         {tipoFiltro && (
           <div className="admin-tracking-panel">
             <div className="admin-tracking-header">
-              <h3>📊 Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
+              <h3>Seguimiento: "{tipoFiltro.toUpperCase()}"</h3>
               <button 
                 onClick={() => handleEliminarTipo(tipoFiltro)}
                 className="admin-btn-delete-type"
               >
-                🗑️ Eliminar Tipo
+                Eliminar Tipo
               </button>
             </div>
             
             <div className="admin-tracking-stats">
               <div className="admin-form-group admin-form-group-no-margin">
-                <label className="admin-tracking-label-plan">📅 Planificados</label>
+                <label className="admin-tracking-label-plan">Planificados</label>
                 <input 
                   type="number" 
                   value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.planificados || 0}
@@ -76,7 +76,7 @@ function ListaTab({
                 />
               </div>
               <div className="admin-form-group admin-form-group-no-margin">
-                <label className="admin-tracking-label-dead">🍂 Bajas de este tipo</label>
+                <label className="admin-tracking-label-dead">Bajas de este tipo</label>
                 <input 
                   type="number" 
                   value={statsTipos.find(s => s.tipo === tipoFiltro.toLowerCase())?.muertos || 0}
@@ -85,7 +85,7 @@ function ListaTab({
                 />
               </div>
               <div className="admin-form-group admin-form-group-no-margin admin-opacity-muted">
-                <label className="admin-tracking-label-alive">🌲 Vivos en sistema</label>
+                <label className="admin-tracking-label-alive">Vivos en sistema</label>
                 <input 
                   type="text" 
                   disabled
@@ -104,7 +104,7 @@ function ListaTab({
         </div>
       ) : arboles.filter(a => a.estado !== 'muerto').length === 0 ? (
         <div className="admin-empty-msg">
-          <div className="admin-empty-icon">🌲</div>
+          <div className="admin-empty-icon"></div>
           <p>No hay árboles activos registrados. ¡Agrega el primero!</p>
         </div>
       ) : (
@@ -141,7 +141,7 @@ function ListaTab({
                     />
                   )}
                   <div className="admin-arbol-card-img-placeholder">
-                    🌳
+                     
                   </div>
 
                   <div className="admin-arbol-card-body">
@@ -150,15 +150,15 @@ function ListaTab({
                       {arbol.nombreCientifico || '—'}
                     </p>
                     <p className="admin-card-clima-altura">
-                      {arbol.clima ? `🌍 ${arbol.clima}` : ''}{' '}
-                      {arbol.altura ? `• 📏 ${arbol.altura}` : ''}
+                      {arbol.clima ? arbol.clima : ''}{' '}
+                      {arbol.altura ? `• ${arbol.altura}` : ''}
                     </p>
 
                     {/* Info de Abono */}
                     <div className="admin-arbol-status-abono">
                       <div className="admin-abono-count-wrap">
                          <span className="admin-abono-badge">
-                           🦴 {arbol.historialAbono?.length || 0} Abonos
+                           {arbol.historialAbono?.length || 0} Abonos
                          </span>
                          {arbol.historialAbono?.length > 0 && (
                            <button 
@@ -183,20 +183,20 @@ function ListaTab({
                         className="admin-btn-editar"
                         onClick={() => handleEditar(arbol)}
                       >
-                        ✏️ Editar
+                        Editar
                       </button>
                       <button
                         className="admin-btn-abonar"
                         onClick={() => handleAbonarArbol(arbol)}
                         title="Aplicar abono/fertilizante"
                       >
-                        🍽️ Abonar
+                        Abonar
                       </button>
                       <button
                         className="admin-btn-eliminar"
                         onClick={() => handleEliminar(arbol)}
                       >
-                        🗑️ Eliminar
+                        Eliminar
                       </button>
                     </div>
                   </div>

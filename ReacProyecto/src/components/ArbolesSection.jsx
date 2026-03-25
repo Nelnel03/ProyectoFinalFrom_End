@@ -27,7 +27,7 @@ function ArbolModal({ arbol, onClose }) {
 
         ) : (
           <div className="modal-img-placeholder">
-            🌳
+           
           </div>
         )}
 
@@ -56,7 +56,7 @@ function ArbolModal({ arbol, onClose }) {
 
           {arbol.descripcion && (
             <div className="modal-section">
-              <h3 className="modal-section-title">📋 Descripción</h3>
+              <h3 className="modal-section-title">Descripción</h3>
               <p className="modal-section-text">{arbol.descripcion}</p>
             </div>
           )}
@@ -64,7 +64,7 @@ function ArbolModal({ arbol, onClose }) {
           {arbol.cuidados && (
 
             <div className="modal-section">
-              <h3 className="modal-section-title">🌱 Cuidados</h3>
+              <h3 className="modal-section-title">Cuidados</h3>
 
               <p className="modal-section-text">{arbol.cuidados}</p>
             </div>
@@ -155,7 +155,7 @@ function ArbolesSection({ arboles }) {
     <section className="arboles-section">
 
       <div className="arboles-section-header">
-        <h2 className="arboles-section-title">🌿 Especies Registradas</h2>
+        <h2 className="arboles-section-title">Especies Registradas</h2>
         <p className="arboles-section-subtitle">
           Explora la diversidad forestal de nuestro corredor biológico.
         </p>

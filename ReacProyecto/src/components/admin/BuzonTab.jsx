@@ -126,9 +126,9 @@ function BuzonTab() {
 
   /* ── Tabs ── */
   const tabs = [
-    { id: 'soporte',      label: `✉️ Soporte (${reportesSoporte.length})`,     activeColor: 'var(--color-mar-profundo)' },
-    { id: 'robos',        label: `🚨 Robos (${reportesRobo.length})`,           activeColor: '#bc6c25' },
-    { id: 'actividades',  label: `📋 Labores (${reportesVoluntario.length})`,   activeColor: 'var(--color-bosque-helecho)' },
+    { id: 'soporte',      label: `Soporte (${reportesSoporte.length})`,     activeColor: 'var(--color-mar-profundo)' },
+    { id: 'robos',        label: `Robos (${reportesRobo.length})`,           activeColor: '#bc6c25' },
+    { id: 'actividades',  label: `Labores (${reportesVoluntario.length})`,   activeColor: 'var(--color-bosque-helecho)' },
   ];
 
   /* ── Selectores de estado inline ── */
@@ -162,7 +162,7 @@ function BuzonTab() {
         fontSize: '0.8rem', fontWeight: 'bold',
       }}
     >
-      🗑️ Eliminar
+      Eliminar
     </button>
   );
 
@@ -171,7 +171,7 @@ function BuzonTab() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>📬 Buzón Interno</h2>
+          <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>Buzón Interno</h2>
           <p style={{ margin: '4px 0 0', color: 'var(--color-texto)', opacity: 0.8, fontSize: '0.9rem' }}>
             Gestión de mensajes, reportes y actividades de la comunidad
           </p>
@@ -196,7 +196,7 @@ function BuzonTab() {
               {t.label}
             </button>
           ))}
-          <button onClick={cargarDatos} title="Actualizar" style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer' }}>🔄</button>
+          <button onClick={cargarDatos} title="Actualizar" style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: 'var(--color-texto)', fontWeight: 'bold' }}>↺</button>
         </div>
       </div>
 
@@ -250,8 +250,8 @@ function BuzonTab() {
                   <div key={rep.id} style={cardStyle('#bc6c25')}>
                     <div style={rowBetween}>
                       <div>
-                        <h3 style={{ margin: 0, color: '#bc6c25', fontSize: '1.05rem' }}>🌳 Árbol: {rep.tipo_arbol}</h3>
-                        <span style={metaText}>📍 {rep.ubicacion}</span>
+                        <h3 style={{ margin: 0, color: '#bc6c25', fontSize: '1.05rem' }}>Árbol: {rep.tipo_arbol}</h3>
+                        <span style={metaText}>{rep.ubicacion}</span>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
                         <SelectEstado
@@ -304,7 +304,7 @@ function BuzonTab() {
                     </div>
                     {rep.pruebas && (
                       <div style={{ marginTop: '0.7rem', padding: '8px 12px', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '1px solid #dcfce7', fontSize: '0.85rem' }}>
-                        📷 <strong>Pruebas:</strong> {rep.pruebas}
+                        <strong>Pruebas:</strong> {rep.pruebas}
                       </div>
                     )}
                   </div>
@@ -322,7 +322,7 @@ function BuzonTab() {
 function Vacia({ mensaje }) {
   return (
     <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: 'var(--color-crema-organico)', borderRadius: '15px' }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📭</div>
+      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}></div>
       <p style={{ margin: 0, color: 'var(--color-texto)', fontWeight: '500' }}>{mensaje}</p>
     </div>
   );

@@ -26,7 +26,7 @@ function ReportesTab() {
   return (
     <div className="tab-content" style={{ padding: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ color: '#1a4d2e', margin: 0 }}>📋 Reportes de Actividad de Voluntarios</h2>
+        <h2 style={{ color: '#1a4d2e', margin: 0 }}>Reportes de Actividad de Voluntarios</h2>
         <button 
           onClick={cargarReportes}
           style={{
@@ -39,7 +39,7 @@ function ReportesTab() {
             fontWeight: '600'
           }}
         >
-          🔄 Actualizar
+          Actualizar
         </button>
       </div>
 
@@ -95,10 +95,10 @@ function ReportesTab() {
                     {reporte.horas} Horas
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '5px' }}>
-                    ⏱️ {reporte.horaInicio} - {reporte.horaFin}
+                     {reporte.horaInicio} - {reporte.horaFin}
                   </div>
                   <div style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '2px' }}>
-                    📅 {reporte.fecha}
+                     {reporte.fecha}
                   </div>
                 </div>
               </div>
@@ -126,10 +126,10 @@ function ReportesTab() {
                   lineHeight: '1.5',
                   border: '1px solid #34d399'
                 }}>
-                  <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#1a4d2e' }}>📸 Evidencia / Pruebas:</strong>
+                  <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#1a4d2e' }}>Evidencia / Pruebas:</strong>
                   {reporte.pruebas.startsWith('http') ? (
                     <a href={reporte.pruebas} target="_blank" rel="noopener noreferrer" style={{ color: '#059669', fontWeight: 'bold' }}>
-                      🔗 Ver Evidencia Adjunta
+                      Ver Evidencia Adjunta
                     </a>
                   ) : (
                     reporte.pruebas

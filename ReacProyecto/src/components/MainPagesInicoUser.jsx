@@ -1,17 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/services';
 import ArbolesSection from './ArbolesSection';
-
-
-
 import '../styles/PremiumDashboard.css';
-
-
-
-import Swal from 'sweetalert2';
-
 
 function MainPagesInicoUser() {
   const [userName, setUserName] = useState('');
@@ -20,7 +11,7 @@ function MainPagesInicoUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated') === 'true';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
     if (!isAuthenticated) {
       navigate('/login');
       return;
@@ -48,35 +39,18 @@ function MainPagesInicoUser() {
   };
 
   const handleLogout = () => {
-    Swal.fire({
-      title: '¿Cerrar sesión?',
-      text: "¿Estás seguro de que deseas salir de tu portal forestal?",
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#283618',
-      cancelButtonColor: '#bc6c25',
-      confirmButtonText: 'Sí, Salir',
-      cancelButtonText: 'No, Quedarme',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        sessionStorage.clear();
-        navigate('/');
-      }
-    });
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('user');
+    navigate('/');
   };
 
-
-
   return (
-
-
     <div className="dashboard-premium">
       <div className="premium-header">
         <div className="user-premium-header-flex">
             <div>
                 <h2 className="user-premium-subtitle">BioMon ADI</h2>
-                <h1>🌳 ¡Hola! {userName}</h1>
+                <h1>¡Hola! {userName}</h1>
                 <p className="user-premium-greeting">
                     Tu portal personal de monitoreo forestal. Explora y protege la biodiversidad local.
                 </p>
@@ -84,15 +58,12 @@ function MainPagesInicoUser() {
                     <div className="badge">Voluntario Activo</div>
                 )}
             </div>
-
-
             <button
                 onClick={handleLogout}
                 className="btn-logout-premium user-btn-logout-margin"
             >
-                🚪 Cerrar Sesión
+                Cerrar Sesión
             </button>
-
         </div>
       </div>
 
@@ -102,7 +73,6 @@ function MainPagesInicoUser() {
           <p className="user-collection-desc">
             Explora las especies registradas en el sistema. Puedes ver detalles técnicos, estados de salud y progresos de crecimiento.
           </p>
-=
         </section>
 
         {cargando ? (
@@ -113,13 +83,9 @@ function MainPagesInicoUser() {
         ) : (
           <ArbolesSection arboles={arboles} />
         )}
-
-
-
       </main>
     </div>
   );
 }
 
-export default MainPagesInicoUser;
-
+export default MainPagesInicoUser;

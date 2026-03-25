@@ -67,9 +67,11 @@
 }
 
 .visitor-login-btn {
+
   background-color: var(--color-bosque-musgo);
   color: white;
   padding: 12px 28px;
+
   border-radius: 50px;
   text-decoration: none;
   font-weight: 700;

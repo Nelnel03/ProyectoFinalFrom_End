@@ -3,12 +3,12 @@ import services from '../services/services';
 
 // Paleta de colores de estado compartida con el admin
 const STATUS_STYLES = {
-  'Pendiente':        { bg: '#fef9c3', text: '#92400e', border: '#fde68a', icon: '⏳' },
-  'En Proceso':       { bg: '#e0f2fe', text: '#0369a1', border: '#bae6fd', icon: '🔄' },
-  'Leído':            { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0', icon: '👁️' },
-  'Solucionado':      { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7', icon: '✅' },
-  'En Investigación': { bg: '#fef3c7', text: '#92400e', border: '#fde68a', icon: '🔍' },
-  'Resuelto':         { bg: '#dcfce7', text: '#166534', border: '#86efac', icon: '✅' },
+  'Pendiente':        { bg: '#fef9c3', text: '#92400e', border: '#fde68a', icon: '' },
+  'En Proceso':       { bg: '#e0f2fe', text: '#0369a1', border: '#bae6fd', icon: '' },
+  'Leído':            { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0', icon: '' },
+  'Solucionado':      { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7', icon: '' },
+  'En Investigación': { bg: '#fef3c7', text: '#92400e', border: '#fde68a', icon: '' },
+  'Resuelto':         { bg: '#dcfce7', text: '#166534', border: '#86efac', icon: '' },
 };
 
 function StatusBadge({ estado }) {
@@ -67,7 +67,7 @@ function MisReportesTab({ user }) {
     <div className="mis-reportes-container" style={{ padding: '1rem' }}>
       {/* Header con botón de refresco */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>📑 Mis Solicitudes y Reportes</h2>
+        <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>Mis Solicitudes y Reportes</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {ultimaActualizacion && (
             <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
@@ -89,7 +89,7 @@ function MisReportesTab({ user }) {
               opacity: cargando ? 0.7 : 1,
             }}
           >
-            {cargando ? '...' : '🔄 Actualizar'}
+            {cargando ? '...' : 'Actualizar'}
           </button>
         </div>
       </div>
@@ -102,7 +102,7 @@ function MisReportesTab({ user }) {
           {/* ── SOPORTE ── */}
           <section>
             <h3 style={{ color: 'var(--color-mar-profundo)', borderBottom: '2px solid #e0f2fe', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
-              ✉️ Mensajes de Soporte
+              Mensajes de Soporte
             </h3>
             {mensajesSoporte.length === 0 ? (
               <p style={{ color: '#6b7280' }}>No has enviado mensajes de soporte.</p>
@@ -132,7 +132,7 @@ function MisReportesTab({ user }) {
           {/* ── ROBOS ── */}
           <section>
             <h3 style={{ color: '#bc6c25', borderBottom: '2px solid #ffedd5', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
-              🚨 Reportes de Robo
+              Reportes de Robo
             </h3>
             {reportesRobo.length === 0 ? (
               <p style={{ color: '#6b7280' }}>No tienes reportes de robo.</p>
@@ -151,7 +151,7 @@ function MisReportesTab({ user }) {
                       <strong style={{ color: '#bc6c25', fontSize: '1rem' }}>{r.tipo_arbol}</strong>
                       <StatusBadge estado={r.estado} />
                     </div>
-                    <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#6b7280' }}>📍 {r.ubicacion}</p>
+                    <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#6b7280' }}>{r.ubicacion}</p>
                     <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#374151' }}>{r.descripcion}</p>
                     <small style={{ color: '#9ca3af' }}>Enviado: {new Date(r.fecha).toLocaleDateString()}</small>
                   </div>
@@ -164,7 +164,7 @@ function MisReportesTab({ user }) {
           {user.rol === 'voluntario' && (
             <section>
               <h3 style={{ color: 'var(--color-bosque-helecho)', borderBottom: '2px solid #dcfce7', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
-                👷 Mis Reportes de Actividad
+                Mis Reportes de Actividad
               </h3>
               {actividades.length === 0 ? (
                 <p style={{ color: '#6b7280' }}>No tienes registros de actividad.</p>
@@ -178,7 +178,7 @@ function MisReportesTab({ user }) {
                           ✓ Registrado
                         </span>
                       </div>
-                      <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#374151' }}>⏱️ {a.horas} horas — {a.fecha}</p>
+                      <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#374151' }}>{a.horas} horas — {a.fecha}</p>
                       <p style={{ margin: '6px 0', fontSize: '0.88rem', color: '#6b7280', fontStyle: 'italic' }}>{a.tareas}</p>
                     </div>
                   ))}

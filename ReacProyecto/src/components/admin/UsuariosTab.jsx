@@ -15,13 +15,13 @@ function UsuariosTab({
   return (
     <div>
       <div className="admin-section-header">
-        <h2 className="admin-section-title-white">👥 Gestión de Usuarios</h2>
+        <h2 className="admin-section-title-white">Gestión de Usuarios</h2>
         <p className="admin-section-subtitle-green">Administrar accesos y cuentas del sistema</p>
       </div>
 
       <div id="user-form-container" className="admin-form-card admin-user-form-container">
         <h3 className="admin-user-form-title">
-          <span className="admin-user-form-title-icon">{modoEdicionUsuario ? '✏️' : '👤'}</span>
+          <span className="admin-user-form-title-icon"></span>
           {modoEdicionUsuario ? 'Editar Usuario' : 'Crear Usuarios'}
         </h3>
         
@@ -80,7 +80,7 @@ function UsuariosTab({
           
           <div className="admin-user-form-footer">
             <button type="submit" className="admin-btn-user-submit">
-              {modoEdicionUsuario ? '💾 Guardar Cambios' : '➕ Crear Usuario'}
+              {modoEdicionUsuario ? 'Guardar Cambios' : 'Crear Usuario'}
             </button>
             {modoEdicionUsuario && (
               <button type="button" onClick={resetFormUsuario} className="admin-btn-user-cancel">
@@ -96,7 +96,7 @@ function UsuariosTab({
           <div key={user.id} className="admin-arbol-card admin-user-card">
             <div className="admin-user-card-header">
               <div className={`admin-user-avatar ${user.rol}`}>
-                {user.rol === 'admin' ? '👑' : '👤'}
+                {user.rol === 'admin' ? 'Admin' : 'User'}
               </div>
               <div className="admin-user-info-text">
                 <h3>{user.nombre}</h3>
@@ -119,7 +119,7 @@ function UsuariosTab({
                 onClick={() => handleEditarUsuario(user)} 
                 className="admin-btn-user-edit"
               >
-                ✏️ Editar
+                Editar
               </button>
               <button 
                 onClick={() => handleEliminarUsuario(user.id, user.nombre)} 
@@ -127,14 +127,14 @@ function UsuariosTab({
                 className="admin-btn-user-delete"
                 title={user.rol === 'admin' ? "No se puede eliminar administradores principales" : ""}
               >
-                🗑️ Borrar
+                Borrar
               </button>
               {user.rol !== 'admin' && (
                 <button 
                   onClick={() => handleConvertirUsuarioAVoluntariado(user)} 
                   className="admin-btn-user-convert"
                 >
-                  🤝 Convertir a Voluntario
+                  Convertir a Voluntario
                 </button>
               )}
             </div>

@@ -117,7 +117,7 @@ function UserReportesRobo({ user, onDone }) {
 
   return (
     <div className="user-reports-container" style={{ borderLeft: "4px solid #ef4444" }}>
-      <h2 style={{ color: "#ef4444" }}>🚨 Reportar Árbol Robado</h2>
+      <h2 style={{ color: "#ef4444" }}>Reportar Árbol Robado</h2>
       <p>Utiliza este formulario para reportar un árbol que ha sido sustraído o talado ilegalmente.</p>
 
       {estadoEnvio.texto && (

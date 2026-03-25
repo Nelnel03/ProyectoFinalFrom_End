@@ -72,7 +72,7 @@ const Navbar = () => {
                             onClick={handleLogout} 
                             className="navbar-btn-logout"
                         >
-                            🚪 Salir
+                            Salir
                         </button>
                     </div>
                 )}

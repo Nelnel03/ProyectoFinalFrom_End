@@ -100,16 +100,16 @@ function BuzonEnviados({ user }) {
     <div className="user-reports-container" style={{ maxWidth: "750px" }}>
       {/* Encabezado */}
       <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        📬 Buzón de Enviados
+        Buzón de Enviados
       </h2>
       <p>Aquí puedes ver todos los mensajes y reportes que has enviado al administrador.</p>
 
       {/* Filtros */}
       <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
         {[
-          { key: "todos", label: "📋 Todos" },
-          { key: "soporte", label: "✉️ Soporte" },
-          { key: "robo",    label: "🚨 Robos" },
+          { key: "todos", label: "Todos" },
+          { key: "soporte", label: "Soporte" },
+          { key: "robo",    label: "Robos" },
         ].map(({ key, label }) => (
           <button
             key={key}
@@ -142,7 +142,7 @@ function BuzonEnviados({ user }) {
           backgroundColor: "#f9fafb", borderRadius: "10px",
           color: "#6b7280", border: "1px dashed #d1d5db",
         }}>
-          <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>📭</div>
+          <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}></div>
           <p style={{ margin: 0, fontWeight: "500" }}>No hay mensajes enviados aún.</p>
         </div>
       ) : (
@@ -185,7 +185,7 @@ function BuzonEnviados({ user }) {
 
               {/* Fecha */}
               <div style={{ fontSize: "0.82rem", color: "#9ca3af" }}>
-                🕒 Enviado el {formatFecha(item.fecha)}
+                Enviado el {formatFecha(item.fecha)}
               </div>
 
               {/* Detalle opcional */}

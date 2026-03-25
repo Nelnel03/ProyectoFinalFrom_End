@@ -25,7 +25,7 @@ function AdminReports() {
   return (
     <div>
       <div className="admin-section-header">
-        <h2>✉️ Reportes y Soporte</h2>
+        <h2>Reportes y Soporte</h2>
         <p className="admin-reports-header-subtitle">Mensajes y reportes enviados por los usuarios</p>
       </div>
 
@@ -35,7 +35,7 @@ function AdminReports() {
         </div>
       ) : reportes.length === 0 ? (
         <div className="admin-reports-empty">
-          <div className="admin-reports-empty-icon">📬</div>
+          <div className="admin-reports-empty-icon"></div>
           <p>La bandeja está vacía. No hay reportes nuevos.</p>
         </div>
       ) : (
@@ -46,8 +46,8 @@ function AdminReports() {
                 <div>
                   <h3 className="admin-report-card-title">{reporte.asunto}</h3>
                   <div className="admin-report-card-meta">
-                    <span>👤 {reporte.userName}</span>
-                    <span>📧 {reporte.userEmail}</span>
+                    <span>{reporte.userName}</span>
+                    <span>{reporte.userEmail}</span>
                   </div>
                 </div>
                 <div className="admin-report-card-status-wrap">
