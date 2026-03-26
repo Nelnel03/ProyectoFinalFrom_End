@@ -887,3 +887,115 @@
 .admin-opacity-muted {
   opacity: 0.8;
 }
+
+/* ===========================
+   RESPONSIVE MOBILE ≤768px
+=========================== */
+@media screen and (max-width: 768px) {
+  /* Banner header del admin */
+  .admin-header-banner {
+    padding: 1.5rem 1rem;
+    margin: 10px 10px 0 10px;
+    border-radius: 16px;
+  }
+  .admin-header-main-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .admin-header-main-row h1 {
+    font-size: 2rem;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+  .admin-welcome-text {
+    font-size: 0.95rem;
+  }
+  .admin-logout-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Tabs del admin */
+  .admin-tabs-container {
+    margin: 0 10px;
+    padding: 1.5rem 1rem 0;
+  }
+  .admin-tabs-pills {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    flex-wrap: nowrap;
+  }
+  .admin-tab-pill {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Contenido principal */
+  .admin-main {
+    padding: 1rem;
+  }
+
+  /* Grids a columna única */
+  .admin-arboles-lista {
+    grid-template-columns: 1fr;
+  }
+  .admin-user-list {
+    grid-template-columns: 1fr;
+  }
+  .admin-abonos-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-user-form {
+    grid-template-columns: 1fr;
+  }
+  .admin-abono-form {
+    grid-template-columns: 1fr;
+  }
+
+  /* Controles */
+  .admin-controls-row {
+    flex-direction: column;
+    width: 100%;
+  }
+  .admin-search-input {
+    width: 100%;
+  }
+  .admin-filter-select {
+    width: 100%;
+    min-width: unset;
+  }
+  .admin-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  /* Tarjeta baja */
+  .admin-baja-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-baja-date-wrap {
+    text-align: left;
+    padding: 0;
+  }
+
+  /* Formulario de usuario */
+  .admin-user-form-container {
+    padding: 1rem;
+  }
+  .admin-user-form-footer {
+    flex-direction: column;
+  }
+  .admin-btn-user-submit,
+  .admin-btn-user-cancel {
+    width: 100%;
+  }
+}
+

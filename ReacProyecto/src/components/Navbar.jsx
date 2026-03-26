@@ -36,21 +36,24 @@ const Navbar = () => {
 
     return (
         <nav className="navbar-main">
-            <div onClick={() => navigate('/')} className="navbar-logo-container">
+            <div onClick={() => navigate(auth && user ? (user.rol === 'voluntario' ? '/dashboard-voluntario' : '/dashboard-user') : '/')} className="navbar-logo-container">
                 <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
                 <h2 className="navbar-logo-title">BioMon ADI</h2>
             </div>
             
             <div className="navbar-links-container">
-                {!location.pathname.startsWith('/admin') && (
+                {/* Si no es admin y no está logueado, mostrar inicio. Si está logueado, el logo ya lo lleva a su panel. */}
+                {!location.pathname.startsWith('/admin') && !auth && (
                     <button onClick={() => navigate('/')} className="navbar-btn-link">
                         Inicio
                     </button>
                 )}
 
-                <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
-                    Mapa
-                </button>
+                {!location.pathname.startsWith('/admin') && (
+                    <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
+                        Mapa
+                    </button>
+                )}
                 {!location.pathname.startsWith('/admin') && (
                     <button onClick={() => navigate('/historia')} className="navbar-btn-link">
                         Historia

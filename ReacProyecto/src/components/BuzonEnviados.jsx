@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import services from "../services/services.jsx";
 import "../styles/UserReports.css";
+import "../styles/BuzonEnviados.css";
 
 // Formatea una fecha ISO a formato legible en español
 function formatFecha(isoString) {
@@ -25,16 +26,14 @@ function EstadoBadge({ estado }) {
   };
   const estilo = colores[estado] || colores["Pendiente"];
   return (
-    <span style={{
-      padding: "3px 12px",
-      borderRadius: "999px",
-      fontSize: "0.78rem",
-      fontWeight: "600",
-      backgroundColor: estilo.bg,
-      color: estilo.color,
-      border: `1px solid ${estilo.border}`,
-      whiteSpace: "nowrap",
-    }}>
+    <span
+      className="buzon-estado-badge"
+      style={{
+        backgroundColor: estilo.bg,
+        color: estilo.color,
+        border: `1px solid ${estilo.border}`,
+      }}
+    >
       {estado || "Pendiente"}
     </span>
   );
@@ -97,15 +96,15 @@ function BuzonEnviados({ user }) {
       : todos;
 
   return (
-    <div className="user-reports-container" style={{ maxWidth: "750px" }}>
+    <div className="user-reports-container container-wide">
       {/* Encabezado */}
-      <h2 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      <h2 className="buzon-enviados-title">
         Buzón de Enviados
       </h2>
       <p>Aquí puedes ver todos los mensajes y reportes que has enviado al administrador.</p>
 
       {/* Filtros */}
-      <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+      <div className="buzon-filters">
         {[
           { key: "todos", label: "Todos" },
           { key: "soporte", label: "Soporte" },
@@ -114,17 +113,7 @@ function BuzonEnviados({ user }) {
           <button
             key={key}
             onClick={() => setFiltro(key)}
-            style={{
-              padding: "7px 18px",
-              backgroundColor: filtro === key ? "#1a4d2e" : "#f3f4f6",
-              color: filtro === key ? "white" : "#4b5563",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontWeight: "600",
-              fontSize: "0.85rem",
-              transition: "all 0.2s",
-            }}
+            className={`filter-buzon-btn ${filtro === key ? "active" : ""}`}
           >
             {label}
           </button>
@@ -133,50 +122,36 @@ function BuzonEnviados({ user }) {
 
       {/* Contenido */}
       {cargando ? (
-        <div style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
+        <div className="buzon-loading">
           Cargando mensajes...
         </div>
       ) : listaMostrar.length === 0 ? (
-        <div style={{
-          textAlign: "center", padding: "2.5rem 1rem",
-          backgroundColor: "#f9fafb", borderRadius: "10px",
-          color: "#6b7280", border: "1px dashed #d1d5db",
-        }}>
-          <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}></div>
-          <p style={{ margin: 0, fontWeight: "500" }}>No hay mensajes enviados aún.</p>
+        <div className="buzon-empty">
+          <div className="buzon-empty-icon"></div>
+          <p className="buzon-empty-text">No hay mensajes enviados aún.</p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div className="buzon-list">
           {listaMostrar.map((item) => (
             <div
               key={`${item.tipo}-${item.id}`}
-              style={{
-                backgroundColor: "#ffffff",
-                border: "1px solid #e5e7eb",
-                borderRadius: "10px",
-                padding: "1rem 1.25rem",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
+              className="buzon-item-card"
             >
               {/* Fila superior: título + badges */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
-                <span style={{ fontWeight: "700", color: "#1a4d2e", fontSize: "1rem" }}>
+              <div className="buzon-item-top">
+                <span className="buzon-item-title">
                   {item.titulo}
                 </span>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <div className="buzon-item-badges">
                   {/* Tipo badge */}
-                  <span style={{
-                    padding: "3px 10px",
-                    borderRadius: "999px",
-                    fontSize: "0.75rem",
-                    fontWeight: "600",
-                    backgroundColor: item.tipoBadgeBg,
-                    color: item.tipoBadgeColor,
-                    border: `1px solid ${item.tipoBadgeBorder}`,
-                  }}>
+                  <span
+                    className="buzon-tipo-badge"
+                    style={{
+                      backgroundColor: item.tipoBadgeBg,
+                      color: item.tipoBadgeColor,
+                      border: `1px solid ${item.tipoBadgeBorder}`,
+                    }}
+                  >
                     {item.tipo}
                   </span>
                   <EstadoBadge estado={item.estado} />
@@ -184,18 +159,18 @@ function BuzonEnviados({ user }) {
               </div>
 
               {/* Fecha */}
-              <div style={{ fontSize: "0.82rem", color: "#9ca3af" }}>
+              <div className="buzon-item-date">
                 Enviado el {formatFecha(item.fecha)}
               </div>
 
               {/* Detalle opcional */}
               {item.mensaje && (
-                <p style={{ margin: 0, fontSize: "0.88rem", color: "#6b7280", borderTop: "1px solid #f3f4f6", paddingTop: "0.5rem" }}>
+                <p className="buzon-item-preview">
                   {item.mensaje.length > 120 ? item.mensaje.slice(0, 120) + "…" : item.mensaje}
                 </p>
               )}
               {item.descripcion && (
-                <p style={{ margin: 0, fontSize: "0.88rem", color: "#6b7280", borderTop: "1px solid #f3f4f6", paddingTop: "0.5rem" }}>
+                <p className="buzon-item-preview">
                   {item.descripcion.length > 120 ? item.descripcion.slice(0, 120) + "…" : item.descripcion}
                 </p>
               )}

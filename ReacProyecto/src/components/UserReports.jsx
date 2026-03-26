@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import services from "../services/services.jsx";
 import "../styles/UserReports.css";
 
-
-
 function validate(reporte) {
   const errors = {};
   const asunto = reporte.asunto.trim();
   const mensaje = reporte.mensaje.trim();
 
   if (!asunto)                  errors.asunto  = "El asunto es obligatorio.";
-  else if (asunto.length < 5)   errors.asunto  = "El asunto debe tener al menos 5 caracteres.";
 
   if (!mensaje)                 errors.mensaje = "El mensaje es obligatorio.";
   else if (mensaje.length < 15) errors.mensaje = "El mensaje debe tener al menos 15 caracteres.";
@@ -92,28 +89,28 @@ function UserReports({ user, onDone }) {
       <form onSubmit={handleSubmit} className="report-form" noValidate>
         {/* Asunto */}
         <div className="form-group">
-          <label>Asunto: <span style={{ color: "#e53e3e" }}>*</span></label>
-          <input
-            type="text"
+          <label>Asunto: <span className="required-star">*</span></label>
+          <select
             name="asunto"
             value={reporte.asunto}
             onChange={handleChange}
             onBlur={handleBlur}
             className={fieldClass("asunto")}
-            placeholder="Ej: Problema con un árbol registrado"
-            maxLength={100}
-          />
+          >
+            <option value="">Seleccione un asunto...</option>
+            <option value="árbol seco">árbol seco</option>
+            <option value="mucha basura al rededor del corredor">mucha basura al rededor del corredor</option>
+            <option value="animal muerto en la zona">animal muerto en la zona</option>
+            <option value="falta de mantenimiento">falta de mantenimiento</option>
+          </select>
           {touched.asunto && errors.asunto && (
             <span className="field-error-msg">⚠ {errors.asunto}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginTop: "3px", display: "block" }}>
-            {reporte.asunto.length}/100 caracteres
-          </span>
         </div>
 
         {/* Mensaje */}
         <div className="form-group">
-          <label>Mensaje: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Mensaje: <span className="required-star">*</span></label>
           <textarea
             name="mensaje"
             value={reporte.mensaje}
@@ -126,7 +123,7 @@ function UserReports({ user, onDone }) {
           {touched.mensaje && errors.mensaje && (
             <span className="field-error-msg">⚠ {errors.mensaje}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginTop: "3px", display: "block" }}>
+          <span className="char-counter">
             {reporte.mensaje.length} caracteres (mínimo 15)
           </span>
         </div>

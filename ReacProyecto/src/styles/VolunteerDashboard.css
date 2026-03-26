@@ -1,0 +1,141 @@
+.volunteer-container {
+  background-color: #f0fdf4 !important;
+}
+
+.volunteer-header {
+  background: linear-gradient(135deg, #166534 0%, #1a4d2e 100%) !important;
+  padding: 3rem 1rem !important;
+}
+
+.volunteer-header-title {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+}
+
+.volunteer-header-subtitle {
+  opacity: 0.9 !important;
+  font-size: 1.2rem !important;
+}
+
+.volunteer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1100px;
+  margin: -2rem auto 2rem auto;
+}
+
+.volunteer-stat-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-top: 5px solid #166534;
+}
+
+.volunteer-stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #166534;
+}
+
+.volunteer-stat-label {
+  margin: 5px 0;
+  color: #6b7280;
+  font-weight: bold;
+}
+
+.volunteer-content {
+  max-width: 1100px;
+}
+
+.volunteer-nav-pills {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.volunteer-nav-pill {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.volunteer-nav-pill.active {
+  background-color: #166534;
+  color: white;
+}
+
+.volunteer-view-container {
+  min-height: 400px;
+}
+
+.volunteer-loading {
+  text-align: center;
+  padding: 10rem 2rem;
+  color: #166534;
+}
+
+.volunteer-loading h2 {
+  font-size: 2rem;
+}
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .volunteer-header {
+    padding: 2rem 1rem !important;
+  }
+
+  .volunteer-header-title {
+    font-size: 1.8rem !important;
+  }
+
+  .volunteer-header-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .volunteer-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    margin: -1rem auto 1.5rem auto;
+  }
+
+  .volunteer-content {
+    padding: 1.5rem !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    margin-top: -15px !important;
+    border-radius: 15px !important;
+  }
+
+  .volunteer-stat-card {
+    padding: 1rem;
+  }
+
+  .volunteer-stat-value {
+    font-size: 2rem;
+  }
+
+  .volunteer-nav-pills {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .volunteer-nav-pill {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem;
+  }
+}

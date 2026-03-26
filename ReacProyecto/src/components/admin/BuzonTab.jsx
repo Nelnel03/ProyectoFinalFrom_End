@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import services from '../../services/services';
 import Swal from 'sweetalert2';
+import '../../styles/BuzonTab.css';
 
 const ESTADOS_SOPORTE = ['Pendiente', 'En Proceso', 'Leído', 'Solucionado'];
 const ESTADOS_ROBO    = ['Pendiente', 'En Investigación', 'Resuelto'];
 
-const statusColors = {
-  'Pendiente':        { bg: '#fef9c3', text: '#92400e', border: '#fde68a' },
-  'En Proceso':       { bg: '#e0f2fe', text: '#0369a1', border: '#bae6fd' },
-  'Leído':            { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0' },
-  'Solucionado':      { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7' },
-  'En Investigación': { bg: '#fef3c7', text: '#92400e', border: '#fde68a' },
-  'Resuelto':         { bg: '#dcfce7', text: '#166534', border: '#86efac' },
+const getStatusClass = (estado) => {
+  switch (estado) {
+    case 'Pendiente':        return 'status-pendiente';
+    case 'En Proceso':       return 'status-proceso';
+    case 'Leído':            return 'status-leido';
+    case 'Solucionado':      return 'status-solucionado';
+    case 'En Investigación': return 'status-investigacion';
+    case 'Resuelto':         return 'status-resuelto';
+    default:                 return 'status-pendiente';
+  }
 };
 
 function StatusBadge({ estado }) {
-  const c = statusColors[estado] || statusColors['Pendiente'];
+  const statusClass = getStatusClass(estado);
   return (
-    <span style={{
-      padding: '3px 12px',
-      borderRadius: '999px',
-      fontSize: '0.78rem',
-      fontWeight: '700',
-      backgroundColor: c.bg,
-      color: c.text,
-      border: `1px solid ${c.border}`,
-    }}>
+    <span className={`status-badge ${statusClass}`}>
       {estado || 'Pendiente'}
     </span>
   );
@@ -136,16 +132,7 @@ function BuzonTab() {
     <select
       value={value || opciones[0]}
       onChange={e => onChange(e.target.value)}
-      style={{
-        padding: '4px 10px',
-        borderRadius: '8px',
-        border: `1px solid ${(statusColors[value] || statusColors['Pendiente']).border}`,
-        backgroundColor: (statusColors[value] || statusColors['Pendiente']).bg,
-        color: (statusColors[value] || statusColors['Pendiente']).text,
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        fontSize: '0.82rem',
-      }}
+      className={`select-status-basic ${getStatusClass(value)}`}
     >
       {opciones.map(op => <option key={op} value={op}>{op}</option>)}
     </select>
@@ -155,12 +142,7 @@ function BuzonTab() {
   const BtnEliminar = ({ onClick }) => (
     <button
       onClick={onClick}
-      style={{
-        backgroundColor: '#fee2e2', color: '#991b1b',
-        border: 'none', padding: '5px 12px',
-        borderRadius: '8px', cursor: 'pointer',
-        fontSize: '0.8rem', fontWeight: 'bold',
-      }}
+      className="btn-delete-basic"
     >
       Eliminar
     </button>
@@ -169,39 +151,30 @@ function BuzonTab() {
   return (
     <div className="tab-content">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>Buzón Interno</h2>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-texto)', opacity: 0.8, fontSize: '0.9rem' }}>
+      <div className="buzon-header">
+        <div className="buzon-title-section">
+          <h2>Buzón Interno</h2>
+          <p className="buzon-subtitle">
             Gestión de mensajes, reportes y actividades de la comunidad
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="buzon-tabs">
           {tabs.map(t => (
             <button
               key={t.id}
               onClick={() => setSeccion(t.id)}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: seccion === t.id ? t.activeColor : 'var(--color-crema-organico)',
-                color: seccion === t.id ? 'white' : t.activeColor,
-                border: `1.5px solid ${t.activeColor}`,
-                borderRadius: '50px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: '0.83rem',
-                transition: 'all 0.2s',
-              }}
+              className={`buzon-tab-btn ${seccion === t.id ? 'active' : ''}`}
+              style={seccion === t.id ? { backgroundColor: t.activeColor, border: `1.5px solid ${t.activeColor}` } : { color: t.activeColor, border: `1.5px solid ${t.activeColor}` }}
             >
               {t.label}
             </button>
           ))}
-          <button onClick={cargarDatos} title="Actualizar" style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: 'var(--color-texto)', fontWeight: 'bold' }}>↺</button>
+          <button onClick={cargarDatos} title="Actualizar" className="refresh-btn">↺</button>
         </div>
       </div>
 
       {cargando ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-texto)' }}>Cargando mensajes...</div>
+        <div className="buzon-loading">Cargando mensajes...</div>
       ) : (
         <>
           {/* ── SECCIÓN SOPORTE ── */}
@@ -209,29 +182,29 @@ function BuzonTab() {
             reportesSoporte.length === 0 ? (
               <Vacia mensaje="No hay mensajes de soporte recibidos." />
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="reportes-list">
                 {reportesSoporte.map(rep => (
-                  <div key={rep.id} style={cardStyle('#0369a1')}>
-                    <div style={rowBetween}>
+                  <div key={rep.id} className="reporte-card card-soporte">
+                    <div className="row-between">
                       <div>
-                        <h3 style={{ margin: 0, color: 'var(--color-mar-profundo)', fontSize: '1.05rem' }}>{rep.asunto}</h3>
-                        <span style={metaText}>De: <strong>{rep.userName}</strong> · {rep.userEmail}</span>
+                        <h3 className="card-title title-soporte">{rep.asunto}</h3>
+                        <span className="meta-text">De: <strong>{rep.userName}</strong> · {rep.userEmail}</span>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                      <div className="card-actions-right">
                         <SelectEstado
                           value={rep.estado}
                           opciones={ESTADOS_SOPORTE}
                           onChange={(v) => handleEstadoSoporte(rep, v)}
                         />
-                        <span style={{ fontSize: '0.75rem', color: 'var(--color-texto)', opacity: 0.7 }}>
+                        <span className="status-date">
                           {new Date(rep.fecha).toLocaleString()}
                         </span>
                       </div>
                     </div>
-                    <div style={{ backgroundColor: '#f0f9ff', padding: '1rem', borderRadius: '10px', border: '1px solid #e0f2fe', margin: '0.8rem 0 0' }}>
-                      <p style={{ margin: 0, lineHeight: '1.6', color: '#334155' }}>{rep.mensaje}</p>
+                    <div className="message-box box-soporte">
+                      <p className="message-text">{rep.mensaje}</p>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.7rem' }}>
+                    <div className="card-footer">
                       <BtnEliminar onClick={() => handleEliminarSoporte(rep.id)} />
                     </div>
                   </div>
@@ -245,31 +218,31 @@ function BuzonTab() {
             reportesRobo.length === 0 ? (
               <Vacia mensaje="No hay alertas de robo actualmente." />
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="reportes-list">
                 {reportesRobo.map(rep => (
-                  <div key={rep.id} style={cardStyle('#bc6c25')}>
-                    <div style={rowBetween}>
+                  <div key={rep.id} className="reporte-card card-robo">
+                    <div className="row-between">
                       <div>
-                        <h3 style={{ margin: 0, color: '#bc6c25', fontSize: '1.05rem' }}>Árbol: {rep.tipo_arbol}</h3>
-                        <span style={metaText}>{rep.ubicacion}</span>
+                        <h3 className="card-title title-robo">Árbol: {rep.tipo_arbol}</h3>
+                        <span className="meta-text">{rep.ubicacion}</span>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                      <div className="card-actions-right">
                         <SelectEstado
                           value={rep.estado}
                           opciones={ESTADOS_ROBO}
                           onChange={(v) => handleEstadoRobo(rep, v)}
                         />
-                        <span style={{ fontSize: '0.75rem', color: 'var(--color-texto)', opacity: 0.7 }}>
+                        <span className="status-date">
                           {new Date(rep.fecha).toLocaleString()}
                         </span>
                       </div>
                     </div>
-                    <div style={{ backgroundColor: '#fff7ed', padding: '1rem', borderRadius: '10px', border: '1px solid #ffedd5', margin: '0.8rem 0 0' }}>
-                      <strong style={{ display: 'block', color: '#9a3412', marginBottom: '4px' }}>Descripción:</strong>
-                      <p style={{ margin: 0, lineHeight: '1.5' }}>{rep.descripcion}</p>
+                    <div className="message-box box-robo">
+                      <strong className="box-title-inner inner-title-robo">Descripción:</strong>
+                      <p className="message-text">{rep.descripcion}</p>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.7rem' }}>
-                      <span style={metaText}>Reportado por: <strong>{rep.userName}</strong> ({rep.userEmail})</span>
+                    <div className="card-footer-between">
+                      <span className="meta-text">Reportado por: <strong>{rep.userName}</strong> ({rep.userEmail})</span>
                       <BtnEliminar onClick={() => handleEliminarRobo(rep.id)} />
                     </div>
                   </div>
@@ -283,27 +256,27 @@ function BuzonTab() {
             reportesVoluntario.length === 0 ? (
               <Vacia mensaje="No hay reportes de actividades registrados." />
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="reportes-list">
                 {reportesVoluntario.map(rep => (
-                  <div key={rep.id} style={cardStyle('var(--color-bosque-helecho)')}>
-                    <div style={rowBetween}>
+                  <div key={rep.id} className="reporte-card card-voluntario">
+                    <div className="row-between">
                       <div>
-                        <h3 style={{ margin: 0, color: 'var(--color-mar-profundo)', fontSize: '1.05rem' }}>{rep.voluntarioNombre}</h3>
-                        <span style={metaText}>{rep.voluntarioEmail}</span>
+                        <h3 className="card-title title-soporte">{rep.voluntarioNombre}</h3>
+                        <span className="meta-text">{rep.voluntarioEmail}</span>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <span style={{ backgroundColor: 'var(--color-bosque-helecho)', color: 'white', padding: '4px 12px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                      <div className="voluntario-stats">
+                        <span className="hours-tag">
                           {rep.horas} Horas
                         </span>
-                        <p style={{ margin: '5px 0 0', fontSize: '0.75rem', color: 'var(--color-texto)', opacity: 0.7 }}>{rep.fecha} · {rep.horaInicio}–{rep.horaFin}</p>
+                        <p className="voluntario-date-time">{rep.fecha} · {rep.horaInicio}–{rep.horaFin}</p>
                       </div>
                     </div>
-                    <div style={{ backgroundColor: 'var(--color-crema-organico)', padding: '1rem', borderRadius: '10px', margin: '0.8rem 0 0' }}>
-                      <strong style={{ display: 'block', color: 'var(--color-bosque-helecho)', marginBottom: '4px' }}>Detalles de la labor:</strong>
-                      <p style={{ margin: 0, lineHeight: '1.5' }}>{rep.tareas}</p>
+                    <div className="message-box box-voluntario">
+                      <strong className="box-title-inner inner-title-voluntario">Detalles de la labor:</strong>
+                      <p className="message-text">{rep.tareas}</p>
                     </div>
                     {rep.pruebas && (
-                      <div style={{ marginTop: '0.7rem', padding: '8px 12px', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '1px solid #dcfce7', fontSize: '0.85rem' }}>
+                      <div className="evidence-box">
                         <strong>Pruebas:</strong> {rep.pruebas}
                       </div>
                     )}
@@ -321,22 +294,10 @@ function BuzonTab() {
 /* ── Helpers ── */
 function Vacia({ mensaje }) {
   return (
-    <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: 'var(--color-crema-organico)', borderRadius: '15px' }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}></div>
-      <p style={{ margin: 0, color: 'var(--color-texto)', fontWeight: '500' }}>{mensaje}</p>
+    <div className="empty-message-container">
+      <p className="empty-message-text">{mensaje}</p>
     </div>
   );
 }
-
-const cardStyle = (borderColor) => ({
-  backgroundColor: 'white',
-  padding: '1.25rem 1.5rem',
-  borderRadius: '15px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-  borderLeft: `6px solid ${borderColor}`,
-});
-
-const rowBetween = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' };
-const metaText   = { fontSize: '0.83rem', color: 'var(--color-texto)', display: 'block', marginTop: '3px' };
 
 export default BuzonTab;

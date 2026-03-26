@@ -1,457 +1,91 @@
+/**
+ * @file services.jsx
+ * @description Punto de entrada centralizado para los servicios de la aplicación.
+ * Re-exporta todos los servicios modulares para facilitar su importación en los componentes.
+ */
 
-const BASE_URL = "http://localhost:3005";
+// Importación de todos los servicios específicos como alias para agruparlos
+import * as usuariosService from "./usuarios.service.jsx";
+import * as arbolesService from "./arboles.service.jsx";
+import * as statsTiposService from "./statsTipos.service.jsx";
+import * as voluntariadosService from "./voluntariados.service.jsx";
+import * as abonosService from "./abonos.service.jsx";
+import * as reportesVoluntariadoService from "./reportesVoluntariado.service.jsx";
+import * as reportesService from "./reportes.service.jsx";
+import * as reportesRobadosService from "./reportesRobados.service.jsx";
 
-
-async function getUsuarios() {
-  try {
-    const respuestaServidor = await fetch(`${BASE_URL}/usuarios`);
-    const datosUsuarios = await respuestaServidor.json();
-    return datosUsuarios;
-  } catch (error) {
-    console.error("Error al obtener los usuarios", error);
-    return [];
-  }
-}
-
-async function postUsuarios(usuario) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(usuario),
-    });
-    const datosUsuarios = await respuesta.json();
-    return datosUsuarios;
-  } catch (error) {
-    console.error("Error al crear el usuario", error);
-  }
-}
-
-async function putUsuarios(usuario, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(usuario),
-    });
-    const datosUsuarios = await respuesta.json();
-    return datosUsuarios;
-  } catch (error) {
-    console.error("Error al actualizar los cambios", error);
-  }
-}
-
-async function deleteUsuarios(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
-      method: "DELETE",
-    });
-    const datosUsuarios = await respuesta.json();
-    return datosUsuarios;
-  } catch (error) {
-    console.error("Error al eliminar el registro", error);
-  }
-}
-
-async function getArboles() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/arboles`);
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al obtener los árboles", error);
-    return [];
-  }
-}
-
-async function postArboles(arbol) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/arboles`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(arbol),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear el árbol", error);
-  }
-}
-
-async function putArboles(arbol, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/arboles/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(arbol),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al actualizar el árbol", error);
-  }
-}
-
-async function deleteArboles(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/arboles/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar el árbol", error);
-  }
-}
-
-async function getStatsTipos() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/stats_tipos`);
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al obtener stats de tipos", error);
-    return [];
-  }
-}
-
-async function postStatsTipos(stat) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/stats_tipos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(stat),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear stat de tipo", error);
-  }
-}
-
-async function putStatsTipos(stat, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/stats_tipos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(stat),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al actualizar stat de tipo", error);
-  }
-}
-
-async function deleteStatsTipos(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/stats_tipos/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar stat de tipo", error);
-  }
-}
-
-async function getVoluntariados() {
-  try {
-    const respuestaServidor = await fetch(`${BASE_URL}/usuarios?rol=voluntario`);
-    const datosVoluntariados = await respuestaServidor.json();
-    return datosVoluntariados;
-  } catch (error) {
-    console.error("Error al obtener los voluntariados", error);
-    return [];
-  }
-}
-
-async function postVoluntariados(voluntariado) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(voluntariado),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear el voluntariado", error);
-  }
-}
-
-async function putVoluntariados(voluntariado, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(voluntariado),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al actualizar the voluntariado", error);
-  }
-}
-
-async function deleteVoluntariados(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/usuarios/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar el voluntariado", error);
-  }
-}
-
-async function getAbonos() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/abonos`);
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al obtener los abonos", error);
-    return [];
-  }
-}
-
-async function postAbonos(abono) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/abonos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(abono),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear el abono", error);
-  }
-}
-
-async function putAbonos(abono, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/abonos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(abono),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al actualizar el abono", error);
-  }
-}
-
-async function deleteAbonos(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/abonos/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar the abono", error);
-  }
-}
-
-async function getReportesVoluntariado() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`);
-    if (!respuesta.ok) return [];
-    const datos = await respuesta.json();
-    return Array.isArray(datos) ? datos : [];
-  } catch (error) {
-    console.error("Error al obtener los reportes de voluntariado", error);
-    return [];
-  }
-}
-
-async function postReporteVoluntariado(reporte) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reporte),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al enviar el reporte de voluntariado", error);
-  }
-}
-
-async function getReportes() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes`);
-    if (!respuesta.ok) return [];
-    const datos = await respuesta.json();
-    return Array.isArray(datos) ? datos : [];
-  } catch (error) {
-    console.error("Error al obtener reportes", error);
-    return [];
-  }
-}
-
-async function postReportes(reporte) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reporte),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear reporte", error);
-  }
-}
-
-
-async function putReportes(reporte, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reporte),
-    });
-    return await respuesta.json();
-  } catch (error) {
-    console.error("Error al actualizar reporte", error);
-  }
-}
-
-async function deleteReportes(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar el reporte", error);
-  }
-}
-
-
-async function getReportesRobados() {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_robados`);
-    if (!respuesta.ok) return [];
-    const datos = await respuesta.json();
-    return Array.isArray(datos) ? datos : [];
-  } catch (error) {
-    console.error("Error al obtener reportes de árboles robados", error);
-    return [];
-  }
-}
-
-async function postReportesRobados(reporte) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_robados`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reporte),
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al crear reporte de árbol robado", error);
-  }
-}
-
-async function deleteReportesRobados(id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_robados/${id}`, {
-      method: "DELETE",
-    });
-    const datos = await respuesta.json();
-    return datos;
-  } catch (error) {
-    console.error("Error al eliminar el reporte de robo", error);
-  }
-}
-
-async function putReportesRobados(reporte, id) {
-  try {
-    const respuesta = await fetch(`${BASE_URL}/reportes_robados/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reporte),
-    });
-    return await respuesta.json();
-  } catch (error) {
-    console.error("Error al actualizar reporte de robo", error);
-  }
-}
-
+/**
+ * Objeto que agrupa todos los métodos de los servicios individuales.
+ * Útil para importar el servicio completo mediante: import services from '...';
+ * @type {Object}
+ */
 const services = {
-  getUsuarios,
-  postUsuarios,
-  putUsuarios,
-  deleteUsuarios,
-  getArboles,
-  postArboles,
-  putArboles,
-  deleteArboles,
-  getStatsTipos,
-  postStatsTipos,
-  putStatsTipos,
-  deleteStatsTipos,
-  getVoluntariados,
-  postVoluntariados,
-  putVoluntariados,
-  deleteVoluntariados,
-  getAbonos,
-  postAbonos,
-  putAbonos,
-  deleteAbonos,
-  getReportesVoluntariado,
-  postReporteVoluntariado,
-  getReportes,
-  postReportes,
-  putReportes,
-  deleteReportes,
-  getReportesRobados,
-  postReportesRobados,
-  putReportesRobados,
-  deleteReportesRobados,
+  ...usuariosService,
+  ...arbolesService,
+  ...statsTiposService,
+  ...voluntariadosService,
+  ...abonosService,
+  ...reportesVoluntariadoService,
+  ...reportesService,
+  ...reportesRobadosService,
 };
 
+// Exportación por defecto del objeto unificado
 export default services;
+
+// Re-exportación de funciones individuales para soporte de importaciones nombradas: 
+// Ejemplo: import { getUsuarios } from '...';
+
 export {
   getUsuarios,
   postUsuarios,
   putUsuarios,
   deleteUsuarios,
+} from "./usuarios.service.jsx";
+
+export {
   getArboles,
   postArboles,
   putArboles,
   deleteArboles,
+} from "./arboles.service.jsx";
+
+export {
   getStatsTipos,
   postStatsTipos,
   putStatsTipos,
   deleteStatsTipos,
+} from "./statsTipos.service.jsx";
+
+export {
   getVoluntariados,
   postVoluntariados,
   putVoluntariados,
   deleteVoluntariados,
+} from "./voluntariados.service.jsx";
+
+export {
   getAbonos,
   postAbonos,
   putAbonos,
   deleteAbonos,
+} from "./abonos.service.jsx";
+
+export {
   getReportesVoluntariado,
   postReporteVoluntariado,
+} from "./reportesVoluntariado.service.jsx";
+
+export {
   getReportes,
   postReportes,
-
   putReportes,
   deleteReportes,
+} from "./reportes.service.jsx";
 
+export {
   getReportesRobados,
   postReportesRobados,
   putReportesRobados,
   deleteReportesRobados,
-};
+} from "./reportesRobados.service.jsx";

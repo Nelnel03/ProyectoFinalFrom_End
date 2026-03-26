@@ -9,12 +9,15 @@ import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
 import HistoryForm from '../pages/HistoryForm';
+import Mapa from '../pages/Mapa';
 import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
 import UserDashboard from '../components/UserDashboard';
 import VolunteerDashboard from '../components/VolunteerDashboard';
+import '../styles/Layout.css';
+import Footer from '../components/Footer';
 
 function MainLayout() {
   const location = useLocation();
@@ -31,7 +34,7 @@ function MainLayout() {
 
 
   return (
-    <div className="app-main-layout-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-main-layout-container">
       {/* 
           Condicional para el Nav/Navbar:
 
@@ -44,12 +47,13 @@ function MainLayout() {
 
 
 
-      <div className="main-content-layout">
+      <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
           <Route path="/voluntariado" element={<Voluntariado />} />
+          <Route path="/mapa" element={<Mapa />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           
@@ -94,6 +98,7 @@ function MainLayout() {
           />
         </Routes>
       </div>
+      {location.pathname !== '/mapa' && <Footer />}
     </div>
   );
 }

@@ -248,26 +248,7 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-    },
-    {
-      "id": "4b24",
-      "nombre": "nelson",
-      "email": "nelsonaraya0364@gmail.com",
-      "telefono": "12345678",
-      "password": "12345678",
-      "rol": "user",
-      "resetToken": "8q4jdvpuwt0tydmpsv752n",
-      "resetTokenExpiry": "2026-03-26T15:51:05.341Z"
-    },
-    {
-      "id": "5c69",
-      "nombre": "Steven Salas",
-      "email": "ssalasl@fwdcostarica.com",
-      "telefono": "86621066",
-      "password": "12345678",
-      "rol": "user",
-      "resetToken": "aadou1s9gvu5ewbesyf047",
-      "resetTokenExpiry": "2026-03-26T18:22:04.434Z"
+
     }
   ],
   "stats_tipos": [
@@ -319,9 +300,23 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
+
     }
   ],
-  "reportes_robados": [],
+  "reportes_robados": [
+    {
+      "tipo_arbol": "robo de un arbol de guanacaste",
+      "ubicacion": "asdfghj",
+      "descripcion": "asdfghjhgfdsaASD",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-26T02:46:50.335Z",
+      "estado": "En Investigación",
+      "id": "JQcgpNVCpaw"
+
+    }
+  ],
   "reportes_voluntariado": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

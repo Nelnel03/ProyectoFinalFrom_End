@@ -98,7 +98,6 @@ function UserReportesRobo({ user, onDone }) {
       setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" }); 
       if (onDone) setTimeout(onDone, 1500);
 
-
       setReporte({ tipo_arbol: "", ubicacion: "", descripcion: "" });
       setErrors({});
       setTouched({});
@@ -116,19 +115,12 @@ function UserReportesRobo({ user, onDone }) {
     touched[name] && errors[name] ? "input-error" : "";
 
   return (
-    <div className="user-reports-container" style={{ borderLeft: "4px solid #ef4444" }}>
-      <h2 style={{ color: "#ef4444" }}>Reportar Árbol Robado</h2>
+    <div className="user-reports-container container-danger">
+      <h2 className="title-danger">Reportar Árbol Robado</h2>
       <p>Utiliza este formulario para reportar un árbol que ha sido sustraído o talado ilegalmente.</p>
 
       {estadoEnvio.texto && (
-        <div
-          className={`mensaje ${estadoEnvio.tipo}`}
-          style={{
-            backgroundColor: estadoEnvio.tipo === "success" ? "#dcfce7" : "#fee2e2",
-            color:           estadoEnvio.tipo === "success" ? "#166534" : "#991b1b",
-            border:          estadoEnvio.tipo === "success" ? "1px solid #bbf7d0" : "1px solid #fecaca",
-          }}
-        >
+        <div className={`mensaje ${estadoEnvio.tipo === "success" ? "success-alt" : "error-alt"}`}>
           {estadoEnvio.texto}
         </div>
       )}
@@ -136,7 +128,7 @@ function UserReportesRobo({ user, onDone }) {
       <form onSubmit={handleSubmit} className="report-form" noValidate>
         {/* Tipo de árbol */}
         <div className="form-group">
-          <label>Tipo de Árbol (o Nombre): <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Tipo de Árbol (o Nombre): <span className="required-star">*</span></label>
           <input
             type="text"
             name="tipo_arbol"
@@ -154,7 +146,7 @@ function UserReportesRobo({ user, onDone }) {
 
         {/* Ubicación */}
         <div className="form-group">
-          <label>Ubicación del Árbol (Dirección o Coordenadas): <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Ubicación del Árbol (Dirección o Coordenadas): <span className="required-star">*</span></label>
           <input
             type="text"
             name="ubicacion"
@@ -171,7 +163,7 @@ function UserReportesRobo({ user, onDone }) {
 
         {/* Descripción */}
         <div className="form-group">
-          <label>Reseña o Descripción Detallada: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Reseña o Descripción Detallada: <span className="required-star">*</span></label>
           <textarea
             name="descripcion"
             value={reporte.descripcion}
@@ -184,7 +176,7 @@ function UserReportesRobo({ user, onDone }) {
           {touched.descripcion && errors.descripcion && (
             <span className="field-error-msg">⚠ {errors.descripcion}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginTop: "3px", display: "block" }}>
+          <span className="char-counter">
             {reporte.descripcion.length} caracteres (mínimo 15)
           </span>
         </div>
@@ -192,8 +184,7 @@ function UserReportesRobo({ user, onDone }) {
         <button
           type="submit"
           disabled={loading}
-          className="btn-send"
-          style={{ backgroundColor: "#ef4444" }}
+          className="btn-send btn-danger-report"
         >
           {loading ? "Enviando Reporte..." : "Enviar Reporte de Robo"}
         </button>

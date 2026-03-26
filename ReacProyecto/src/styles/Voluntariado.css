@@ -159,3 +159,118 @@
   .voluntariado-hero-content p { font-size: 1.1rem; }
   .vol-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
 }
+
+/* ── New Philosophy Styles ── */
+.philosophy-section {
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.philosophy-title {
+  color: #1a4d2e;
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.philosophy-text {
+  color: #4b5563;
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+  line-height: 1.8;
+}
+
+.info-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.info-card-modern {
+  padding: 2.5rem;
+  background-color: #f9fafb;
+  border-radius: 20px;
+  border-bottom: 5px solid #166534;
+  transition: transform 0.3s ease;
+}
+
+.info-card-modern:hover {
+  transform: translateY(-5px);
+}
+
+.info-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-card-title {
+  color: #1a4d2e;
+  margin-bottom: 1rem;
+}
+
+.info-card-text {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.btn-full {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* ===========================
+   RESPONSIVE MOBILE ≤768px
+=========================== */
+@media screen and (max-width: 768px) {
+  .voluntariado-hero {
+    height: auto;
+    min-height: 280px;
+    padding: 2rem 1rem;
+  }
+  .voluntariado-hero-content h1 {
+    font-size: 2rem;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+  .voluntariado-hero-content p {
+    font-size: 1rem;
+  }
+  .voluntariado-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  .voluntariado-cta {
+    padding: 1.5rem 1rem;
+    margin: 0 1rem;
+  }
+  .voluntariado-cta h2 {
+    font-size: 1.5rem;
+    letter-spacing: 0;
+  }
+  .vol-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .vol-btn-primary,
+  .vol-btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+  .philosophy-section {
+    padding: 3rem 1rem;
+  }
+  .philosophy-title {
+    font-size: 1.7rem;
+  }
+  .info-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+

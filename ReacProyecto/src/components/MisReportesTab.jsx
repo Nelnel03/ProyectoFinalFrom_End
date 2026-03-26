@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import services from '../services/services';
+import '../styles/MisReportesTab.css';
 
 // Paleta de colores de estado compartida con el admin
 const STATUS_STYLES = {
@@ -14,16 +15,14 @@ const STATUS_STYLES = {
 function StatusBadge({ estado }) {
   const s = STATUS_STYLES[estado] || STATUS_STYLES['Pendiente'];
   return (
-    <span style={{
-      padding: '4px 14px',
-      borderRadius: '999px',
-      fontSize: '0.8rem',
-      fontWeight: '700',
-      backgroundColor: s.bg,
-      color: s.text,
-      border: `1px solid ${s.border}`,
-      whiteSpace: 'nowrap',
-    }}>
+    <span
+      className="status-badge-pill"
+      style={{
+        backgroundColor: s.bg,
+        color: s.text,
+        border: `1px solid ${s.border}`,
+      }}
+    >
       {s.icon} {estado || 'Pendiente'}
     </span>
   );
@@ -35,6 +34,7 @@ function MisReportesTab({ user }) {
   const [actividades, setActividades] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [ultimaActualizacion, setUltimaActualizacion] = useState(null);
+  const [filtroActivo, setFiltroActivo] = useState('todos');
 
   const cargarTodo = useCallback(async () => {
     if (!user?.id) return;
@@ -64,122 +64,119 @@ function MisReportesTab({ user }) {
   }, [cargarTodo]);
 
   return (
-    <div className="mis-reportes-container" style={{ padding: '1rem' }}>
+    <div className="mis-reportes-container">
       {/* Header con botón de refresco */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ color: 'var(--color-bosque-helecho)', margin: 0 }}>Mis Solicitudes y Reportes</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+      <div className="mis-reportes-header">
+        <h2 className="mis-reportes-title">Mis Solicitudes y Reportes</h2>
+        <div className="mis-reportes-actions">
           {ultimaActualizacion && (
-            <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+            <span className="last-updated-text">
               Actualizado: {ultimaActualizacion.toLocaleTimeString()}
             </span>
           )}
           <button
             onClick={cargarTodo}
             disabled={cargando}
-            style={{
-              padding: '7px 14px',
-              backgroundColor: 'var(--color-bosque-helecho)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: cargando ? 'not-allowed' : 'pointer',
-              fontWeight: '600',
-              fontSize: '0.85rem',
-              opacity: cargando ? 0.7 : 1,
-            }}
+            className="refresh-reportes-btn"
           >
             {cargando ? '...' : 'Actualizar'}
           </button>
         </div>
       </div>
 
+      <div className="mis-reportes-filtros">
+        <button className={`filtro-rep-btn ${filtroActivo === 'todos' ? 'active' : ''}`} onClick={() => setFiltroActivo('todos')}>Todos</button>
+        <button className={`filtro-rep-btn ${filtroActivo === 'soporte' ? 'active' : ''}`} onClick={() => setFiltroActivo('soporte')}>Soporte</button>
+        <button className={`filtro-rep-btn ${filtroActivo === 'robo' ? 'active' : ''}`} onClick={() => setFiltroActivo('robo')}>Robos</button>
+        {user?.rol === 'voluntario' && (
+          <button className={`filtro-rep-btn ${filtroActivo === 'actividades' ? 'active' : ''}`} onClick={() => setFiltroActivo('actividades')}>Labores</button>
+        )}
+      </div>
+
       {cargando && mensajesSoporte.length === 0 ? (
-        <p style={{ textAlign: 'center', color: 'var(--color-texto)' }}>Cargando tus datos...</p>
+        <p className="mis-reportes-loading">Cargando tus datos...</p>
       ) : (
-        <div style={{ display: 'grid', gap: '3rem' }}>
+        <div className="mis-reportes-grid">
 
           {/* ── SOPORTE ── */}
-          <section>
-            <h3 style={{ color: 'var(--color-mar-profundo)', borderBottom: '2px solid #e0f2fe', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
+          {(filtroActivo === 'todos' || filtroActivo === 'soporte') && (
+            <section>
+            <h3 className="section-title-soporte">
               Mensajes de Soporte
             </h3>
             {mensajesSoporte.length === 0 ? (
-              <p style={{ color: '#6b7280' }}>No has enviado mensajes de soporte.</p>
+              <p className="empty-section-text">No has enviado mensajes de soporte.</p>
             ) : (
-              <div style={{ display: 'grid', gap: '1rem' }}>
+              <div className="cards-grid">
                 {mensajesSoporte.map(m => (
-                  <div key={m.id} style={{
-                    padding: '1.25rem 1.5rem',
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    border: '1px solid #e5e7eb',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                    borderLeft: `5px solid ${STATUS_STYLES[m.estado]?.border || '#e5e7eb'}`,
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      <strong style={{ color: 'var(--color-mar-profundo)', fontSize: '1rem' }}>{m.asunto}</strong>
+                  <div
+                    key={m.id}
+                    className="reporte-item-card"
+                    style={{ borderLeft: `5px solid ${STATUS_STYLES[m.estado]?.border || '#e5e7eb'}` }}
+                  >
+                    <div className="card-top-row">
+                      <strong className="card-title-soporte">{m.asunto}</strong>
                       <StatusBadge estado={m.estado} />
                     </div>
-                    <p style={{ marginTop: '0.75rem', fontSize: '0.92rem', color: '#374151', lineHeight: '1.5' }}>{m.mensaje}</p>
-                    <small style={{ color: '#9ca3af' }}>Enviado: {new Date(m.fecha).toLocaleDateString()}</small>
+                    <p className="card-message">{m.mensaje}</p>
+                    <small className="card-date">Enviado: {new Date(m.fecha).toLocaleDateString()}</small>
                   </div>
                 ))}
               </div>
             )}
-          </section>
+            </section>
+          )}
 
           {/* ── ROBOS ── */}
-          <section>
-            <h3 style={{ color: '#bc6c25', borderBottom: '2px solid #ffedd5', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
+          {(filtroActivo === 'todos' || filtroActivo === 'robo') && (
+            <section>
+            <h3 className="section-title-robo">
               Reportes de Robo
             </h3>
             {reportesRobo.length === 0 ? (
-              <p style={{ color: '#6b7280' }}>No tienes reportes de robo.</p>
+              <p className="empty-section-text">No tienes reportes de robo.</p>
             ) : (
-              <div style={{ display: 'grid', gap: '1rem' }}>
+              <div className="cards-grid">
                 {reportesRobo.map(r => (
-                  <div key={r.id} style={{
-                    padding: '1.25rem 1.5rem',
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    border: '1px solid #e5e7eb',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                    borderLeft: `5px solid ${STATUS_STYLES[r.estado]?.border || '#e5e7eb'}`,
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      <strong style={{ color: '#bc6c25', fontSize: '1rem' }}>{r.tipo_arbol}</strong>
+                  <div
+                    key={r.id}
+                    className="reporte-item-card"
+                    style={{ borderLeft: `5px solid ${STATUS_STYLES[r.estado]?.border || '#e5e7eb'}` }}
+                  >
+                    <div className="card-top-row">
+                      <strong className="card-title-robo">{r.tipo_arbol}</strong>
                       <StatusBadge estado={r.estado} />
                     </div>
-                    <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#6b7280' }}>{r.ubicacion}</p>
-                    <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#374151' }}>{r.descripcion}</p>
-                    <small style={{ color: '#9ca3af' }}>Enviado: {new Date(r.fecha).toLocaleDateString()}</small>
+                    <p className="card-detail card-detail-gray">{r.ubicacion}</p>
+                    <p className="card-detail card-detail-dark">{r.descripcion}</p>
+                    <small className="card-date">Enviado: {new Date(r.fecha).toLocaleDateString()}</small>
                   </div>
                 ))}
               </div>
             )}
-          </section>
+            </section>
+          )}
 
           {/* ── ACTIVIDADES (solo voluntarios) ── */}
-          {user.rol === 'voluntario' && (
+          {user.rol === 'voluntario' && (filtroActivo === 'todos' || filtroActivo === 'actividades') && (
             <section>
-              <h3 style={{ color: 'var(--color-bosque-helecho)', borderBottom: '2px solid #dcfce7', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
+              <h3 className="section-title-actividad">
                 Mis Reportes de Actividad
               </h3>
               {actividades.length === 0 ? (
-                <p style={{ color: '#6b7280' }}>No tienes registros de actividad.</p>
+                <p className="empty-section-text">No tienes registros de actividad.</p>
               ) : (
-                <div style={{ display: 'grid', gap: '1rem' }}>
+                <div className="cards-grid">
                   {actividades.map(a => (
-                    <div key={a.id} style={{ padding: '1.25rem 1.5rem', backgroundColor: 'white', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <strong style={{ color: 'var(--color-bosque-helecho)' }}>{a.tipoTarea}</strong>
-                        <span style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                    <div key={a.id} className="reporte-item-card">
+                      <div className="card-top-row">
+                        <strong className="card-title-actividad">{a.tipoTarea}</strong>
+                        <span className="badge-registered">
                           ✓ Registrado
                         </span>
                       </div>
-                      <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#374151' }}>{a.horas} horas — {a.fecha}</p>
-                      <p style={{ margin: '6px 0', fontSize: '0.88rem', color: '#6b7280', fontStyle: 'italic' }}>{a.tareas}</p>
+                      <p className="card-detail card-detail-dark">{a.horas} horas — {a.fecha}</p>
+                      <p className="card-detail card-detail-italic">{a.tareas}</p>
                     </div>
                   ))}
                 </div>
