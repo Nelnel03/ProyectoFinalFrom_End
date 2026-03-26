@@ -190,7 +190,6 @@
       "id": "9ba2",
       "nombre": "Andrés Leal V",
       "email": "andresgerardolv@gmail.com",
-
       "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
       "rol": "voluntario",
       "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
@@ -246,7 +245,6 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-
     }
   ],
   "stats_tipos": [
@@ -280,7 +278,6 @@
   ],
   "reportes": [
     {
-
       "id": "2ed3",
       "asunto": "sdfghjk",
       "mensaje": "dfrtyuikjnbvcwertyjjhgf",
@@ -299,10 +296,25 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
-
     }
   ],
   "reportes_robados": [],
-  "reportes_voluntariado": [],
+  "reportes_voluntariado": [
+    {
+      "voluntarioId": "bdce",
+      "voluntarioNombre": "leal",
+      "voluntarioEmail": "leal@gmail.com",
+      "tipoTarea": "Mantenimiento",
+      "horaInicio": "18:52:56",
+      "horaFin": "18:53:00",
+      "horas": 0,
+      "tareas": "fghjklkhgfghjkkjh",
+      "pruebas": "fghjkl",
+      "fecha": "2026-03-26",
+      "timestamp": "2026-03-26T00:53:09.046Z",
+      "estado": "enviado",
+      "id": "dabvgPEYTQY"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

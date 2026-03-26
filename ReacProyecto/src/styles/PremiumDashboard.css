@@ -358,3 +358,95 @@ body {
   background: rgba(239, 68, 68, 0.2);
   color: #991b1b;
 }
+
+/* ══════════════════════════════
+   RESPONSIVO — TABLET Y MÓVIL
+   ══════════════════════════════ */
+
+@media (max-width: 768px) {
+  .dashboard-premium {
+    padding: 1.5rem;
+  }
+
+  .premium-header {
+    padding: 2.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .premium-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .glass-card {
+    padding: 2rem 1.5rem;
+  }
+
+  /* Tabs en tablet: scroll horizontal */
+  .premium-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-radius: 16px;
+    padding: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .premium-tab {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .modal-body {
+    padding: 2rem;
+  }
+
+  .modal-nombre {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-premium {
+    padding: 1rem;
+  }
+
+  .premium-header {
+    padding: 2rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .premium-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .premium-header-welcome {
+    font-size: 1rem;
+  }
+
+  .glass-card {
+    padding: 1.25rem 1rem;
+    border-radius: 16px;
+  }
+
+  .premium-tab {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+  }
+
+  /* Modal de árbol a pantalla completa en móvil */
+  .modal-contenido {
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-body {
+    padding: 1.5rem 1rem;
+  }
+
+  .modal-nombre {
+    font-size: 1.5rem;
+  }
+}

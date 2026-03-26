@@ -112,9 +112,6 @@
   font-size: 0.9rem;
   border: 1px solid rgba(192, 57, 43, 0.1);
 }
-<<<<<<< HEAD
-
-=======
 .login-back-btn {
   background: none;
   border: none;
@@ -154,4 +151,26 @@
     transform: translateY(0);
   }
 }
->>>>>>> c1e867e2e5203a9e66ae6add120fd807ff50a9b2
+
+/* ══════════ RESPONSIVO ══════════ */
+
+@media (max-width: 640px) {
+  .login-minimal-wrapper {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 3rem;
+  }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .login-btn {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}

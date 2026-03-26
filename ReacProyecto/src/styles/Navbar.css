@@ -130,3 +130,43 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+  .navbar-main {
+    padding: 0.8rem 1.5rem;
+  }
+
+  .navbar-links-container {
+    gap: 0.75rem;
+  }
+
+  /* Ocular los links de texto en tablets pequeñas */
+  .navbar-btn-link {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-main {
+    padding: 0.7rem 1rem;
+  }
+
+  /* Ocultar links de navegación secundarios en móvil */
+  .navbar-btn-link {
+    display: none;
+  }
+
+  .navbar-logo-title {
+    font-size: 1.1rem;
+  }
+
+  .navbar-logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .navbar-btn-acceder {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}

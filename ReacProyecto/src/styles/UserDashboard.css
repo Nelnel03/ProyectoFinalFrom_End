@@ -62,3 +62,34 @@
   color: #1a4d2e;
   margin-bottom: 1rem;
 }
+
+/* ══════════ RESPONSIVO ══════════ */
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 2rem 1.25rem;
+  }
+  .dashboard-header-title {
+    font-size: 1.8rem;
+  }
+  .dashboard-tabs {
+    gap: 0.5rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+  }
+  .tab-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-header-title {
+    font-size: 1.5rem;
+  }
+  .dashboard-header-greeting {
+    font-size: 0.95rem;
+  }
+}
