@@ -228,24 +228,64 @@ function MainPagesInicoAdmin() {
     }, 100);
   };
 
-  const handleEliminarUsuario = async (id, nombre) => {
-    const confirm = await Swal.fire({
-      title: '¿Eliminar usuario?',
-      text: `Esta acción eliminará permanentemente al usuario "${nombre}".`,
+  const handleBanUsuario = async (id, nombre) => {
+    const { value: motivo } = await Swal.fire({
+      title: '¿Cancelar cuenta de usuario?',
+      text: `Ingresa el motivo de la cancelación para "${nombre}":`,
+      input: 'textarea',
+      inputPlaceholder: 'Escribe aquí el motivo...',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Confirmar Cancelación',
+      cancelButtonText: 'Volver',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Debes proporcionar un motivo para cancelar la cuenta';
+        }
+      }
+    });
+
+    if (motivo) {
+      try {
+        const user = usuarios.find(u => u.id === id);
+        const userBaneado = { 
+          ...user, 
+          status: 'banned', 
+          motivoBan: motivo 
+        };
+        await services.putUsuarios(userBaneado, id);
+        Swal.fire('Cancelado', 'La cuenta del usuario ha sido cancelada', 'success');
+        await cargarArboles();
+      } catch (err) {
+        Swal.fire('Error', 'No se pudo cancelar la cuenta', 'error');
+      }
+    }
+  };
+
+  const handleActivarUsuario = async (id, nombre) => {
+    const confirm = await Swal.fire({
+      title: '¿Reactivar usuario?',
+      text: `¿Estás seguro de reactivar la cuenta de "${nombre}"?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, reactivar',
       cancelButtonText: 'Cancelar'
     });
 
     if (confirm.isConfirmed) {
       try {
-        await services.deleteUsuarios(id);
-        Swal.fire('Eliminado', 'El usuario ha sido eliminado', 'success');
+        const user = usuarios.find(u => u.id === id);
+        const userActivo = { 
+          ...user, 
+          status: 'active'
+        };
+        delete userActivo.motivoBan;
+        await services.putUsuarios(userActivo, id);
+        Swal.fire('Reactivado', 'El usuario puede volver a ingresar', 'success');
         await cargarArboles();
       } catch (err) {
-        Swal.fire('Error', 'No se pudo eliminar el usuario', 'error');
+        Swal.fire('Error', 'No se pudo reactivar la cuenta', 'error');
       }
     }
   };
@@ -961,7 +1001,19 @@ function MainPagesInicoAdmin() {
             {tab === 'resumen' && <ResumenTab arboles={arboles} tiposDisponibles={tiposDisponibles} statsTipos={statsTipos} setTipoFiltro={setTipoFiltro} setTab={setTab} />}
             {tab === 'lista' && <ListaTab busqueda={busqueda} setBusqueda={setBusqueda} tipoFiltro={tipoFiltro} setTipoFiltro={setTipoFiltro} tiposDisponibles={tiposDisponibles} setTab={setTab} handleEliminarTipo={handleEliminarTipo} statsTipos={statsTipos} handleUpdateStatTipo={handleUpdateStatTipo} arboles={arboles} cargando={cargando} handleEditar={handleEditar} handleAbonarArbol={handleAbonarArbol} handleEliminar={handleEliminar} handleLimpiarHistorialAbono={handleLimpiarHistorialAbono} />}
             {tab === 'bajas' && <BajasTab arboles={arboles} handleEditar={handleEditar} />}
-            {tab === 'usuarios' && <UsuariosTab modoEdicionUsuario={modoEdicionUsuario} handleUserSubmit={handleUserSubmit} formUsuario={formUsuario} setFormUsuario={setFormUsuario} resetFormUsuario={resetFormUsuario} usuarios={usuarios} handleEditarUsuario={handleEditarUsuario} handleEliminarUsuario={handleEliminarUsuario} handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado} />}
+            {tab === 'usuarios' && <UsuariosTab
+              modoEdicionUsuario={modoEdicionUsuario}
+              handleUserSubmit={handleUserSubmit}
+              formUsuario={formUsuario}
+              setFormUsuario={setFormUsuario}
+              resetFormUsuario={resetFormUsuario}
+              usuarios={usuarios}
+              handleEditarUsuario={handleEditarUsuario}
+              handleBanUsuario={handleBanUsuario}
+              handleActivarUsuario={handleActivarUsuario}
+              handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado}
+            />
+}
             { tab === 'voluntariados' && <VoluntariadosTab modoEdicionVoluntariado={modoEdicionVoluntariado} handleVoluntariadoSubmit={handleVoluntariadoSubmit} formVoluntariado={formVoluntariado} setFormVoluntariado={setFormVoluntariado} resetFormVoluntariado={resetFormVoluntariado} voluntariados={voluntariados} handleEditarVoluntariado={handleEditarVoluntariado} handleEliminarVoluntariado={handleEliminarVoluntariado} handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario} /> }
             { tab === 'abonos' && <AbonosTab modoEdicionAbono={modoEdicionAbono} handleAbonoSubmit={handleAbonoSubmit} formAbono={formAbono} setFormAbono={setFormAbono} resetFormAbono={resetFormAbono} abonos={abonos} handleEditarAbono={handleEditarAbono} handleEliminarAbono={handleEliminarAbono} /> }
             { tab === 'buzon' && <BuzonTab /> }
