@@ -269,17 +269,18 @@ const History = () => {
                                     {quizQuestions[quizState.current].question}
                                 </p>
                                 <div className="quiz-options-list">
-
-                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: false, selectedOption: 1 })}>
-                                        A) Producir sombra para las iguanas <CheckCircle size={20} className="quiz-option-icon" />
-                                    </div>
-                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: true, selectedOption: 2 })}>
-                                        B) Atrapar sedimentos y prevenir la erosión <CheckCircle size={20} className="quiz-option-icon" />
-                                    </div>
-                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: false, selectedOption: 3 })}>
-                                        C) Absorber agua salada para purificarla <CheckCircle size={20} className="quiz-option-icon" />
-                                    </div>
-
+                                    {quizQuestions[quizState.current].options.map((opt, i) => (
+                                        <div 
+                                            key={i} 
+                                            className="quiz-option" 
+                                            onClick={() => {
+                                                const isCorrect = i === quizQuestions[quizState.current].correctIndex;
+                                                setQuizState({ ...quizState, answered: true, correct: isCorrect, selectedOption: i, score: isCorrect ? quizState.score + 1 : quizState.score });
+                                            }}
+                                        >
+                                            <span style={{ fontWeight: '500' }}>{['A)', 'B)', 'C)'][i]}</span> {opt} <CheckCircle size={20} className="quiz-option-icon" />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ) : (

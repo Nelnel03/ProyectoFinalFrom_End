@@ -245,7 +245,14 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-
+    },
+    {
+      "id": "3764",
+      "nombre": "Sol Aragón",
+      "email": "marisol19001@gmail.com",
+      "telefono": "12345678",
+      "password": "12345678",
+      "rol": "user"
     }
   ],
   "stats_tipos": [
@@ -279,7 +286,6 @@
   ],
   "reportes": [
     {
-
       "id": "2ed3",
       "asunto": "sdfghjk",
       "mensaje": "dfrtyuikjnbvcwertyjjhgf",
@@ -298,7 +304,6 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
-
     }
   ],
   "reportes_robados": [],
