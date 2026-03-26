@@ -22,18 +22,20 @@ function Nav() {
   return (
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
-        <NavLink to="/" className="visitor-logo">
+        <NavLink to={auth ? (sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/'} className="visitor-logo">
           <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
           <span className="visitor-logo-text">BioMon ADI</span>
         </NavLink>
         
         <div className="visitor-nav-links">
-          <NavLink 
-            to="/" 
-            className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
-          >
-            Inicio
-          </NavLink>
+          {!auth && (
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
+            >
+              Inicio
+            </NavLink>
+          )}
           <NavLink 
             to="/historia" 
             className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}

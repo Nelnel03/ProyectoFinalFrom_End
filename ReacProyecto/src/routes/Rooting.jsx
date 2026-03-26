@@ -16,8 +16,8 @@ import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
 import UserDashboard from '../components/UserDashboard';
 import VolunteerDashboard from '../components/VolunteerDashboard';
-
 import '../styles/Layout.css';
+import Footer from '../components/Footer';
 
 function MainLayout() {
   const location = useLocation();
@@ -98,6 +98,7 @@ function MainLayout() {
           />
         </Routes>
       </div>
+      {location.pathname !== '/mapa' && <Footer />}
     </div>
   );
 }

@@ -93,17 +93,6 @@ const Landing = () => {
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer className="landing-footer">
-                <div className="footer-brand">
-                    <img src="/src/assets/logo.png" alt="Logo" className="footer-logo" />
-                    <div>
-                        <h3 className="footer-brand-name">BioMon ADI</h3>
-                        <p className="footer-brand-tagline">CORREDOR BIOLÓGICO</p>
-                    </div>
-                </div>
-                <p className="footer-copyright">&copy; {new Date().getFullYear()} ADI La Angostura, Puntarenas. Salvando el futuro juntos.</p>
-            </footer>
         </div>
     );
 };

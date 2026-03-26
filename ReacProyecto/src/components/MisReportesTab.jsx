@@ -34,6 +34,7 @@ function MisReportesTab({ user }) {
   const [actividades, setActividades] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [ultimaActualizacion, setUltimaActualizacion] = useState(null);
+  const [filtroActivo, setFiltroActivo] = useState('todos');
 
   const cargarTodo = useCallback(async () => {
     if (!user?.id) return;
@@ -83,13 +84,23 @@ function MisReportesTab({ user }) {
         </div>
       </div>
 
+      <div className="mis-reportes-filtros">
+        <button className={`filtro-rep-btn ${filtroActivo === 'todos' ? 'active' : ''}`} onClick={() => setFiltroActivo('todos')}>Todos</button>
+        <button className={`filtro-rep-btn ${filtroActivo === 'soporte' ? 'active' : ''}`} onClick={() => setFiltroActivo('soporte')}>Soporte</button>
+        <button className={`filtro-rep-btn ${filtroActivo === 'robo' ? 'active' : ''}`} onClick={() => setFiltroActivo('robo')}>Robos</button>
+        {user?.rol === 'voluntario' && (
+          <button className={`filtro-rep-btn ${filtroActivo === 'actividades' ? 'active' : ''}`} onClick={() => setFiltroActivo('actividades')}>Labores</button>
+        )}
+      </div>
+
       {cargando && mensajesSoporte.length === 0 ? (
         <p className="mis-reportes-loading">Cargando tus datos...</p>
       ) : (
         <div className="mis-reportes-grid">
 
           {/* ── SOPORTE ── */}
-          <section>
+          {(filtroActivo === 'todos' || filtroActivo === 'soporte') && (
+            <section>
             <h3 className="section-title-soporte">
               Mensajes de Soporte
             </h3>
@@ -113,10 +124,12 @@ function MisReportesTab({ user }) {
                 ))}
               </div>
             )}
-          </section>
+            </section>
+          )}
 
           {/* ── ROBOS ── */}
-          <section>
+          {(filtroActivo === 'todos' || filtroActivo === 'robo') && (
+            <section>
             <h3 className="section-title-robo">
               Reportes de Robo
             </h3>
@@ -141,10 +154,11 @@ function MisReportesTab({ user }) {
                 ))}
               </div>
             )}
-          </section>
+            </section>
+          )}
 
           {/* ── ACTIVIDADES (solo voluntarios) ── */}
-          {user.rol === 'voluntario' && (
+          {user.rol === 'voluntario' && (filtroActivo === 'todos' || filtroActivo === 'actividades') && (
             <section>
               <h3 className="section-title-actividad">
                 Mis Reportes de Actividad
