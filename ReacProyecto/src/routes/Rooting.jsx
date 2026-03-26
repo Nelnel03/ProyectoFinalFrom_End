@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
 import HistoryForm from '../pages/HistoryForm';
+import Mapa from '../pages/Mapa';
 import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
@@ -52,6 +53,7 @@ function MainLayout() {
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
           <Route path="/voluntariado" element={<Voluntariado />} />
+          <Route path="/mapa" element={<Mapa />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           
