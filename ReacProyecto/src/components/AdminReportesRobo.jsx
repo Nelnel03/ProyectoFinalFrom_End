@@ -3,8 +3,6 @@ import services from '../services/services';
 import Swal from 'sweetalert2';
 import '../styles/AdminReports.css';
 
-
-
 function AdminReportesRobo() {
   const [reportes, setReportes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -62,21 +60,11 @@ function AdminReportesRobo() {
     }
   };
 
-  const getStatusColor = (estado) => {
-    switch (estado?.toLowerCase()) {
-      case 'resuelto': return { bg: '#dcfce7', text: '#166534' };
-      case 'en investigacion': return { bg: '#fef9c3', text: '#854d0e' };
-      case 'pendiente': default: return { bg: '#fee2e2', text: '#991b1b' };
-    }
-  };
-
   return (
     <div>
       <div className="admin-section-header">
-
         <h2 className="admin-reports-robo-header">Reportes de Árboles Robados</h2>
         <p className="admin-reports-header-subtitle">Alertas de sustracción o tala ilegal reportadas por los usuarios</p>
-
       </div>
 
       {cargando ? (
@@ -89,7 +77,6 @@ function AdminReportesRobo() {
           <p>La bandeja está vacía. No hay reportes de árboles robados actualmente.</p>
         </div>
       ) : (
-
         <div className="admin-reports-list">
           {reportes.slice().reverse().map((reporte) => (
             <div key={reporte.id} className="admin-report-card admin-report-card-robo">
@@ -106,23 +93,10 @@ function AdminReportesRobo() {
                   </span>
                   <div className="admin-report-card-date">
                     {new Date(reporte.fecha).toLocaleString()}
-
                   </div>
                   <button 
                     onClick={() => handleEliminar(reporte.id)}
-                    style={{
-                      backgroundColor: '#fee2e2',
-                      color: '#b91c1c',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      fontSize: '0.85rem',
-                      fontWeight: '600',
-                      transition: 'background 0.2s'
-                    }}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#fecaca'}
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#fee2e2'}
+                    className="btn-delete-inline"
                   >
                     Eliminar Reporte
                   </button>
@@ -146,7 +120,6 @@ function AdminReportesRobo() {
               </div>
             </div>
           ))}
-
         </div>
       )}
     </div>

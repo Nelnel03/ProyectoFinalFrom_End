@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import services from "../services/services.jsx";
 import "../styles/UserReports.css";
 
-
-
 function validate(reporte) {
   const errors = {};
   const asunto = reporte.asunto.trim();
@@ -92,7 +90,7 @@ function UserReports({ user, onDone }) {
       <form onSubmit={handleSubmit} className="report-form" noValidate>
         {/* Asunto */}
         <div className="form-group">
-          <label>Asunto: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Asunto: <span className="required-star">*</span></label>
           <input
             type="text"
             name="asunto"
@@ -106,14 +104,14 @@ function UserReports({ user, onDone }) {
           {touched.asunto && errors.asunto && (
             <span className="field-error-msg">⚠ {errors.asunto}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginTop: "3px", display: "block" }}>
+          <span className="char-counter">
             {reporte.asunto.length}/100 caracteres
           </span>
         </div>
 
         {/* Mensaje */}
         <div className="form-group">
-          <label>Mensaje: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Mensaje: <span className="required-star">*</span></label>
           <textarea
             name="mensaje"
             value={reporte.mensaje}
@@ -126,7 +124,7 @@ function UserReports({ user, onDone }) {
           {touched.mensaje && errors.mensaje && (
             <span className="field-error-msg">⚠ {errors.mensaje}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginTop: "3px", display: "block" }}>
+          <span className="char-counter">
             {reporte.mensaje.length} caracteres (mínimo 15)
           </span>
         </div>

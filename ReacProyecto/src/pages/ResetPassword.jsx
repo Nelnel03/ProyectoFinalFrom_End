@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import services from '../services/services';
 import Footer from '../components/Footer';
 import '../styles/Login.css';
+import '../styles/ResetPassword.css';
 
 function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -108,25 +109,25 @@ function ResetPassword() {
           <h2>Restablecer Contraseña</h2>
           
           {error ? (
-            <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#ffe6e6', padding: '10px', borderRadius: '5px' }}>
+            <div className="error-message reset-error-msg">
               {error}
-              <div style={{ marginTop: '1rem' }}>
+              <div className="reset-error-footer">
                 <button 
                   onClick={() => navigate('/login')}
-                  style={{ background: 'none', border: 'none', color: '#1a4d2e', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+                  className="reset-back-link"
                 >
                   Volver a iniciar sesión
                 </button>
               </div>
             </div>
           ) : success ? (
-            <div className="success-message" style={{ color: 'green', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#e6ffe6', padding: '10px', borderRadius: '5px' }}>
+            <div className="success-message reset-success-msg">
               {success}
-              <p style={{ marginTop: '10px', fontSize: '0.9rem' }}>Redirigiendo al inicio de sesión...</p>
+              <p className="reset-redirect-text">Redirigiendo al inicio de sesión...</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              <p style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#4b5563', fontSize: '0.95rem' }}>
+              <p className="reset-form-hint">
                 Ingresa y confirma tu nueva contraseña.
               </p>
 
@@ -140,7 +141,7 @@ function ResetPassword() {
                   placeholder="••••••••"
                   minLength={8}
                 />
-                <small style={{ color: '#6b7280', fontSize: '0.75rem', display: 'block', marginTop: '4px' }}>
+                <small className="password-requirements">
                   Mínimo 8 caracteres, 1 mayúscula, 1 minúscula y 1 número.
                 </small>
               </div>

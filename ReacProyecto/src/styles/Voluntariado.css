@@ -159,3 +159,63 @@
   .voluntariado-hero-content p { font-size: 1.1rem; }
   .vol-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
 }
+
+/* ── New Philosophy Styles ── */
+.philosophy-section {
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.philosophy-title {
+  color: #1a4d2e;
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.philosophy-text {
+  color: #4b5563;
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+  line-height: 1.8;
+}
+
+.info-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.info-card-modern {
+  padding: 2.5rem;
+  background-color: #f9fafb;
+  border-radius: 20px;
+  border-bottom: 5px solid #166534;
+  transition: transform 0.3s ease;
+}
+
+.info-card-modern:hover {
+  transform: translateY(-5px);
+}
+
+.info-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-card-title {
+  color: #1a4d2e;
+  margin-bottom: 1rem;
+}
+
+.info-card-text {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.btn-full {
+  width: 100%;
+  max-width: 300px;
+}

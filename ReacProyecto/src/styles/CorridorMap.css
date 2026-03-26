@@ -1,0 +1,92 @@
+.map-wrapper {
+  height: calc(100vh - 4rem);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+
+.map-container-main {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.leaflet-container-full {
+  height: 100%;
+  width: 100%;
+}
+
+.map-floating-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.map-info-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  backdrop-filter: blur(100px);
+  border: 1px solid rgba(255,255,255,0.2);
+  max-width: 300px;
+}
+
+.map-info-title {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  color: #1a4332;
+}
+
+.map-info-subtitle {
+  margin: 0 0 15px 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.google-maps-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: #1a73e8;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.google-maps-btn:hover {
+  background: #1557b0;
+  color: white;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+/* Animations and Markers */
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.custom-marker { 
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); 
+}
+
+.custom-marker:hover > div {
+  transform: rotate(-45deg) scale(1.1) !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.5) !important;
+}

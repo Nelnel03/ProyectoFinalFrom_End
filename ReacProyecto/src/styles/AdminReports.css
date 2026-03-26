@@ -139,3 +139,19 @@
 .admin-report-btn-delete:hover {
   opacity: 0.9;
 }
+
+.btn-delete-inline {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-delete-inline:hover {
+  background-color: #fecaca;
+}

@@ -16,6 +16,8 @@ import PrivateRoutes from './PrivateRoutes';
 import UserDashboard from '../components/UserDashboard';
 import VolunteerDashboard from '../components/VolunteerDashboard';
 
+import '../styles/Layout.css';
+
 function MainLayout() {
   const location = useLocation();
   const isAuth = sessionStorage.getItem('isAuthenticated') === 'true';
@@ -31,7 +33,7 @@ function MainLayout() {
 
 
   return (
-    <div className="app-main-layout-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-main-layout-container">
       {/* 
           Condicional para el Nav/Navbar:
 
