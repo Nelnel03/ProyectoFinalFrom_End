@@ -27,13 +27,13 @@ body {
 /* --- DASHBOARD WRAPPER --- */
 .dashboard-premium {
   min-height: 100vh;
-  padding: 3rem;
+  padding: 0 0 3rem 0;
 }
 
 /* --- HEADERS (CONTRASTADO) --- */
 .premium-header {
   background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
-  border-radius: var(--radius);
+  border-radius: 0;
   padding: 5rem 4rem;
   color: var(--color-caracola);
   margin-bottom: 4rem;
@@ -266,6 +266,7 @@ body {
 .user-glass-main {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .user-section-title {
@@ -334,12 +335,13 @@ body {
 .glass-card-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .premium-tabs-container {
   margin-bottom: 3.5rem;
   overflow-x: auto;
-  padding: 10px;
+  padding: 10px 2rem;
 }
 
 .admin-msg {
