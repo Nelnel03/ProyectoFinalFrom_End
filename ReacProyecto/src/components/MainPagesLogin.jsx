@@ -6,28 +6,38 @@ import services from '../services/services';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/Login.css';
 
-const SERVICE_ID = "service_sc5pdre";
-const TEMPLATE_ID = "template_xxxxx";
-const PUBLIC_KEY = "XsUEbUew1_hoY1y8H";
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-// Inicialización global de EmailJS como fue solicitado
-emailjs.init(PUBLIC_KEY);
+// Inicialización global de EmailJS
+if (PUBLIC_KEY && !PUBLIC_KEY.includes("tu_public_key_aqui")) {
+  emailjs.init(PUBLIC_KEY);
+}
 
-const enviarCorreo = async (nombre, correo) => {
+const enviarCorreo = async (nombre, correo, token) => {
   try {
-    if (TEMPLATE_ID.includes("xxxxx") || PUBLIC_KEY.includes("xxxxx")) {
-      Swal.fire('Faltan Llaves', 'Para que el correo se envíe, debes reemplazar "template_xxxxx" y "xxxxxxxxxxxxx" con tus llaves reales de EmailJS.', 'warning');
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY || 
+        SERVICE_ID.includes("tu_") || TEMPLATE_ID.includes("tu_") || PUBLIC_KEY.includes("tu_")) {
+      Swal.fire('Configuración Incompleta', 'Las llaves de EmailJS no están configuradas correctamente en el archivo .env.', 'warning');
       return false;
     }
 
-    if (!nombre || !correo) {
+    if (!nombre || !correo || !token) {
       console.error("Datos incompletos");
       return false;
     }
 
+    const resetLink = `${window.location.origin}/reset-password?token=${token}`;
+
     const templateParams = {
+      site_name: "BioMon ADI",
+      site_logo_url: "URL_DE_TU_LOGO_SUBIDO_A_INTERNET", // Reemplazar con una URL pública
       user_name: nombre,
-      user_email: correo
+      user_email: correo,
+      to_email: correo,
+      email: correo,
+      reset_link: resetLink
     };
 
     const response = await emailjs.send(
@@ -72,12 +82,8 @@ function MainPagesLogin() {
   const handleLogin = async (e) => {
 
     e.preventDefault();
-    const emailTrimmed = email.trim();
     setError('');
     setLoading(true);
-
-
-
 
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
@@ -94,7 +100,8 @@ function MainPagesLogin() {
 
 
       const usuarios = await services.getUsuarios();
-      const user = usuarios.find(u => u.email === trimmedEmail && u.password === trimmedPassword);
+      const saltedPass = btoa(trimmedPassword + "_SECURE_SALT");
+      const user = usuarios.find(u => u.email === trimmedEmail && (u.password === trimmedPassword || u.password === saltedPass));
 
       if (user) {
         if (user.debeCambiarPassword) {
@@ -249,7 +256,15 @@ function MainPagesLogin() {
         return;
       }
 
-      const envioExitoso = await enviarCorreo(user.nombre, user.email);
+      // Generar token y expiración (1 hora)
+      const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const expiry = new Date(Date.now() + 3600000).toISOString();
+
+      // Guardar token en el perfil del usuario
+      const updatedUser = { ...user, resetToken: token, resetTokenExpiry: expiry };
+      await services.putUsuarios(updatedUser, user.id);
+
+      const envioExitoso = await enviarCorreo(user.nombre, user.email, token);
 
       if (envioExitoso) {
         Swal.fire({
