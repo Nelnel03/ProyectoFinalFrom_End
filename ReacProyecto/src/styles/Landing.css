@@ -3,15 +3,22 @@
     color: var(--color-texto);
 }
 
+/* SECCIÓN HERO: Imagen principal y degradado de impacto */
 .hero-section {
+  /* Degradado de bosque a tierra usando variables vibrantes */
+  background: linear-gradient(
+      rgba(45, 106, 79, 0.75), 
+      rgba(96, 56, 8, 0.85)
+    ), 
+    url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(rgba(0, 119, 182, 0.7), rgba(0, 180, 216, 0.8)), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80") center/cover no-repeat;
-    color: white;
+    color: rgb(29, 102, 11);
     padding: 2rem;
 }
 
+/* Contenido centrado del hero */
 .hero-content {
     flex: 1;
     display: flex;
@@ -23,45 +30,50 @@
     margin: 0 auto;
 }
 
+/* Título de gran impacto */
 .hero-title {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    color: var(--color-caracola);
-    line-height: 1.1;
-    font-weight: 800;
-    font-family: var(--fuente-acento);
-    text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -1px;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-caracola);
+  line-height: 1.1;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
+/* Descripción secundaria del hero */
 .hero-description {
     font-size: 1.2rem;
     margin-bottom: 2.5rem;
-    color: #e0e0e0;
+    color: #ffffff;
     line-height: 1.6;
 }
 
+/* Botón principal temático de la landing */
 .hero-button {
-    background: var(--color-coral);
-    color: white;
-    border: none;
-    padding: 1.2rem 3rem;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.2s, background-color 0.2s;
-    font-family: var(--fuente-principal);
+  background: var(--color-bosque-musgo);
+  border: 2px solid var(--color-ocre-silvestre);
+  color: rgb(174, 219, 194);
+  padding: 1.2rem 3rem;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  font-family: var(--fuente-principal);
 }
 
 .hero-button:hover {
-    transform: scale(1.05);
-    background-color: #ff6347;
+  background: var(--color-bosque-helecho);
+  box-shadow: 0 0 20px rgba(163, 177, 138, 0.4);
+  transform: scale(1.05);
 }
 
+/* SECCIÓN DE LOCALIDADES: Grid informativo */
 .localities-section {
     padding: 5rem 2rem;
     background: var(--color-arena);
@@ -83,6 +95,7 @@
     max-width: 700px;
 }
 
+/* Rejilla de tarjetas de localidades */
 .localities-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -91,6 +104,7 @@
     margin: 0 auto;
 }
 
+/* Tarjeta de localidad individual */
 .locality-card {
     padding: 2.5rem;
     background: white;
@@ -104,10 +118,11 @@
     transform: translateY(-10px);
 }
 
+/* Contenedor del icono circular */
 .locality-icon-container {
     background: #e9f5ed;
     width: 70px;
-    height: 100px;
+    height: 70px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -127,6 +142,7 @@
     line-height: 1.6;
 }
 
+/* Enlace a acción dentro de la tarjeta */
 .locality-link {
     margin-top: 1rem;
     color: var(--primary);
@@ -138,6 +154,7 @@
     gap: 5px;
 }
 
+/* Footer específico usado en landing (Si aplica) */
 .landing-footer {
     background: var(--color-mar-profundo);
     color: var(--color-caracola);
