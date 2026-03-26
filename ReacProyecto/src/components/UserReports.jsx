@@ -8,7 +8,6 @@ function validate(reporte) {
   const mensaje = reporte.mensaje.trim();
 
   if (!asunto)                  errors.asunto  = "El asunto es obligatorio.";
-  else if (asunto.length < 5)   errors.asunto  = "El asunto debe tener al menos 5 caracteres.";
 
   if (!mensaje)                 errors.mensaje = "El mensaje es obligatorio.";
   else if (mensaje.length < 15) errors.mensaje = "El mensaje debe tener al menos 15 caracteres.";
@@ -91,22 +90,22 @@ function UserReports({ user, onDone }) {
         {/* Asunto */}
         <div className="form-group">
           <label>Asunto: <span className="required-star">*</span></label>
-          <input
-            type="text"
+          <select
             name="asunto"
             value={reporte.asunto}
             onChange={handleChange}
             onBlur={handleBlur}
             className={fieldClass("asunto")}
-            placeholder="Ej: Problema con un árbol registrado"
-            maxLength={100}
-          />
+          >
+            <option value="">Seleccione un asunto...</option>
+            <option value="árbol seco">árbol seco</option>
+            <option value="mucha basura al rededor del corredor">mucha basura al rededor del corredor</option>
+            <option value="animal muerto en la zona">animal muerto en la zona</option>
+            <option value="falta de mantenimiento">falta de mantenimiento</option>
+          </select>
           {touched.asunto && errors.asunto && (
             <span className="field-error-msg">⚠ {errors.asunto}</span>
           )}
-          <span className="char-counter">
-            {reporte.asunto.length}/100 caracteres
-          </span>
         </div>
 
         {/* Mensaje */}

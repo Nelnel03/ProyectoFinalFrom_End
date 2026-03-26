@@ -245,7 +245,6 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-
     }
   ],
   "stats_tipos": [
@@ -279,7 +278,6 @@
   ],
   "reportes": [
     {
-
       "id": "2ed3",
       "asunto": "sdfghjk",
       "mensaje": "dfrtyuikjnbvcwertyjjhgf",
@@ -298,10 +296,31 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
-
+    },
+    {
+      "asunto": "un arbol se seco",
+      "mensaje": "se seco un arbol",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-26T02:45:35.659Z",
+      "estado": "Leído",
+      "id": "d4u-KaKmyac"
     }
   ],
-  "reportes_robados": [],
+  "reportes_robados": [
+    {
+      "tipo_arbol": "robo de un arbol de guanacaste",
+      "ubicacion": "asdfghj",
+      "descripcion": "asdfghjhgfdsaASD",
+      "userId": "ca99",
+      "userName": "GG",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-26T02:46:50.335Z",
+      "estado": "En Investigación",
+      "id": "JQcgpNVCpaw"
+    }
+  ],
   "reportes_voluntariado": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
