@@ -32,33 +32,57 @@ body {
 
 /* --- HEADERS (CONTRASTADO) --- */
 .premium-header {
-  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
-  border-radius: 0;
-  padding: 5rem 4rem;
-  color: var(--color-caracola);
-  margin-bottom: 4rem;
+  background-color: #3A5A40 !important;
+  background-image: none !important;
+  padding: 5rem 4rem 8rem;
+  color: #DAD7CD !important;
+  margin-bottom: 0;
   box-shadow: var(--sombra-profunda);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.premium-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='20' y='50' font-size='24' opacity='0.03'%3E%F0%9F%8D%83%3C/text%3E%3Ctext x='80' y='110' font-size='24' opacity='0.03'%3E%F0%9F%A6%8E%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .premium-header h1 {
-  font-family: var(--fuente-acento);
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 3.8rem;
   font-weight: 800;
+  color: #DAD7CD !important;
   margin: 0;
-  letter-spacing: 1px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  letter-spacing: 2px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.2);
   text-transform: uppercase;
+  position: relative;
+  z-index: 2;
 }
 
 .premium-header p {
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 1.4rem;
-  color: var(--color-caracola);
+  color: #DAD7CD !important;
   margin-top: 1.5rem;
   max-width: 850px;
-  font-weight: 600; 
-  opacity: 0.9;
+  font-weight: 500; 
+  opacity: 0.85;
+  position: relative;
+  z-index: 2;
 }
 
 /* --- GLASS CARDS (ELEGANTES PERO LEGIBLES) --- */
@@ -69,7 +93,10 @@ body {
   box-shadow: 0 20px 50px rgba(40, 54, 24, 0.15);
   padding: 3.5rem;
   border: 1px solid rgba(58, 90, 64, 0.2); /* Verde musgo sutil */
+  margin-top: -4rem;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 20;
 }
 
 

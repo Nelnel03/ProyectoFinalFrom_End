@@ -3,13 +3,13 @@
   justify-content: space-between; 
   align-items: center;
   padding: 0.8rem 4rem;
-  background: rgba(52, 78, 65, 0.9); /* Verde bosque cálido profundo */
+  background: rgba(45, 66, 55, 0.95); /* Verde bosque más definido y profundo */
   backdrop-filter: blur(15px);
   position: sticky;
   top: 0;
   z-index: 1010;
-  box-shadow: 0 4px 30px rgba(40, 54, 24, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(218, 215, 205, 0.15); /* Separador sutil color Crema */
 }
 
 
