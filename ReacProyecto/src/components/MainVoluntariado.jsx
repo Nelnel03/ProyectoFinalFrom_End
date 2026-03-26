@@ -11,32 +11,28 @@ function MainVoluntariado() {
         <div className="voluntariado-hero-content">
           <h1>Únete como Voluntario</h1>
           <p>Forma parte de nuestra misión para proteger la biodiversidad y restaurar nuestros bosques.</p>
-
         </div>
       </section>
 
       {/* Philosophy Section */}
-      <section style={{ padding: '5rem 2rem', maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-        <h2 style={{ color: '#1a4d2e', fontSize: '2.4rem', marginBottom: '1.5rem' }}>Nuestra Filosofía de Servicio</h2>
-        <p style={{ color: '#4b5563', fontSize: '1.1rem', maxWidth: '800px', margin: '0 auto 4rem auto', lineHeight: '1.8' }}>
+      <section className="philosophy-section">
+        <h2 className="philosophy-title">Nuestra Filosofía de Servicio</h2>
+        <p className="philosophy-text">
           No buscamos simples asistentes; buscamos guardianes comprometidos. Nuestro programa de voluntariado está diseñado para personas apasionadas que deseen profesionalizar su impacto ambiental.
         </p>
         
-        <div className="voluntariado-info-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
-          <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
-            <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Restauración Ecológica</h3>
-            <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Participa en la selección, siembra y monitoreo de especies nativas bajo estándares científicos.</p>
+        <div className="info-grid-modern">
+          <div className="info-card-modern">
+            <h3 className="info-card-title">Restauración Ecológica</h3>
+            <p className="info-card-text">Participa en la selección, siembra y monitoreo de especies nativas bajo estándares científicos.</p>
           </div>
-          <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
-            <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Vigilancia y Protección</h3>
-            <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Colabora con el equipo de patrullaje para prevenir la tala ilegal y asegurar la integridad de la reserva.</p>
+          <div className="info-card-modern">
+            <h3 className="info-card-title">Vigilancia y Protección</h3>
+            <p className="info-card-text">Colabora con el equipo de patrullaje para prevenir la tala ilegal y asegurar la integridad de la reserva.</p>
           </div>
-          <div className="voluntariado-info-card" style={{ padding: '2.5rem', backgroundColor: '#f9fafb', borderRadius: '20px', borderBottom: '5px solid #166534' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1.5rem' }}></div>
-            <h3 style={{ color: '#1a4d2e', marginBottom: '1rem' }}>Gestión de Datos</h3>
-            <p style={{ color: '#4b5563', lineHeight: '1.6' }}>Asiste en el censo forestal y el registro digital de cada árbol en nuestra plataforma tecnológica.</p>
+          <div className="info-card-modern">
+            <h3 className="info-card-title">Gestión de Datos</h3>
+            <p className="info-card-text">Asiste en el censo forestal y el registro digital de cada árbol en nuestra plataforma tecnológica.</p>
           </div>
         </div>
       </section>
@@ -47,13 +43,11 @@ function MainVoluntariado() {
         <p>Regístrate en nuestra plataforma y postúlate como voluntario hoy mismo.</p>
         <div className="vol-buttons">
           <button 
-            className="vol-btn-primary" 
+            className="vol-btn-primary btn-full" 
             onClick={() => navigate('/login')}
-            style={{ width: '100%', maxWidth: '300px' }}
           >
             Registrarme Ahora
           </button>
-
         </div>
       </section>
     </div>

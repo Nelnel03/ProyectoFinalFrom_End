@@ -94,3 +94,14 @@
   margin-top: 4px;
   display: block;
 }
+
+.required-star {
+  color: #e53e3e;
+}
+
+.password-hint {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 4px;
+  display: block;
+}

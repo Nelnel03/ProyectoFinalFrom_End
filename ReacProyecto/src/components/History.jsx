@@ -155,8 +155,6 @@ const History = () => {
     ];
 
     return (
-
-
         <div className="history-dashboard-wrapper">
 
             {/* BARRA DE PROGRESO */}
@@ -166,7 +164,6 @@ const History = () => {
             <header className="glass-header">
                 <div className="header-brand">
                     <div className="brand-icon-wrapper">
-
                         <Brain color="white" size={26} />
                     </div>
                     <div className="brand-text">
@@ -189,11 +186,8 @@ const History = () => {
 
                 {/* SECCIÓN: ¿QUÉ QUIERES APRENDER HOY? (Hover Cards) */}
                 <section>
-
-
                     <h2 className="section-title-elegant">¿Qué descubriremos hoy?</h2>
                     <div className="hover-cards-grid">
-
                         {exploreTopics.map((topic, i) => (
                             <div key={i} className="hover-card" style={{ '--card-color': topic.color }} onClick={() => setSelectedTopic(i)}>
                                 <div className="hover-card-icon-container" style={{ background: `${topic.color}15`, color: topic.color }}>
@@ -211,13 +205,10 @@ const History = () => {
                 <div className="history-two-columns">
 
                     {/* SECCIÓN: MAPA DE CONOCIMIENTO (Línea de tiempo) */}
-
-
                     <section className="learning-path-section">
                         <div className="learning-path-header">
                             <Target size={28} color="#1a73e8" />
                             <h2>Ruta de Aprendizaje</h2>
-
                         </div>
 
                         <div className="learning-path-layout">
@@ -231,24 +222,18 @@ const History = () => {
                                         className={`interactive-node ${activeNode === node.id ? 'active' : ''}`}
                                         onClick={() => setActiveNode(node.id)}
                                     >
-
-
-                                        <div className="node-number-circle" style={{ background: activeNode === node.id ? '#1a73e8' : 'white', border: `2px solid ${activeNode === node.id ? '#1a73e8' : '#e5e7eb'}`, color: activeNode === node.id ? 'white' : '#9ca3af' }}>
-
+                                        <div className={`node-number-circle ${activeNode === node.id ? 'node-bullet-active' : 'node-bullet-inactive'}`}>
                                             {node.id}
                                         </div>
-                                        <span className="node-title-text" style={{ fontWeight: activeNode === node.id ? '700' : '500', color: activeNode === node.id ? '#1f2937' : '#6b7280' }}>
+                                        <span className={`node-title-text ${activeNode === node.id ? 'node-text-active' : 'node-text-inactive'}`}>
                                             {node.title}
                                         </span>
                                     </div>
                                 ))}
                             </div>
                             {/* Contenido dinámico */}
-
-
                             <div className="path-content-card">
                                 <div className="path-content-icon">
-
                                     {knowledgeNodes.find(n => n.id === activeNode)?.icon}
                                 </div>
                                 <h3>{knowledgeNodes.find(n => n.id === activeNode)?.title}</h3>
@@ -284,18 +269,17 @@ const History = () => {
                                     {quizQuestions[quizState.current].question}
                                 </p>
                                 <div className="quiz-options-list">
-                                    {quizQuestions[quizState.current].options.map((opt, i) => (
-                                        <div 
-                                            key={i} 
-                                            className="quiz-option" 
-                                            onClick={() => {
-                                                const isCorrect = i === quizQuestions[quizState.current].correctIndex;
-                                                setQuizState({ ...quizState, answered: true, correct: isCorrect, selectedOption: i, score: isCorrect ? quizState.score + 1 : quizState.score });
-                                            }}
-                                        >
-                                            <span style={{ fontWeight: '500' }}>{['A)', 'B)', 'C)'][i]}</span> {opt} <CheckCircle size={20} color="transparent" />
-                                        </div>
-                                    ))}
+
+                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: false, selectedOption: 1 })}>
+                                        A) Producir sombra para las iguanas <CheckCircle size={20} className="quiz-option-icon" />
+                                    </div>
+                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: true, selectedOption: 2 })}>
+                                        B) Atrapar sedimentos y prevenir la erosión <CheckCircle size={20} className="quiz-option-icon" />
+                                    </div>
+                                    <div className="quiz-option" onClick={() => setQuizState({ answered: true, correct: false, selectedOption: 3 })}>
+                                        C) Absorber agua salada para purificarla <CheckCircle size={20} className="quiz-option-icon" />
+                                    </div>
+
                                 </div>
                             </div>
                         ) : (
@@ -369,10 +353,8 @@ const History = () => {
                     </section>
 
                     {/* SECCIÓN: ZONA DE COMUNIDAD */}
-
                     <section className="community-hero-card">
                         <div className="community-bg-icon">
-
                             <MessageSquare size={150} color="white" />
                         </div>
                         <div className="community-card-content">
@@ -409,15 +391,12 @@ const History = () => {
                                 </div>
                             </div>
 
-
                             <button className="btn-community-forum">
-
                                 Entrar al Foro
                             </button>
                         </div>
                     </section>
                 </div>
-
             </div>
 
             {/* MODAL PARA FLORA COSTERA (Índice 0 en exploreTopics) */}
@@ -604,7 +583,7 @@ const History = () => {
                                 <BookOpen size={40} />
                             </div>
                             <div className="modal-header-text">
-                                <h2>La Angostura</h2>
+                                <h2 className="modal-h2">La Angostura</h2>
                                 <p>Punto geográfico e histórico clave</p>
                             </div>
                         </div>

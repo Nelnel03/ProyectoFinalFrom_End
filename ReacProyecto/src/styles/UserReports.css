@@ -97,3 +97,38 @@
   margin-top: 4px;
   display: block;
 }
+
+.char-counter {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 3px;
+  display: block;
+}
+
+.required-star {
+  color: #e53e3e;
+}
+
+.container-danger {
+  border-left: 4px solid #ef4444;
+}
+
+.title-danger {
+  color: #ef4444;
+}
+
+.btn-danger-report {
+  background-color: #ef4444 !important;
+}
+
+.mensaje.success-alt {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.mensaje.error-alt {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}

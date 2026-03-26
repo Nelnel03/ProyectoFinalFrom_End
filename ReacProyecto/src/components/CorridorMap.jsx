@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, ZoomControl, LayersControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import '../styles/CorridorMap.css';
 
 // ── Página principal del mapa ──────────────────────────────────────────────
 const CorridorMap = () => {
@@ -9,14 +10,14 @@ const CorridorMap = () => {
     const mapRef = React.useRef(null); // Referencia al objeto principal del mapa de Leaflet
 
     return (
-        <div style={{ height: 'calc(100vh - 4rem)', position: 'relative', overflow: 'hidden', display: 'flex' }}>
+        <div className="map-wrapper">
             
             {/* 1. Mapa Principal a pantalla completa */}
-            <div style={{ flex: 1, height: '100%', position: 'relative' }}>
+            <div className="map-container-main">
                 <MapContainer
                     center={center}
                     zoom={15}
-                    style={{ height: '100%', width: '100%' }}
+                    className="leaflet-container-full"
                     zoomControl={false}
                     ref={mapRef}
                 >
@@ -49,69 +50,23 @@ const CorridorMap = () => {
                     </LayersControl>
 
                     {/* Botón de Google Maps Flotante */}
-                    <div style={{ 
-                        position: 'absolute', 
-                        top: '20px', 
-                        left: '20px', 
-                        zIndex: 1000,
-                        pointerEvents: 'auto'
-                    }}>
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            padding: '15px 20px',
-                            borderRadius: '16px',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
-                            backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(255,255,255,0.2)',
-                            maxWidth: '300px'
-                        }}>
-                            <h2 style={{ margin: '0 0 5px 0', fontSize: '1.2rem', color: '#1a4332' }}>Mapa Biológico</h2>
-                            <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', color: '#666' }}>Puntarenas (Chacarita - Porto Bello)</p>
+                    <div className="map-floating-overlay">
+                        <div className="map-info-card">
+                            <h2 className="map-info-title">Mapa Biológico</h2>
+                            <p className="map-info-subtitle">Puntarenas (Chacarita - Porto Bello)</p>
                             
                             <a 
                                 href="https://www.google.com/maps/@9.9875,-84.795,15z/data=!3m1!1e3" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '8px',
-                                    padding: '10px 15px',
-                                    background: '#1a73e8',
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    borderRadius: '10px',
-                                    fontSize: '0.9rem',
-                                    fontWeight: '600',
-                                    transition: 'all 0.2s ease',
-                                    boxShadow: '0 4px 12px rgba(26, 115, 232, 0.3)'
-                                }}
+                                className="google-maps-btn"
                             >
-                                <span style={{ fontSize: '1.2rem' }}>📍</span> Ver en Google Maps
+                                <span className="btn-icon">📍</span> Ver en Google Maps
                             </a>
                         </div>
                     </div>
                 </MapContainer>
             </div>
-
-            <style>{`
-                @keyframes slideIn {
-                    from { transform: translateX(-100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-                .custom-marker { 
-                    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); 
-                }
-                .custom-marker:hover > div {
-                    transform: rotate(-45deg) scale(1.1) !important;
-                    box-shadow: 0 8px 18px rgba(0,0,0,0.5) !important;
-                }
-            `}</style>
         </div>
     );
 };
