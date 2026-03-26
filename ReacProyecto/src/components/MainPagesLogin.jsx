@@ -1,12 +1,56 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import emailjs from '@emailjs/browser';
 import services from '../services/services';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/Login.css';
 
+const SERVICE_ID = "service_sc5pdre";
+const TEMPLATE_ID = "template_xxxxx";
+const PUBLIC_KEY = "XsUEbUew1_hoY1y8H";
+
+// Inicialización global de EmailJS como fue solicitado
+emailjs.init(PUBLIC_KEY);
+
+const enviarCorreo = async (nombre, correo) => {
+  try {
+    if (TEMPLATE_ID.includes("xxxxx") || PUBLIC_KEY.includes("xxxxx")) {
+      Swal.fire('Faltan Llaves', 'Para que el correo se envíe, debes reemplazar "template_xxxxx" y "xxxxxxxxxxxxx" con tus llaves reales de EmailJS.', 'warning');
+      return false;
+    }
+
+    if (!nombre || !correo) {
+      console.error("Datos incompletos");
+      return false;
+    }
+
+    const templateParams = {
+      user_name: nombre,
+      user_email: correo
+    };
+
+    const response = await emailjs.send(
+      SERVICE_ID,
+      TEMPLATE_ID,
+      templateParams,
+      PUBLIC_KEY
+    );
+
+    console.log("✅ Enviado:", response);
+    return true;
+
+  } catch (error) {
+    console.error("❌ Error completo:", error);
+    const mensajeReal = error?.text || error?.message || String(error);
+    Swal.fire('Error de EmailJS', `Detalle técnico: ${mensajeReal}`, 'error');
+    return false;
+  }
+};
+
 function MainPagesLogin() {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isRecovering, setIsRecovering] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
@@ -183,6 +227,48 @@ function MainPagesLogin() {
     }
   };
 
+  const handleRecovery = async (e) => {
+    e.preventDefault();
+    setError('');
+    const trimmedEmail = email.trim();
+
+    if (!validateEmail(trimmedEmail)) {
+      Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const usuarios = await services.getUsuarios();
+      const user = usuarios.find(u => u.email === trimmedEmail);
+
+      if (!user) {
+        Swal.fire('Error', 'No existe una cuenta con este correo', 'error');
+        setLoading(false);
+        return;
+      }
+
+      const envioExitoso = await enviarCorreo(user.nombre, user.email);
+
+      if (envioExitoso) {
+        Swal.fire({
+          title: '¡Correo enviado!',
+          text: 'Se han enviado las instrucciones de recuperación a tu correo.',
+          icon: 'success',
+          confirmButtonText: 'Entendido'
+        });
+        setIsRecovering(false);
+        setEmail('');
+      }
+    } catch (error) {
+      console.error("Error general:", error);
+      Swal.fire('Error', 'Problema inesperado al conectarse.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-minimal-wrapper">
       <div className="login-card">
@@ -194,7 +280,9 @@ function MainPagesLogin() {
           ← Volver al Inicio
         </button>
 
-        <h2>{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+        <h2>
+          {isRecovering ? 'Recuperar Contraseña' : isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}
+        </h2>
 
 
 
@@ -205,8 +293,8 @@ function MainPagesLogin() {
           </div>
         )}
 
-        <form onSubmit={isRegistering ? handleRegister : handleLogin}>
-          {isRegistering && (
+        <form onSubmit={isRecovering ? handleRecovery : isRegistering ? handleRegister : handleLogin}>
+          {!isRecovering && isRegistering && (
             <>
               <div className="form-group">
                 <label>Nombre Completo</label>
@@ -246,9 +334,9 @@ function MainPagesLogin() {
             />
           </div>
 
-
-          <div className="form-group">
-            <label>Contraseña</label>
+          {!isRecovering && (
+            <div className="form-group">
+              <label>Contraseña</label>
             <input
               type="password"
               value={password}
@@ -258,8 +346,9 @@ function MainPagesLogin() {
               maxLength="15"
             />
           </div>
+          )}
 
-          {isRegistering && (
+          {!isRecovering && isRegistering && (
             <div className="form-group">
               <label>Confirmar Contraseña</label>
               <input
@@ -274,25 +363,71 @@ function MainPagesLogin() {
             </div>
           )}
 
+          {!isRegistering && !isRecovering && (
+            <div className="login-forgot-password" style={{ textAlign: 'right', marginBottom: '15px' }}>
+              <button 
+                type="button" 
+                className="login-footer-link" 
+                onClick={() => {
+                  setIsRecovering(true);
+                  setError('');
+                }}
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
+          )}
+
           <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? 'Cargando...' : isRegistering ? 'Registrarse' : 'Entrar'}
+            {loading ? 'Cargando...' : isRecovering ? 'Enviar Instrucciones' : isRegistering ? 'Registrarse' : 'Entrar'}
           </button>
         </form>
 
         <div className="login-footer-container">
           <p className="login-footer-text">
-            {isRegistering ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?'}
-            <button
-              onClick={() => {
-                setIsRegistering(!isRegistering);
-                setError('');
-              }}
-
-              className="login-footer-link"
-
-            >
-              {isRegistering ? 'Inicia Sesión' : 'Regístrate aquí'}
-            </button>
+            {isRecovering ? (
+              <>
+                ¿Recordaste tu contraseña?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRecovering(false);
+                    setError('');
+                  }}
+                  className="login-footer-link"
+                >
+                  Inicia Sesión
+                </button>
+              </>
+            ) : isRegistering ? (
+              <>
+                ¿Ya tienes una cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegistering(false);
+                    setError('');
+                  }}
+                  className="login-footer-link"
+                >
+                  Inicia Sesión
+                </button>
+              </>
+            ) : (
+              <>
+                ¿No tienes una cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegistering(true);
+                    setError('');
+                  }}
+                  className="login-footer-link"
+                >
+                  Regístrate aquí
+                </button>
+              </>
+            )}
           </p>
         </div>
       </div>
