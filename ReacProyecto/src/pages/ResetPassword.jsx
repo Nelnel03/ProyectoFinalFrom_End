@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import services from '../services/services';
-import Footer from '../components/Footer';
 import '../styles/Login.css';
 import '../styles/ResetPassword.css';
 
@@ -165,7 +164,6 @@ function ResetPassword() {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
