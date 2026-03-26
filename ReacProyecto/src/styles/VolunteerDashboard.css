@@ -91,3 +91,54 @@
 .volunteer-loading h2 {
   font-size: 2rem;
 }
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .volunteer-header {
+    padding: 2rem 1rem !important;
+  }
+
+  .volunteer-header-title {
+    font-size: 1.8rem !important;
+  }
+
+  .volunteer-header-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .volunteer-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    margin: -1rem auto 1.5rem auto;
+  }
+
+  .volunteer-content {
+    padding: 1.5rem !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    margin-top: -15px !important;
+    border-radius: 15px !important;
+  }
+
+  .volunteer-stat-card {
+    padding: 1rem;
+  }
+
+  .volunteer-stat-value {
+    font-size: 2rem;
+  }
+
+  .volunteer-nav-pills {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .volunteer-nav-pill {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem;
+  }
+}

@@ -179,3 +179,27 @@
   background-color: #9ca3af;
   cursor: not-allowed;
 }
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .reporte-form-card {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .btn-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cancel-btn, .finish-btn, .back-btn, .submit-report-btn {
+    width: 100%;
+    flex: none;
+  }
+  .form-main-title {
+    font-size: 1.5rem;
+  }
+  .task-in-progress-title {
+    font-size: 1.25rem;
+  }
+}

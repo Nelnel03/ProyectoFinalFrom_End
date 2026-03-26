@@ -130,3 +130,29 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .navbar-main {
+    padding: 0.8rem 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .navbar-links-container {
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .navbar-logo-title {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-logo-img {
+    width: 32px;
+    height: 32px;
+  }
+}
+

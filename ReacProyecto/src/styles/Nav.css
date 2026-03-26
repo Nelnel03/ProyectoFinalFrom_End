@@ -97,22 +97,42 @@ body {
   width: calc(100% - 250px);
 }
 
-/* Layout for Visitor (Top Nav) */
-.main-content-layout.visitor-layout {
-  padding-top: 70px;
-  margin-left: 0;
-  width: 100%;
-}
-
 @media (max-width: 768px) {
-  .visitor-nav-links {
-    gap: 1rem;
-  }
-  .visitor-link {
-    display: none; /* Hide simple links on mobile to save space */
+  .visitor-nav {
+    height: auto;
+    min-height: 56px;
+    padding: 0.4rem 0;
   }
   .visitor-nav-container {
-    padding: 0 1rem;
+    padding: 0 0.8rem;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .visitor-nav-links {
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .visitor-link {
+    display: none;
+  }
+  .visitor-login-btn {
+    font-size: 0.78rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+    border-radius: 30px;
+  }
+  .visitor-logo {
+    font-size: 1.1rem;
+    gap: 6px;
+  }
+  .visitor-logo-img {
+    width: 36px;
+    height: 36px;
+  }
+  .visitor-auth-actions {
+    gap: 0.3rem;
   }
 }
 
