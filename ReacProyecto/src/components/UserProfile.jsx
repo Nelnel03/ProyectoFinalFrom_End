@@ -103,7 +103,7 @@ function UserProfile({ user, onUpdateUser }) {
       <form onSubmit={handleSubmit} className="profile-form" noValidate>
         {/* Nombre */}
         <div className="form-group">
-          <label>Nombre: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Nombre: <span className="required-star">*</span></label>
           <input
             type="text"
             name="nombre"
@@ -121,7 +121,7 @@ function UserProfile({ user, onUpdateUser }) {
 
         {/* Email */}
         <div className="form-group">
-          <label>Correo Electrónico: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Correo Electrónico: <span className="required-star">*</span></label>
           <input
             type="text"
             name="email"
@@ -138,7 +138,7 @@ function UserProfile({ user, onUpdateUser }) {
 
         {/* Password */}
         <div className="form-group">
-          <label>Contraseña: <span style={{ color: "#e53e3e" }}>*</span></label>
+          <label>Contraseña: <span className="required-star">*</span></label>
           <input
             type="password"
             name="password"
@@ -152,7 +152,7 @@ function UserProfile({ user, onUpdateUser }) {
           {touched.password && errors.password && (
             <span className="field-error-msg">⚠ {errors.password}</span>
           )}
-          <span style={{ fontSize: "0.75rem", color: "#6b7280", marginTop: "4px", display: "block" }}>
+          <span className="password-hint">
             Mínimo 6 caracteres, máximo 15.
           </span>
         </div>
