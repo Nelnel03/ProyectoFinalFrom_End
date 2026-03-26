@@ -185,3 +185,32 @@
   font-weight: 700;
   white-space: nowrap;
 }
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .mis-reportes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .mis-reportes-filtros {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .filtro-rep-btn {
+    width: 100%;
+    text-align: center;
+  }
+  .card-top-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .mis-reportes-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .reporte-item-card {
+    padding: 1rem;
+  }
+}

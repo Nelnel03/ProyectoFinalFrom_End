@@ -219,3 +219,58 @@
   width: 100%;
   max-width: 300px;
 }
+
+/* ===========================
+   RESPONSIVE MOBILE ≤768px
+=========================== */
+@media screen and (max-width: 768px) {
+  .voluntariado-hero {
+    height: auto;
+    min-height: 280px;
+    padding: 2rem 1rem;
+  }
+  .voluntariado-hero-content h1 {
+    font-size: 2rem;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+  .voluntariado-hero-content p {
+    font-size: 1rem;
+  }
+  .voluntariado-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  .voluntariado-cta {
+    padding: 1.5rem 1rem;
+    margin: 0 1rem;
+  }
+  .voluntariado-cta h2 {
+    font-size: 1.5rem;
+    letter-spacing: 0;
+  }
+  .vol-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .vol-btn-primary,
+  .vol-btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+  .philosophy-section {
+    padding: 3rem 1rem;
+  }
+  .philosophy-title {
+    font-size: 1.7rem;
+  }
+  .info-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+

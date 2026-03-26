@@ -47,7 +47,7 @@ function MainLayout() {
 
 
 
-      <div className="main-content-layout">
+      <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
