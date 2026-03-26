@@ -97,6 +97,16 @@ function MainPagesLogin() {
       const user = usuarios.find(u => u.email === trimmedEmail && u.password === trimmedPassword);
 
       if (user) {
+        if (user.status === 'banned') {
+          Swal.fire({
+            title: 'Cuenta Cancelada',
+            html: `<p>Tu acceso ha sido revocado por la administración.</p><div style="background:#f7f7f7; padding:15px; border-radius:10px; border-left:4px solid #ef4444; text-align:left; margin-top:15px;"><strong>Motivo:</strong><br/>"${user.motivoBan}"</div>`,
+            icon: 'error'
+          });
+          setLoading(false);
+          return;
+        }
+
         if (user.debeCambiarPassword) {
           const { value: newPassword } = await Swal.fire({
             title: 'Primer Inicio de Sesión',
