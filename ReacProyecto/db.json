@@ -185,8 +185,8 @@
       "email": "alealvfwd@gmail.com",
       "password": "12345678",
       "rol": "user",
-      "resetToken": "xjgeeez4yk9sop1zlcydb9",
-      "resetTokenExpiry": "2026-03-26T18:28:28.231Z"
+      "resetToken": "v97wkkzkc4sjjk5exg3is",
+      "resetTokenExpiry": "2026-03-26T20:23:06.125Z"
     },
     {
       "id": "9ba2",
@@ -248,7 +248,6 @@
       "password": "111111",
       "rol": "user",
       "id": "DVAlcBR3ZBo"
-
     }
   ],
   "stats_tipos": [
@@ -300,7 +299,6 @@
       "fecha": "2026-03-25T02:38:56.583Z",
       "estado": "En Proceso",
       "id": "voj1VWU0_uQ"
-
     }
   ],
   "reportes_robados": [
@@ -314,7 +312,6 @@
       "fecha": "2026-03-26T02:46:50.335Z",
       "estado": "En Investigación",
       "id": "JQcgpNVCpaw"
-
     }
   ],
   "reportes_voluntariado": [],
