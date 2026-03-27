@@ -199,9 +199,9 @@ function ModernUserDashboard() {
                 <span className="stat-label">Puntos de Impacto</span>
                 <div className="stat-value-container">
                   <span className="stat-value">{(stats.impactPoints / 1000).toFixed(1)}k</span>
-                  <div style={{width: '60px', height: '4px', background: '#dcfce7', borderRadius: '2px', marginLeft: 'auto'}}>
-                    <div style={{width: '70%', height: '100%', background: '#10b981', borderRadius: '2px'}}></div>
-                  </div>
+                    <div className="impact-progress-container">
+                      <div className="impact-progress-bar" style={{width: '70%'}}></div>
+                    </div>
                 </div>
               </div>
 
@@ -345,36 +345,16 @@ function ModernUserDashboard() {
             <div className="section-header-flex" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem'}}>
               <h2 style={{margin: 0}}>Guía de Árboles</h2>
 
-              <div className="view-mode-toggle" style={{background: '#f1f5f9', padding: '0.25rem', borderRadius: '10px', display: 'flex', gap: '0.25rem'}}>
+              <div className="view-mode-toggle">
                 <button 
                   onClick={() => setViewMode('individual')}
-                  style={{
-                    padding: '0.5rem 1rem', 
-                    borderRadius: '8px', 
-                    border: 'none', 
-                    background: viewMode === 'individual' ? 'white' : 'transparent',
-                    boxShadow: viewMode === 'individual' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: '0.85rem',
-                    color: viewMode === 'individual' ? 'var(--primary-green)' : '#64748b'
-                  }}
+                  className={`view-mode-btn ${viewMode === 'individual' ? 'active' : ''}`}
                 >
                   Individual
                 </button>
                 <button 
                   onClick={() => setViewMode('especies')}
-                  style={{
-                    padding: '0.5rem 1rem', 
-                    borderRadius: '8px', 
-                    border: 'none', 
-                    background: viewMode === 'especies' ? 'white' : 'transparent',
-                    boxShadow: viewMode === 'especies' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: '0.85rem',
-                    color: viewMode === 'especies' ? 'var(--primary-green)' : '#64748b'
-                  }}
+                  className={`view-mode-btn ${viewMode === 'especies' ? 'active' : ''}`}
                 >
                   Por Especie
                 </button>
@@ -535,7 +515,7 @@ function ModernUserDashboard() {
 
           <div className="top-actions">
             <div className="search-container">
-              <Search size={16} color="#64748b" />
+              <Search size={16} className="search-icon" />
               <input 
                 type="text" 
                 placeholder="Buscar especies de árboles en el corredor..." 
