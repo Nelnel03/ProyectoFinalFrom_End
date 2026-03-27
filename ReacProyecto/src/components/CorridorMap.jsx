@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Compass } from 'lucide-react';
 import { MapContainer, TileLayer, ZoomControl, LayersControl } from 'react-leaflet';
+
 import 'leaflet/dist/leaflet.css';
 import '../styles/CorridorMap.css';
 
@@ -48,23 +50,21 @@ const CorridorMap = () => {
                             />
                         </LayersControl.BaseLayer>
                     </LayersControl>
-
-                    {/* Botón de Google Maps Flotante */}
+                    
                     <div className="map-floating-overlay">
-                        <div className="map-info-card">
-                            <h2 className="map-info-title">Mapa Biológico</h2>
-                            <p className="map-info-subtitle">Puntarenas (Chacarita - Porto Bello)</p>
-                            
-                            <a 
-                                href="https://www.google.com/maps/@9.9875,-84.795,15z/data=!3m1!1e3" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="google-maps-btn"
-                            >
-                                <span className="btn-icon">📍</span> Ver en Google Maps
-                            </a>
-                        </div>
+                        <a 
+                            href="https://www.google.com/maps/@9.9875,-84.795,15z/data=!3m1!1e3" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="compass-btn-floating"
+                            title="Abrir en Google Maps"
+                        >
+                            <Compass size={24} />
+                        </a>
                     </div>
+
+
+
                 </MapContainer>
             </div>
         </div>

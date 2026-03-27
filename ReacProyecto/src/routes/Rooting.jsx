@@ -31,8 +31,12 @@ function MainLayout() {
     location.pathname.startsWith('/dashboard-user') || 
     location.pathname.startsWith('/dashboard-voluntario');
 
+  const isUserDashboard = 
+    location.pathname.startsWith('/user') || 
+    location.pathname.startsWith('/dashboard-user');
 
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/reset-password';
+
 
 
   return (
@@ -44,7 +48,8 @@ function MainLayout() {
           Si es visitante normal, mostramos el Nav global.
           Si es login o reset, no mostramos nada (form minimal).
       */}
-      {!isAuthRoute && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+      {!isAuthRoute && !isUserDashboard && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+
 
 
 
@@ -102,6 +107,8 @@ function MainLayout() {
         </Routes>
       </div>
       {location.pathname !== '/mapa' && <Footer />}
+
+
     </div>
   );
 }

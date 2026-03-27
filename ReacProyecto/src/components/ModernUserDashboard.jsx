@@ -27,7 +27,9 @@ import {
   LayoutDashboard,
   UserCheck
 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import services from '../services/services';
+
 import ArbolesSection from './ArbolesSection';
 import UserProfile from './UserProfile';
 import UserReports from './UserReports';
@@ -88,10 +90,24 @@ function ModernUserDashboard() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('user');
-    navigate('/');
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: "¿Estás seguro de que quieres salir?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#064e3b',
+      cancelButtonColor: '#ef4444',
+      confirmButtonText: 'Sí, Salir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.removeItem('isAuthenticated');
+        sessionStorage.removeItem('user');
+        navigate('/');
+      }
+    });
   };
+
 
   if (!user) return <div className="modern-loading">Cargando...</div>;
 
@@ -196,27 +212,22 @@ function ModernUserDashboard() {
                   </div>
                   <div className="header-actions">
                     <button className="icon-btn"><LayoutDashboard size={20} /></button>
-                    <button className="icon-btn"><Compass size={20} /></button>
+                    <a 
+                      href="https://www.google.com/maps/@9.9875,-84.795,15z/data=!3m1!1e3" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="icon-btn"
+                      title="Abrir en Google Maps"
+                    >
+                      <Compass size={20} />
+                    </a>
+
                   </div>
                 </div>
-                <div className="map-placeholder">
-                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop" alt="Vista del Mapa" />
-                  <div className="map-status-floating">
-                    <div className="status-left">
-                      <div className="status-icon-circle">
-                        <Eye size={20} />
-                      </div>
-                      <div className="status-text">
-                        <h4>Monitoreo Activo</h4>
-                        <p>Estación Valle de la Niebla</p>
-                      </div>
-                    </div>
-                    <div className="status-label">
-                      <span>Estado</span>
-                      <p>Óptimo</p>
-                    </div>
-                  </div>
+                <div className="map-placeholder" style={{padding: 0, height: '480px', overflow: 'hidden'}}>
+                  <CorridorMap />
                 </div>
+
               </div>
 
               {/* Right Column: Sidebar Sections */}
@@ -306,9 +317,10 @@ function ModernUserDashboard() {
       case 'historia':
         return (
           <div className="main-section-card" style={{padding: 0, height: '70vh', overflowX: 'hidden', overflowY: 'auto'}}>
-            <History />
+            <History user={user} />
           </div>
         );
+
       case 'coleccion':
 
 
@@ -336,14 +348,13 @@ function ModernUserDashboard() {
       {/* Sidebar Navigation */}
       <aside className="modern-sidebar">
         <div className="sidebar-logo">
-          <div className="logo-icon">
-            <Trees size={20} />
-          </div>
+          <img src="/src/assets/logo.png" alt="BioMon Logo" className="sidebar-logo-img" />
           <div className="logo-text">
             <h2>Biomon ADI</h2>
             <span>Portal de Conservación</span>
           </div>
         </div>
+
 
         <nav className="sidebar-nav">
           <button 
@@ -422,11 +433,8 @@ function ModernUserDashboard() {
             <HelpCircle size={18} />
             Soporte
           </button>
-          <button className="nav-item" onClick={handleLogout} style={{color: '#ef4444'}}>
-            <LogOut size={18} />
-            Cerrar Sesión
-          </button>
         </div>
+
       </aside>
 
       {/* Main Content */}
@@ -474,12 +482,25 @@ function ModernUserDashboard() {
             </div>
             <button className="icon-btn"><Bell size={20} /></button>
             <button className="icon-btn" onClick={() => setCurrentTab('perfil')}><Settings size={20} /></button>
-            {user.fotoPerfil ? (
-              <img src={user.fotoPerfil} alt="Avatar" className="user-avatar-small" />
-            ) : (
-              <User size={20} />
-            )}
+            <div className="avatar-group" style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
+              {user.fotoPerfil ? (
+                <img src={user.fotoPerfil} alt="Avatar" className="user-avatar-small" />
+              ) : (
+                <div className="user-avatar-placeholder">
+                  <User size={20} />
+                </div>
+              )}
+              <button 
+                className="icon-btn logout-top" 
+                onClick={handleLogout} 
+                style={{color: '#ef4444', marginLeft: '0.25rem'}}
+                title="Cerrar Sesión"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
           </div>
+
         </header>
 
         {/* Content Area */}
@@ -488,14 +509,7 @@ function ModernUserDashboard() {
         </div>
 
 
-        <footer style={{marginTop: '4rem', color: '#64748b', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #e2e8f0', paddingTop: '2rem'}}>
-          <p>© 2026 Proyecto Corredor Biológico La Angostura</p>
-          <div style={{display: 'flex', gap: '2rem'}}>
-            <span>Guías de Conservación</span>
-            <span>Privacidad de Datos</span>
-            <span>Ética de Registros</span>
-          </div>
-        </footer>
+
       </main>
     </div>
   );

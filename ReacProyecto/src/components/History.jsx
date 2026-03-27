@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import '../styles/History.css';
 
-const History = () => {
+const History = ({ user }) => {
+
     const [scrollProgress, setScrollProgress] = useState(0);
     const [quizState, setQuizState] = useState({ current: 0, score: 0, answered: false, correct: false, selectedOption: null, completed: false });
     const [activeNode, setActiveNode] = useState(1);
@@ -172,15 +173,14 @@ const History = () => {
                     </div>
                 </div>
                 <div className="header-user-actions">
+
                     <div className="user-stats-badge">
                         <Trophy size={18} color="#f59e0b" />
                         <span>{quizState.score} Medallas</span>
                     </div>
-                    <div className="user-avatar-circle">
-                        US
-                    </div>
                 </div>
             </header>
+
 
             <div className="history-main-content">
 
@@ -318,89 +318,10 @@ const History = () => {
                         )}
                     </section>
                 </div>
-
-                <div className="history-two-columns">
-                    {/* SECCIÓN: BIBLIOTECA DE RECURSOS */}
-                    <section className="library-section">
-                        <div className="library-header">
-                            <BookOpen size={28} color="#9b5de5" />
-                            <h2>Biblioteca Multimedia</h2>
-                        </div>
-
-                        {/* Filtros */}
-                        <div className="library-filters">
-                            {['Todos', 'PDF', 'Video', 'Audio'].map(f => (
-                                <button key={f} className={`filter-btn ${activeFilter === f ? 'active' : ''}`} onClick={() => setActiveFilter(f)}>
-                                    {f}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Lista de Recursos */}
-                        <div className="resources-scroll-list">
-                            {filteredResources.map(res => (
-                                <div key={res.id} className="resource-item-card">
-                                    <div className="resource-icon-box" style={{ background: `${res.color}15`, color: res.color }}>
-                                        {res.icon}
-                                    </div>
-                                    <div className="resource-info">
-                                        <h4>{res.title}</h4>
-                                        <span className="resource-meta">Recurso en {res.type}</span>
-                                    </div>
-                                    <ChevronRight size={18} color="#d1d5db" />
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    {/* SECCIÓN: ZONA DE COMUNIDAD */}
-                    <section className="community-hero-card">
-                        <div className="community-bg-icon">
-                            <MessageSquare size={150} color="white" />
-                        </div>
-                        <div className="community-card-content">
-                            <div className="community-header">
-                                <Users size={28} color="white" />
-                                <h2>Comunidad Activa</h2>
-                            </div>
-
-                            <p className="community-description">
-                                Únete a la discusión. Comparte tus descubrimientos y sube fotos del corredor geolocalizado. Tu aporte cuenta para el ranking semanal.
-                            </p>
-
-                            <div className="ranking-table-glass">
-                                <div className="ranking-row">
-                                    <span className="ranking-name-cell">
-                                        <div className="ranking-pos-circle pos-1">1</div>
-                                        Escuela Central
-                                    </span>
-                                    <span>240 pts</span>
-                                </div>
-                                <div className="ranking-row">
-                                    <span className="ranking-name-cell">
-                                        <div className="ranking-pos-circle pos-2">2</div>
-                                        Grupo ADI Vol.
-                                    </span>
-                                    <span>185 pts</span>
-                                </div>
-                                <div className="ranking-row">
-                                    <span className="ranking-name-cell">
-                                        <div className="ranking-pos-circle pos-3">3</div>
-                                        Tu pos. (Individual)
-                                    </span>
-                                    <span>65 pts</span>
-                                </div>
-                            </div>
-
-                            <button className="btn-community-forum">
-                                Entrar al Foro
-                            </button>
-                        </div>
-                    </section>
-                </div>
             </div>
 
             {/* MODAL PARA FLORA COSTERA (Índice 0 en exploreTopics) */}
+
             {selectedTopic === 0 && (
                 <div className="history-modal-overlay">
                     <div className="history-modal-container">

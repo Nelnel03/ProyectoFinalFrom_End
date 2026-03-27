@@ -39,16 +39,12 @@
   margin-bottom: 3rem;
 }
 
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--primary-green);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+.sidebar-logo-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
+
 
 .logo-text h2 {
   font-size: 1.1rem;
@@ -228,9 +224,26 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid white;
-  box-shadow: 0 0 0 1px #e2e8f0;
+  border: 1px solid #e2e8f0;
 }
+
+.user-avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.logout-top:hover {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
 
 /* Hero Section */
 .hero-profile {
