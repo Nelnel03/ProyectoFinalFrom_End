@@ -67,6 +67,10 @@
 }
 
 .visitor-login-btn {
+  /* Revertimos variables a su estado verde original para los botones */
+  --color-bosque-musgo: #344e41;
+  --color-bosque-helecho: #3a5a40;
+  --color-mar-profundo: #344e41;
 
   background-color: var(--color-bosque-musgo);
   color: white;

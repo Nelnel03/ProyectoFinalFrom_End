@@ -32,6 +32,7 @@ function UserProfile({ user, onUpdateUser }) {
     nombre: "",
     email: "",
     password: "",
+    fotoPerfil: "",
   });
   const [errors,  setErrors]  = useState({});
   const [touched, setTouched] = useState({});
@@ -44,6 +45,7 @@ function UserProfile({ user, onUpdateUser }) {
         nombre:   user.nombre   || "",
         email:    user.email    || "",
         password: user.password || "",
+        fotoPerfil: user.fotoPerfil || "",
       });
     }
   }, [user]);
@@ -96,6 +98,20 @@ function UserProfile({ user, onUpdateUser }) {
     <div className="user-profile-container">
       <h2>Mi Perfil</h2>
       <p>Aquí puedes ver o editar tu información personal.</p>
+
+      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        {formData.fotoPerfil ? (
+          <img 
+            src={formData.fotoPerfil} 
+            alt="Perfil" 
+            style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--primary-color)' }} 
+          />
+        ) : (
+          <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#ccc', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: '#fff' }}>
+            {formData.nombre ? formData.nombre.charAt(0).toUpperCase() : '?'}
+          </div>
+        )}
+      </div>
 
       {mensaje.texto && (
         <div className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</div>
@@ -156,6 +172,19 @@ function UserProfile({ user, onUpdateUser }) {
           <span className="password-hint">
             Mínimo 6 caracteres, máximo 15.
           </span>
+        </div>
+
+        {/* Foto Perfil */}
+        <div className="form-group">
+          <label>URL de Foto de Perfil:</label>
+          <input
+            type="text"
+            name="fotoPerfil"
+            value={formData.fotoPerfil}
+            onChange={handleChange}
+            className="form-control"
+            placeholder="Opcional: https://..."
+          />
         </div>
 
         <button type="submit" disabled={loading} className="btn-save">

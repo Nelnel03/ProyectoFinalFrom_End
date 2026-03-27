@@ -52,9 +52,22 @@ function VolunteerDashboard() {
 
   return (
     <div className="visitante-container volunteer-container">
-      <header className="visitante-header volunteer-header">
-        <h1 className="volunteer-header-title">Centro de Servicio</h1>
-        <p className="volunteer-header-subtitle">¡Hola {user?.nombre}! Gestiona tus actividades y horas trabajadas.</p>
+      <header className="visitante-header volunteer-header" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        {user?.fotoPerfil ? (
+          <img 
+            src={user.fotoPerfil} 
+            alt="Avatar" 
+            style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white' }} 
+          />
+        ) : (
+          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: '#fff', border: '2px solid white' }}>
+            {user?.nombre ? user.nombre.charAt(0).toUpperCase() : '?'}
+          </div>
+        )}
+        <div style={{ textAlign: 'left' }}>
+          <h1 className="volunteer-header-title" style={{ margin: 0 }}>Centro de Servicio</h1>
+          <p className="volunteer-header-subtitle" style={{ margin: 0 }}>¡Hola {user?.nombre}! Gestiona tus actividades y horas trabajadas.</p>
+        </div>
       </header>
 
       <div className="volunteer-stats-grid">

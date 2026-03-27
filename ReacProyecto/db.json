@@ -89,7 +89,8 @@
       "rol": "voluntario",
       "area": "senbrador",
       "telefono": "11111111",
-      "fechaIngreso": "2026-03-23"
+      "fechaIngreso": "2026-03-23",
+      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.CkAShpmv48U9KCHP91-MIgHaC2%3Fpid%3DApi&f=1&ipt=847f42216f3c767ac74d1ee52fa0468a61fd1f96e6db5ea8a63643a3eb0809da&ipo=images"
     },
     {
       "id": "a8d3",
@@ -124,7 +125,8 @@
       "nombre": "GG",
       "email": "g@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "user",
+      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.FG9iIexBnQHiVtqfHyfLVwHaDo%3Fpid%3DApi&f=1&ipt=fb2deded93b22870dccf4507c52aa2cf5e24cb877c72c15ab416d9130d1058a5&ipo=images"
     },
     {
       "id": "05a5",
@@ -156,8 +158,8 @@
       "email": "alealvfwd@gmail.com",
       "password": "12345678",
       "rol": "user",
-      "resetToken": "w5wcs6xiid5oet5w58wmr",
-      "resetTokenExpiry": "2026-03-26T22:46:29.721Z"
+      "resetToken": "v97wkkzkc4sjjk5exg3is",
+      "resetTokenExpiry": "2026-03-26T20:23:06.125Z"
     },
     {
       "id": "9ba2",
@@ -165,11 +167,10 @@
       "email": "andresgerardolv@gmail.com",
       "password": "QWdsdjE5ODNfU0VDVVJFX1NBTFQ=",
       "rol": "voluntario",
-      "resetTokenExpiry": "2026-03-26T15:53:56.542Z",
+      "resetTokenExpiry": "2026-03-20T21:12:05.636Z",
       "area": "plantador",
       "telefono": "11111111",
-      "fechaIngreso": "2026-03-23",
-      "resetToken": "w56b1g165sm8z6tmkpspsp"
+      "fechaIngreso": "2026-03-23"
     },
     {
       "id": "6bb7",
@@ -209,7 +210,9 @@
       "nombre": "alv",
       "email": "alealvarela@gmail.com",
       "password": "12345678",
-      "rol": "user"
+      "rol": "user",
+      "status": "banned",
+      "motivoBan": "por bot"
     },
     {
       "nombre": "sssssss",
@@ -226,7 +229,8 @@
       "email": "marisol19001@gmail.com",
       "telefono": "12345678",
       "password": "12345678",
-      "rol": "user"
+      "rol": "user",
+      "status": "active"
     },
     {
       "nombre": "prueva",
@@ -236,6 +240,7 @@
       "id": "4Lafzmd_e0E",
       "status": "banned",
       "motivoBan": "Prueva"
+
     }
   ],
   "stats_tipos": [

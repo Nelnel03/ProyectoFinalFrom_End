@@ -85,6 +85,17 @@ function UsuariosTab({
             </div>
             
             <div className="admin-form-group admin-form-group-no-margin">
+              <label className="admin-user-input-label">Foto de Perfil (URL)</label>
+              <input
+                type="text"
+                value={formUsuario.fotoPerfil || ''}
+                onChange={(e) => setFormUsuario({...formUsuario, fotoPerfil: e.target.value})}
+                placeholder="Opcional: https://..."
+                className="admin-user-input"
+              />
+            </div>
+            
+            <div className="admin-form-group admin-form-group-no-margin">
               <label className="admin-user-input-label">Rol de Acceso</label>
               <select
                 value={formUsuario.rol}
@@ -124,7 +135,11 @@ function UsuariosTab({
           <div key={user.id} className="admin-arbol-card admin-user-card" style={{ border: user.status === 'banned' ? '1px solid #feb2b2' : '' }}>
             <div className="admin-user-card-header">
               <div className={`admin-user-avatar ${user.rol}`}>
-                {user.rol === 'admin' ? 'Admin' : 'User'}
+                {user.fotoPerfil ? (
+                  <img src={user.fotoPerfil} alt={user.nombre} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                ) : (
+                  user.rol === 'admin' ? 'Admin' : 'User'
+                )}
               </div>
               <div className="admin-user-info-text">
                 <h3>{user.nombre}</h3>
