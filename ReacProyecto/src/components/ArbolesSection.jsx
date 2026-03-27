@@ -123,7 +123,7 @@ function ArbolCard({ arbol, count, onClick }) {
 }
 
 // ── Sección completa de tarjetas (usada en User y Visitante) ──────────────────
-function ArbolesSection({ arboles }) {
+function ArbolesSection({ arboles, viewMode = 'individual' }) {
   const [arbolSeleccionado, setArbolSeleccionado] = useState(null);
   const [stats, setStats] = useState([]);
 
@@ -131,48 +131,59 @@ function ArbolesSection({ arboles }) {
     services.getStatsTipos().then(res => setStats(res || []));
   }, []);
 
-  const arbolesAgrupados = arboles && arboles.length > 0 ? Object.values(arboles.reduce((acc, arbol) => {
-    const tipo = (arbol.tipo || 'Sin clasificar').toLowerCase();
-    const isAlive = arbol.estado !== 'muerto';
+  // Si el modo es individual, pasamos la lista tal cual.
+  // Si el modo es especies, agrupamos por tipo.
+  const displayList = arboles && arboles.length > 0 ? (
+    viewMode === 'individual' 
+      ? arboles.map(a => ({ ...a, isIndividual: true }))
+      : Object.values(arboles.reduce((acc, arbol) => {
+          const tipo = (arbol.tipo || 'Sin clasificar').toLowerCase();
+          const isAlive = arbol.estado !== 'muerto';
 
-    if (!acc[tipo]) {
-      const statDelTipo = stats.find(s => s.tipo.toLowerCase() === tipo);
-      acc[tipo] = {
-        tipo,
-        count: 0,
-        representante: { ...arbol, stats: statDelTipo },
-      };
-    }
-    
-    if (isAlive) {
-      acc[tipo].count += 1;
-    }
-    
-    return acc;
-  }, {})) : [];
+          if (!acc[tipo]) {
+            const statDelTipo = stats.find(s => s.tipo.toLowerCase() === tipo);
+            acc[tipo] = {
+              tipo,
+              count: 0,
+              representante: { ...arbol, stats: statDelTipo },
+            };
+          }
+          
+          if (isAlive) {
+            acc[tipo].count += 1;
+          }
+          
+          return acc;
+        }, {}))
+  ) : [];
 
   return (
     <section className="arboles-section">
 
       <div className="arboles-section-header">
-        <h2 className="arboles-section-title">Especies Registradas</h2>
+        <h2 className="arboles-section-title">
+          {viewMode === 'individual' ? 'Inventario de Árboles' : 'Especies Registradas'}
+        </h2>
         <p className="arboles-section-subtitle">
-          Explora la diversidad forestal de nuestro corredor biológico.
+          {viewMode === 'individual' 
+            ? 'Listado detallado de cada ejemplar plantado en el corredor.' 
+            : 'Explora la diversidad forestal por tipo de especie.'}
         </p>
       </div>
 
-      {arbolesAgrupados.length > 0 ? (
+      {displayList.length > 0 ? (
         <div className="arboles-grid">
-          {arbolesAgrupados.map((grupo) => (
+          {displayList.map((item, idx) => (
             <ArbolCard
-              key={grupo.tipo}
-              arbol={grupo.representante}
-              count={grupo.count}
+              key={item.id || item.tipo || idx}
+              arbol={item.isIndividual ? item : item.representante}
+              count={item.isIndividual ? undefined : item.count}
               onClick={setArbolSeleccionado}
             />
           ))}
         </div>
       ) : (
+
         <div className="arboles-empty">
           <div className="tree-icon"></div>
           <p>Aún no hay especies registradas en el sistema.</p>
