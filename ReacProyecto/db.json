@@ -126,7 +126,8 @@
       "email": "g@gmail.com",
       "password": "12345678",
       "rol": "user",
-      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.FG9iIexBnQHiVtqfHyfLVwHaDo%3Fpid%3DApi&f=1&ipt=fb2deded93b22870dccf4507c52aa2cf5e24cb877c72c15ab416d9130d1058a5&ipo=images"
+      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.FG9iIexBnQHiVtqfHyfLVwHaDo%3Fpid%3DApi&f=1&ipt=fb2deded93b22870dccf4507c52aa2cf5e24cb877c72c15ab416d9130d1058a5&ipo=images",
+      "debeCambiarPassword": false
     },
     {
       "id": "05a5",

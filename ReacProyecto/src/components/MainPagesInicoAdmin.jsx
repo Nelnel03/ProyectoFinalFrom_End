@@ -13,6 +13,8 @@ import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
 import BuzonTab from './admin/BuzonTab';
+import SolicitudesTab from './admin/SolicitudesTab';
+
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
 const FORM_INICIAL = {
@@ -495,12 +497,13 @@ function MainPagesInicoAdmin() {
   };
 
   const handleConvertirVoluntariadoAUsuario = async (vol) => {
-    // Verificar si ya existe un usuario con ese correo
-    const userExists = usuarios.find(u => u.email.toLowerCase() === vol.email.toLowerCase());
+    // Verificar si ya existe OTRO usuario con ese correo (excluyendo el actual)
+    const userExists = usuarios.find(u => u.email.toLowerCase() === vol.email.toLowerCase() && u.id !== vol.id);
     if (userExists) {
-      Swal.fire('Atención', `Ya existe un usuario con el correo ${vol.email}. No se puede duplicar.`, 'warning');
+      Swal.fire('Atención', `Ya existe otro usuario registrado con el correo ${vol.email}.`, 'warning');
       return;
     }
+
 
     const { value: password } = await Swal.fire({
       title: 'Convertir a Usuario',
@@ -1004,9 +1007,11 @@ function MainPagesInicoAdmin() {
             { id: 'usuarios', label: 'Usuarios', reset: resetFormUsuario },
             { id: 'voluntariados', label: 'Voluntariados', reset: resetFormVoluntariado },
             { id: 'abonos', label: `Abonos (${abonos.length})`, reset: resetFormAbono },
+            { id: 'solicitudes', label: 'Solicitudes', reset: resetForm },
             { id: 'buzon', label: 'Buzón', reset: resetForm },
             { id: 'agregar', label: modoEdicion ? 'Editar' : 'Agregar', reset: resetForm }
           ].map(t => (
+
             <button
               key={t.id}
               className={`premium-tab ${tab === t.id ? 'active' : ''}`}
@@ -1037,7 +1042,9 @@ function MainPagesInicoAdmin() {
 }
             { tab === 'voluntariados' && <VoluntariadosTab modoEdicionVoluntariado={modoEdicionVoluntariado} handleVoluntariadoSubmit={handleVoluntariadoSubmit} formVoluntariado={formVoluntariado} setFormVoluntariado={setFormVoluntariado} resetFormVoluntariado={resetFormVoluntariado} voluntariados={voluntariados} handleEditarVoluntariado={handleEditarVoluntariado} handleEliminarVoluntariado={handleEliminarVoluntariado} handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario} /> }
             { tab === 'abonos' && <AbonosTab modoEdicionAbono={modoEdicionAbono} handleAbonoSubmit={handleAbonoSubmit} formAbono={formAbono} setFormAbono={setFormAbono} resetFormAbono={resetFormAbono} abonos={abonos} handleEditarAbono={handleEditarAbono} handleEliminarAbono={handleEliminarAbono} /> }
+            { tab === 'solicitudes' && <SolicitudesTab onUpdate={cargarArboles} /> }
             { tab === 'buzon' && <BuzonTab /> }
+
             { tab === 'agregar' && <ArbolFormTab modoEdicion={modoEdicion} handleSubmit={handleSubmit} form={form} handleChange={handleChange} modoNuevoTipo={modoNuevoTipo} tiposDisponibles={tiposDisponibles} setModoNuevoTipo={setModoNuevoTipo} setForm={setForm} resetForm={resetForm} setTab={setTab} /> }
         </div>
       </main>

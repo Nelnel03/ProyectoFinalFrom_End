@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import services from "../services/services.jsx";
+import Swal from 'sweetalert2';
+import { UserCheck, Heart, ShieldCheck } from 'lucide-react';
 import "../styles/UserProfile.css";
+
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,6 +41,9 @@ function UserProfile({ user, onUpdateUser }) {
   const [touched, setTouched] = useState({});
   const [mensaje, setMensaje] = useState({ tipo: "", texto: "" });
   const [loading, setLoading] = useState(false);
+  const [solicitud, setSolicitud] = useState(null);
+
+
 
   useEffect(() => {
     if (user) {
@@ -49,6 +55,22 @@ function UserProfile({ user, onUpdateUser }) {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    const checkSolicitud = async () => {
+      if (user && user.rol === 'user') {
+        try {
+          const solicitudes = await services.getSolicitudesVoluntariado();
+          const miSolicitud = solicitudes.find(s => s.userId === user.id && s.estado === 'pendiente');
+          setSolicitud(miSolicitud);
+        } catch (e) {
+          console.error("Error al buscar solicitud:", e);
+        }
+      }
+    };
+    checkSolicitud();
+  }, [user]);
+
 
   const handleChange = (e) => {
     const updated = { ...formData, [e.target.name]: e.target.value };
@@ -117,6 +139,85 @@ function UserProfile({ user, onUpdateUser }) {
       {mensaje.texto && (
         <div className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</div>
       )}
+
+      {/* Sección Voluntariado (ARRIBA) */}
+      {user.rol === 'user' && !solicitud && (
+        <div className="volunteer-application-box" style={{ marginBottom: '2rem' }}>
+          <div className="volunteer-icon">
+            <Heart size={32} color="#1a4d2e" />
+          </div>
+          <div className="volunteer-text">
+            <h3>Conviértete en Voluntario</h3>
+            <p>Sube de nivel tu impacto. Podrás registrar árboles, reportar incidentes y mucho más.</p>
+          </div>
+          <button 
+            type="button" 
+            className="btn-apply-volunteer"
+            onClick={async () => {
+              const result = await Swal.fire({
+                title: '¿Quieres ser Voluntario?',
+                text: "Esto enviará una solicitud al administrador para su revisión.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#344e41',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '¡Sí, enviar solicitud!',
+                cancelButtonText: 'Cancelar'
+              });
+
+              if (result.isConfirmed) {
+                try {
+                  setLoading(true);
+                  const nuevaSolicitud = {
+                    userId: user.id,
+                    userName: user.nombre,
+                    userEmail: user.email,
+                    fechaSolicitud: new Date().toISOString().split('T')[0],
+                    estado: 'pendiente'
+                  };
+                  await services.postSolicitudVoluntariado(nuevaSolicitud);
+                  setSolicitud(nuevaSolicitud);
+                  
+                  await Swal.fire({
+                    title: 'Solicitud Enviada',
+                    text: 'El administrador revisará tu perfil pronto. Te notificaremos una vez sea aprobada.',
+                    icon: 'success',
+                    confirmButtonColor: '#344e41'
+                  });
+                } catch (error) {
+                  console.error(error);
+                  Swal.fire('Error', 'No se pudo enviar la solicitud.', 'error');
+                } finally {
+                  setLoading(false);
+                }
+              }
+            }}
+          >
+            Postularse Ahora
+          </button>
+        </div>
+      )}
+
+      {solicitud && solicitud.estado === 'pendiente' && (
+        <div className="volunteer-application-box pending" style={{ marginBottom: '2rem', border: '1px dashed #f59e0b', background: '#fffbeb' }}>
+          <div className="volunteer-icon">
+            <UserCheck size={32} color="#d97706" />
+          </div>
+          <div className="volunteer-text">
+            <h3 style={{ color: '#92400e' }}>Solicitud en Revisión</h3>
+            <p style={{ color: '#92400e' }}>Tu solicitud como voluntario está pendiente de aprobación por el administrador.</p>
+          </div>
+        </div>
+      )}
+
+
+      {user.rol === 'voluntario' && (
+        <div className="volunteer-status-badge" style={{ marginBottom: '2rem' }}>
+          <ShieldCheck size={20} color="#059669" />
+          <span>Ya eres parte del equipo de Voluntarios</span>
+        </div>
+      )}
+
 
       <form onSubmit={handleSubmit} className="profile-form" noValidate>
         {/* Nombre */}
@@ -188,11 +289,13 @@ function UserProfile({ user, onUpdateUser }) {
           />
         </div>
 
-        <button type="submit" disabled={loading} className="btn-save">
+        <button type="submit" disabled={loading} className={`btn-save ${loading ? 'opacity-50' : ''}`}>
           {loading ? "Guardando..." : "Guardar Cambios"}
         </button>
       </form>
     </div>
+
+
   );
 }
 
