@@ -104,26 +104,6 @@
 }
 
 .navbar-btn-logout {
-<<<<<<< HEAD
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  backdrop-filter: blur(5px);
-  color: white !important;
-  padding: 0.6rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.3s ease;
-}
-
-.navbar-btn-logout:hover {
-  background: rgba(239, 68, 68, 0.4) !important; /* Un poco más de fondo para mejor contraste */
-  border-color: rgba(239, 68, 68, 0.7) !important;
-  color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
-=======
   background: #ef4444 !important;
   color: white !important;
   border: none !important;
@@ -139,7 +119,6 @@
   background: #dc2626 !important;
   transform: scale(1.05) translateY(-2px);
   box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
->>>>>>> fe291b431faa8aef8a142c9d8ee01c5340845eb5
 }
 
 .navbar-auth-actions {
@@ -187,4 +166,3 @@
     height: 32px;
   }
 }
-

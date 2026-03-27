@@ -40,6 +40,7 @@ import MisReportesTab from './MisReportesTab';
 import CorridorMap from './CorridorMap';
 import History from './History';
 import HistoryQuiz from './HistoryQuiz';
+import DarkModeToggle from './DarkModeToggle';
 
 import '../styles/ModernUserDashboard.css';
 
@@ -546,6 +547,9 @@ function ModernUserDashboard() {
                     }
                 }}
               />
+            </div>
+            <div style={{ marginRight: '0.5rem' }}>
+              <DarkModeToggle />
             </div>
             <button className="icon-btn" onClick={() => setCurrentTab('perfil')}><Settings size={20} /></button>
 
