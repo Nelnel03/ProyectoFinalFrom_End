@@ -4,6 +4,7 @@ import services from '../services/services';
 import UserProfile from './UserProfile';
 import ReporteForm from './ReporteForm';
 import MisReportesTab from './MisReportesTab';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/VolunteerDashboard.css';
 
@@ -64,9 +65,12 @@ function VolunteerDashboard() {
             {user?.nombre ? user.nombre.charAt(0).toUpperCase() : '?'}
           </div>
         )}
-        <div style={{ textAlign: 'left' }}>
+        <div style={{ textAlign: 'left', flex: 1 }}>
           <h1 className="volunteer-header-title" style={{ margin: 0 }}>Centro de Servicio</h1>
           <p className="volunteer-header-subtitle" style={{ margin: 0 }}>¡Hola {user?.nombre}! Gestiona tus actividades y horas trabajadas.</p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <DarkModeToggle />
         </div>
       </header>
 

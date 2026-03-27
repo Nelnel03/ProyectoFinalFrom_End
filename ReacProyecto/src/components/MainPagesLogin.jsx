@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
 import services from '../services/services';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/Login.css';
 
@@ -195,6 +196,22 @@ function MainPagesLogin() {
       return;
     }
 
+    if (/\d/.test(nombre.trim())) {
+      Swal.fire('Error', 'El nombre no debe contener números', 'error');
+      return;
+    }
+
+    if (nombre.trim().length < 3) {
+      Swal.fire('Error', 'El nombre debe tener al menos 3 caracteres', 'error');
+      return;
+    }
+
+    const phoneRegex = /^\d{8}$/;
+    if (!phoneRegex.test(telefono.trim())) {
+      Swal.fire('Error', 'El número de teléfono debe tener exactamente 8 dígitos', 'error');
+      return;
+    }
+
     const vowelCount = (nombre.match(/[aeiouáéíóúü]/gi) || []).length;
     if (vowelCount < 2) {
       Swal.fire('Error', 'El nombre completo debe contener al menos dos vocales', 'error');
@@ -296,6 +313,9 @@ function MainPagesLogin() {
 
   return (
     <div className="login-minimal-wrapper">
+      <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100 }}>
+        <DarkModeToggle />
+      </div>
       <div className="login-card">
         <button 
           className="login-back-btn" 

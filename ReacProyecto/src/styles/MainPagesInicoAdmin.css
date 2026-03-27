@@ -403,10 +403,9 @@
 .admin-user-info-text p {
   margin: 2px 0 0 0;
   font-size: 0.95rem;
-  color: #000000;
-  font-weight: 700;
-  background-color: var(--color-bosque-musgo);
-  opacity: 0.8;
+  color: var(--admin-text-muted);
+  font-weight: 500;
+  background-color: transparent;
 }
 
 .admin-user-id-badge {
@@ -481,7 +480,7 @@
   cursor: pointer;
   font-weight: 700;
   background-color: var(--color-bosque-musgo);
-  color: #385137;
+  color: #FFFFFF;
   font-size: 0.85rem;
 }
 
@@ -751,7 +750,7 @@
   border-radius: 6px;
   font-weight: 700;
   background-color: var(--color-bosque-musgo);
-  color: #475569;
+  color: #FFFFFF;
   cursor: pointer;
   font-size: 0.8rem;
 }
@@ -1170,18 +1169,20 @@
 }
 
 [data-theme='dark'] .admin-tab-pill {
-    background-color: #1e1e1e;
+    background-color: transparent;
     color: #94a3b8;
-    border-color: #333;
+    border-color: transparent;
 }
 
 [data-theme='dark'] .admin-tab-pill:hover {
-    background-color: #333;
+    background-color: rgba(255,255,255,0.05);
 }
 
 [data-theme='dark'] .admin-tab-pill.active {
-    background-color: var(--color-bosque-helecho);
-    color: white;
+    background-color: transparent;
+    color: var(--color-bosque-helecho);
+    border-bottom: 2px solid var(--color-bosque-helecho);
+    border-radius: 0;
 }
 
 [data-theme='dark'] .admin-arbol-card-img-placeholder {

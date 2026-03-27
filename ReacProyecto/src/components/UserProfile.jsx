@@ -16,6 +16,7 @@ function validate(formData) {
   if (!nombre)             errors.nombre   = "El nombre es obligatorio.";
   else if (nombre.length < 3) errors.nombre = "El nombre debe tener al menos 3 caracteres.";
   else if (nombre.length > 60) errors.nombre = "El nombre no puede exceder 60 caracteres.";
+  else if (/\d/.test(nombre)) errors.nombre = "El nombre no debe contener números.";
 
   if (!email)              errors.email    = "El correo es obligatorio.";
   else if (!email.includes("@") || !email.includes("."))

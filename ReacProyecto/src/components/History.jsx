@@ -31,7 +31,7 @@ const History = ({ user }) => {
     const knowledgeNodes = [
         { id: 1, title: 'El Origen', icon: <MapIcon size={24} />, content: 'La Angostura es un tómbolo que conecta la península de Puntarenas. Históricamente era un paso de arenas blancas y manglares.' },
         { id: 2, title: 'La Fragmentación', icon: <Activity size={24} />, content: 'Con la construcción de carreteras, este ecosistema sufrió y lo que era un corredor de especies se convirtió en una barrera de asfalto.' },
-        { id: 3, title: 'El Renacer', icon: <ShieldCheck size={24} />, content: 'El proyecto del Corredor Biológico nace para restaurar la conectividad, reconstruyendo el puerto seguro para la vida silvestre.' },
+        { id: 3, title: 'El Renacer', icon: <ShieldCheck size={24} />, content: 'El proyecto BioMon ADI nace para restaurar la conectividad, reconstruyendo el puerto seguro para la vida silvestre.' },
         { id: 4, title: 'La Comunidad', icon: <HeartHandshake size={24} />, content: 'El éxito radica en la ADI y la comunidad. Cuidar estas plantas protege contra el cambio climático y fomenta el equilibrio.' }
     ];
 
@@ -144,6 +144,8 @@ const History = ({ user }) => {
                             </div>
                         </div>
                     </section>
+
+
                 </div>
 
             </div>
@@ -172,7 +174,7 @@ const History = ({ user }) => {
                             <h3 className="modal-subsection-title" style={{ color: '#2a9d8f' }}>Vegetación de Playa y Litoral</h3>
                             <p style={{ fontSize: '0.9rem', color: '#666' }}>Son las especies que bordean directamente la costa y están adaptadas a suelos arenosos y salinidad.</p>
                             <ul className="modal-list-elegant">
-                                <li className="modal-list-item border-green"><strong>Almendro de Playa (Terminalia catappa):</strong> Es uno de los árboles más emblemáticos de la zona. Recientemente se sembraron 300 unidades adicionales como parte del Corredor Natural La Angostura para mitigar la deforestación y proveer sombra en la ruta principal.</li>
+                                <li className="modal-list-item border-green"><strong>Almendro de Playa (Terminalia catappa):</strong> Es uno de los árboles más emblemáticos de la zona. Recientemente se sembraron 300 unidades adicionales como parte de BioMon ADI para mitigar la deforestación y proveer sombra en la ruta principal.</li>
                                 <li className="modal-list-item border-orange"><strong>Uva de Playa (Coccoloba uvifera):</strong> Un arbusto de hojas redondeadas y coriáceas muy común en la línea de costa de Chacarita y Playa Pochote. Sus frutos son comestibles y atraen a aves y monos.</li>
                                 <li className="modal-list-item border-blue"><strong>Palma de Coco (Cocos nucifera):</strong> Aunque es una especie introducida, es omnipresente en los jardines de los hoteles y casas frente al mar en todo el sector de Porto Bello.</li>
                                 <li className="modal-list-item border-amber"><strong>Verdolaga de Playa (Sesuvium portulacastrum):</strong> Una planta rastrera suculenta que coloniza las dunas y zonas arenosas cercanas a la marea alta.</li>
@@ -198,7 +200,7 @@ const History = ({ user }) => {
                             <div className="grid-two-cards" style={{ marginTop: '1.5rem' }}>
                                 <div className="info-card-colored bg-green-light grid-full">
                                     <h4 className="text-green-dark">Esfuerzos de Restauración</h4>
-                                    <p>Como parte de los esfuerzos de restauración del Corredor Natural La Angostura, también se están introduciendo especies nativas como la Flor Blanca, el Poró y el Vainillo, seleccionadas técnicamente por su capacidad de atraer polinizadores y adaptarse a los suelos salinos del sector.</p>
+                                    <p>Como parte de los esfuerzos de restauración de BioMon ADI, también se están introduciendo especies nativas como la Flor Blanca, el Poró y el Vainillo, seleccionadas técnicamente por su capacidad de atraer polinizadores y adaptarse a los suelos salinos del sector.</p>
                                 </div>
                             </div>
 
@@ -295,7 +297,7 @@ const History = ({ user }) => {
                         <div className="modal-body-scrollable">
                             
                             <h3 className="modal-subsection-title" style={{ color: '#1a73e8' }}>¿Qué los protege?</h3>
-                            <p>La zona está bajo la protección legal del <strong>Humedal Estero Puntarenas y Manglares Asociados (HEPyMA)</strong>, declarado Área Silvestre Protegida (ASP) desde el año 2001. Además, existe el <strong>Corredor Natural La Angostura</strong>, una estrategia de conectividad para regenerar el bosque costero y mitigar la deforestación urbana.</p>
+                            <p>La zona está bajo la protección legal del <strong>Humedal Estero Puntarenas y Manglares Asociados (HEPyMA)</strong>, declarado Área Silvestre Protegida (ASP) desde el año 2001. Además, existe BioMon ADI, una estrategia de conectividad para regenerar el bosque costero y mitigar la deforestación urbana.</p>
 
                             <h3 className="modal-subsection-title" style={{ color: '#1a73e8', marginTop: '1.5rem' }}>¿Qué instituciones los protegen?</h3>
                             <ul className="modal-list-elegant">
@@ -364,8 +366,8 @@ const History = ({ user }) => {
                                     <p>Proviene de una alianza entre instituciones públicas y privadas como el MOPT, la Municipalidad de Puntarenas, el SINAC, y fundaciones como FUNBAM y Coopenae-Wink.</p>
                                 </div>
                                 <div className="info-card-colored bg-blue-light">
-                                    <h4 className="text-blue-dark">Corredor Natural</h4>
-                                    <p>Recientemente se creó el Corredor Natural La Angostura para combatir la pérdida de bosque costero y mitigar los efectos del cambio climático.</p>
+                                    <h4 className="text-blue-dark">BioMon ADI</h4>
+                                    <p>Recientemente se creó la plataforma BioMon ADI para combatir la pérdida de bosque costero y mitigar los efectos del cambio climático.</p>
                                 </div>
                                 <div className="info-card-colored bg-amber-light grid-full">
                                     <h4 className="text-amber-dark">Importancia ecológica</h4>
@@ -428,7 +430,62 @@ const History = ({ user }) => {
                 </div>
             )}
 
+            {/* MODAL PARA CONÓCENOS (Índice 5 en exploreTopics) */}
+            {selectedTopic === 5 && (
+                <div className="history-modal-overlay">
+                    <div className="history-modal-container">
+                        <button className="btn-modal-close" onClick={() => setSelectedTopic(null)}>
+                            <span className="modal-close-icon">&times;</span>
+                        </button>
+                        <div className="modal-header-flex">
+                            <div className="modal-header-icon-box" style={{ background: '#8ac92615', color: '#8ac926' }}>
+                                <HeartHandshake size={40} />
+                            </div>
+                            <div className="modal-header-text">
+                                <h2>Conócenos</h2>
+                                <p>Misión, Visión y el origen de BioMon ADI</p>
+                            </div>
+                        </div>
+                        
+                        <div className="modal-body-scrollable">
+                            
+                            <div className="grid-two-cards" style={{ marginBottom: '1.5rem' }}>
+                                <div className="info-card-colored bg-green-light">
+                                    <h4 className="text-green-dark" style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Misión</h4>
+                                    <p>Restaurar y preservar la conectividad ecológica del Corredor Natural La Angostura mediante la reforestación estratégica con especies nativas, el monitoreo biológico participativo y la educación ambiental integral. Buscamos transformar la matriz urbana de Puntarenas en un paisaje resiliente que genere empleos verdes, empodere a la comunidad local y garantice un refugio seguro para la biodiversidad costera.</p>
+                                </div>
+                                <div className="info-card-colored bg-blue-light">
+                                    <h4 className="text-blue-dark" style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Visión</h4>
+                                    <p>Ser la plataforma comunitaria líder en la gestión de corredores biológicos urbanos en Costa Rica, reconocida por integrar tecnología de monitoreo, participación ciudadana y sostenibilidad socioeconómica. Aspiramos a convertir a Puntarenas en un modelo global de convivencia armónica entre el desarrollo humano y la naturaleza, donde la identidad cultural y la salud del ecosistema prosperen de la mano.</p>
+                                </div>
+                            </div>
+                            
+                            <h3 className="modal-subsection-title" style={{ color: '#8ac926' }}>¿Por qué se creó BioMon ADI?</h3>
+                            <p style={{ fontSize: '0.95rem', color: '#555', marginBottom: '1rem' }}>La plataforma BioMon ADI nació como una respuesta tecnológica y comunitaria a una crisis ambiental histórica en Puntarenas. Los motivos principales de su creación son:</p>
 
+                            <ul className="modal-list-elegant">
+                                <li className="modal-list-item border-green"><strong>De la Fragmentación a la Conectividad:</strong> Históricamente, La Angostura era un tómbolo natural de manglares y arena. La urbanización y la construcción de carreteras convirtieron este paso vital en una "barrera de asfalto" que aisló a las especies. BioMon ADI se crea para gestionar el "renacer" de este ecosistema, reconstruyendo el puente biológico necesario para la fauna.</li>
+                                <li className="modal-list-item border-orange"><strong>Mitigación de la Pérdida de Bosque:</strong> Entre 2002 y 2024, Puntarenas perdió más de 4,380 hectáreas de bosque primario. BioMon ADI surge para centralizar los esfuerzos de reforestación (como la siembra de almendros de playa, mangle botoncillo y flor blanca) y asegurar que cada árbol plantado contribuya a la captura de carbono y a la resiliencia climática.</li>
+                                <li className="modal-list-item border-blue"><strong>Empoderamiento y Empleos Verdes:</strong> El proyecto no es solo ambiental, sino social. Se creó para administrar y visibilizar los "Empleos Verdes", dando prioridad a mujeres de la zona y ofreciendo capacitación integral en áreas que van desde la educación financiera hasta la ciberhigiene.</li>
+                                <li className="modal-list-item border-amber"><strong>Ciencia Ciudadana y Monitoreo:</strong> La "Bio" en BioMon se refiere al monitoreo biológico. La página busca que los vecinos de Chacarita, El Carmen y La Angostura dejen de ser espectadores y se conviertan en "Protectores Costeros", utilizando herramientas digitales para registrar avistamientos de fauna y el estado de la flora sembrada.</li>
+                                <li className="modal-list-item border-red"><strong>Alianza Interinstitucional:</strong> Se creó como el núcleo digital del convenio entre la ADI La Angostura, Coopenae-Wink, FUNBAM, el MOPT y la Municipalidad de Puntarenas, facilitando la transparencia y la participación comunitaria en el desarrollo sostenible de la región.</li>
+                            </ul>
+
+                            <div className="info-card-colored" style={{ background: '#8ac92620', borderLeft: '4px solid #8ac926', marginTop: '1.5rem', padding: '1rem' }}>
+                                <p style={{ margin: 0, fontWeight: '500', color: '#333' }}>
+                                    Esta plataforma representa el compromiso de <strong>"salvar el futuro juntos"</strong>, transformando un punto crítico de vulnerabilidad en un motor de vida y aprendizaje para las nuevas generaciones de puntarenenses.
+                                </p>
+                            </div>
+
+                        </div>
+                        <div className="modal-footer-center">
+                            <button className="btn-modal-action" onClick={() => setSelectedTopic(null)}>
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
