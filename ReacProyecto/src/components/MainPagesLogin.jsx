@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import emailjs from '@emailjs/browser';
 import services from '../services/services';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/MainPagesInicoVisitante.css';
 import '../styles/Login.css';
 
@@ -312,6 +313,9 @@ function MainPagesLogin() {
 
   return (
     <div className="login-minimal-wrapper">
+      <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100 }}>
+        <DarkModeToggle />
+      </div>
       <div className="login-card">
         <button 
           className="login-back-btn" 

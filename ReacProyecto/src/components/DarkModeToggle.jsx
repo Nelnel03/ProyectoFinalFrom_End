@@ -1,34 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 function DarkModeToggle() {
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem('modoOscuro') === 'activado';
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.body.setAttribute('data-theme', 'dark');
-      localStorage.setItem('modoOscuro', 'activado');
-    } else {
-      document.body.removeAttribute('data-theme');
-      localStorage.setItem('modoOscuro', 'desactivado');
-    }
-  }, [isDark]);
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <button 
-      onClick={() => setIsDark(!isDark)}
+      onClick={toggleTheme}
       style={{
         background: 'transparent',
         border: 'none',
         cursor: 'pointer',
-        color: isDark ? '#fbbf24' : 'inherit',
+        color: isDark ? '#fbbf24' : '#fff',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '0 8px',
-        marginRight: '8px'
+        marginRight: '8px',
+        transition: 'color 0.3s'
       }}
       title="Alternar Tema"
     >
