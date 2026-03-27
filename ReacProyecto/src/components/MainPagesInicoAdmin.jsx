@@ -957,7 +957,8 @@ function MainPagesInicoAdmin() {
     <div className="dashboard-premium">
       <header className="premium-header">
         <div className="premium-header-flex">
-          <div>
+          <img src="/src/assets/logo.png" alt="Logo" className="admin-header-logo" />
+          <div className="admin-header-text">
             <h2 className="premium-header-subtitle">BioMon ADI</h2>
             <h1>Panel de Control</h1>
             <p className="premium-header-welcome">
