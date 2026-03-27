@@ -31,7 +31,9 @@ import Swal from 'sweetalert2';
 import services from '../services/services';
 
 import ArbolesSection from './ArbolesSection';
+import ConocenosTab from './ConocenosTab';
 import UserProfile from './UserProfile';
+
 import UserReports from './UserReports';
 import UserReportesRobo from './UserReportesRobo';
 import MisReportesTab from './MisReportesTab';
@@ -44,7 +46,9 @@ import '../styles/ModernUserDashboard.css';
 function ModernUserDashboard() {
   const [user, setUser] = useState(null);
   const [arboles, setArboles] = useState([]);
+  const [viewMode, setViewMode] = useState('individual'); // 'individual' o 'especies'
   const [searchTerm, setSearchTerm] = useState('');
+
   const [reportes, setReportes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [currentTab, setCurrentTab] = useState('dashboard');
@@ -136,10 +140,14 @@ function ModernUserDashboard() {
             {/* Hero Section */}
             <div className="hero-profile">
               <img 
-                src="https://images.unsplash.com/photo-1448375240581-881216bc51b1?q=80&w=2070&auto=format&fit=crop" 
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.WOCihXnOixa4FlibByvm2QHaFj%3Fpid%3DApi&f=1&ipt=103e1e53151ec1cbeb28de530419906dfee31a9062d9a709260fc735469e76aa&ipo=images" 
                 alt="Bosque" 
                 className="hero-bg" 
               />
+
+
+
+
               <div className="hero-overlay">
                 <div className="profile-info-main">
                   <div className="profile-img-container">
@@ -152,7 +160,8 @@ function ModernUserDashboard() {
                   <div className="profile-details">
                     <h1>{user.nombre}</h1>
                     <div className="profile-meta">
-                      <span className="badge-role">{user.rol === 'user' ? 'Guardián del Bosque' : user.rol}</span>
+                      <span className="badge-role">{user.rol === 'voluntariado' ? 'Guardián del Bosque' : 'Ciudadano Protector'}</span>
+
                       <div className="location-meta">
                         <MapPin size={14} />
                         <span>La Angostura, Sector Sur</span>
@@ -192,13 +201,7 @@ function ModernUserDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="stat-card">
-                <span className="stat-label">Expediciones</span>
-                <div className="stat-value-container">
-                  <span className="stat-value">{stats.expeditions}</span>
-                  <span className="stat-change" style={{color: '#64748b', fontSize: '0.8rem', marginLeft: 'auto'}}>Temporada 4</span>
-                </div>
-              </div>
+
             </div>
 
             {/* Main Grid */}
@@ -238,26 +241,32 @@ function ModernUserDashboard() {
                     <button className="icon-btn" onClick={() => setCurrentTab('coleccion')} style={{fontSize: '0.8rem'}}>Ver Todo</button>
                   </div>
                   <div className="habitats-list">
-                    {arboles.length > 0 ? arboles.slice(0, 3).map((arbol, idx) => (
-                      <div className="habitat-item" key={arbol.id || idx}>
-                        <img 
-                          src={arbol.imagenUrl || "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop"} 
-                          className="habitat-img" 
-                        />
-                        <div className="habitat-info">
-                          <p className="habitat-name">{arbol.nombre}</p>
-                          <p className="habitat-desc">{arbol.nombreCientifico}</p>
-                          <div className="habitat-tags">
-                              <span className="tag green">{arbol.familia || 'Nativo'}</span>
-                              <span className="tag orange">{arbol.clima || 'Tropical'}</span>
+                    {arboles.length > 0 ? Array.from(new Set(arboles.map(a => a.nombre)))
+                      .slice(0, 3)
+                      .map(nombreUnico => {
+                        const arbol = arboles.find(a => a.nombre === nombreUnico);
+                        return (
+                          <div className="habitat-item" key={arbol.id}>
+                            <img 
+                              src={arbol.imagenUrl || "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop"} 
+                              className="habitat-img" 
+                            />
+                            <div className="habitat-info">
+                              <p className="habitat-name">{arbol.nombre}</p>
+                              <p className="habitat-desc">{arbol.nombreCientifico}</p>
+                              <div className="habitat-tags">
+                                  <span className="tag green">{arbol.familia || 'Nativo'}</span>
+                                  <span className="tag orange">{arbol.clima || 'Tropical'}</span>
+                              </div>
+                            </div>
+                            <ChevronRight size={16} color="#cbd5e1" />
                           </div>
-                        </div>
-                        <ChevronRight size={16} color="#cbd5e1" />
-                      </div>
-                    )) : (
+                        );
+                      }) : (
                       <p style={{fontSize: '0.8rem', color: '#64748b'}}>No hay especies registradas.</p>
                     )}
                   </div>
+
                 </div>
               </div>
             </div>
@@ -322,14 +331,57 @@ function ModernUserDashboard() {
         );
 
       case 'coleccion':
+        const uniqueSpecies = Array.from(new Set(arboles.map(a => a.nombre)))
+          .map(nombre => arboles.find(a => a.nombre === nombre));
 
+        const displayArboles = viewMode === 'individual' ? filteredArboles : 
+          uniqueSpecies.filter(s => s.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
 
         return (
           <div className="main-section-card">
-            <h2>Especies de árboles en el corredor</h2>
-            {cargando ? <p>Cargando especies...</p> : <ArbolesSection arboles={filteredArboles} />}
+            <div className="section-header-flex" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem'}}>
+              <h2 style={{margin: 0}}>Guía de Árboles</h2>
+
+              <div className="view-mode-toggle" style={{background: '#f1f5f9', padding: '0.25rem', borderRadius: '10px', display: 'flex', gap: '0.25rem'}}>
+                <button 
+                  onClick={() => setViewMode('individual')}
+                  style={{
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '8px', 
+                    border: 'none', 
+                    background: viewMode === 'individual' ? 'white' : 'transparent',
+                    boxShadow: viewMode === 'individual' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    color: viewMode === 'individual' ? 'var(--primary-green)' : '#64748b'
+                  }}
+                >
+                  Individual
+                </button>
+                <button 
+                  onClick={() => setViewMode('especies')}
+                  style={{
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '8px', 
+                    border: 'none', 
+                    background: viewMode === 'especies' ? 'white' : 'transparent',
+                    boxShadow: viewMode === 'especies' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    color: viewMode === 'especies' ? 'var(--primary-green)' : '#64748b'
+                  }}
+                >
+                  Por Especie
+                </button>
+              </div>
+            </div>
+            {cargando ? <p>Cargando especies...</p> : <ArbolesSection arboles={displayArboles} viewMode={viewMode} />}
+
           </div>
         );
+
       case 'mis_reportes':
         return <MisReportesTab user={user} />;
       case 'reporte_robo':
@@ -338,7 +390,10 @@ function ModernUserDashboard() {
         return <UserReports user={user} onDone={() => setCurrentTab('mis_reportes')} />;
       case 'perfil':
         return <UserProfile user={user} onUpdateUser={setUser} />;
+      case 'conocenos':
+        return <ConocenosTab />;
       default:
+
         return <div>Selecciona una opción</div>;
     }
   };
@@ -373,8 +428,9 @@ function ModernUserDashboard() {
             }}
           >
             <Search className="nav-icon" size={18} />
-            Guía de Especies
+            Guía de Árboles
           </button>
+
           <button 
             className={`nav-item ${currentTab === 'mis_reportes' ? 'active' : ''}`}
             onClick={() => setCurrentTab('mis_reportes')}
@@ -397,14 +453,6 @@ function ModernUserDashboard() {
             Historia
           </button>
           <button 
-            className={`nav-item ${currentTab === 'reporte_robo' || currentTab === 'reportes' ? 'active' : ''}`}
-            onClick={() => setCurrentTab('reportes')}
-          >
-
-            <Bell className="nav-icon" size={18} />
-            Notificaciones
-          </button>
-          <button 
             className={`nav-item ${currentTab === 'dashboard' ? '' : ''}`} 
             onClick={() => {
                 setCurrentTab('dashboard');
@@ -418,10 +466,8 @@ function ModernUserDashboard() {
             Impacto
           </button>
 
-          <button className="btn-new-obs" onClick={() => setCurrentTab('reportes')}>
-            <PlusCircle size={18} />
-            Nueva Observación
-          </button>
+
+
         </nav>
 
         <div className="sidebar-footer">
@@ -429,10 +475,11 @@ function ModernUserDashboard() {
             <Settings size={18} />
             Configuración
           </button>
-          <button className="nav-item">
+          <button className="nav-item" onClick={() => setCurrentTab('reportes')}>
             <HelpCircle size={18} />
             Soporte
           </button>
+
         </div>
 
       </aside>
@@ -459,8 +506,14 @@ function ModernUserDashboard() {
             >
                 Historia
             </button>
-            <button className="top-bar-nav-link">Comunidad</button>
+            <button 
+              className={`top-bar-nav-link ${currentTab === 'conocenos' ? 'active' : ''}`}
+              onClick={() => setCurrentTab('conocenos')}
+            >
+              Conócenos
+            </button>
           </div>
+
 
 
 
@@ -480,8 +533,8 @@ function ModernUserDashboard() {
                 }}
               />
             </div>
-            <button className="icon-btn"><Bell size={20} /></button>
             <button className="icon-btn" onClick={() => setCurrentTab('perfil')}><Settings size={20} /></button>
+
             <div className="avatar-group" style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
               {user.fotoPerfil ? (
                 <img src={user.fotoPerfil} alt="Avatar de Usuario" className="user-avatar-small" />

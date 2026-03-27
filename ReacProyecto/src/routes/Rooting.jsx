@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
-import InicioAdimin from '../pages/InicioAdimin';
+import InicioAdmin from '../pages/InicioAdmin';
 import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
@@ -96,7 +96,7 @@ function MainLayout() {
             path="/admin" 
             element={
               <PrivateRoutes roleRequired="admin">
-                <InicioAdimin />
+                <InicioAdmin />
               </PrivateRoutes>
             } 
           />

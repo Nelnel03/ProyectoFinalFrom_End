@@ -52,8 +52,8 @@ const History = ({ user }) => {
         { title: 'Protección', icon: <ShieldCheck size={32} />, color: '#1a73e8' },
         { title: 'Educación', icon: <BookOpen size={32} />, color: '#9b5de5' },
         { title: 'Voluntariado', icon: <Users size={32} />, color: '#e63946' },
-        { title: 'Conócenos', icon: <HeartHandshake size={32} />, color: '#8ac926' },
     ];
+
 
     // 16 Preguntas generadas a partir del contenido
     const quizQuestions = [
@@ -622,7 +622,7 @@ const History = ({ user }) => {
                             <div className="grid-two-cards" style={{ marginBottom: '1.5rem' }}>
                                 <div className="info-card-colored bg-green-light">
                                     <h4 className="text-green-dark" style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Misión</h4>
-                                    <p>Restaurar y preservar la conectividad ecológica de BioMon ADI mediante la reforestación estratégica con especies nativas, el monitoreo biológico participativo y la educación ambiental integral. Buscamos transformar la matriz urbana de Puntarenas en un paisaje resiliente que genere empleos verdes, empodere a la comunidad local y garantice un refugio seguro para la biodiversidad costera.</p>
+                                    <p>Restaurar y preservar la conectividad ecológica del Corredor Natural La Angostura mediante la reforestación estratégica con especies nativas, el monitoreo biológico participativo y la educación ambiental integral. Buscamos transformar la matriz urbana de Puntarenas en un paisaje resiliente que genere empleos verdes, empodere a la comunidad local y garantice un refugio seguro para la biodiversidad costera.</p>
                                 </div>
                                 <div className="info-card-colored bg-blue-light">
                                     <h4 className="text-blue-dark" style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Visión</h4>
