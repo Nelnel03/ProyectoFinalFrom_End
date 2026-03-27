@@ -36,7 +36,8 @@ const USER_FORM_INICIAL = {
   nombre: '',
   email: '',
   password: '',
-  rol: 'user'
+  rol: 'user',
+  fotoPerfil: ''
 };
 
 const VOLUNTARIADO_FORM_INICIAL = {
@@ -44,7 +45,8 @@ const VOLUNTARIADO_FORM_INICIAL = {
   area: '', // Antes puesto
   email: '',
   telefono: '',
-  fechaIngreso: new Date().toISOString().split('T')[0]
+  fechaIngreso: new Date().toISOString().split('T')[0],
+  fotoPerfil: ''
 };
 
 const ABONO_FORM_INICIAL = {

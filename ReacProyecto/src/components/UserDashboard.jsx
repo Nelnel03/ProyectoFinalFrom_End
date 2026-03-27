@@ -59,9 +59,22 @@ function UserDashboard() {
 
   return (
     <div className="visitante-container">
-      <header className="visitante-header dashboard-header">
-        <h1 className="dashboard-header-title">Panel de Usuario</h1>
-        <p className="dashboard-header-greeting">¡Hola {user?.nombre}! Explora nuestra colección forestal.</p>
+      <header className="visitante-header dashboard-header" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        {user?.fotoPerfil ? (
+          <img 
+            src={user.fotoPerfil} 
+            alt="Avatar" 
+            style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid white' }} 
+          />
+        ) : (
+          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: '#fff', border: '2px solid white' }}>
+            {user?.nombre ? user.nombre.charAt(0).toUpperCase() : '?'}
+          </div>
+        )}
+        <div style={{ textAlign: 'left' }}>
+          <h1 className="dashboard-header-title" style={{ margin: 0 }}>Panel de Usuario</h1>
+          <p className="dashboard-header-greeting" style={{ margin: 0 }}>¡Hola {user?.nombre}! Explora nuestra colección forestal.</p>
+        </div>
       </header>
 
       <main className="visitante-content dashboard-main-content">

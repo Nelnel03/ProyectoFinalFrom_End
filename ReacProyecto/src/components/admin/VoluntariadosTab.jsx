@@ -77,6 +77,17 @@ function VoluntariadosTab({
               className="admin-user-input"
             />
           </div>
+
+          <div className="admin-form-group admin-form-group-no-margin">
+            <label className="admin-user-input-label">Foto de Perfil (URL)</label>
+            <input
+              type="text"
+              value={formVoluntariado.fotoPerfil || ''}
+              onChange={(e) => setFormVoluntariado({...formVoluntariado, fotoPerfil: e.target.value})}
+              placeholder="Opcional: https://..."
+              className="admin-user-input"
+            />
+          </div>
           
           <div className="admin-user-form-footer">
             <button type="submit" className="admin-btn-user-submit">
@@ -96,7 +107,11 @@ function VoluntariadosTab({
           <div key={vol.id} className="admin-arbol-card admin-user-card">
             <div className="admin-user-card-header">
               <div className="admin-user-avatar admin-vol-avatar">
-              
+                {vol.fotoPerfil ? (
+                  <img src={vol.fotoPerfil} alt={vol.nombre} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                ) : (
+                  <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{vol.nombre.charAt(0).toUpperCase()}</span>
+                )}
               </div>
               <div className="admin-user-info-text">
                 <h3>{vol.nombre}</h3>
