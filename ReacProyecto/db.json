@@ -123,13 +123,14 @@
     },
     {
       "id": "a8d3",
-      "nombre": "Sol",
+      "nombre": "Solaría",
       "email": "sol@gmail.com",
       "password": "12345678",
       "rol": "voluntario",
       "area": "plantador",
       "telefono": "11111111",
-      "fechaIngreso": "2026-03-23"
+      "fechaIngreso": "2026-03-23",
+      "fotoPerfil": "https://lens.usercontent.google.com/banana?agsi=CmdnbG9iYWw6OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAwZWI6MTozZjZjYmUyZTg3ZTQxZmFmOjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAyNDhmODgwMzM2ODowMDA2NGUwODRiNzZhZWFmEAI="
     },
     {
       "id": "0029",
@@ -249,7 +250,9 @@
       "direccion": "sssssssssssssssssss",
       "password": "111111",
       "rol": "user",
-      "id": "DVAlcBR3ZBo"
+      "id": "DVAlcBR3ZBo",
+      "status": "banned",
+      "motivoBan": "Datos insuficientes"
     },
     {
       "id": "3764",
@@ -287,6 +290,15 @@
       "password": "12345678",
       "rol": "user",
       "fotoPerfil": "https://lens.usercontent.google.com/banana?agsi=CmdnbG9iYWw6OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAwZWI6MToyNGQ3MjYzNmQ1ZmYzMzI2OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAyNDhmODgwMzM2ODowMDA2NGUwNjVhMzQzNmNmEAI="
+    },
+    {
+      "id": "2799",
+      "nombre": "Fresa",
+      "email": "Fresa@gmail.com",
+      "telefono": "23456789",
+      "password": "12345678",
+      "rol": "user",
+      "fotoPerfil": "https://lens.usercontent.google.com/banana?agsi=CmdnbG9iYWw6OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAwZWI6MTozZjM2NGU1NjgwODFkYzIxOjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAyNDhmODgwMzM2ODowMDA2NGUwODI5OTRhNzZmEAI="
     }
   ],
   "stats_tipos": [
