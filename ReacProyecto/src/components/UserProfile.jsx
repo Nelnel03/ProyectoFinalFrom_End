@@ -80,8 +80,9 @@ function UserProfile({ user, onUpdateUser }) {
     try {
       const updatedUser = { ...user, ...formData };
       await services.putUsuarios(updatedUser, user.id);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
       onUpdateUser(updatedUser);
+
       setMensaje({ tipo: "success", texto: "Perfil actualizado correctamente." });
     } catch (error) {
       console.error(error);

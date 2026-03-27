@@ -7,11 +7,31 @@
   --primary-saturada: #283618; /* Sombra tierra muy cálida */
   --accent: var(--color-bosque-helecho);
   --bg-creme: #fefae0; /* Arena cálida */
-  --bg-page: #fefae0;
-  --text-main: #283618;
+  --bg-page: var(--color-arena);
+  --text-main: var(--color-texto);
   --text-label: #3a5a40;
   --shadow: 0 10px 40px rgba(40, 54, 24, 0.12);
   --radius: 24px;
+  --glass-bg: rgba(254, 250, 224, 0.96);
+  --tab-bg: rgba(58, 90, 64, 0.1);
+  --tab-text: var(--color-mar-profundo);
+  --card-bg: #fdfdfd;
+  --modal-bg: white;
+  --user-text: #666;
+  --user-heading: #344E41;
+}
+
+[data-theme='dark'] {
+  --primary-saturada: #a3b18a;
+  --text-label: #a3b18a;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --glass-bg: rgba(24, 24, 24, 0.96);
+  --tab-bg: rgba(255, 255, 255, 0.1);
+  --tab-text: #e5e5e5;
+  --card-bg: #1e1e1e;
+  --modal-bg: #1e1e1e;
+  --user-text: #c0c0c0;
+  --user-heading: #e5e5e5;
 }
 
 
@@ -87,10 +107,10 @@ body {
 
 /* --- GLASS CARDS (ELEGANTES PERO LEGIBLES) --- */
 .glass-card {
-  background: rgba(254, 250, 224, 0.96); /* Crema cálido semi-transparente */
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   border-radius: var(--radius);
-  box-shadow: 0 20px 50px rgba(40, 54, 24, 0.15);
+  box-shadow: var(--shadow);
   padding: 3.5rem;
   border: 1px solid rgba(58, 90, 64, 0.2); /* Verde musgo sutil */
   margin-top: -4rem;
@@ -103,7 +123,7 @@ body {
 
 /* --- TABS --- */
 .premium-tabs {
-  background: rgba(58, 90, 64, 0.1);
+  background: var(--tab-bg);
   padding: 10px;
   border-radius: 50px;
   display: inline-flex;
@@ -117,7 +137,7 @@ body {
   border-radius: 50px;
   font-weight: 700;
   font-size: 1rem;
-  color: var(--color-mar-profundo);
+  color: var(--tab-text);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -126,7 +146,7 @@ body {
 }
 
 .premium-tab:hover {
-  background: rgba(0,0,0,0.05);
+  background: rgba(100, 100, 100, 0.15);
 }
 
 .premium-tab.active {
@@ -167,7 +187,7 @@ body {
 
 /* --- GRID DE ÁRBOLES --- */
 .arbol-card {
-  background: #fdfdfd;
+  background: var(--card-bg);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0,0,0,0.06);
@@ -185,7 +205,7 @@ body {
   font-family: var(--fuente-acento);
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--color-mar-profundo);
+  color: var(--color-texto);
   margin-bottom: 8px;
   text-transform: uppercase;
 }
@@ -218,7 +238,7 @@ body {
 }
 
 .modal-contenido {
-  background: white;
+  background: var(--modal-bg);
   border-radius: 30px;
   max-width: 950px;
   width: 95%;
@@ -235,7 +255,7 @@ body {
   font-family: var(--fuente-acento);
   font-size: 3rem;
   font-weight: 800;
-  color: var(--color-mar-profundo);
+  color: var(--color-texto);
   text-transform: uppercase;
 }
 
@@ -253,7 +273,7 @@ body {
 .modal-info-label {
   font-size: 0.85rem;
   text-transform: uppercase;
-  color: #4a5568;
+  color: var(--text-label);
   font-weight: 800;
   margin-bottom: 8px;
 }
@@ -303,7 +323,7 @@ body {
 }
 
 .user-collection-heading {
-  color: #344E41;
+  color: var(--user-heading);
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -311,7 +331,7 @@ body {
 
 .user-collection-desc {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--user-text);
   max-width: 800px;
 }
 
@@ -333,16 +353,19 @@ body {
 }
 
 .user-loading-text {
-  color: #666;
+  color: var(--user-text);
   font-weight: 600;
 }
 
 .premium-header-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the pair of logo + text */
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .premium-header-subtitle {

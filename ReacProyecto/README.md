@@ -1,56 +1,61 @@
-panel de administracion http://localhost:3005/admin (la ruta dirigida al admin esta Privada)
+# BioMon ADI - Gestión de Biodiversidad Forestal
 
- Tutorial: Uso del Panel de Administración
-El Panel de Administración es la herramienta centralizada donde los administradores pueden gestionar todos los aspectos del sistema de Recolección de Basura y Reforestación. A esta sección solo pueden entrar usuarios con el rol designado de admin.
+Sistema integral para el monitoreo de reforestación, gestión de voluntarios y reportes comunitarios en la zona de La Angostura.
 
-Ruta de acceso: http://localhost:3005/admin (Ruta privada, requiere inicio de sesión con credenciales de administrador).
+##  Stack Tecnológico
+- **Frontend:** React 19 + Vite
+- **Estilos:** Vanilla CSS (Diseño Premium / Glassmorphism)
+- **Estado Global:** React Hooks (useState, useEffect, Context)
+- **Enrutamiento:** React Router Dom 7
+- **Mapa:** Leaflet + React Leaflet
+- **Backend Simulado:** JSON Server (REST API)
+- **Notificaciones:** SweetAlert2
+- **Iconografía:** Lucide React
 
-A continuación, explicamos cada una de las secciones (pestañas) disponibles en el panel:
+##  Arquitectura y Funcionalidades
+- **Panel Administrativo:** Gestión de inventario de abonos, censo de árboles (altas/bajas), y control de usuarios/voluntarios.
+- **Sistema de Roles:** Acceso diferenciado para Administradores, Voluntarios y Usuarios registrados.
+- **Seguimiento de Plantación:** Registro detallado de progreso, clima y cuidados por especie.
+- **Buzón Interno:** Gestión de reportes de robo, labores de voluntariado y soporte técnico.
+- **Modo Oscuro:** Implementación nativa mediante variables CSS y persistencia en LocalStorage.
 
-1. Resumen (Dashboard)
-Esta es la pantalla principal que verás al entrar. Funciona como un centro de mando para obtener una vista rápida del estado del proyecto.
+## 🔧 Instalación y Despliegue
 
-Estadísticas de Árboles: Muestra cantidades totales de árboles plantados, clasificados por vivos y muertos.
-Métricas generales: Puedes visualizar indicadores y gráficas rápidas sobre el progreso general de la reforestación.
+### 1. Clonar y dependencias
+```bash
+npm install
+```
 
-2. Gestión de Árboles (Plantaciones)
-Esta sección está dedicada al control y monitoreo de todas las especies plantadas.
+### 2. Levantar Servidor de Datos (Backend)
+En una terminal independiente, ejecutar el servidor JSON (Puerto 3005):
+```bash
+npx json-server --watch db.json --port 3005
+```
 
-Lista de Seguimiento: Puedes ver el listado completo de los árboles.
-Agregar Nuevo: Tienes un formulario completo para registrar un árbol (Nombre, Nombre Científico, Tipo/Clasificación, Progreso en %, Altura, Clima, y Cuidados).
-Botón de Abono: Desde la lista de árboles, puedes aplicar fertilizante directamente a un árbol y revisar su historial de abonos.
+### 3. Ejecutar Aplicación (Frontend)
+```bash
+npm run dev
+```
 
-3. Árboles en Baja
-Un registro histórico de aquellos árboles que lamentablemente no sobrevivieron (estado "muerto"). Sirve para llevar un control estadístico de pérdidas y analizar qué especies o áreas necesitan más atención.
+##  Estructura Principal
+- `/src/components`: Componentes reutilizables y secciones del dashboard.
+- `/src/pages`: Vistas principales de la aplicación.
+- `/src/services`: Capa de abstracción para peticiones API (Axios/Fetch).
+- `/src/styles`: Sistema de diseño modular y temas (Dark/Light).
+- `db.json`: Base de datos local para persistencia de información.
 
-4. Gestión de Usuarios
-Aquí el administrador tiene control total sobre las cuentas de las personas registradas en la plataforma.
+##  Endpoints de la API (JSON Server)
+La API está disponible en `http://localhost:3005` con los siguientes recursos:
 
-Crear y Editar: Puedes registrar nuevos usuarios manualmente o corregir sus datos (nombre, email).
-Cancelar Cuenta (Banear): Si un usuario hace mal uso del sistema, puedes suspender o cancelar su cuenta indicando un "Motivo de Ban". El usuario verá este motivo si intenta loguearse.
-Reactivar: Puedes devolverle el acceso a un usuario baneado.
-Convertir a Voluntario: Con un solo clic, puedes ascender a un usuario normal al rol de Voluntario asignándole un área de interés y su teléfono.
+- **Árboles:** `/arboles` - Censo y seguimiento de especies.
+- **Usuarios:** `/usuarios` - Gestión de cuentas y roles.
+- **Estadísticas:** `/stats_tipos` - Métricas de planificación por tipo.
+- **Abonos:** `/abonos` - Inventario de fertilizantes.
+- **Reportes:** `/reportes` - Buzón de soporte técnico.
+- **Robos:** `/reportes_robados` - Denuncias de sustracción.
+- **Voluntariado:** `/reportes_voluntariado` - Registro de labores de campo.
 
-5. Gestión de Voluntariados
-Sección exclusiva para manejar al equipo de trabajo de campo.
-
-Registro: Da de alta a nuevos voluntarios con sus datos de contacto (área asignada, teléfono). Al crearlos, se les asigna una contraseña temporal por defecto (Voluntario123) que el sistema les pedirá cambiar.
-Eliminar o Modificar: Mantén la base de datos de tu equipo de voluntarios siempre actualizada.
-Degradar a Usuario: Si un voluntario deja el programa, puedes convertir su cuenta nuevamente a la de un usuario normal.
-
-6. Inventario de Abonos y Fertilizantes
-Esencial para la logística y cuidado de las plantas.
-
-Control de Stock: Registra el nombre del abono (ej. Compost, Humus) y la cantidad disponible en kg o unidades.
-Actualización: Permite agregar o restar inventario si llega nuevo material. Cuando le asignas abono a un árbol en la pestaña de plantaciones, automáticamente se descuenta 1 unidad del stock general aquí.
-
-7. Buzón (Reportes y Mensajes)
-El centro de comunicación y alertas.
-
-Revisión de Reportes: Aquí llegan todos los reportes enviados por los usuarios o voluntarios (por ejemplo, reportes de robo de árboles, denuncias de áreas sucias, o dudas generales).
-Gestión de Alertas: Permite al administrador tomar decisiones informadas con base en lo que la comunidad está reportando y marcar los reportes como leídos o resueltos.
-
-------------------------------------------------------------------------------------------------------------------------
-
-panel de usuario http://localhost:3005/user
-
+##  Rutas de la Aplicación
+- **Admin:** `/admin` - Dashboard de control total (Privado).
+- **Usuario:** `/dashboard-user` - Vista de usuario final.
+- **Voluntario:** `/dashboard-voluntario` - Panel de reportes de labores.

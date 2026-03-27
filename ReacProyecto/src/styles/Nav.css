@@ -163,10 +163,14 @@ body {
 
 .visitor-btn-logout {
   background-color: #ef4444 !important;
-  border: none;
+  color: white !important;
+  border: none !important;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
 }
 
 .visitor-btn-logout:hover {
   background-color: #dc2626 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
 }

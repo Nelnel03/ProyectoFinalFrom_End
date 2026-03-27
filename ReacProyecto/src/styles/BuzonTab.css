@@ -250,3 +250,75 @@
     font-size: 0.8rem;
     font-weight: bold;
 }
+
+/* --- DARK MODE OVERRIDES FOR BUZON --- */
+[data-theme='dark'] .reporte-card {
+  background-color: var(--color-caracola);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .title-soporte,
+[data-theme='dark'] .title-robo {
+  color: #e5e5e5;
+}
+
+[data-theme='dark'] .box-soporte {
+  background-color: #0c4a6e;
+  border-color: #075985;
+}
+
+[data-theme='dark'] .box-robo {
+  background-color: #451a03;
+  border-color: #78350f;
+}
+
+[data-theme='dark'] .box-voluntario {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+[data-theme='dark'] .message-text {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .inner-title-robo,
+[data-theme='dark'] .inner-title-voluntario {
+  color: #fbbf24;
+}
+
+[data-theme='dark'] .buzon-subtitle {
+    color: #94a3b8;
+}
+
+[data-theme='dark'] .empty-message-container {
+    background-color: #1a1a1a;
+}
+
+[data-theme='dark'] .evidence-box {
+    background-color: #064e3b;
+    border-color: #065f46;
+    color: #d1fae5;
+}
+
+[data-theme='dark'] .buzon-tab-btn {
+    background-color: #2a2a2a;
+    color: #e5e5e5;
+}
+
+[data-theme='dark'] .buzon-tab-btn.active {
+    background-color: var(--color-bosque-helecho) !important;
+    color: white !important;
+}
+
+[data-theme='dark'] .status-pendiente { background-color: #451a03; color: #fde68a; border-color: #78350f; }
+[data-theme='dark'] .status-proceso { background-color: #0c4a6e; color: #bae6fd; border-color: #075985; }
+[data-theme='dark'] .status-leido { background-color: #064e3b; color: #bbf7d0; border-color: #065f46; }
+[data-theme='dark'] .status-solucionado { background-color: #065f46; color: #d1fae5; border-color: #059669; }
+[data-theme='dark'] .status-investigacion { background-color: #451a03; color: #fde68a; border-color: #78350f; }
+[data-theme='dark'] .status-resuelto { background-color: #064e3b; color: #dcfce7; border-color: #065f46; }
+
+[data-theme='dark'] .select-status-basic {
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #444;
+}

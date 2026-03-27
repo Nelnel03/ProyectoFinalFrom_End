@@ -122,7 +122,7 @@
     },
     {
       "id": "ca99",
-      "nombre": "GG",
+      "nombre": "GG ezz",
       "email": "g@gmail.com",
       "password": "12345678",
       "rol": "user",
@@ -159,7 +159,8 @@
       "password": "12345678",
       "rol": "user",
       "resetToken": "v97wkkzkc4sjjk5exg3is",
-      "resetTokenExpiry": "2026-03-26T20:23:06.125Z"
+      "resetTokenExpiry": "2026-03-26T20:23:06.125Z",
+      "fotoPerfil": "https://www.google.com/imgres?q=rafiki&imgurl=https%3A%2F%2Fstatic.wikia.nocookie.net%2Flionguard%2Fimages%2Fb%2Fba%2FRafiki-main.png%2Frevision%2Flatest%3Fcb%3D20180918175456&imgrefurl=https%3A%2F%2Flionguard.fandom.com%2Fwiki%2FRafiki&docid=vDCvu6cUcTTEqM&tbnid=JW_2cdG7CpYJMM&vet=12ahUKEwjRrq2A5MCTAxUlQjABHWhJDJEQnPAOegQIFRAB..i&w=753&h=1037&hcb=2&ved=2ahUKEwjRrq2A5MCTAxUlQjABHWhJDJEQnPAOegQIFRAB"
     },
     {
       "id": "9ba2",
@@ -240,7 +241,6 @@
       "id": "4Lafzmd_e0E",
       "status": "banned",
       "motivoBan": "Prueva"
-
     }
   ],
   "stats_tipos": [

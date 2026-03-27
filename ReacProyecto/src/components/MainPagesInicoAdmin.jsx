@@ -13,7 +13,6 @@ import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
 import BuzonTab from './admin/BuzonTab';
-
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
 const FORM_INICIAL = {
@@ -978,14 +977,14 @@ function MainPagesInicoAdmin() {
     <div className="dashboard-premium">
       <header className="premium-header">
         <div className="premium-header-flex">
-          <div>
+          <img src="/src/assets/logo.png" alt="Logo" className="admin-header-logo" />
+          <div className="admin-header-text">
             <h2 className="premium-header-subtitle">BioMon ADI</h2>
             <h1>Panel de Control</h1>
             <p className="premium-header-welcome">
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
-
         </div>
       </header>
 
