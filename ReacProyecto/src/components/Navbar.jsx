@@ -51,16 +51,23 @@ const Navbar = () => {
                     </button>
                 )}
 
-                {!location.pathname.startsWith('/admin') && (
+                {!location.pathname.startsWith('/admin') && 
+                 !location.pathname.startsWith('/user') && 
+                 !location.pathname.startsWith('/dashboard-user') && (
                     <button onClick={() => navigate('/mapa')} className="navbar-btn-link">
                         Mapa
                     </button>
                 )}
-                {!location.pathname.startsWith('/admin') && (
+
+
+                {!location.pathname.startsWith('/admin') && 
+                 !location.pathname.startsWith('/user') && 
+                 !location.pathname.startsWith('/dashboard-user') && (
                     <button onClick={() => navigate('/historia')} className="navbar-btn-link">
                         Historia
                     </button>
                 )}
+
 
 
                 {!auth ? (

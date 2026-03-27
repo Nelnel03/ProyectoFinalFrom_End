@@ -15,6 +15,8 @@ import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
 import UserDashboard from '../components/UserDashboard';
+import ModernUserDashboard from '../components/ModernUserDashboard';
+
 import VolunteerDashboard from '../components/VolunteerDashboard';
 import '../styles/Layout.css';
 import Footer from '../components/Footer';
@@ -74,8 +76,9 @@ function MainLayout() {
             path="/dashboard-user" 
             element={
               <PrivateRoutes rolesAllowed={['user']}>
-                <UserDashboard />
+                <ModernUserDashboard />
               </PrivateRoutes>
+
             } 
           />
 
