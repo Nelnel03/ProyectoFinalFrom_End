@@ -136,69 +136,54 @@ const HistoryQuiz = () => {
     };
 
     return (
-        <div className="history-section history-quiz-section" style={{maxWidth: '800px', margin: '0 auto', background: 'white', padding: '2rem', borderRadius: '24px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)'}}>
-            <div className="section-icon-box quiz-bg" style={{background: '#f59e0b15', color: '#f59e0b', width: '60px', height: '60px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem'}}>
+        <div className="history-section history-quiz-section">
+            <div className="section-icon-box quiz-bg">
                 <Gamepad2 size={32} />
             </div>
-            <h2 className="section-title" style={{fontSize: '1.8rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem'}}>¡Pon a prueba tu conocimiento!</h2>
-            <p className="section-subtitle" style={{color: '#64748b', marginBottom: '2rem'}}>Completa este desafío para ganar medallas de honor.</p>
+            <h2 className="section-title">¡Pon a prueba tu conocimiento!</h2>
+            <p className="section-subtitle">Completa este desafío para ganar medallas de honor.</p>
 
             {!quizState.completed ? (
-                <div className="quiz-card" style={{background: '#f8fafc', padding: '2rem', borderRadius: '20px', border: '1px solid #e2e8f0'}}>
-                    <div className="quiz-header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem'}}>
+                <div className="quiz-card">
+                    <div className="quiz-header">
                         <div className="quiz-progress-text">
-                            <span style={{fontSize: '0.9rem', color: '#64748b'}}>Pregunta {quizState.current + 1} de {quizQuestions.length}</span>
+                            <span>Pregunta {quizState.current + 1} de {quizQuestions.length}</span>
                         </div>
-                        <div className="quiz-medals" style={{display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#fef3c7', padding: '0.4rem 0.8rem', borderRadius: '12px'}}>
-                            <Trophy size={16} color="#f59e0b" />
-                            <span style={{fontWeight: '700', color: '#92400e'}}>{quizState.score}</span>
+                        <div className="quiz-medals">
+                            <Trophy size={16} />
+                            <span>{quizState.score}</span>
                         </div>
                     </div>
 
-                    <h3 className="quiz-question" style={{fontSize: '1.3rem', fontWeight: '600', color: '#1e293b', marginBottom: '1.5rem', lineHeight: '1.4'}}>
+                    <h3 className="quiz-question">
                         {quizQuestions[quizState.current].question}
                     </h3>
 
-                    <div className="quiz-options" style={{display: 'flex', flexDirection: 'column', gap: '0.75rem'}}>
+                    <div className="quiz-options">
                         {quizQuestions[quizState.current].options.map((opt, idx) => (
                             <button
                                 key={idx}
                                 className={`quiz-option-btn ${quizState.answered ? (idx === quizQuestions[quizState.current].correctIndex ? 'correct' : (idx === quizState.selectedOption ? 'wrong' : '')) : ''}`}
                                 onClick={() => handleAnswer(idx)}
                                 disabled={quizState.answered}
-                                style={{
-                                    padding: '1rem 1.5rem',
-                                    borderRadius: '12px',
-                                    border: '2px solid #e2e8f0',
-                                    background: 'white',
-                                    textAlign: 'left',
-                                    cursor: quizState.answered ? 'default' : 'pointer',
-                                    transition: 'all 0.2s ease',
-                                    fontSize: '1rem',
-                                    fontWeight: '500',
-                                    color: '#475569',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between'
-                                }}
                             >
                                 {opt}
                                 {quizState.answered && idx === quizQuestions[quizState.current].correctIndex && (
-                                    <CheckCircle size={20} color="#10b981" />
+                                    <CheckCircle size={20} className="correct-icon" />
                                 )}
                             </button>
                         ))}
                     </div>
 
                     {quizState.answered && (
-                        <div className={`quiz-feedback-box ${quizState.correct ? 'success' : 'info'}`} style={{marginTop: '1.5rem', padding: '1.25rem', borderRadius: '15px', background: quizState.correct ? '#ecfdf5' : '#eff6ff', border: `1px solid ${quizState.correct ? '#10b98130' : '#3b82f630'}`}}>
-                            <div style={{display: 'flex', gap: '0.75rem'}}>
-                                <Star size={20} color={quizState.correct ? '#10b981' : '#3b82f6'} style={{flexShrink: 0}} />
-                                <p style={{fontSize: '0.95rem', color: quizState.correct ? '#065f46' : '#1e3a8a', margin: 0}}>
+                        <div className={`quiz-feedback-box ${quizState.correct ? 'success' : 'info'}`}>
+                            <div className="feedback-content">
+                                <Star size={20} className="feedback-icon" />
+                                <p>
                                     {quizQuestions[quizState.current].feedback}
                                 </p>
                             </div>
-                            <button className="btn-next-question" onClick={nextQuestion} style={{marginTop: '1rem', width: '100%', padding: '0.8rem', borderRadius: '12px', background: '#1e293b', color: 'white', border: 'none', cursor: 'pointer', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'}}>
+                            <button className="btn-next-question" onClick={nextQuestion}>
                                 {quizState.current === quizQuestions.length - 1 ? 'Ver Resultado' : 'Siguiente Pregunta'}
                                 <ChevronRight size={18} />
                             </button>
@@ -206,27 +191,27 @@ const HistoryQuiz = () => {
                     )}
                 </div>
             ) : (
-                <div className="quiz-result-card" style={{textAlign: 'center', background: '#f8fafc', padding: '3rem 2rem', borderRadius: '24px', border: '2px dashed #cbd5e1'}}>
-                    <div style={{width: '80px', height: '80px', background: '#fef3c7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem'}}>
-                        <Trophy size={40} color="#f59e0b" />
+                <div className="quiz-result-card">
+                    <div className="result-icon-box">
+                        <Trophy size={40} />
                     </div>
-                    <h3 style={{fontSize: '2rem', fontWeight: '800', color: '#1e293b', marginBottom: '0.5rem'}}>¡Misión cumplida!</h3>
-                    <p style={{color: '#64748b', fontSize: '1.1rem', marginBottom: '2rem'}}>Has finalizado el desafío del Corredor Biológico.</p>
+                    <h3>¡Misión cumplida!</h3>
+                    <p>Has finalizado el desafío del Corredor Biológico.</p>
                     
-                    <div className="result-stats" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2.5rem'}}>
-                        <div style={{background: 'white', padding: '1.5rem', borderRadius: '18px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)'}}>
-                            <span style={{display: 'block', fontSize: '0.85rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem'}}>Preguntas</span>
-                            <span style={{fontSize: '1.8rem', fontWeight: '800', color: '#1e293b'}}>{quizQuestions.length}</span>
+                    <div className="result-stats">
+                        <div className="result-stat-item">
+                            <span className="stat-label-quiz">Preguntas</span>
+                            <span className="stat-value-quiz">{quizQuestions.length}</span>
                         </div>
-                        <div style={{background: 'white', padding: '1.5rem', borderRadius: '18px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)'}}>
-                            <span style={{display: 'block', fontSize: '0.85rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem'}}>Medallas</span>
-                            <span style={{fontSize: '1.8rem', fontWeight: '800', color: '#f59e0b'}}>{quizState.score}</span>
+                        <div className="result-stat-item">
+                            <span className="stat-label-quiz">Medallas</span>
+                            <span className="stat-value-quiz medal">{quizState.score}</span>
                         </div>
                     </div>
 
-                    <div style={{display: 'flex', gap: '1rem'}}>
-                        <button onClick={restartQuiz} style={{flex: 1, padding: '1rem', borderRadius: '15px', background: 'white', color: '#1e293b', border: '2px solid #e2e8f0', fontWeight: '700', cursor: 'pointer'}}>Reintentar</button>
-                        <button style={{flex: 2, padding: '1rem', borderRadius: '15px', background: 'var(--primary-green)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer'}}>Certificar Puntos</button>
+                    <div className="result-actions">
+                        <button onClick={restartQuiz} className="btn-restart">Reintentar</button>
+                        <button className="btn-certify">Certificar Puntos</button>
                     </div>
                 </div>
             )}
