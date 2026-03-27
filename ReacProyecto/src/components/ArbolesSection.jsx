@@ -165,9 +165,12 @@ function ArbolesSection({ arboles, viewMode = 'individual' }) {
           {viewMode === 'individual' ? 'Inventario de Árboles' : 'Especies Registradas'}
         </h2>
         <p className="arboles-section-subtitle">
+
+
           {viewMode === 'individual' 
             ? 'Listado detallado de cada ejemplar plantado en el corredor.' 
             : 'Explora la diversidad forestal por tipo de especie.'}
+
         </p>
       </div>
 

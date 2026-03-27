@@ -70,6 +70,11 @@ function ReporteForm({ user, onReportSubmitted }) {
       return;
     }
 
+    if (pruebas.trim().length < 15) {
+      Swal.fire('Atención', 'La descripción de las pruebas debe tener al menos 15 caracteres.', 'warning');
+      return;
+    }
+
     setEnviando(true);
 
     const horasTrabajadas = calcularHoras();
