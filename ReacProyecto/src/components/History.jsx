@@ -9,8 +9,9 @@ import '../styles/History.css';
 const History = ({ user }) => {
 
     const [scrollProgress, setScrollProgress] = useState(0);
-    const [quizState, setQuizState] = useState({ current: 0, score: 0, answered: false, correct: false, selectedOption: null, completed: false });
     const [activeNode, setActiveNode] = useState(1);
+
+
     const [activeFilter, setActiveFilter] = useState('Todos');
     const [selectedTopic, setSelectedTopic] = useState(null);
 
@@ -55,105 +56,9 @@ const History = ({ user }) => {
     ];
 
 
-    // 16 Preguntas generadas a partir del contenido
-    const quizQuestions = [
-        {
-            question: '¿Cuál es la función principal de las raíces del Mangle Rojo en el estero?',
-            options: ['Producir sombra', 'Atrapar sedimentos y prevenir erosión', 'Filtrar agua dulce'],
-            correctIndex: 1,
-            feedback: 'El Mangle Rojo atrapa sedimentos vitales para evitar la erosión costera.'
-        },
-        {
-            question: '¿Cuántas hectáreas de bosque primario perdió Puntarenas entre 2002 y 2024?',
-            options: ['Menos de 1,000 hectáreas', 'Cerca de 10,000 hectáreas', 'Más de 4,380 hectáreas'],
-            correctIndex: 2,
-            feedback: 'Puntarenas perdió más de 4,380 hectáreas, por eso la deforestación es crítica.'
-        },
-        {
-            question: '¿Qué especie de manglar es conocida por tener raíces que salen del suelo (pneumatóforos)?',
-            options: ['Mangle Blanco', 'Mangle Negro', 'Mangle Botoncillo'],
-            correctIndex: 1,
-            feedback: 'El Mangle Negro es dominante por su alta tolerancia a la salinidad y sus peculiares raíces.'
-        },
-        {
-            question: '¿Qué reptil es conocido como "lagartija Jesucristo" por correr sobre el agua?',
-            options: ['Garrobo', 'Basilisco', 'Iguana verde'],
-            correctIndex: 1,
-            feedback: 'El basilisco gana este apodo gracias a su increíble habilidad para desplazarse sobre el agua.'
-        },
-        {
-            question: '¿En qué año se declaró el Humedal Estero Puntarenas como Área Silvestre Protegida?',
-            options: ['1985', '2015', '2001'],
-            correctIndex: 2,
-            feedback: 'Fue declarado ASP en el año 2001 (HEPyMA).'
-        },
-        {
-            question: '¿Cuál fundación lidera proyectos masivos de restauración de manglares en el Estero?',
-            options: ['NATUWA', 'Fundación Tierra Pura', 'FUNBAM'],
-            correctIndex: 1,
-            feedback: 'Fundación Tierra Pura lidera la restauración específica dentro del Estero.'
-        },
-        {
-            question: '¿A quiénes se da prioridad para los "Empleos Verdes" en BioMon ADI?',
-            options: ['A estudiantes extranjeros', 'A pescadores industriales', 'A mujeres de la zona'],
-            correctIndex: 2,
-            feedback: 'El proyecto empodera socialmente dando prioridad a mujeres locales y brindando capacitaciones.'
-        },
-        {
-            question: '¿Qué evento histórico sucedió en La Angostura en el año 1860?',
-            options: ['Batalla de La Angostura', 'Batalla de Rivas', 'Tragedia del bus'],
-            correctIndex: 0,
-            feedback: 'Las fuerzas del gobierno derrotaron a los seguidores de Juan Rafael Mora Porras en esta batalla.'
-        },
-        {
-            question: '¿Cuál de estas es una planta arrastrada y suculenta adaptada a las dunas y arena?',
-            options: ['Lengua de Suegra', 'Verdolaga de Playa', 'Uva de Playa'],
-            correctIndex: 1,
-            feedback: 'La Verdolaga de Playa coloniza áreas arenosas cerquitas de la marea alta.'
-        },
-        {
-            question: '¿Qué mamífero visitante es muy habitual en Porto Bello, atraído por alimentos?',
-            options: ['El Oso Hormiguero', 'El Mapache', 'El Jaguar'],
-            correctIndex: 1,
-            feedback: 'Los mapaches y los pizotes son visitantes extremadamente habituales por la actividad humana.'
-        },
-        {
-            question: '¿Qué invertebrados de barro son fundamentales en la base alimenticia del manglar?',
-            options: ['Cangrejos rojos y violinistas', 'Langostas y camarones', 'Erizos de mar y anémonas'],
-            correctIndex: 0,
-            feedback: 'Ambos tipos de cangrejos habitan entre las raíces del manglar alimentando el ecosistema.'
-        },
-        {
-            question: '¿Qué entidad pública protege las zonas verdes y derechos de vía en La Angostura?',
-            options: ['SINAC', 'MOPT', 'Incofer'],
-            correctIndex: 1,
-            feedback: 'La Dirección de Seguridad y Embellecimiento de Carreteras del MOPT tiene esta función.'
-        },
-        {
-            question: '¿Cuál tecnología precisa se usa para detectar tala ilegal en los manglares actualmente?',
-            options: ['Monitoreo con Drones', 'Satélites meteorológicos', 'Radares submarinos'],
-            correctIndex: 0,
-            feedback: 'Los drones de precisión ayudan activamente a vigilar la deforestación y los rellenos.'
-        },
-        {
-            question: '¿A qué animales se les ayuda preparando sus dietas en el voluntariado de NATUWA?',
-            options: ['Mamíferos marinos', 'Aves de corral', 'Animales rescatados como perezosos y jaguares'],
-            correctIndex: 2,
-            feedback: 'Voluntarios ayudan en la dieta de monos, jaguares, dantas y perezosos en NATUWA.'
-        },
-        {
-            question: '¿Cuál recurso hídrico sirve como sitio de "crianza" para peces como corvina y robalo?',
-            options: ['El Golfo de Nicoya', 'El Estero de Puntarenas', 'Río Barranca'],
-            correctIndex: 1,
-            feedback: 'Los alevines crecen seguros en el Estero debido a la protección de las raíces de mangle.'
-        },
-        {
-            question: 'Este esfuerzo digital y tecnológico transforma observadores en "Protectores Costeros":',
-            options: ['Redes locales de comercio', 'La Plataforma BioMon ADI', 'Juntas vecinales'],
-            correctIndex: 1,
-            feedback: 'BioMon ADI busca el monitoreo participativo para salvar el futuro de la biodiversidad.'
-        }
-    ];
+
+
+
 
     return (
         <div className="history-dashboard-wrapper">
@@ -173,12 +78,9 @@ const History = ({ user }) => {
                     </div>
                 </div>
                 <div className="header-user-actions">
-
-                    <div className="user-stats-badge">
-                        <Trophy size={18} color="#f59e0b" />
-                        <span>{quizState.score} Medallas</span>
-                    </div>
+                    {/* Badge de medallas eliminado */}
                 </div>
+
             </header>
 
 
@@ -202,10 +104,9 @@ const History = ({ user }) => {
                     </div>
                 </section>
 
-                <div className="history-two-columns">
-
+                <div className="history-full-column">
                     {/* SECCIÓN: MAPA DE CONOCIMIENTO (Línea de tiempo) */}
-                    <section className="learning-path-section">
+                    <section className="learning-path-section" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
                         <div className="learning-path-header">
                             <Target size={28} color="#1a73e8" />
                             <h2>Ruta de Aprendizaje</h2>
@@ -244,80 +145,9 @@ const History = ({ user }) => {
                         </div>
                     </section>
 
-                    {/* SECCIÓN: GAMIFICACIÓN (Pop Quiz) */}
-                    <section className="quiz-card-section">
-                        <div className="quiz-header">
-                            <div className="quiz-header-title">
-                                <Star size={28} color="#f59e0b" fill="#f59e0b" />
-                                <h2>Reto Rápido ({quizState.completed ? 'Finalizado' : `${quizState.current + 1}/16`})</h2>
-                            </div>
-                            <span className="quiz-completed-badge" style={{ background: '#f59e0b', color: 'white' }}>Puntaje: {quizState.score}</span>
-                        </div>
 
-                        {quizState.completed ? (
-                            <div className="quiz-result-container">
-                                <div className="medal-animation medal-shine-container">
-                                    <Trophy size={60} color="#f59e0b" />
-                                </div>
-                                <h3 className="quiz-result-title success">¡Desafío Completado!</h3>
-                                <p className="quiz-result-text">Has acertado {quizState.score} de 16 preguntas sobre BioMon ADI.</p>
-                                <button className="btn-retry-quiz" onClick={() => setQuizState({ current: 0, score: 0, answered: false, correct: false, selectedOption: null, completed: false })}>Volver a jugar</button>
-                            </div>
-                        ) : !quizState.answered ? (
-                            <div className="quiz-question-container">
-                                <p className="quiz-question-text">
-                                    {quizQuestions[quizState.current].question}
-                                </p>
-                                <div className="quiz-options-list">
-                                    {quizQuestions[quizState.current].options.map((opt, i) => (
-                                        <div 
-                                            key={i} 
-                                            className="quiz-option" 
-                                            onClick={() => {
-                                                const isCorrect = i === quizQuestions[quizState.current].correctIndex;
-                                                setQuizState({ ...quizState, answered: true, correct: isCorrect, selectedOption: i, score: isCorrect ? quizState.score + 1 : quizState.score });
-                                            }}
-                                        >
-                                            <span style={{ fontWeight: '500' }}>{['A)', 'B)', 'C)'][i]}</span> {opt} <CheckCircle size={20} className="quiz-option-icon" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="quiz-result-container">
-                                {quizState.correct ? (
-                                    <>
-                                        <div className="medal-animation medal-shine-container">
-                                            <Award size={60} color="#f59e0b" />
-                                        </div>
-                                        <h3 className="quiz-result-title success">¡Correcto!</h3>
-                                        <p className="quiz-result-text">{quizQuestions[quizState.current].feedback}</p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="quiz-fail-icon-container">
-                                            <ShieldCheck size={60} color="#ef4444" />
-                                        </div>
-                                        <h3 className="quiz-result-title fail">Incorrecto</h3>
-                                        <p className="quiz-result-text">{quizQuestions[quizState.current].feedback}</p>
-                                    </>
-                                )}
-                                <button 
-                                    className="btn-retry-quiz" 
-                                    onClick={() => {
-                                        if (quizState.current + 1 < quizQuestions.length) {
-                                            setQuizState({ ...quizState, current: quizState.current + 1, answered: false, correct: false, selectedOption: null });
-                                        } else {
-                                            setQuizState({ ...quizState, answered: false, completed: true });
-                                        }
-                                    }}
-                                >
-                                    {quizState.current + 1 < quizQuestions.length ? 'Siguiente Pregunta' : 'Ver Resultados'}
-                                </button>
-                            </div>
-                        )}
-                    </section>
                 </div>
+
             </div>
 
             {/* MODAL PARA FLORA COSTERA (Índice 0 en exploreTopics) */}
