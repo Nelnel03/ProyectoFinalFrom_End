@@ -277,6 +277,15 @@
       "id": "KnD1RaCk2NQ",
       "resetToken": "j2kdjzlcz91ffy1kt6ixs",
       "resetTokenExpiry": "2026-03-26T20:31:20.779Z"
+    },
+    {
+      "id": "ed15",
+      "nombre": "Kiwi",
+      "email": "kiwi@gmail.com",
+      "telefono": "12345678",
+      "password": "12345678",
+      "rol": "user",
+      "fotoPerfil": "https://lens.usercontent.google.com/banana?agsi=CmdnbG9iYWw6OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAwZWI6MToyNGQ3MjYzNmQ1ZmYzMzI2OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAyNDhmODgwMzM2ODowMDA2NGUwNjVhMzQzNmNmEAI="
     }
   ],
   "stats_tipos": [
@@ -338,6 +347,16 @@
       "fecha": "2026-03-26T02:45:35.659Z",
       "estado": "Leído",
       "id": "d4u-KaKmyac"
+    },
+    {
+      "id": "624a",
+      "asunto": "animal muerto en la zona",
+      "mensaje": "Me encontré un perro muerto en la playa de Chacarita",
+      "userId": "ed15",
+      "userName": "Kiwi",
+      "userEmail": "kiwi@gmail.com",
+      "fecha": "2026-03-27T19:23:42.018Z",
+      "estado": "Pendiente"
     }
   ],
   "reportes_robados": [
