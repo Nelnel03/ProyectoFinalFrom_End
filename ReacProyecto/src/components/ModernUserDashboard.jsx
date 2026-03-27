@@ -39,6 +39,8 @@ import UserReportesRobo from './UserReportesRobo';
 import MisReportesTab from './MisReportesTab';
 import CorridorMap from './CorridorMap';
 import History from './History';
+import HistoryQuiz from './HistoryQuiz';
+
 import '../styles/ModernUserDashboard.css';
 
 
@@ -392,7 +394,11 @@ function ModernUserDashboard() {
         return <UserProfile user={user} onUpdateUser={setUser} />;
       case 'conocenos':
         return <ConocenosTab />;
+      case 'juego':
+        return <div className="main-section-card"><HistoryQuiz /></div>;
+
       default:
+
 
         return <div>Selecciona una opción</div>;
     }
@@ -512,6 +518,14 @@ function ModernUserDashboard() {
             >
               Conócenos
             </button>
+            <button 
+              className={`top-bar-nav-link ${currentTab === 'juego' ? 'active' : ''}`}
+              onClick={() => setCurrentTab('juego')}
+            >
+              Mini Juego
+            </button>
+
+
           </div>
 
 
