@@ -1,9 +1,11 @@
-panel de administracion http://localhost:3005/admin (la ruta dirigida al admin esta Privada)
 
  Tutorial: Uso del Panel de Administración
 El Panel de Administración es la herramienta centralizada donde los administradores pueden gestionar todos los aspectos del sistema de Recolección de Basura y Reforestación. A esta sección solo pueden entrar usuarios con el rol designado de admin.
 
 Ruta de acceso: http://localhost:3005/admin (Ruta privada, requiere inicio de sesión con credenciales de administrador).
+
+email: [admin@gmail.com]
+contraseña: [admin1234]
 
 A continuación, explicamos cada una de las secciones (pestañas) disponibles en el panel:
 

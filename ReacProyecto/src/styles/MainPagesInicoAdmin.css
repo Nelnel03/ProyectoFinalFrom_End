@@ -999,3 +999,243 @@
   }
 }
 
+/* --- DARK MODE OVERRIDES FOR ADMIN PANEL --- */
+[data-theme='dark'] .admin-user-card,
+[data-theme='dark'] .admin-abono-stat-card,
+[data-theme='dark'] .admin-baja-card {
+  background-color: var(--color-caracola);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-texto);
+}
+
+[data-theme='dark'] .admin-user-info-text h3,
+[data-theme='dark'] .admin-abono-info h4,
+[data-theme='dark'] .admin-baja-title,
+[data-theme='dark'] .admin-user-input-label {
+  color: var(--color-texto);
+}
+
+[data-theme='dark'] .admin-user-id-badge {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .admin-user-id-label,
+[data-theme='dark'] .admin-user-id-value {
+  color: var(--color-texto);
+}
+
+[data-theme='dark'] .admin-user-input,
+[data-theme='dark'] .admin-user-select,
+[data-theme='dark'] .admin-tracking-input,
+[data-theme='dark'] .admin-type-input,
+[data-theme='dark'] .admin-search-input,
+[data-theme='dark'] .admin-filter-select {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #fff;
+}
+
+[data-theme='dark'] .admin-tracking-panel {
+  background: rgba(52, 211, 153, 0.05);
+  border-color: rgba(52, 211, 153, 0.1);
+}
+
+[data-theme='dark'] .admin-user-avatar.user {
+    background-color: #0c4a6e;
+}
+
+[data-theme='dark'] .admin-user-avatar.admin {
+    background-color: #7f1d1d;
+}
+
+[data-theme='dark'] .admin-vol-contact-box {
+    background-color: #2a2a2a;
+    border-color: #444;
+}
+
+[data-theme='dark'] .admin-vol-contact-box p {
+    color: #cbd5e1;
+}
+
+[data-theme='dark'] .admin-abono-icon {
+    background: #064e3b;
+    border-color: #065f46;
+}
+
+[data-theme='dark'] .admin-abono-last-date {
+    color: #94a3b8;
+}
+
+[data-theme='dark'] .admin-abono-form-card {
+    background: #064e3b;
+    border-color: #065f46;
+}
+
+[data-theme='dark'] .admin-empty-msg,
+[data-theme='dark'] .admin-no-results {
+    color: #94a3b8;
+}
+
+[data-theme='dark'] .admin-baja-img-wrap {
+    border-color: #7f1d1d;
+}
+
+[data-theme='dark'] .admin-baja-placeholder {
+    background-color: #450a0a;
+    color: #fecaca;
+}
+
+[data-theme='dark'] .admin-baja-title {
+    color: #fca5a5;
+}
+
+[data-theme='dark'] .admin-baja-date-value {
+    color: #ef4444;
+}
+
+[data-theme='dark'] .admin-stat-main-card,
+[data-theme='dark'] .admin-type-stat-card {
+  background-color: var(--color-caracola);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .admin-stat-info h3,
+[data-theme='dark'] .admin-stat-info p,
+[data-theme='dark'] .admin-type-name,
+[data-theme='dark'] .admin-type-count,
+[data-theme='dark'] .admin-type-percentage,
+[data-theme='dark'] .admin-type-stat-footer {
+  color: var(--color-texto);
+}
+
+[data-theme='dark'] .admin-type-progress-bar {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .admin-type-view-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-texto);
+  border-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+[data-theme='dark'] .admin-type-view-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .admin-stat-icon {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .admin-stat-icon.blue {
+    background-color: #1e3a8a;
+    color: #3b82f6;
+}
+
+[data-theme='dark'] .admin-form-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .admin-form-group label {
+    color: #94a3b8;
+}
+
+[data-theme='dark'] .admin-form-group input,
+[data-theme='dark'] .admin-form-group textarea,
+[data-theme='dark'] .admin-form-group select {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #444;
+}
+
+[data-theme='dark'] .admin-form-group input:focus,
+[data-theme='dark'] .admin-form-group textarea:focus,
+[data-theme='dark'] .admin-form-group select:focus {
+    border-color: var(--color-bosque-helecho);
+    background-color: #262626;
+}
+
+[data-theme='dark'] .admin-tabs-container {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+[data-theme='dark'] .admin-tabs-pills {
+    background-color: #262626;
+}
+
+[data-theme='dark'] .admin-tab-pill {
+    background-color: #1e1e1e;
+    color: #94a3b8;
+    border-color: #333;
+}
+
+[data-theme='dark'] .admin-tab-pill:hover {
+    background-color: #333;
+}
+
+[data-theme='dark'] .admin-tab-pill.active {
+    background-color: var(--color-bosque-helecho);
+    color: white;
+}
+
+[data-theme='dark'] .admin-arbol-card-img-placeholder {
+    background-color: #262626;
+    color: #444;
+}
+
+[data-theme='dark'] .admin-section-header h2 {
+    color: #e5e5e5;
+}
+
+[data-theme='dark'] .admin-msg.success {
+    background: rgba(6, 78, 59, 0.4);
+    color: #34d399;
+    border-color: #065f46;
+}
+
+[data-theme='dark'] .admin-msg.error {
+    background: rgba(127, 29, 29, 0.4);
+    color: #fca5a5;
+    border-color: #7f1d1d;
+}
+
+[data-theme='dark'] .admin-btn-logout-premium {
+    background-color: #991b1b;
+    color: #fff !important;
+}
+
+[data-theme='dark'] .admin-btn-logout-premium:hover {
+    background-color: #b91c1c;
+}
+
+[data-theme='dark'] .admin-select-option-bold {
+    color: #4bfc5a;
+}
+
+[data-theme='dark'] .admin-user-role-badge.admin {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+    border-color: #991b1b;
+}
+
+[data-theme='dark'] .admin-user-role-badge.user {
+    background-color: #064e3b;
+    color: #34d399;
+    border-color: #065f46;
+}
+
+[data-theme='dark'] .admin-vol-date {
+    color: #94a3b8;
+}
+
+[data-theme='dark'] .admin-btn-cancel-type {
+    background-color: #333;
+    color: #fff;
+}
+

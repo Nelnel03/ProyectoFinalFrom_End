@@ -13,7 +13,6 @@ import VoluntariadosTab from './admin/VoluntariadosTab';
 import AbonosTab from './admin/AbonosTab';
 import ArbolFormTab from './admin/ArbolFormTab';
 import BuzonTab from './admin/BuzonTab';
-
 // Ya no hay tipos de árboles quemados (hardcoded) para permitir eliminación completa de categorías
 
 const FORM_INICIAL = {
@@ -965,7 +964,6 @@ function MainPagesInicoAdmin() {
               Bienvenido, <strong>{adminName}</strong>. Gestionando la biodiversidad forestal de La Angostura.
             </p>
           </div>
-
         </div>
       </header>
 
