@@ -195,6 +195,22 @@ function MainPagesLogin() {
       return;
     }
 
+    if (/\d/.test(nombre.trim())) {
+      Swal.fire('Error', 'El nombre no debe contener números', 'error');
+      return;
+    }
+
+    if (nombre.trim().length < 3) {
+      Swal.fire('Error', 'El nombre debe tener al menos 3 caracteres', 'error');
+      return;
+    }
+
+    const phoneRegex = /^\d{8}$/;
+    if (!phoneRegex.test(telefono.trim())) {
+      Swal.fire('Error', 'El número de teléfono debe tener exactamente 8 dígitos', 'error');
+      return;
+    }
+
     const vowelCount = (nombre.match(/[aeiouáéíóúü]/gi) || []).length;
     if (vowelCount < 2) {
       Swal.fire('Error', 'El nombre completo debe contener al menos dos vocales', 'error');

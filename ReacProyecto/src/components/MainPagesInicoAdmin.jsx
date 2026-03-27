@@ -157,6 +157,11 @@ function MainPagesInicoAdmin() {
       return;
     }
 
+    if (/\d/.test(trimmedNombre)) {
+      Swal.fire('Error', 'El nombre del usuario no debe contener números', 'error');
+      return;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmedEmail)) {
       Swal.fire('Error', 'Por favor, ingresa un correo electrónico válido', 'error');
@@ -313,6 +318,11 @@ function MainPagesInicoAdmin() {
 
     if (trimmedNombre.length < 4) {
       Swal.fire('Error', 'El nombre del voluntario debe tener al menos 4 letras', 'error');
+      return;
+    }
+
+    if (/\d/.test(trimmedNombre)) {
+      Swal.fire('Error', 'El nombre del voluntario no debe contener números', 'error');
       return;
     }
 
@@ -769,6 +779,16 @@ function MainPagesInicoAdmin() {
 
     if (trimmedNombre.length < 4) {
       Swal.fire('Error', 'El nombre del árbol debe tener al menos 4 letras', 'error');
+      return;
+    }
+
+    if (/\d/.test(trimmedNombre)) {
+      Swal.fire('Error', 'El nombre común del árbol no debe contener números', 'error');
+      return;
+    }
+
+    if (/\d/.test(trimmedNombreCientifico)) {
+      Swal.fire('Error', 'El nombre científico del árbol no debe contener números', 'error');
       return;
     }
 
