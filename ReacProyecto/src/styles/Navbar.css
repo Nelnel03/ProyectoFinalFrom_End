@@ -12,6 +12,11 @@
   border-bottom: 2px solid rgba(218, 215, 205, 0.15); /* Separador sutil color Crema */
 }
 
+[data-theme='dark'] .navbar-main {
+  background: rgba(18, 18, 18, 0.95); 
+  border-bottom-color: rgba(255,255,255,0.05);
+}
+
 
 .navbar-logo-container {
   display: flex; 

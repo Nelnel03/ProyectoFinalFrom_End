@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
@@ -42,6 +43,7 @@ const Navbar = () => {
             </div>
             
             <div className="navbar-links-container">
+                <DarkModeToggle />
                 {/* Si no es admin y no está logueado, mostrar inicio. Si está logueado, el logo ya lo lleva a su panel. */}
                 {!location.pathname.startsWith('/admin') && !auth && (
                     <button onClick={() => navigate('/')} className="navbar-btn-link">

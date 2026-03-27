@@ -29,6 +29,17 @@
   --sombra-profunda: 0 10px 40px rgba(8, 28, 21, 0.25);
 }
 
+[data-theme='dark'] {
+  --color-arena: #121212;
+  --color-caracola: #1e1e1e;
+  --color-texto: #e5e5e5;
+  --color-tierra-sombra: #e5e5e5;
+  --color-crema-organico: #181818;
+  --color-ocre-silvestre: #2a2a2a;
+  --sombra-suave: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --sombra-profunda: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
 /* Estilos Globales */
 * {
   box-sizing: border-box;
@@ -42,6 +53,7 @@ body {
   padding: 0;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 html {

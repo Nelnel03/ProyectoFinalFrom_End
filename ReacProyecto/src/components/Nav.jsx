@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/Nav.css';
 
 function Nav() {
@@ -28,6 +29,9 @@ function Nav() {
         </NavLink>
         
         <div className="visitor-nav-links">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <DarkModeToggle />
+          </div>
           {!auth && (
             <NavLink 
               to="/" 
