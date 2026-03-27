@@ -157,7 +157,7 @@ function ArbolesSection({ arboles }) {
       <div className="arboles-section-header">
         <h2 className="arboles-section-title">Especies Registradas</h2>
         <p className="arboles-section-subtitle">
-          Explora la diversidad forestal de nuestro corredor biológico.
+          Explora la diversidad forestal de BioMon ADI.
         </p>
       </div>
 

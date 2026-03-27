@@ -13,7 +13,7 @@ function Footer() {
                 <img src="/src/assets/logo.png" alt="Logo" className="footer-logo-img" />
                 <div className="footer-brand">
                     <h3 className="footer-title">BioMon ADI</h3>
-                    <p className="footer-subtitle">CORREDOR BIOLÓGICO LA ANGOSTURA</p>
+                    <p className="footer-subtitle">BIOMON ADI | LA ANGOSTURA</p>
                 </div>
             </div>
             

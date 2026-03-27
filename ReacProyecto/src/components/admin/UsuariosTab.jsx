@@ -39,8 +39,8 @@ function UsuariosTab({
         </div>
       </div>
 
-      <div className="admin-tabs-container" style={{ padding: '0 0.5rem', marginBottom: '1.5rem' }}>
-        <div className="admin-tabs-pills" style={{ background: 'rgba(58, 90, 64, 0.1)', padding: '5px', borderRadius: '15px' }}>
+      <div className="admin-tabs-container" style={{ padding: '0 0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--admin-border-color)' }}>
+        <div className="admin-tabs-pills" style={{ background: 'transparent', display: 'flex', gap: '20px' }}>
           <button 
             onClick={() => setSubTab('activos')} 
             className={`admin-tab-pill ${subTab === 'activos' ? 'active' : ''}`}
@@ -50,7 +50,10 @@ function UsuariosTab({
           <button 
             onClick={() => setSubTab('cancelados')} 
             className={`admin-tab-pill ${subTab === 'cancelados' ? 'active' : ''}`}
-            style={{ color: subTab === 'cancelados' ? 'white' : '#e53e3e' }}
+            style={{ 
+              color: subTab === 'cancelados' ? '#e53e3e' : '#9ca3af',
+              borderBottomColor: subTab === 'cancelados' ? '#e53e3e' : 'transparent' 
+            }}
           >
             Usuarios Cancelados
           </button>

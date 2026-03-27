@@ -34,7 +34,7 @@ const Landing = () => {
 
             {/* Sección de Localidades */}
             <div className="localities-section">
-                <h2 className="localities-title">Localidades del Corredor</h2>
+                <h2 className="localities-title">Localidades de BioMon ADI</h2>
                 <p className="localities-description">
                     Trabajamos en la recuperación de tres sectores estratégicos que conectan el ecosistema costero de Puntarenas.
                 </p>
@@ -50,7 +50,7 @@ const Landing = () => {
                             <MapIcon size={35} color="var(--color-mar-profundo)" />
                         </div>
                         <h3 className="locality-name">Chacarita</h3>
-                        <p className="locality-description">El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
+                        <p className="locality-description">El acceso principal a BioMon ADI. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
                         <div className="locality-link">
 
                             Ver mapa local <ArrowRight size={16} />
