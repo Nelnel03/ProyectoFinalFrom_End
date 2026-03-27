@@ -409,7 +409,7 @@ function ModernUserDashboard() {
       {/* Sidebar Navigation */}
       <aside className="modern-sidebar">
         <div className="sidebar-logo">
-          <img src="/src/assets/logo.png" alt="BioMon Logo" className="sidebar-logo-img" />
+          <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
           <div className="logo-text">
             <h2>Biomon ADI</h2>
             <span>Portal de Conservación</span>
@@ -551,7 +551,7 @@ function ModernUserDashboard() {
 
             <div className="avatar-group" style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
               {user.fotoPerfil ? (
-                <img src={user.fotoPerfil} alt="Avatar" className="user-avatar-small" />
+                <img src={user.fotoPerfil} alt="Avatar de Usuario" className="user-avatar-small" />
               ) : (
                 <div className="user-avatar-placeholder">
                   <User size={20} />

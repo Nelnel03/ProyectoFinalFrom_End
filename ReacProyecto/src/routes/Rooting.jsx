@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
-import InicioAdimin from '../pages/InicioAdimin';
+import InicioAdmin from '../pages/InicioAdmin';
 import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
@@ -48,11 +48,7 @@ function MainLayout() {
           Si es visitante normal, mostramos el Nav global.
           Si es login o reset, no mostramos nada (form minimal).
       */}
-      {!isAuthRoute && !isUserDashboard && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
-
-
-
-
+      {!isAuthRoute && !isUserDashboard && !isAdminRoute && (isPremiumRoute ? <Navbar /> : <Nav />)}
 
       <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
         <Routes>
@@ -100,13 +96,13 @@ function MainLayout() {
             path="/admin" 
             element={
               <PrivateRoutes roleRequired="admin">
-                <InicioAdimin />
+                <InicioAdmin />
               </PrivateRoutes>
             } 
           />
         </Routes>
       </div>
-      {location.pathname !== '/mapa' && <Footer />}
+      {location.pathname !== '/mapa' && !isAdminRoute && <Footer />}
 
 
     </div>
