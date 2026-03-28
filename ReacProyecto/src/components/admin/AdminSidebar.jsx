@@ -7,10 +7,11 @@ import {
   CheckCircle, 
   FileText, 
   HelpCircle, 
-  LogOut 
+  LogOut,
+  X
 } from 'lucide-react';
 
-const AdminSidebar = ({ tab, setTab, resetForm, resetFormUsuario, handleLogout }) => {
+const AdminSidebar = ({ tab, setTab, resetForm, resetFormUsuario, handleLogout, isOpen, onClose, isMobile }) => {
   const sidebarLinks = [
     { id: 'resumen', label: 'Panel de Control', icon: LayoutDashboard },
     { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
@@ -21,7 +22,13 @@ const AdminSidebar = ({ tab, setTab, resetForm, resetFormUsuario, handleLogout }
   ];
 
   return (
-    <aside className="admin-sidebar">
+    <aside className={`admin-sidebar ${isMobile ? (isOpen ? 'mobile-open' : 'mobile-hidden') : ''}`}>
+      {isMobile && (
+        <button className="admin-sidebar-close-btn" onClick={onClose}>
+          <X size={20} />
+        </button>
+      )}
+
       <div className="admin-logo-section">
         <div className="admin-logo-icon">
           <img src="/src/assets/logo.png" alt="Logo BioMon" className="admin-logo-img" />

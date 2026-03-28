@@ -1117,3 +1117,122 @@
   color: var(--admin-accent-green);
   transform: scale(1.1);
 }
+
+/* ==========================================================================
+   ADMIN DASHBOARD - MOBILE RESPONSIVE SYSTEM
+   ========================================================================== */
+
+/* Global overflow fix */
+html, body {
+  overflow-x: hidden !important;
+}
+
+/* Mobile sidebar drawer behavior */
+.admin-layout.is-mobile .admin-sidebar {
+  transform: translateX(-110%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9999;
+}
+
+.admin-layout.is-mobile .admin-sidebar.mobile-open {
+  transform: translateX(0);
+}
+
+/* When NOT mobile, ensure sidebar is always visible */
+.admin-sidebar.mobile-hidden {
+  /* handled via is-mobile + no open class */
+}
+
+/* Sidebar close button (mobile only) */
+.admin-sidebar-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.admin-sidebar-close-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Overlay behind open drawer */
+.admin-sidebar-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(3px);
+  z-index: 9998;
+}
+
+/* Hamburger menu button in topbar */
+.admin-mobile-menu-btn {
+  background: var(--admin-sidebar-bg);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+/* Topbar mobile adjustments */
+.admin-topbar-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Main wrapper — full width on mobile */
+.admin-layout.is-mobile .admin-main-wrapper {
+  margin-left: 0 !important;
+  width: 100vw;
+}
+
+/* Responsive topbar padding */
+@media screen and (max-width: 1024px) {
+  .admin-topbar {
+    padding: 1rem 1.2rem 0 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .admin-content-view {
+    padding: 0.5rem 1rem 3rem !important;
+  }
+
+  /* Stats grid: 2 columns on tablet, 1 on phone */
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Middle grid stack */
+  .admin-middle-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Bottom grid stack */
+  .admin-bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-topbar-left h1 {
+    font-size: 1rem !important;
+  }
+}

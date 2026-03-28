@@ -77,6 +77,14 @@ function MainPagesInicoAdmin() {
   const [formUsuario, setFormUsuario] = useState(USER_FORM_INICIAL);
   const [modoEdicionUsuario, setModoEdicionUsuario] = useState(false);
   const [idEditandoUsuario, setIdEditandoUsuario] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [voluntariados, setVoluntariados] = useState([]);
   const [formVoluntariado, setFormVoluntariado] = useState(VOLUNTARIADO_FORM_INICIAL);
@@ -556,20 +564,34 @@ function MainPagesInicoAdmin() {
 
 
 
+  const handleTabChange = (newTab) => {
+    setTab(newTab);
+    if (isMobile) setSidebarOpen(false);
+  };
+
   return (
-    <div className="admin-layout">
+    <div className={`admin-layout ${isMobile ? 'is-mobile' : ''}`}>
       <AdminSidebar 
         tab={tab} 
-        setTab={setTab} 
+        setTab={handleTabChange} 
         resetForm={resetForm} 
         resetFormUsuario={resetFormUsuario} 
-        handleLogout={handleLogout} 
+        handleLogout={handleLogout}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        isMobile={isMobile}
       />
+
+      {isMobile && sidebarOpen && (
+        <div className="admin-sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
 
       <div className="admin-main-wrapper">
         <AdminTopbar 
           totalNotificaciones={totalNotificaciones} 
-          setTab={setTab} 
+          setTab={setTab}
+          isMobile={isMobile}
+          onOpenSidebar={() => setSidebarOpen(true)}
         />
 
         <section className="admin-content-view">

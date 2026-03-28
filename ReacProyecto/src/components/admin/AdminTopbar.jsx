@@ -1,12 +1,17 @@
 import React from 'react';
-import { Users, Bell } from 'lucide-react';
+import { Users, Bell, Menu } from 'lucide-react';
 import DarkModeToggle from '../DarkModeToggle';
 
-const AdminTopbar = ({ totalNotificaciones, setTab }) => {
+const AdminTopbar = ({ totalNotificaciones, setTab, isMobile, onOpenSidebar }) => {
   return (
     <header className="admin-topbar">
       <div className="admin-topbar-left">
-        <h1>Centro de Control Administrativo</h1>
+        {isMobile && (
+          <button className="admin-mobile-menu-btn" onClick={onOpenSidebar}>
+            <Menu size={22} />
+          </button>
+        )}
+        <h1>{isMobile ? 'Admin' : 'Centro de Control Administrativo'}</h1>
       </div>
       
       <div className="admin-topbar-right">
@@ -22,12 +27,14 @@ const AdminTopbar = ({ totalNotificaciones, setTab }) => {
            </div>
         </div>
 
-        <div className="admin-profile-pill">
-          <span>Panel Administrativo</span>
-          <div className="admin-avatar-placeholder">
-            <Users size={16} />
+        {!isMobile && (
+          <div className="admin-profile-pill">
+            <span>Panel Administrativo</span>
+            <div className="admin-avatar-placeholder">
+              <Users size={16} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );
