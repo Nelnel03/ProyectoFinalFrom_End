@@ -11,9 +11,10 @@ function UsuariosTab({
   handleEditarUsuario,
   handleBanUsuario,
   handleActivarUsuario,
-  handleConvertirUsuarioAVoluntariado
+  handleConvertirUsuarioAVoluntariado,
+  subTab,
+  setSubTab
 }) {
-  const [subTab, setSubTab] = React.useState('activos'); // 'activos' | 'cancelados'
   const [busqueda, setBusqueda] = React.useState(''); // Nuevo estado para búsqueda de usuarios
   return (
     <div>

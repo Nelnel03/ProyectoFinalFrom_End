@@ -43,3 +43,24 @@ export async function postReporteVoluntariado(reporte) {
     console.error("Error al enviar el reporte de voluntariado", error);
   }
 }
+/**
+ * Actualiza un reporte de voluntariado existente (usado para marcarlo comovisto o cambiar su estado).
+ * @async
+ * @function putReporteVoluntariado
+ * @param {Object} reporte Objeto con los datos actualizados del reporte.
+ * @param {string|number} id Identificador único del reporte a modificar.
+ */
+export async function putReporteVoluntariado(reporte, id) {
+  try {
+    const respuesta = await fetch(`${BASE_URL}/reportes_voluntariado/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reporte),
+    });
+    if (!respuesta.ok) throw new Error("No se pudo actualizar el reporte.");
+    const datos = await respuesta.json();
+    return datos;
+  } catch (error) {
+    console.error("Error al actualizar el reporte de voluntariado", error);
+  }
+}

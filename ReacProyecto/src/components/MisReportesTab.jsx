@@ -10,6 +10,8 @@ const STATUS_STYLES = {
   'Solucionado':      { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7', icon: '' },
   'En Investigación': { bg: '#fef3c7', text: '#92400e', border: '#fde68a', icon: '' },
   'Resuelto':         { bg: '#dcfce7', text: '#166534', border: '#86efac', icon: '' },
+  'Aprobada':         { bg: '#dcfce7', text: '#166534', border: '#86efac', icon: '✓ ' },
+  'Rechazada':        { bg: '#fee2e2', text: '#991b1b', border: '#fecaca', icon: '× ' },
 };
 
 function StatusBadge({ estado }) {
@@ -32,6 +34,7 @@ function MisReportesTab({ user }) {
   const [reportesRobo, setReportesRobo] = useState([]);
   const [mensajesSoporte, setMensajesSoporte] = useState([]);
   const [actividades, setActividades] = useState([]);
+  const [solicitudesVol, setSolicitudesVol] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [ultimaActualizacion, setUltimaActualizacion] = useState(null);
   const [filtroActivo, setFiltroActivo] = useState('todos');
@@ -40,14 +43,16 @@ function MisReportesTab({ user }) {
     if (!user?.id) return;
     setCargando(true);
     try {
-      const [todosRobos, todosSoporte, todasActividades] = await Promise.all([
+      const [todosRobos, todosSoporte, todasActividades, todasSolicitudes] = await Promise.all([
         services.getReportesRobados(),
         services.getReportes(),
-        services.getReportesVoluntariado()
+        services.getReportesVoluntariado(),
+        services.getSolicitudesVoluntariado()
       ]);
       setReportesRobo((todosRobos || []).filter(r => r.userId === user.id).reverse());
       setMensajesSoporte((todosSoporte || []).filter(m => m.userId === user.id).reverse());
       setActividades((todasActividades || []).filter(a => a.voluntarioId === user.id).reverse());
+      setSolicitudesVol((todasSolicitudes || []).filter(s => s.userId === user.id).reverse());
       setUltimaActualizacion(new Date());
     } catch (err) {
       console.error('Error al cargar mis reportes:', err);
@@ -88,6 +93,7 @@ function MisReportesTab({ user }) {
         <button className={`filtro-rep-btn ${filtroActivo === 'todos' ? 'active' : ''}`} onClick={() => setFiltroActivo('todos')}>Todos</button>
         <button className={`filtro-rep-btn ${filtroActivo === 'soporte' ? 'active' : ''}`} onClick={() => setFiltroActivo('soporte')}>Soporte</button>
         <button className={`filtro-rep-btn ${filtroActivo === 'robo' ? 'active' : ''}`} onClick={() => setFiltroActivo('robo')}>Robos</button>
+        <button className={`filtro-rep-btn ${filtroActivo === 'postulacion' ? 'active' : ''}`} onClick={() => setFiltroActivo('postulacion')}>Voluntariado</button>
         {user?.rol === 'voluntario' && (
           <button className={`filtro-rep-btn ${filtroActivo === 'actividades' ? 'active' : ''}`} onClick={() => setFiltroActivo('actividades')}>Labores</button>
         )}
@@ -177,6 +183,35 @@ function MisReportesTab({ user }) {
                       </div>
                       <p className="card-detail card-detail-dark">{a.horas} horas — {a.fecha}</p>
                       <p className="card-detail card-detail-italic">{a.tareas}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ── POSTULACIONES VOLUNTARIADO ── */}
+          {(filtroActivo === 'todos' || filtroActivo === 'postulacion') && (
+            <section>
+              <h3 className="section-title-postulacion" style={{ color: '#7c3aed' }}>
+                Solicitudes de Voluntariado
+              </h3>
+              {solicitudesVol.length === 0 ? (
+                <p className="empty-section-text">No tienes solicitudes de voluntariado.</p>
+              ) : (
+                <div className="cards-grid">
+                  {solicitudesVol.map(s => (
+                    <div 
+                      key={s.id} 
+                      className="reporte-item-card"
+                      style={{ borderLeft: `5px solid ${STATUS_STYLES[s.estado]?.border || '#7c3aed'}` }}
+                    >
+                      <div className="card-top-row">
+                        <strong className="card-title-postulacion" style={{ color: '#5b21b6' }}>Postulación a Voluntario</strong>
+                        <StatusBadge estado={s.estado} />
+                      </div>
+                      <p className="card-detail card-detail-dark" style={{ fontStyle: 'italic' }}>"{s.mensaje}"</p>
+                      <small className="card-date">Enviado: {new Date(s.fecha).toLocaleDateString()}</small>
                     </div>
                   ))}
                 </div>

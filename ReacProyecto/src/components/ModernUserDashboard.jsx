@@ -25,7 +25,8 @@ import {
   PlusCircle,
   Bell,
   LayoutDashboard,
-  UserCheck
+  UserCheck,
+  ShieldAlert
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import services from '../services/services';
@@ -41,6 +42,7 @@ import CorridorMap from './CorridorMap';
 import History from './History';
 import HistoryQuiz from './HistoryQuiz';
 import DarkModeToggle from './DarkModeToggle';
+import SolicitudVoluntariadoTab from './SolicitudVoluntariadoTab';
 
 import '../styles/ModernUserDashboard.css';
 
@@ -78,6 +80,13 @@ function ModernUserDashboard() {
     }
     
     fetchData();
+
+    // POLLEO EN TIEMPO REAL (Simulación con Intervalo de 30s)
+    const intervalId = setInterval(() => {
+        fetchData();
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, [navigate, searchParams]);
 
   const fetchData = async () => {
@@ -372,9 +381,11 @@ function ModernUserDashboard() {
       case 'reportes':
         return <UserReports user={user} onDone={() => setCurrentTab('mis_reportes')} />;
       case 'perfil':
-        return <UserProfile user={user} onUpdateUser={setUser} />;
+        return <UserProfile user={user} onUpdateUser={setUser} onTabChange={setCurrentTab} />;
       case 'conocenos':
         return <ConocenosTab />;
+      case 'solicitud_voluntariado':
+        return <SolicitudVoluntariadoTab user={user} onDone={() => setCurrentTab('mis_reportes')} />;
       case 'juego':
         return <div className="main-section-card"><HistoryQuiz /></div>;
 
@@ -390,7 +401,9 @@ function ModernUserDashboard() {
       {/* Sidebar Navigation */}
       <aside className="modern-sidebar">
         <div className="sidebar-logo">
-          <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
+          <div className="sidebar-logo-icon">
+            <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
+          </div>
           <div className="logo-text">
             <h2>Biomon ADI</h2>
             <span>Portal de Conservación</span>
@@ -426,6 +439,13 @@ function ModernUserDashboard() {
             Mis Solicitudes
           </button>
           <button 
+            className={`nav-item ${currentTab === 'reporte_robo' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('reporte_robo')}
+          >
+            <ShieldAlert className="nav-icon" size={18} />
+            Reportar Robo
+          </button>
+          <button 
             className={`nav-item ${currentTab === 'mapa' ? 'active' : ''}`}
             onClick={() => setCurrentTab('mapa')}
           >
@@ -452,6 +472,16 @@ function ModernUserDashboard() {
             <Trophy className="nav-icon" size={18} />
             Impacto
           </button>
+
+          {user.rol !== 'voluntario' && (
+            <button 
+              className={`nav-item ${currentTab === 'solicitud_voluntariado' ? 'active' : ''}`}
+              onClick={() => setCurrentTab('solicitud_voluntariado')}
+            >
+              <UserCheck className="nav-icon" size={18} />
+              Ser Voluntariado
+            </button>
+          )}
 
 
 

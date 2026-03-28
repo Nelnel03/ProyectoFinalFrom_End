@@ -15,8 +15,8 @@ function VoluntariadosTab({
   return (
     <div>
       <div className="admin-section-header">
-        <h2 className="admin-section-title-white">Gestión de Voluntarios</h2>
-        <p className="admin-section-subtitle-green">Administrar la base de datos de voluntarios y sus áreas</p>
+        <h2 className="admin-section-title-white">Registro de Voluntariados</h2>
+        <p className="admin-section-subtitle-green">Administrar la base de datos oficial de voluntarios y sus asignaciones</p>
       </div>
 
       <div id="voluntariado-form-container" className="admin-form-card admin-user-form-container">
