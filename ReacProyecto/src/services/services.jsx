@@ -13,6 +13,9 @@ import * as abonosService from "./abonos.service.jsx";
 import * as reportesVoluntariadoService from "./reportesVoluntariado.service.jsx";
 import * as reportesService from "./reportes.service.jsx";
 import * as reportesRobadosService from "./reportesRobados.service.jsx";
+import * as solicitudesVoluntariadoService from "./solicitudesVoluntariado.service.jsx";
+import * as tareasDisponiblesService from "./tareasDisponibles.service.jsx";
+
 
 /**
  * Objeto que agrupa todos los métodos de los servicios individuales.
@@ -28,6 +31,8 @@ const services = {
   ...reportesVoluntariadoService,
   ...reportesService,
   ...reportesRobadosService,
+  ...solicitudesVoluntariadoService,
+  ...tareasDisponiblesService,
 };
 
 // Exportación por defecto del objeto unificado
@@ -74,6 +79,7 @@ export {
 export {
   getReportesVoluntariado,
   postReporteVoluntariado,
+  putReporteVoluntariado,
 } from "./reportesVoluntariado.service.jsx";
 
 export {
@@ -89,3 +95,17 @@ export {
   putReportesRobados,
   deleteReportesRobados,
 } from "./reportesRobados.service.jsx";
+
+export {
+  getSolicitudesVoluntariado,
+  postSolicitudVoluntariado,
+  putSolicitudVoluntariado,
+  deleteSolicitudVoluntariado,
+} from "./solicitudesVoluntariado.service.jsx";
+
+export {
+  getTareasDisponibles,
+  postTareaDisponible,
+  putTareaDisponible,
+  deleteTareaDisponible,
+} from "./tareasDisponibles.service.jsx";

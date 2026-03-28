@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import DarkModeToggle from './DarkModeToggle';
 import '../styles/Nav.css';
 
 function Nav() {
@@ -22,32 +23,32 @@ function Nav() {
   return (
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
-        <NavLink to="/" className="visitor-logo">
-          <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+        <NavLink to={auth ? (sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/'} className="visitor-logo">
+          <div className="visitor-logo-icon">
+            <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+          </div>
           <span className="visitor-logo-text">BioMon ADI</span>
         </NavLink>
         
         <div className="visitor-nav-links">
-          <NavLink 
-            to="/" 
-            className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
-          >
-            Inicio
-          </NavLink>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <DarkModeToggle />
+          </div>
+          {!auth && (
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => (isActive && location.pathname === '/' ? "visitor-link active" : "visitor-link")}
+            >
+              Inicio
+            </NavLink>
+          )}
           <NavLink 
             to="/historia" 
             className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
           >
             Historia
           </NavLink>
-          {!(sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'voluntario') && (
-            <NavLink 
-              to="/voluntariado" 
-              className={({ isActive }) => (isActive ? "visitor-link active" : "visitor-link")}
-            >
-              Voluntariado
-            </NavLink>
-          )}
+
           {!auth ? (
             <NavLink 
               to="/login" 

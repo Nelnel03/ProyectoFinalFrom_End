@@ -67,6 +67,10 @@
 }
 
 .visitor-login-btn {
+  /* Revertimos variables a su estado verde original para los botones */
+  --color-bosque-musgo: #344e41;
+  --color-bosque-helecho: #3a5a40;
+  --color-mar-profundo: #344e41;
 
   background-color: var(--color-bosque-musgo);
   color: white;
@@ -97,22 +101,50 @@ body {
   width: calc(100% - 250px);
 }
 
-/* Layout for Visitor (Top Nav) */
-.main-content-layout.visitor-layout {
-  padding-top: 70px;
-  margin-left: 0;
-  width: 100%;
-}
-
 @media (max-width: 768px) {
+<<<<<<< HEAD
   .visitor-nav-links {
     gap: 1rem;
   }
   .visitor-link {
     font-size: 0.9rem;
+=======
+  .visitor-nav {
+    height: auto;
+    min-height: 56px;
+    padding: 0.4rem 0;
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805
   }
   .visitor-nav-container {
-    padding: 0 1rem;
+    padding: 0 0.8rem;
+    flex-wrap: nowrap;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .visitor-nav-links {
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .visitor-link {
+    display: none;
+  }
+  .visitor-login-btn {
+    font-size: 0.78rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+    border-radius: 30px;
+  }
+  .visitor-logo {
+    font-size: 1.1rem;
+    gap: 6px;
+  }
+  .visitor-logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .visitor-auth-actions {
+    gap: 0.3rem;
   }
 }
 
@@ -202,10 +234,24 @@ body {
 }
 
 /* --- ESTILOS EXTRAIDOS DE COMPONENTES ONLINE --- */
-.visitor-logo-img {
+.visitor-logo-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(58, 90, 64, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.visitor-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .visitor-logo-text {
@@ -224,10 +270,14 @@ body {
 
 .visitor-btn-logout {
   background-color: #ef4444 !important;
-  border: none;
+  color: white !important;
+  border: none !important;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
 }
 
 .visitor-btn-logout:hover {
   background-color: #dc2626 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
 }

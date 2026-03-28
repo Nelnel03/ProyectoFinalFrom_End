@@ -116,12 +116,27 @@ function MainPagesInicoVisitante() {
 
       <main className="visitante-content">
         <section className="visitante-intro">
-          <h2>Bienvenido al Sistema</h2>
+          <div className="intro-badge">Portal de Visitantes</div>
+          <h2>Explora la Biodiversidad de La Angostura</h2>
           <p>
-            Explora nuestra base de datos de especies forestales. Haz click en cualquier
-            tarjeta para ver información detallada de crecimiento, cuidados y más.
-            Regístrate para acceder a funciones adicionales.
+            BioMon ADI es una plataforma dedicada al monitoreo y protección de la salud ecológica del tómbolo. 
+            A continuación, puedes explorar nuestro catálogo interactivo de especies nativas. 
+            Cada ejemplar es monitoreado regularmente por nuestro equipo de voluntarios para asegurar su crecimiento y supervivencia.
           </p>
+          <div className="intro-features">
+            <div className="feature">
+              <span className="feature-dot"></span>
+              <span>Información botánica detallada</span>
+            </div>
+            <div className="feature">
+              <span className="feature-dot"></span>
+              <span>Estado de salud en tiempo real</span>
+            </div>
+            <div className="feature">
+              <span className="feature-dot"></span>
+              <span>Guía de cuidados específicos</span>
+            </div>
+          </div>
         </section>
 
         {/* Tarjetas de árboles visibles para visitantes */}

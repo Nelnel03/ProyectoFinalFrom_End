@@ -179,3 +179,72 @@
   background-color: #9ca3af;
   cursor: not-allowed;
 }
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+  .reporte-form-card {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .btn-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cancel-btn, .finish-btn, .back-btn, .submit-report-btn {
+    width: 100%;
+    flex: none;
+  }
+  .form-main-title {
+    font-size: 1.5rem;
+  }
+  .task-in-progress-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* --- MODO OSCURO PARA FORMULARIO DE REPORTE --- */
+[data-theme='dark'] .reporte-form-card {
+  background-color: var(--color-caracola);
+}
+
+[data-theme='dark'] .form-subtitle,
+[data-theme='dark'] .timer-hint,
+[data-theme='dark'] .start-time-text {
+  color: #a1a1aa;
+}
+
+[data-theme='dark'] .task-select,
+[data-theme='dark'] .obs-textarea {
+  background-color: #121212;
+  color: var(--color-texto);
+  border-color: rgba(255,255,255,0.1);
+}
+
+[data-theme='dark'] .timer-box {
+  background-color: #121212;
+  border-color: #4ade80;
+}
+
+[data-theme='dark'] .report-summary {
+  background-color: #121212;
+  border-left-color: #4ade80;
+}
+
+[data-theme='dark'] .start-work-btn,
+[data-theme='dark'] .submit-report-btn,
+[data-theme='dark'] .finish-btn {
+  background-color: #4ade80;
+  color: #121212;
+}
+
+[data-theme='dark'] .back-btn {
+  background-color: #2a2a2a;
+  color: #a1a1aa;
+}
+
+[data-theme='dark'] .cancel-btn {
+  background-color: #7f1d1d;
+  color: #fca5a5;
+}

@@ -29,6 +29,18 @@
   --sombra-profunda: 0 10px 40px rgba(8, 28, 21, 0.25);
 }
 
+[data-theme='dark'] {
+  --color-arena: #0d1117;
+  --color-caracola: #161b22;
+  --color-texto: #f0f6fc;
+  --color-tierra-sombra: #8b949e;
+  --color-crema-organico: #0d1117;
+  --color-ocre-silvestre: #21262d;
+  --color-palmera: #10b981;
+  --sombra-suave: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --sombra-profunda: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+
 /* Estilos Globales */
 * {
   box-sizing: border-box;
@@ -41,6 +53,12 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 /* Títulos con Tipografía de Acento */
@@ -115,7 +133,8 @@ input, select, textarea {
   font-family: var(--fuente-principal);
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background-color: white;
+  background-color: var(--color-caracola);
+  color: var(--color-texto);
 }
 
 input:focus, select:focus, textarea:focus {
@@ -165,7 +184,7 @@ header.main-header::before {
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-mar-turquesa);
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

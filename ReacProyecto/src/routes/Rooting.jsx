@@ -4,19 +4,22 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import InicioVisitantes from '../pages/InicioVisitantes';
 import InicioUser from '../pages/InicioUser';
-import InicioAdimin from '../pages/InicioAdimin';
+import InicioAdmin from '../pages/InicioAdmin';
 import Login from '../pages/Login';
 import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
 import HistoryForm from '../pages/HistoryForm';
-import Voluntariado from '../pages/Voluntariado';
+import Mapa from '../pages/Mapa';
+
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
-import UserDashboard from '../components/UserDashboard';
-import VolunteerDashboard from '../components/VolunteerDashboard';
+import UserDashboard from '../components/user/UserDashboardV2';
+import ModernUserDashboard from '../components/user/ModernUserDashboard';
 
+import VolunteerDashboard from '../components/volunteer/VolunteerDashboard';
 import '../styles/Layout.css';
+import Footer from '../components/Footer';
 
 function MainLayout() {
   const location = useLocation();
@@ -28,8 +31,12 @@ function MainLayout() {
     location.pathname.startsWith('/dashboard-user') || 
     location.pathname.startsWith('/dashboard-voluntario');
 
+  const isUserDashboard = 
+    location.pathname.startsWith('/user') || 
+    location.pathname.startsWith('/dashboard-user');
 
   const isAuthRoute = location.pathname === '/login' || location.pathname === '/reset-password';
+
 
 
   return (
@@ -41,17 +48,19 @@ function MainLayout() {
           Si es visitante normal, mostramos el Nav global.
           Si es login o reset, no mostramos nada (form minimal).
       */}
-      {!isAuthRoute && (isPremiumRoute ? <Navbar /> : (!isAdminRoute && <Nav />))}
+      {!isAuthRoute && 
+       !isAdminRoute && 
+       !location.pathname.startsWith('/dashboard-voluntario') && 
+       !location.pathname.startsWith('/dashboard-user') && 
+       (isPremiumRoute ? <Navbar /> : <Nav />)}
 
-
-
-
-      <div className="main-content-layout">
+      <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
-          <Route path="/voluntariado" element={<Voluntariado />} />
+
+          <Route path="/mapa" element={<Mapa />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           
@@ -72,8 +81,9 @@ function MainLayout() {
             path="/dashboard-user" 
             element={
               <PrivateRoutes rolesAllowed={['user']}>
-                <UserDashboard />
+                <ModernUserDashboard />
               </PrivateRoutes>
+
             } 
           />
 
@@ -90,12 +100,15 @@ function MainLayout() {
             path="/admin" 
             element={
               <PrivateRoutes roleRequired="admin">
-                <InicioAdimin />
+                <InicioAdmin />
               </PrivateRoutes>
             } 
           />
         </Routes>
       </div>
+      {location.pathname !== '/mapa' && location.pathname !== '/dashboard-voluntario' && !isAdminRoute && <Footer />}
+
+
     </div>
   );
 }

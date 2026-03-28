@@ -32,78 +32,78 @@ const Landing = () => {
                 </div>
             </div>
 
-            {/* Sección de Localidades */}
-            <div className="localities-section">
-                <h2 className="localities-title">Localidades del Corredor</h2>
-                <p className="localities-description">
-                    Trabajamos en la recuperación de tres sectores estratégicos que conectan el ecosistema costero de Puntarenas.
-                </p>
-                
-                <div className="localities-grid">
-                    {/* Chacarita */}
-                    <div 
-                        onClick={() => navigate('/mapa')}
-                        className="locality-card"
-                    >
-
-                        <div className="locality-icon-container">
-                            <MapIcon size={35} color="var(--color-mar-profundo)" />
-                        </div>
-                        <h3 className="locality-name">Chacarita</h3>
-                        <p className="locality-description">El acceso principal al corredor. Esfuerzos centrados en la recuperación de la Playa y el área periurbana del Estero.</p>
-                        <div className="locality-link">
-
-                            Ver mapa local <ArrowRight size={16} />
-                        </div>
-                    </div>
-
-                    {/* La Angostura */}
-                    <div 
-                        onClick={() => navigate('/historia')}
-                        className="locality-card"
-                    >
-                        <div className="locality-icon-container">
-                            <Leaf size={35} color="var(--color-mar-profundo)" />
-                        </div>
-
-                        <h3 className="locality-name">La Angostura</h3>
-                        <p className="locality-description">El pulmón estrecho de la ciudad. Un tómbolo de arena que conecta la península con el continente.</p>
-                        <div className="locality-link">
-
-                            Leer historia <ArrowRight size={16} />
+            {/* Sección: Sobre BioMon */}
+            <div className="about-section">
+                <div className="about-container">
+                    <div className="about-text">
+                        <h2 className="section-tag">Nuestra Misión</h2>
+                        <h3 className="section-title">Protegiendo el Corredor Biológico La Angostura</h3>
+                        <p className="section-description">
+                            BioMon ADI nace como una iniciativa comunitaria para monitorear y proteger la biodiversidad en el tómbolo de Puntarenas. Nuestro objetivo es crear un puente entre la ciencia y la comunidad, permitiendo que cada ciudadano se convierta en un guardián de nuestro ecosistema.
+                        </p>
+                        <div className="about-stats">
+                            <div className="stat-item">
+                                <span className="stat-number">3</span>
+                                <span className="stat-label">Zonas de Impacto</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-number">+100</span>
+                                <span className="stat-label">Voluntarios Activos</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-number">24/7</span>
+                                <span className="stat-label">Monitoreo Digital</span>
+                            </div>
                         </div>
                     </div>
-
-                    {/* El Carmen */}
-                    <div 
-                        onClick={() => navigate('/mapa')}
-                        className="locality-card"
-                    >
-                        <div className="locality-icon-container">
-                            <Shield size={35} color="var(--color-mar-profundo)" />
-                        </div>
-
-                        <h3 className="locality-name">El Carmen</h3>
-                        <p className="locality-description">Zona de recuperación de manglares al final de la península, protegiendo el entorno del Paseo de los Turistas.</p>
-                        <div className="locality-link">
-
-                            Ver puntos <ArrowRight size={16} />
-                        </div>
+                    <div className="about-image">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80" alt="Conservación" />
                     </div>
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer className="landing-footer">
-                <div className="footer-brand">
-                    <img src="/src/assets/logo.png" alt="Logo" className="footer-logo" />
-                    <div>
-                        <h3 className="footer-brand-name">BioMon ADI</h3>
-                        <p className="footer-brand-tagline">CORREDOR BIOLÓGICO</p>
+            {/* Sección: Qué buscamos hacer */}
+            <div className="mission-section">
+                <div className="mission-header">
+                    <h2 className="section-tag">Nuestras Líneas de Acción</h2>
+                    <h3 className="section-title">Lo que buscamos lograr</h3>
+                </div>
+
+                <div className="mission-grid">
+                    <div className="mission-card">
+                        <div className="mission-icon">
+                            <Leaf size={32} />
+                        </div>
+                        <h4>Restauración Ecológica</h4>
+                        <p>Recuperamos áreas degradadas mediante la siembra de especies nativas y el control de especies invasoras en el corredor.</p>
+                    </div>
+
+                    <div className="mission-card">
+                        <div className="mission-icon">
+                            <Shield size={32} />
+                        </div>
+                        <h4>Protección de Hábitats</h4>
+                        <p>Vigilamos y reportamos amenazas a los manglares y playas, asegurando un refugio seguro para la fauna local.</p>
+                    </div>
+
+                    <div className="mission-card">
+                        <div className="mission-icon">
+                            <BookOpen size={32} />
+                        </div>
+                        <h4>Educación Ambiental</h4>
+                        <p>Empoderamos a la comunidad con conocimientos sobre biodiversidad y la importancia de la conservación forestal.</p>
+                    </div>
+
+                    <div className="mission-card">
+                        <div className="mission-icon">
+                            <MapIcon size={32} />
+                        </div>
+                        <h4>Ciencia Participativa</h4>
+                        <p>Utilizamos tecnología para que cualquier persona pueda registrar datos valiosos para la toma de decisiones ecológicas.</p>
                     </div>
                 </div>
-                <p className="footer-copyright">&copy; {new Date().getFullYear()} ADI La Angostura, Puntarenas. Salvando el futuro juntos.</p>
-            </footer>
+            </div>
+
         </div>
     );
 };

@@ -7,11 +7,31 @@
   --primary-saturada: #283618; /* Sombra tierra muy cálida */
   --accent: var(--color-bosque-helecho);
   --bg-creme: #fefae0; /* Arena cálida */
-  --bg-page: #fefae0;
-  --text-main: #283618;
+  --bg-page: var(--color-arena);
+  --text-main: var(--color-texto);
   --text-label: #3a5a40;
   --shadow: 0 10px 40px rgba(40, 54, 24, 0.12);
   --radius: 24px;
+  --glass-bg: rgba(254, 250, 224, 0.96);
+  --tab-bg: rgba(58, 90, 64, 0.1);
+  --tab-text: var(--color-mar-profundo);
+  --card-bg: #fdfdfd;
+  --modal-bg: white;
+  --user-text: #666;
+  --user-heading: #344E41;
+}
+
+[data-theme='dark'] {
+  --primary-saturada: #a3b18a;
+  --text-label: #a3b18a;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --glass-bg: rgba(24, 24, 24, 0.96);
+  --tab-bg: rgba(255, 255, 255, 0.1);
+  --tab-text: #e5e5e5;
+  --card-bg: #1e1e1e;
+  --modal-bg: #1e1e1e;
+  --user-text: #c0c0c0;
+  --user-heading: #e5e5e5;
 }
 
 
@@ -27,56 +47,83 @@ body {
 /* --- DASHBOARD WRAPPER --- */
 .dashboard-premium {
   min-height: 100vh;
-  padding: 3rem;
+  padding: 0 0 3rem 0;
 }
 
 /* --- HEADERS (CONTRASTADO) --- */
 .premium-header {
-  background: linear-gradient(135deg, var(--color-bosque-musgo), var(--color-tierra-sombra));
-  border-radius: var(--radius);
-  padding: 5rem 4rem;
-  color: var(--color-caracola);
-  margin-bottom: 4rem;
+  background-color: #3A5A40 !important;
+  background-image: none !important;
+  padding: 5rem 4rem 8rem;
+  color: #DAD7CD !important;
+  margin-bottom: 0;
   box-shadow: var(--sombra-profunda);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.premium-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='20' y='50' font-size='24' opacity='0.03'%3E%F0%9F%8D%83%3C/text%3E%3Ctext x='80' y='110' font-size='24' opacity='0.03'%3E%F0%9F%A6%8E%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .premium-header h1 {
-  font-family: var(--fuente-acento);
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 3.8rem;
   font-weight: 800;
+  color: #DAD7CD !important;
   margin: 0;
-  letter-spacing: 1px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  letter-spacing: 2px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.2);
   text-transform: uppercase;
+  position: relative;
+  z-index: 2;
 }
 
 .premium-header p {
+  font-family: 'Montserrat', sans-serif !important;
   font-size: 1.4rem;
-  color: var(--color-caracola);
+  color: #DAD7CD !important;
   margin-top: 1.5rem;
   max-width: 850px;
-  font-weight: 600; 
-  opacity: 0.9;
+  font-weight: 500; 
+  opacity: 0.85;
+  position: relative;
+  z-index: 2;
 }
 
 /* --- GLASS CARDS (ELEGANTES PERO LEGIBLES) --- */
 .glass-card {
-  background: rgba(254, 250, 224, 0.96); /* Crema cálido semi-transparente */
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   border-radius: var(--radius);
-  box-shadow: 0 20px 50px rgba(40, 54, 24, 0.15);
+  box-shadow: var(--shadow);
   padding: 3.5rem;
   border: 1px solid rgba(58, 90, 64, 0.2); /* Verde musgo sutil */
+  margin-top: -4rem;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 20;
 }
 
 
 
 /* --- TABS --- */
 .premium-tabs {
-  background: rgba(58, 90, 64, 0.1);
+  background: var(--tab-bg);
   padding: 10px;
   border-radius: 50px;
   display: inline-flex;
@@ -90,7 +137,7 @@ body {
   border-radius: 50px;
   font-weight: 700;
   font-size: 1rem;
-  color: var(--color-mar-profundo);
+  color: var(--tab-text);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -99,7 +146,7 @@ body {
 }
 
 .premium-tab:hover {
-  background: rgba(0,0,0,0.05);
+  background: rgba(100, 100, 100, 0.15);
 }
 
 .premium-tab.active {
@@ -140,7 +187,7 @@ body {
 
 /* --- GRID DE ÁRBOLES --- */
 .arbol-card {
-  background: #fdfdfd;
+  background: var(--card-bg);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0,0,0,0.06);
@@ -158,7 +205,7 @@ body {
   font-family: var(--fuente-acento);
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--color-mar-profundo);
+  color: var(--color-texto);
   margin-bottom: 8px;
   text-transform: uppercase;
 }
@@ -191,7 +238,7 @@ body {
 }
 
 .modal-contenido {
-  background: white;
+  background: var(--modal-bg);
   border-radius: 30px;
   max-width: 950px;
   width: 95%;
@@ -208,7 +255,7 @@ body {
   font-family: var(--fuente-acento);
   font-size: 3rem;
   font-weight: 800;
-  color: var(--color-mar-profundo);
+  color: var(--color-texto);
   text-transform: uppercase;
 }
 
@@ -226,7 +273,7 @@ body {
 .modal-info-label {
   font-size: 0.85rem;
   text-transform: uppercase;
-  color: #4a5568;
+  color: var(--text-label);
   font-weight: 800;
   margin-bottom: 8px;
 }
@@ -266,6 +313,7 @@ body {
 .user-glass-main {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .user-section-title {
@@ -275,7 +323,7 @@ body {
 }
 
 .user-collection-heading {
-  color: #344E41;
+  color: var(--user-heading);
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -283,7 +331,7 @@ body {
 
 .user-collection-desc {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--user-text);
   max-width: 800px;
 }
 
@@ -305,16 +353,19 @@ body {
 }
 
 .user-loading-text {
-  color: #666;
+  color: var(--user-text);
   font-weight: 600;
 }
 
 .premium-header-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the pair of logo + text */
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .premium-header-subtitle {
@@ -334,12 +385,13 @@ body {
 .glass-card-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .premium-tabs-container {
   margin-bottom: 3.5rem;
   overflow-x: auto;
-  padding: 10px;
+  padding: 10px 2rem;
 }
 
 .admin-msg {
@@ -359,6 +411,7 @@ body {
   color: #991b1b;
 }
 
+<<<<<<< HEAD
 /* ══════════════════════════════
    RESPONSIVO — TABLET Y MÓVIL
    ══════════════════════════════ */
@@ -407,16 +460,75 @@ body {
 }
 
 @media (max-width: 640px) {
+=======
+/* ===========================
+   RESPONSIVE MOBILE ≤768px
+=========================== */
+@media screen and (max-width: 768px) {
+  /* Dashboard wrapper sin padding grande */
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805
   .dashboard-premium {
     padding: 1rem;
   }
 
+<<<<<<< HEAD
   .premium-header {
     padding: 2rem 1.25rem;
+=======
+  /* Header premium - texto enorme */
+  .premium-header {
+    padding: 2rem 1.2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+  .premium-header h1 {
+    font-size: 1.9rem;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
+  .premium-header p {
+    font-size: 1rem;
+    margin-top: 0.8rem;
+  }
+  .premium-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .user-btn-logout-margin {
+    margin-left: 0;
+    width: 100%;
+  }
+  .user-premium-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* Tabs */
+  .premium-tabs {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    border-radius: 12px;
+    padding: 6px;
+  }
+  .premium-tab {
+    padding: 8px 16px;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  /* Glass card */
+  .glass-card {
+    padding: 1.5rem 1rem;
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805
     margin-bottom: 1.5rem;
     border-radius: 16px;
   }
 
+<<<<<<< HEAD
   .premium-header h1 {
     font-size: 1.8rem;
   }
@@ -448,5 +560,31 @@ body {
 
   .modal-nombre {
     font-size: 1.5rem;
+=======
+  /* Modal */
+  .modal-body {
+    padding: 1.5rem 1rem;
+  }
+  .modal-nombre {
+    font-size: 1.8rem;
+    word-break: break-word;
+  }
+
+  /* Titles */
+  .user-collection-heading {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .user-premium-header-flex {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .user-btn-logout-margin {
+    margin-left: 0;
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805
   }
 }

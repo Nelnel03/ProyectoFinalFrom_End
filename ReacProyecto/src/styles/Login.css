@@ -152,6 +152,7 @@
   }
 }
 
+<<<<<<< HEAD
 /* ══════════ RESPONSIVO ══════════ */
 
 @media (max-width: 640px) {
@@ -169,8 +170,32 @@
     font-size: 1.8rem;
   }
 
+=======
+/* ===========================
+   RESPONSIVE MOBILE ≤768px
+=========================== */
+@media screen and (max-width: 768px) {
+  .login-minimal-wrapper {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+  .login-card {
+    padding: 1.8rem 1.2rem;
+    border-radius: 16px;
+  }
+  .login-card h2 {
+    font-size: 1.7rem;
+    letter-spacing: 0;
+    margin-bottom: 1.5rem;
+  }
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805
   .login-btn {
     font-size: 1rem;
     padding: 12px;
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> ab95ccd52ccff4bc3d3f1512e44e2e4fcaadc805

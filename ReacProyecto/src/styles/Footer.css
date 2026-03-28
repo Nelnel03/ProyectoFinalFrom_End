@@ -1,4 +1,9 @@
 .main-footer {
+  /* Forzamos los colores originales para que no cambien en Modo Oscuro */
+  --color-bosque-musgo: #344e41;
+  --color-crema-organico: #fefae0;
+  --color-ocre-silvestre: #a3b18a;
+
   background: var(--color-bosque-musgo);
   color: var(--color-crema-organico);
   padding: 4rem 2rem;
@@ -37,8 +42,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: transparent;
 }
 
 .footer-brand {
@@ -69,6 +73,34 @@
   font-size: 1rem;
   line-height: 1.8;
   opacity: 0.9;
+}
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.footer-socials .social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-socials .social-icon:hover {
+  background: var(--color-ocre-silvestre);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
 .footer-bottom {
