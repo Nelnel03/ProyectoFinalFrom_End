@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import services from '../services/services';
+import services from '../../services/services';
 import Swal from 'sweetalert2';
-import '../styles/AdminReports.css';
+import '../../styles/AdminReports.css';
 
 function AdminReportesRobo() {
   const [reportes, setReportes] = useState([]);

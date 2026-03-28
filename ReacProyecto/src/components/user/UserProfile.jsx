@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import services from "../services/services.jsx";
+import services from '../../services/services.jsx';
 import Swal from 'sweetalert2';
 import { UserCheck, Heart, ShieldCheck } from 'lucide-react';
-import "../styles/UserProfile.css";
+import '../../styles/UserProfile.css';
 
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -1,5 +1,5 @@
 import React from 'react';
-import MainPagesInicoUser from '../components/MainPagesInicoUser';
+import MainPagesInicoUser from '../components/user/MainPagesInicoUser';
 
 function InicioUser() {
   return (

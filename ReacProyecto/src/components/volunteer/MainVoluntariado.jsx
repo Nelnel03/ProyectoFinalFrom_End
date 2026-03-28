@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Voluntariado.css';
+import '../../styles/Voluntariado.css';
 
 function MainVoluntariado() {
   const navigate = useNavigate();

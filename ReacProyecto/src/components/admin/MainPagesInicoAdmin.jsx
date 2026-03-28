@@ -1,48 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import services from '../services/services';
+import services from '../../services/services';
 
-// Icons from lucide-react
-import { 
-  LayoutDashboard, 
-  CheckCircle, 
-  Activity, 
-  Users, 
-  BarChart, 
-  Settings, 
-  Search, 
-  Bell, 
-  Monitor, 
-  Plus, 
-  HelpCircle, 
-  LogOut,
-  FileText,
-  Droplet,
-  History,
-  List,
-  ChevronRight,
-  Map as MapIcon,
-  ShieldCheck,
-  AlertTriangle
-} from 'lucide-react';
+import '../../styles/Arboles.css';
+import '../../styles/MainPagesInicoAdmin.css';
+import '../../styles/PremiumDashboard.css';
+import '../../styles/AdminControlCenter.css';
 
-import '../styles/Arboles.css';
-import '../styles/MainPagesInicoAdmin.css';
-import '../styles/PremiumDashboard.css';
-import '../styles/AdminControlCenter.css';
-
-import ResumenTab from './admin/ResumenTab';
-import ListaTab from './admin/ListaTab';
-import BajasTab from './admin/BajasTab';
-import UsuariosTab from './admin/UsuariosTab';
-import VoluntariadosTab from './admin/VoluntariadosTab';
-import DarkModeToggle from './DarkModeToggle';
-import ArbolFormTab from './admin/ArbolFormTab';
-import BuzonTab from './admin/BuzonTab';
-import AyudaTab from './admin/AyudaTab';
-import AbonosTab from './admin/AbonosTab';
-import Footer from './Footer';
+import ResumenTab from './ResumenTab';
+import ListaTab from './ListaTab';
+import BajasTab from './BajasTab';
+import UsuariosTab from './UsuariosTab';
+import VoluntariadosTab from './VoluntariadosTab';
+import AdminSidebar from './AdminSidebar';
+import AdminTopbar from './AdminTopbar';
+import DarkModeToggle from '../DarkModeToggle';
+import ArbolFormTab from './ArbolFormTab';
+import BuzonTab from './BuzonTab';
+import AyudaTab from './AyudaTab';
+import AbonosTab from './AbonosTab';
+import Footer from '../Footer';
 
 const FORM_INICIAL = {
   nombre: '',
@@ -574,153 +552,32 @@ function MainPagesInicoAdmin() {
     setModoNuevoTipo(false); 
   };
 
-  const sidebarLinks = [
-    { id: 'resumen', label: 'Panel de Control', icon: LayoutDashboard },
-    { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
-    { id: 'lista', label: 'Catálogo de Especies', icon: List },
-    { id: 'bajas', label: 'Historial de Bajas', icon: History },
-    { id: 'voluntariados', label: 'Registro de Voluntariados', icon: CheckCircle },
-    { id: 'buzon', label: 'Buzón / Reportes', icon: FileText },
-  ];
-
   return (
     <div className="admin-layout">
-      {/* Sidebar Section */}
-      <aside className="admin-sidebar">
-        <div className="admin-logo-section">
-          <div className="admin-logo-icon">
-            <img src="/src/assets/logo.png" alt="Logo BioMon" className="admin-logo-img" />
-          </div>
-          <div className="admin-logo-text">
-            <h2>BioMon ADI</h2>
-            <span>Plano de Control Administrativo</span>
-          </div>
-        </div>
+      <AdminSidebar 
+        tab={tab} 
+        setTab={setTab} 
+        resetForm={resetForm} 
+        resetFormUsuario={resetFormUsuario} 
+        handleLogout={handleLogout} 
+      />
 
-        <nav className="admin-nav">
-          {sidebarLinks.map(link => (
-            <button 
-              key={link.id}
-              className={`admin-nav-item ${tab === link.id ? 'active' : ''}`}
-              onClick={() => { setTab(link.id); resetForm(); resetFormUsuario(); }}
-            >
-              <link.icon size={18} />
-              <span className="nav-label">{link.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="admin-sidebar-footer">
-          <div className={`admin-footer-link ${tab === 'ayuda' ? 'active-text' : ''}`} onClick={() => setTab('ayuda')}>
-            <HelpCircle size={16} />
-            <span>Centro de Ayuda</span>
-          </div>
-          <div className="admin-footer-link" onClick={handleLogout}>
-            <LogOut size={16} />
-            <span>Cerrar Sesión</span>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content Body */}
       <div className="admin-main-wrapper">
-        <header className="admin-topbar">
-          <div className="admin-topbar-left">
-            <h1>Centro de Control Administrativo</h1>
-          </div>
-          
-          <div className="admin-topbar-right">
-            <div className="admin-topbar-icons">
-               <DarkModeToggle />
-               <div className="admin-notification-bell-wrapper" onClick={() => setTab('buzon')}>
-                 <Bell size={20} className="admin-icon-btn" />
-                 {totalNotificaciones > 0 && (
-                   <span className="admin-notification-badge">
-                     {totalNotificaciones}
-                   </span>
-                 )}
-               </div>
-            </div>
+        <AdminTopbar 
+          totalNotificaciones={totalNotificaciones} 
+          setTab={setTab} 
+        />
 
-            <div className="admin-profile-pill">
-              <span>Panel Administrativo</span>
-              <div className="admin-avatar-placeholder">
-                <Users size={16} />
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Tab Specific Rendering */}
         <section className="admin-content-view">
-          {tab === 'resumen' && (
-            <div className="overview-dashboard">
-              {/* Stats Grid */}
-              <div className="admin-stats-grid">
-                <div className="admin-stat-card clickable" onClick={() => { setTab('usuarios'); setUserSubTab('activos'); }}>
-                  <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box green"><Users size={20} /></div>
-                  </div>
-                  <div className="admin-stat-label">Usuarios Totales</div>
-                  <div className="admin-stat-value">{usuarios.length}</div>
-                  <div className="admin-stat-subtitle">{usuarios.filter(u => u.rol === 'voluntario').length} Voluntarios</div>
-                </div>
-
-                <div className="admin-stat-card clickable" onClick={() => setTab('lista')}>
-                  <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box green"><List size={20} /></div>
-                  </div>
-                  <div className="admin-stat-label">Árboles Registrados</div>
-                  <div className="admin-stat-value">{arboles.length}</div>
-                  <div className="admin-stat-subtitle">Especies en conservación</div>
-                </div>
-
-                <div className="admin-stat-card clickable" onClick={() => { setTab('usuarios'); setUserSubTab('cancelados'); }}>
-                  <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box blue"><FileText size={20} /></div>
-                  </div>
-                  <div className="admin-stat-label">Cuentas Inactivas</div>
-                  <div className="admin-stat-value">{usuarios.filter(u => u.status === 'banned').length}</div>
-                  <div className="admin-stat-subtitle">Usuarios restringidos</div>
-                </div>
-
-                <div className="admin-stat-card clickable" onClick={() => setTab('bajas')}>
-                  <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box red"><AlertTriangle size={20} /></div>
-                  </div>
-                  <div className="admin-stat-label">Bajas Reportadas</div>
-                  <div className="admin-stat-value">{arboles.filter(a => a.estado === 'muerto').length}</div>
-                  <div className="admin-stat-subtitle">Incidencias críticas</div>
-                </div>
-              </div>
-
-              {/* Middle Section GRID */}
-              <div className="admin-middle-grid" style={{ gridTemplateColumns: '1fr' }}>
-                <div className="admin-card">
-                  <div className="admin-card-header">
-                    <h3>Últimas Especies Registradas</h3>
-                    <button className="admin-v-all-btn" style={{ width: 'auto', marginTop: 0 }} onClick={() => setTab('lista')}>Ver catálogo completo</button>
-                  </div>
-                  <div className="admin-v-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
-                    {arboles.slice(-8).reverse().map((arbol, idx) => (
-                      <div className="admin-v-item" key={idx}>
-                        <img src={arbol.imagenUrl || 'https://via.placeholder.com/50'} className="admin-v-img" alt="Specimen" />
-                        <div className="admin-v-info">
-                          <p className="admin-v-name">{arbol.nombre}</p>
-                          <p className="admin-v-meta">{arbol.tipo || 'Sin tipo'} • {arbol.familia || 'Sin familia'}</p>
-                        </div>
-                        <span className={`admin-v-badge ${arbol.estado === 'vivo' ? 'verified' : 'flagged'}`}>
-                          {arbol.estado ? arbol.estado.toUpperCase() : 'PENDIENTE'}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="tab-render-area">
+            {tab === 'resumen' && (
+              <ResumenTab 
+                usuarios={usuarios} 
+                arboles={arboles} 
+                setTab={setTab} 
+                setUserSubTab={setUserSubTab} 
+              />
+            )}
             {tab === 'lista' && <ListaTab busqueda={busqueda} setBusqueda={setBusqueda} tipoFiltro={tipoFiltro} setTipoFiltro={setTipoFiltro} tiposDisponibles={tiposDisponibles} setTab={setTab} handleEliminarTipo={handleEliminarTipo} statsTipos={statsTipos} handleUpdateStatTipo={handleUpdateStatTipo} arboles={arboles} cargando={cargando} handleEditar={handleEditar} handleAbonarArbol={handleAbonarArbol} handleEliminar={handleEliminar} handleLimpiarHistorialAbono={handleLimpiarHistorialAbono} modoEdicion={modoEdicion} handleSubmit={handleSubmit} form={form} handleChange={handleChange} modoNuevoTipo={modoNuevoTipo} setModoNuevoTipo={setModoNuevoTipo} setForm={setForm} resetForm={resetForm} />}
             {tab === 'bajas' && <BajasTab arboles={arboles} handleEditar={handleEditar} />}
             {tab === 'usuarios' && <UsuariosTab modoEdicionUsuario={modoEdicionUsuario} handleUserSubmit={handleUserSubmit} formUsuario={formUsuario} setFormUsuario={setFormUsuario} resetFormUsuario={resetFormUsuario} usuarios={usuarios} handleEditarUsuario={handleEditarUsuario} handleBanUsuario={handleBanUsuario} handleActivarUsuario={handleActivarUsuario} handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado} subTab={userSubTab} setSubTab={setUserSubTab} />}
@@ -737,5 +594,6 @@ function MainPagesInicoAdmin() {
     </div>
   );
 }
+
 
 export default MainPagesInicoAdmin;

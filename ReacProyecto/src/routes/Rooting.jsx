@@ -14,10 +14,10 @@ import Voluntariado from '../pages/Voluntariado';
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
-import UserDashboard from '../components/UserDashboard';
-import ModernUserDashboard from '../components/ModernUserDashboard';
+import UserDashboard from '../components/user/UserDashboardV2';
+import ModernUserDashboard from '../components/user/ModernUserDashboard';
 
-import VolunteerDashboard from '../components/VolunteerDashboard';
+import VolunteerDashboard from '../components/volunteer/VolunteerDashboard';
 import '../styles/Layout.css';
 import Footer from '../components/Footer';
 

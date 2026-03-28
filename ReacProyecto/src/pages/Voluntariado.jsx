@@ -1,5 +1,5 @@
 import React from 'react';
-import MainVoluntariado from '../components/MainVoluntariado';
+import MainVoluntariado from '../components/volunteer/MainVoluntariado';
 
 function Voluntariado() {
   return (

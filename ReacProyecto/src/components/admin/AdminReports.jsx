@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import services from '../services/services';
-import '../styles/AdminReports.css';
+import services from '../../services/services';
+import '../../styles/AdminReports.css';
 
 function AdminReports() {
   const [reportes, setReportes] = useState([]);

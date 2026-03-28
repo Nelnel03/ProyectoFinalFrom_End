@@ -1,5 +1,5 @@
 import React from 'react';
-import MainPagesInicoAdmin from '../components/MainPagesInicoAdmin';
+import MainPagesInicoAdmin from '../components/admin/MainPagesInicoAdmin';
 
 function InicioAdmin() {
   return <MainPagesInicoAdmin />;

@@ -343,6 +343,16 @@
       "userEmail": "kiwi@gmail.com",
       "fecha": "2026-03-27T19:23:42.018Z",
       "estado": "Leído"
+    },
+    {
+      "asunto": "mucha basura al rededor del corredor",
+      "mensaje": "dfghgfdgdsdfghjkl",
+      "userId": "ca99",
+      "userName": "GG ezz",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-28T03:02:44.268Z",
+      "estado": "Leído",
+      "id": "bNf7djnouhM"
     }
   ],
   "reportes_robados": [
@@ -378,6 +388,17 @@
       "fecha": "2026-03-28T00:30:58.950Z",
       "estado": "En Investigación",
       "id": "vvmOpMxU-Ew"
+    },
+    {
+      "tipo_arbol": "bmnlklkasasasa",
+      "ubicacion": "asasasas",
+      "descripcion": "asdsasesdfereertyuiop",
+      "userId": "ca99",
+      "userName": "GG ezz",
+      "userEmail": "g@gmail.com",
+      "fecha": "2026-03-28T03:04:07.761Z",
+      "estado": "En Investigación",
+      "id": "1FoYl52S-AQ"
     }
   ],
   "reportes_voluntariado": [
@@ -432,6 +453,16 @@
       "fecha": "2026-03-28T01:01:53.936Z",
       "estado": "Aprobada",
       "id": "sSe_ChxEAU4",
+      "visto": true
+    },
+    {
+      "userId": "ca99",
+      "userName": "GG ezz",
+      "userEmail": "g@gmail.com",
+      "mensaje": "´quiero ser voluntariado porque me importa el medio ambiente",
+      "fecha": "2026-03-28T03:04:55.176Z",
+      "estado": "Pendiente",
+      "id": "TXpCO7_4e_0",
       "visto": true
     }
   ],
