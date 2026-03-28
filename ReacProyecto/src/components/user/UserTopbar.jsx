@@ -1,5 +1,4 @@
-import React from 'react';
-import { Search, Settings, User, LogOut } from 'lucide-react';
+import { Search, Settings, User, LogOut, Menu } from 'lucide-react';
 import DarkModeToggle from '../DarkModeToggle';
 
 const UserTopbar = ({ 
@@ -8,42 +7,50 @@ const UserTopbar = ({
   searchTerm, 
   setSearchTerm, 
   user, 
-  handleLogout 
+  handleLogout,
+  onOpenSidebar,
+  isMobile
 }) => {
   return (
     <header className="top-bar">
-      <div className="top-bar-nav">
-        <button 
-          className={`top-bar-nav-link ${currentTab === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('dashboard')}
-        >
-            Panel
-        </button>
-        <button 
-          className={`top-bar-nav-link ${currentTab === 'mapa' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('mapa')}
-        >
-            Mapas de Campo
-        </button>
-        <button 
-          className={`top-bar-nav-link ${currentTab === 'historia' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('historia')}
-        >
-            Historia
-        </button>
-        <button 
-          className={`top-bar-nav-link ${currentTab === 'conocenos' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('conocenos')}
-        >
-          Conócenos
-        </button>
-        <button 
-          className={`top-bar-nav-link ${currentTab === 'juego' ? 'active' : ''}`}
-          onClick={() => setCurrentTab('juego')}
-        >
-          Mini Juego
-        </button>
-      </div>
+      <button className="mobile-menu-btn" onClick={onOpenSidebar}>
+        <Menu size={24} />
+      </button>
+
+      {!isMobile && (
+        <div className="top-bar-nav">
+          <button 
+            className={`top-bar-nav-link ${currentTab === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('dashboard')}
+          >
+              Panel
+          </button>
+          <button 
+            className={`top-bar-nav-link ${currentTab === 'mapa' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('mapa')}
+          >
+              Mapas de Campo
+          </button>
+          <button 
+            className={`top-bar-nav-link ${currentTab === 'historia' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('historia')}
+          >
+              Historia
+          </button>
+          <button 
+            className={`top-bar-nav-link ${currentTab === 'conocenos' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('conocenos')}
+          >
+            Conócenos
+          </button>
+          <button 
+            className={`top-bar-nav-link ${currentTab === 'juego' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('juego')}
+          >
+            Mini Juego
+          </button>
+        </div>
+      )}
 
       <div className="top-actions">
         <div className="search-container">

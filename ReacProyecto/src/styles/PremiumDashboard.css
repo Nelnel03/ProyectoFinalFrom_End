@@ -487,3 +487,14 @@ body {
   }
 }
 
+@media screen and (max-width: 1024px) {
+  .user-premium-header-flex {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .user-btn-logout-margin {
+    margin-left: 0;
+  }
+}

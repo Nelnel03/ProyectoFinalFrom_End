@@ -59,6 +59,15 @@ function ModernUserDashboard() {
   const [reportes, setReportes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [currentTab, setCurrentTab] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -221,12 +230,19 @@ function ModernUserDashboard() {
   };
 
   return (
-    <div className="modern-dashboard-container">
+    <div className={`modern-dashboard-container ${isMobile ? 'is-mobile' : ''}`}>
       <UserSidebar 
         currentTab={currentTab} 
-        setCurrentTab={setCurrentTab} 
+        setCurrentTab={(tab) => {
+          setCurrentTab(tab);
+          setSidebarOpen(false); // Auto-close on tab selection
+        }} 
         user={user} 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
+
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>}
 
       {/* Main Content */}
       <main className="modern-main-content">
@@ -237,6 +253,8 @@ function ModernUserDashboard() {
           setSearchTerm={setSearchTerm} 
           user={user} 
           handleLogout={handleLogout} 
+          onOpenSidebar={() => setSidebarOpen(true)}
+          isMobile={isMobile}
         />
 
         {/* Content Area */}

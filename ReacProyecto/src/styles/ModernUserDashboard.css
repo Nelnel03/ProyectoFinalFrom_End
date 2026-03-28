@@ -167,7 +167,8 @@
   flex-grow: 1;
   padding: 2rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0; 
+  width: calc(100% - 260px);
 }
 
 .top-bar {
@@ -223,8 +224,16 @@
   background: var(--search-bg);
   padding: 0.5rem 1rem;
   border-radius: 30px;
-  width: 300px;
-  transition: background-color 0.3s;
+  width: 350px;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+
+.search-container:focus-within {
+  background: var(--card-bg);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  width: 400px;
 }
 
 .search-container input {
@@ -233,6 +242,8 @@
   margin-left: 0.5rem;
   font-family: inherit;
   width: 100%;
+  outline: none;
+  color: var(--text-main);
 }
 
 .top-actions {
@@ -706,29 +717,173 @@
 
 .badge-label.gold { background: #f59e0b; color: #451a03; }
 
-/* Responsive */
-@media (max-width: 1200px) {
+
+/* ==========================================================================
+   ROBUST RESPONSIVE SYSTEM
+   ========================================================================== */
+
+/* 1. Global Overflow Fix */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+.modern-dashboard-container {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100vw !important;
+}
+
+/* 2. Drawer Navigation Mobile */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9998;
+  opacity: 1;
+}
+
+/* 3. Mobile Layout Styles (Triggered by class and/or media query) */
+.modern-dashboard-container.is-mobile .modern-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 9999;
+  transform: translateX(-102%); /* Hidden by default */
+  width: 280px !important;
+  background: var(--sidebar-bg);
+  box-shadow: 15px 0 50px rgba(0,0,0,0.2);
+}
+
+.modern-dashboard-container.is-mobile .modern-sidebar.mobile-open {
+  transform: translateX(0);
+}
+
+.modern-dashboard-container.is-mobile .modern-main-content {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 1rem !important;
+  max-width: 100vw !important;
+}
+
+.modern-dashboard-container.is-mobile .top-bar {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 1rem;
+}
+
+.modern-dashboard-container.is-mobile .top-actions {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+}
+
+.modern-dashboard-container.is-mobile .search-container {
+  display: none !important; /* Most robust way: Hide it if it's breaking layout */
+}
+
+/* Hero & Grid for Mobile */
+@media screen and (max-width: 1024px) {
+  .hero-profile {
+    height: auto !important;
+    min-height: 250px;
+    border-radius: 12px;
+  }
+
+  .hero-overlay {
+    position: relative !important;
+    background: linear-gradient(to bottom, transparent, rgba(6, 78, 59, 0.9)) !important;
+    padding: 1rem !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1rem;
+  }
+
+  .profile-info-main {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.5rem;
+  }
+
+  .profile-img-container {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .profile-details h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
   .dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+  }
+
+  .impact-banner {
+    flex-direction: column !important;
+    padding: 1.5rem !important;
+    gap: 1.5rem;
+  }
+
+  .impact-value-big span:first-child {
+    font-size: 3rem !important;
+  }
+
+  .impact-badges {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+    width: 100%;
+  }
+
+  .impact-badge-card {
+    width: 100% !important;
+    padding: 0.75rem !important;
   }
 }
 
-@media (max-width: 768px) {
-  .modern-sidebar {
-    display: none;
-  }
+@media screen and (max-width: 480px) {
   .stats-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr !important;
   }
-  .impact-banner {
-    flex-direction: column;
-    text-align: center;
-  }
-  .impact-badges {
-    margin-top: 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+}
+
+.mobile-menu-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-green);
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-close-btn {
+  display: block !important;
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  background: #f1f5f9;
+  color: var(--primary-green);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  z-index: 10000;
 }
 
 /* Map Embedded in Dashboard */
@@ -812,3 +967,7 @@
 
 
 
+.profile-details h1 {
+  word-break: break-word !important;
+  max-width: 100% !important;
+}

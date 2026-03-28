@@ -132,3 +132,15 @@
   color: #991b1b;
   border: 1px solid #fecaca;
 }
+@media screen and (max-width: 768px) {
+  .user-reports-container {
+    padding: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .report-form input,
+  .report-form textarea {
+    padding: 0.6rem;
+    font-size: 0.95rem;
+  }
+}

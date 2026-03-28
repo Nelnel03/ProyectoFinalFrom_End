@@ -9,12 +9,17 @@ import {
   Trophy, 
   UserCheck, 
   Settings, 
-  HelpCircle 
+  HelpCircle,
+  X // Import X for close
 } from 'lucide-react';
 
-const UserSidebar = ({ currentTab, setCurrentTab, user }) => {
+const UserSidebar = ({ currentTab, setCurrentTab, user, isOpen, onClose }) => {
   return (
-    <aside className="modern-sidebar">
+    <aside className={`modern-sidebar ${isOpen ? 'mobile-open' : ''}`}>
+      <button className="mobile-close-btn" onClick={onClose}>
+        <X size={24} />
+      </button>
+
       <div className="sidebar-logo">
         <div className="sidebar-logo-icon">
           <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
