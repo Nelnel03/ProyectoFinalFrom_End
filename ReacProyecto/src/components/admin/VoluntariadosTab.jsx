@@ -17,6 +17,7 @@ import '../../styles/MainPagesInicoAdmin.css';
 import '../../styles/VoluntariadoPremium.css';
 
 function VoluntariadosTab({
+  refrescarNotificaciones,
   modoEdicionVoluntariado,
   handleVoluntariadoSubmit,
   formVoluntariado,
@@ -158,11 +159,12 @@ function VoluntariadosTab({
 
         if (motivo) {
           try {
-            const reporteRechazado = { ...log, estado: 'rechazado', motivoRechazo: motivo };
+            const reporteRechazado = { ...log, estado: 'rechazado', motivoRechazo: motivo, visto: true };
             await services.putReporteVoluntariado(reporteRechazado, log.id);
             const updated = logs.map(l => l.id === log.id ? reporteRechazado : l);
             setLogs(updated);
             if (selectedLog?.id === log.id) setSelectedLog(reporteRechazado);
+            if (refrescarNotificaciones) refrescarNotificaciones();
             Swal.fire('Rechazado', 'El reporte de horas ha sido rechazado.', 'success');
           } catch (error) {
             Swal.fire('Error', 'No se pudo rechazar el reporte.', 'error');
@@ -198,11 +200,12 @@ function VoluntariadosTab({
     if (result.isConfirmed && result.value !== undefined) {
       const horasFinales = parseFloat(result.value);
       try {
-        const reporteActualizado = { ...log, estado: 'aprobado', horas: horasFinales };
+        const reporteActualizado = { ...log, estado: 'aprobado', horas: horasFinales, visto: true };
         await services.putReporteVoluntariado(reporteActualizado, log.id);
         const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
         setLogs(updated);
         if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        if (refrescarNotificaciones) refrescarNotificaciones();
         Swal.fire({ 
           icon: 'success', 
           title: '¡Horas aprobadas!', 
@@ -219,8 +222,10 @@ function VoluntariadosTab({
   const handleVerEvidencia = (log) => {
     if (!log.pruebas) {
       Swal.fire({ icon: 'info', title: 'Sin Evidencias', text: 'El voluntario no adjuntó un archivo de evidencia.' });
+      handleMarcarComoVisto(log);
       return;
     }
+    handleMarcarComoVisto(log);
     Swal.fire({
       title: 'Evidencia del Trabajo',
       text: log.tareas || 'Sin descripción adicional',
@@ -230,6 +235,20 @@ function VoluntariadosTab({
       confirmButtonColor: '#10b981',
       confirmButtonText: 'Cerrar'
     });
+  };
+
+  const handleMarcarComoVisto = async (log) => {
+    if (log.visto) return;
+    try {
+      const reporteActualizado = { ...log, visto: true };
+      await services.putReporteVoluntariado(reporteActualizado, log.id);
+      const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
+      setLogs(updated);
+      if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+      if (refrescarNotificaciones) refrescarNotificaciones();
+    } catch (error) {
+      console.error('Error al marcar como visto:', error);
+    }
   };
 
   const handleSolicitarCorreccion = async (log) => {
@@ -265,11 +284,12 @@ function VoluntariadosTab({
 
     if (date) {
       try {
-        const reporteActualizado = { ...log, estado: 'asignado', fecha: date };
+        const reporteActualizado = { ...log, estado: 'asignado', fecha: date, visto: true };
         await services.putReporteVoluntariado(reporteActualizado, log.id);
         const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
         setLogs(updated);
         if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        if (refrescarNotificaciones) refrescarNotificaciones();
         Swal.fire({ icon: 'success', title: 'Asignación Aprobada', text: 'Se ha asignado la labor al voluntario exitosamente.', timer: 2500, showConfirmButton: false });
       } catch (error) {
         Swal.fire('Error', 'No se pudo aprobar la asignación.', 'error');
@@ -289,11 +309,12 @@ function VoluntariadosTab({
     });
     if (motivo !== undefined) {
       try {
-        const reporteActualizado = { ...log, estado: 'rechazado_pre', motivoRechazo: motivo };
+        const reporteActualizado = { ...log, estado: 'rechazado_pre', motivoRechazo: motivo, visto: true };
         await services.putReporteVoluntariado(reporteActualizado, log.id);
         const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
         setLogs(updated);
         if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        if (refrescarNotificaciones) refrescarNotificaciones();
         Swal.fire({ icon: 'success', title: 'Asignación Rechazada', text: 'El voluntario no podrá realizar esta labor.', timer: 2500, showConfirmButton: false });
       } catch (error) {
         Swal.fire('Error', 'No se pudo rechazar la asignación.', 'error');
@@ -482,7 +503,7 @@ function VoluntariadosTab({
 
             {/* Lista de logs */}
             <div className="premium-logs-list">
-              <div className="premium-log-row-header" style={{ padding: '10px 20px', fontSize: '0.7rem', gridTemplateColumns: '1fr 130px 150px 80px 110px auto' }}>
+              <div className="premium-log-row-header" style={{ padding: '10px 20px', fontSize: '0.7rem' }}>
                 <span>Voluntario</span>
                 <span>Fecha</span>
                 <span>Actividad</span>
@@ -497,10 +518,12 @@ function VoluntariadosTab({
                 ) : logsFiltrados.length > 0 ? (
                   logsFiltrados.map(log => (
                     <div key={log.id}
-                      className="premium-log-item"
-                      style={{ padding: '14px 20px', gridTemplateColumns: '1fr 130px 150px 80px 110px auto', cursor: 'default' }}
+                      className={`premium-log-item ${!log.visto ? 'unread-card' : ''}`}
+                      onClick={() => !log.visto && handleMarcarComoVisto(log)}
+                      style={{ padding: '14px 20px', cursor: 'pointer' }}
                     >
-                      <div className="premium-vol-profile">
+                      <div className="premium-vol-profile title-with-badge">
+                        {!log.visto && <span className="unread-dot-mini" title="No visto"></span>}
                         <div className="premium-avatar" style={{ width: '35px', height: '35px' }}>
                           {log.voluntarioNombre?.charAt(0)}
                         </div>
@@ -509,18 +532,18 @@ function VoluntariadosTab({
                           <span style={{ fontSize: '0.7rem' }}>{log.tareas?.substring(0, 30) || 'Sin descripción'}...</span>
                         </div>
                       </div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--premium-text-muted)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <div data-label="Fecha" style={{ fontSize: '0.85rem', color: 'var(--premium-text-muted)', display: 'flex', alignItems: 'center', gap: '5px' }}>
                         <CalendarDays size={13} /> {log.fecha}
                       </div>
-                      <div>
+                      <div data-label="Actividad">
                         <span className={`premium-task-badge ${getTaskColor(log.tipoTarea)}`}>{log.tipoTarea}</span>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{log.horas}h</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem' }}>
+                      <div data-label="Horas" style={{ fontWeight: 700, fontSize: '0.9rem' }}>{log.horas}h</div>
+                      <div data-label="Estado" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem' }}>
                         <div style={{ width: 8, height: 8, borderRadius: '50%', background: log.estado === 'enviado' ? '#0f766e' : log.estado.startsWith('rechazado') ? '#ef4444' : log.estado === 'solicitado' ? '#3b82f6' : log.estado === 'en_curso' ? '#8b5cf6' : log.estado === 'asignado' ? '#a855f7' : '#10b981', flexShrink: 0 }}></div>
-                        {log.estado === 'enviado' ? 'Terminada' : log.estado.startsWith('rechazado') ? 'Rechazado' : log.estado === 'solicitado' ? 'Solicitado' : log.estado === 'en_curso' ? 'En Curso' : log.estado === 'asignado' ? 'Por Iniciar' : 'Aprobado'}
+                        <span>{log.estado === 'enviado' ? 'Terminada' : log.estado.startsWith('rechazado') ? 'Rechazado' : log.estado === 'solicitado' ? 'Solicitado' : log.estado === 'en_curso' ? 'En Curso' : log.estado === 'asignado' ? 'Por Iniciar' : 'Aprobado'}</span>
                       </div>
-                      <div>
+                      <div className="premium-actions-cell" data-label="Acciones">
                         {log.estado === 'aprobado' ? (
                           <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: '#d1fae5', color: '#065f46', whiteSpace: 'nowrap' }}>
                             ✓ Aprobado
@@ -532,13 +555,13 @@ function VoluntariadosTab({
                         ) : log.estado === 'solicitado' ? (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <button
-                              onClick={() => handleAprobarAsignacion(log)}
+                              onClick={(e) => { e.stopPropagation(); handleAprobarAsignacion(log); }}
                               style={{ padding: '6px 10px', borderRadius: '20px', border: 'none', background: '#3b82f6', color: '#fff', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                             >
                               <Check size={12} /> Asignar
                             </button>
                             <button
-                              onClick={() => handleRechazarAsignacion(log)}
+                              onClick={(e) => { e.stopPropagation(); handleRechazarAsignacion(log); }}
                               style={{ padding: '6px 10px', borderRadius: '20px', border: 'none', background: '#fee2e2', color: '#991b1b', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                             >
                               <XCircle size={12} /> Rechazar
@@ -555,14 +578,14 @@ function VoluntariadosTab({
                         ) : (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <button
-                              onClick={() => handleVerEvidencia(log)}
+                              onClick={(e) => { e.stopPropagation(); handleVerEvidencia(log); }}
                               style={{ padding: '6px 12px', borderRadius: '20px', border: '1px solid #10b981', color: '#10b981', background: 'transparent', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}
                               title="Ver Evidencia"
                             >
                               <Eye size={13} /> Ver
                             </button>
                             <button
-                              onClick={() => handleAprobarHoras(log)}
+                              onClick={(e) => { e.stopPropagation(); handleAprobarHoras(log); }}
                               style={{ padding: '6px 14px', borderRadius: '20px', border: 'none', background: 'var(--premium-forest-dark)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}
                             >
                               <Check size={13} /> Aprobar

@@ -117,6 +117,7 @@ function ModernUserDashboard() {
   };
 
   const handleLogout = () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
     Swal.fire({
       title: '¿Cerrar sesión?',
       text: "¿Estás seguro de que quieres salir?",
@@ -125,7 +126,9 @@ function ModernUserDashboard() {
       confirmButtonColor: '#064e3b',
       cancelButtonColor: '#ef4444',
       confirmButtonText: 'Sí, Salir',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      background: isDark ? '#1e1e1e' : '#fff',
+      color: isDark ? '#fff' : '#545454'
     }).then((result) => {
       if (result.isConfirmed) {
         sessionStorage.removeItem('isAuthenticated');

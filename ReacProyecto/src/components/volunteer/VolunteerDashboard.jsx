@@ -77,6 +77,7 @@ function VolunteerDashboard() {
   };
 
   const handleLogout = () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
     Swal.fire({
       title: '¿Cerrar sesión?',
       text: 'Tendrás que volver a ingresar tus credenciales.',
@@ -85,7 +86,9 @@ function VolunteerDashboard() {
       confirmButtonColor: SIDEBAR_ACTIVE,
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, salir',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      background: isDark ? '#1e1e1e' : '#fff',
+      color: isDark ? '#fff' : '#545454'
     }).then((result) => {
       if (result.isConfirmed) {
         sessionStorage.clear();
@@ -216,12 +219,6 @@ function VolunteerDashboard() {
 
           <div className="top-bar-right">
             <DarkModeToggle />
-            {!isMobile && (
-              <>
-                <Bell size={19} className="top-icon" />
-                <Settings size={19} className="top-icon" />
-              </>
-            )}
             <div className="top-profile-pill">
               <div className="mini-avatar">
                 {user?.fotoPerfil ? <img src={user.fotoPerfil} alt="" /> : user?.nombre?.charAt(0) || 'V'}

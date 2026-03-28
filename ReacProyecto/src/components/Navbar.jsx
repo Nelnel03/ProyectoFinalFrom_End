@@ -16,6 +16,7 @@ const Navbar = () => {
     }, [location]);
 
     const handleLogout = () => {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
         Swal.fire({
             title: '¿Cerrar sesión?',
             text: "¿Estás seguro de que quieres salir?",
@@ -24,7 +25,9 @@ const Navbar = () => {
             confirmButtonColor: '#344e41',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, Salir',
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar',
+            background: isDark ? '#1e1e1e' : '#fff',
+            color: isDark ? '#fff' : '#545454'
         }).then((result) => {
             if (result.isConfirmed) {
                 sessionStorage.clear(); // Limpiamos todo para estar seguros

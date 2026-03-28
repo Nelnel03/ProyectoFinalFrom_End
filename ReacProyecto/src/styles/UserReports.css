@@ -144,3 +144,36 @@
     font-size: 0.95rem;
   }
 }
+
+/* --- DARK MODE --- */
+[data-theme='dark'] .user-reports-container {
+  background-color: #161b22;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .user-reports-container h2 {
+  color: #4bfc5a;
+}
+
+[data-theme='dark'] .user-reports-container p {
+  color: #9ca3af;
+}
+
+[data-theme='dark'] .report-form label {
+  color: #e5e5e5;
+}
+
+[data-theme='dark'] .report-form input,
+[data-theme='dark'] .report-form textarea,
+[data-theme='dark'] .report-form select {
+  background-color: #0d1117;
+  color: #fff;
+  border-color: #30363d;
+}
+
+[data-theme='dark'] .report-form input:focus,
+[data-theme='dark'] .report-form textarea:focus,
+[data-theme='dark'] .report-form select:focus {
+  border-color: #4bfc5a;
+  box-shadow: 0 0 0 2px rgba(75, 252, 90, 0.2);
+}

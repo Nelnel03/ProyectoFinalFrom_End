@@ -1390,4 +1390,252 @@
   color: #1a4d2e;
 }
 
+/* ==========================================================================
+   SISTEMA DE NOTIFICACIONES Y PUNTOS ROJOS (BUZÓN Y BITÁCORA)
+   ========================================================================== */
+
+.unread-card {
+  background-color: #fffbeb !important; /* Tono cálido para indicar pendiente */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  border-left: 4px solid #ef4444 !important;
+}
+
+[data-theme='dark'] .unread-card {
+  background-color: #1a1608 !important;
+  border-left: 4px solid #ef4444 !important;
+}
+
+.title-with-badge {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.unread-dot-mini {
+  width: 10px;
+  height: 10px;
+  background-color: #ef4444; 
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+  animation: pulseDot 1.5s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.unread-card:hover {
+  background-color: #fef3c7 !important;
+  transform: translateX(4px);
+}
+
+[data-theme='dark'] .unread-card:hover {
+  background-color: #242010 !important;
+}
+
+/* ==========================================================================
+   TABLE GRID STYLES FOR PREMIUM LOGS (VOLUNTARIADOS BITÁCORA)
+   ========================================================================== */
+
+.premium-logs-view-wrapper {
+  padding: 1rem 0;
+}
+
+.premium-log-row-header {
+  display: grid !important;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #64748b;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
+  margin-bottom: 12px;
+}
+
+[data-theme='dark'] .premium-log-row-header {
+  color: #94a3b8;
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.premium-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.premium-log-item {
+  display: grid !important;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+[data-theme='dark'] .premium-log-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.premium-log-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  border-color: #94a3b8;
+}
+
+.premium-vol-profile {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.premium-avatar {
+  background: #2d6a4f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3);
+}
+
+.premium-vol-name h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.premium-vol-name span {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  display: block;
+}
+
+.premium-task-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.1rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  display: inline-block;
+  font-size: 0.75rem;
+}
+
+.bg-fauna { background: #fee2e2; color: #991b1b; }
+.bg-soil  { background: #fef3c7; color: #92400e; }
+.bg-trail { background: #dcfce7; color: #166534; }
+
+[data-theme='dark'] .bg-fauna { background: rgba(153, 27, 27, 0.2); color: #fca5a5; }
+[data-theme='dark'] .bg-soil  { background: rgba(146, 64, 14, 0.2); color: #fbbf24; }
+[data-theme='dark'] .bg-trail { background: rgba(22, 101, 52, 0.2); color: #86efac; }
+
+.premium-log-row-header, .premium-log-item {
+  grid-template-columns: 1fr 130px 150px 80px 110px auto;
+}
+
+/* ==========================================================================
+   SISTEMA DE RESPONSIVIDAD UNIVERSAL - ADMIN (PC, TABLET, MÓVIL)
+   ========================================================================== */
+
+/* TABLETS Y PC PEQUEÑAS (≤ 1024px) */
+@media screen and (max-width: 1024px) {
+  .admin-user-list,
+  .solicitudes-grid,
+  .admin-abonos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 1rem;
+  }
+}
+
+/* MÓVILES GRANDES Y TABLETS EN RETRATO (≤ 992px) */
+@media screen and (max-width: 992px) {
+  /* La bitácora de labores se convierte en tarjetas verticales */
+  .premium-log-row-header {
+    display: none !important;
+  }
+  
+  .premium-log-item {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+    padding: 20px !important;
+    position: relative;
+    border-left: 6px solid var(--premium-forest-dark);
+  }
+
+  .premium-vol-profile {
+    border-bottom: 1.5px solid rgba(0,0,0,0.05);
+    padding-bottom: 12px;
+    margin-bottom: 5px;
+  }
+  
+  [data-theme='dark'] .premium-vol-profile {
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+
+  /* Etiquetas informativas para móvil (opcional, pero mejora UX) */
+  .premium-log-item > div:not(.premium-vol-profile) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .premium-log-item > div:not(.premium-vol-profile)::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--premium-text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .premium-actions-cell {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(0,0,0,0.1);
+    justify-content: center !important;
+    width: 100%;
+  }
+
+  [data-theme='dark'] .premium-actions-cell {
+    border-top-color: rgba(255,255,255,0.15);
+  }
+}
+
+/* SMARTPHONES PEQUEÑOS (≤ 600px) */
+@media screen and (max-width: 600px) {
+  .admin-header-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .admin-controls-row {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .admin-user-form {
+    padding: 1rem !important;
+  }
+
+  .admin-btn-user-submit, 
+  .admin-btn-user-cancel {
+    width: 100%;
+  }
+
+  /* Ajustes de tipografía */
+  .premium-vol-name h4 {
+    font-size: 0.85rem;
+  }
+}
+
 
