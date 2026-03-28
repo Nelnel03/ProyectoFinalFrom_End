@@ -68,6 +68,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 2.5rem;
+  justify-content: space-between;
 }
 
 .admin-logo-icon {
@@ -1145,9 +1146,6 @@ html, body {
 
 /* Sidebar close button (mobile only) */
 .admin-sidebar-close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   background: rgba(255,255,255,0.1);
   border: none;
   color: white;
@@ -1158,6 +1156,8 @@ html, body {
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 .admin-sidebar-close-btn:hover {
   background: rgba(255,255,255,0.2);

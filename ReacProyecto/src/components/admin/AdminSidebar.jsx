@@ -23,11 +23,6 @@ const AdminSidebar = ({ tab, setTab, resetForm, resetFormUsuario, handleLogout, 
 
   return (
     <aside className={`admin-sidebar ${isMobile ? (isOpen ? 'mobile-open' : 'mobile-hidden') : ''}`}>
-      {isMobile && (
-        <button className="admin-sidebar-close-btn" onClick={onClose}>
-          <X size={20} />
-        </button>
-      )}
 
       <div className="admin-logo-section">
         <div className="admin-logo-icon">
@@ -37,6 +32,11 @@ const AdminSidebar = ({ tab, setTab, resetForm, resetFormUsuario, handleLogout, 
           <h2>BioMon ADI</h2>
           <span>Plano de Control Administrativo</span>
         </div>
+        {isMobile && (
+          <button className="admin-sidebar-close-btn" onClick={onClose}>
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <nav className="admin-nav">

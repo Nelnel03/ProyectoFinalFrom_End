@@ -9,6 +9,13 @@ html, body {
     width: 100% !important;
 }
 
+:root {
+  --premium-mint-light: #f0fdf4;
+  --premium-border: #e2e8f0;
+  --premium-white: #ffffff;
+  --premium-text-main: #1a2e1a;
+}
+
 .premium-vol-layout {
     display: flex !important;
     min-height: 100vh;
@@ -35,6 +42,9 @@ html, body {
 .sidebar-logo-container {
     padding: 1.5rem 1.5rem 1.2rem;
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .sidebar-title {
@@ -53,6 +63,23 @@ html, body {
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
+}
+
+.mobile-close-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.mobile-close-btn:hover {
+    background: rgba(255,255,255,0.2);
 }
 
 .sidebar-quick-stats {
@@ -294,16 +321,6 @@ html, body {
     border: none;
     padding: 8px;
     border-radius: 8px;
-    cursor: pointer;
-}
-
-.mobile-close-btn {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: transparent;
-    color: white;
-    border: none;
     cursor: pointer;
 }
 

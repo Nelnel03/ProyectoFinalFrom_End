@@ -138,15 +138,17 @@ function VolunteerDashboard() {
 
       {/* ── SIDEBAR ── */}
       <aside className={`premium-sidebar ${sidebarOpen ? 'mobile-open' : ''}`}>
-        {isMobile && (
-          <button className="mobile-close-btn" onClick={() => setSidebarOpen(false)}>
-            <XCircle size={24} />
-          </button>
-        )}
 
         <div className="sidebar-logo-container">
-          <h2 className="sidebar-title">Centro de Control</h2>
-          <span className="sidebar-subtitle">Panel de Voluntario</span>
+          <div>
+            <h2 className="sidebar-title">Centro de Control</h2>
+            <span className="sidebar-subtitle">Panel de Voluntario</span>
+          </div>
+          {isMobile && (
+            <button className="mobile-close-btn" onClick={() => setSidebarOpen(false)}>
+              <XCircle size={20} />
+            </button>
+          )}
         </div>
 
         <div className="sidebar-quick-stats">

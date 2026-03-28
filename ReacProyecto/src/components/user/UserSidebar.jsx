@@ -10,24 +10,25 @@ import {
   UserCheck, 
   Settings, 
   HelpCircle,
-  X // Import X for close
+  X
 } from 'lucide-react';
 
 const UserSidebar = ({ currentTab, setCurrentTab, user, isOpen, onClose }) => {
   return (
     <aside className={`modern-sidebar ${isOpen ? 'mobile-open' : ''}`}>
-      <button className="mobile-close-btn" onClick={onClose}>
-        <X size={24} />
-      </button>
-
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">
-          <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="sidebar-logo-icon">
+            <img src="/src/assets/logo.png" alt="Logo de BioMon" className="sidebar-logo-img" />
+          </div>
+          <div className="logo-text">
+            <h2>Biomon ADI</h2>
+            <span>Portal de Conservación</span>
+          </div>
         </div>
-        <div className="logo-text">
-          <h2>Biomon ADI</h2>
-          <span>Portal de Conservación</span>
-        </div>
+        <button className="mobile-close-btn" onClick={onClose}>
+          <X size={20} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
