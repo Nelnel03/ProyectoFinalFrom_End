@@ -109,6 +109,8 @@
       "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.CkAShpmv48U9KCHP91-MIgHaC2%3Fpid%3DApi&f=1&ipt=847f42216f3c767ac74d1ee52fa0468a61fd1f96e6db5ea8a63643a3eb0809da&ipo=images"
     },
     {
+
+
       "id": "0029",
       "nombre": "Steven Salas",
       "email": "salas@gamil.com",
@@ -225,7 +227,9 @@
       "direccion": "sssssssssssssssssss",
       "password": "111111",
       "rol": "user",
-      "id": "DVAlcBR3ZBo"
+      "id": "DVAlcBR3ZBo",
+      "status": "banned",
+      "motivoBan": "Datos insuficientes"
     },
     {
       "id": "3764",
@@ -263,6 +267,7 @@
       "password": "12345678",
       "rol": "user",
       "fotoPerfil": "https://lens.usercontent.google.com/banana?agsi=CmdnbG9iYWw6OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAwZWI6MToyNGQ3MjYzNmQ1ZmYzMzI2OjAwMDA1NWNmZWM3MDAyNmQ6MDAwMDAyNDhmODgwMzM2ODowMDA2NGUwNjVhMzQzNmNmEAI="
+
     },
     {
       "nombre": "Steven Salas",
@@ -272,7 +277,10 @@
       "rol": "voluntario",
       "fotoPerfil": "",
       "id": "4P0SqJa4lw0"
+
     }
+
+
   ],
   "stats_tipos": [
     {

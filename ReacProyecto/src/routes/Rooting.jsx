@@ -48,7 +48,12 @@ function MainLayout() {
           Si es visitante normal, mostramos el Nav global.
           Si es login o reset, no mostramos nada (form minimal).
       */}
-      {!isAuthRoute && !isUserDashboard && !isAdminRoute && (isPremiumRoute ? <Navbar /> : <Nav />)}
+      {!isAuthRoute && 
+       !isAdminRoute && 
+       !location.pathname.startsWith('/dashboard-voluntario') && 
+       !location.pathname.startsWith('/dashboard-user') && 
+       location.pathname !== '/voluntariado' && 
+       (isPremiumRoute ? <Navbar /> : <Nav />)}
 
       <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
         <Routes>
@@ -102,7 +107,7 @@ function MainLayout() {
           />
         </Routes>
       </div>
-      {location.pathname !== '/mapa' && !isAdminRoute && <Footer />}
+      {location.pathname !== '/mapa' && location.pathname !== '/voluntariado' && location.pathname !== '/dashboard-voluntario' && !isAdminRoute && <Footer />}
 
 
     </div>

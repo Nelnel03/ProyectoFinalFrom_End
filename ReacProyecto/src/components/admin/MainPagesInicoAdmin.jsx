@@ -552,6 +552,17 @@ function MainPagesInicoAdmin() {
     setModoNuevoTipo(false); 
   };
 
+
+  const sidebarLinks = [
+    { id: 'resumen', label: 'Panel de Control', icon: LayoutDashboard },
+    { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
+    { id: 'lista', label: 'Catálogo de Especies', icon: List },
+    { id: 'bajas', label: 'Historial de Bajas', icon: History },
+    { id: 'voluntariados', label: 'Bitácora de Voluntarios', icon: CheckCircle },
+    { id: 'buzon', label: 'Buzón / Reportes', icon: FileText },
+  ];
+
+
   return (
     <div className="admin-layout">
       <AdminSidebar 
