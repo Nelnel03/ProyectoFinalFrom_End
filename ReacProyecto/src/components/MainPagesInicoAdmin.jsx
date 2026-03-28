@@ -579,7 +579,7 @@ function MainPagesInicoAdmin() {
     { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
     { id: 'lista', label: 'Catálogo de Especies', icon: List },
     { id: 'bajas', label: 'Historial de Bajas', icon: History },
-    { id: 'voluntariados', label: 'Registro de Voluntariados', icon: CheckCircle },
+    { id: 'voluntariados', label: 'Bitácora de Voluntarios', icon: CheckCircle },
     { id: 'buzon', label: 'Buzón / Reportes', icon: FileText },
   ];
 
