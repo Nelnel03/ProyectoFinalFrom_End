@@ -78,6 +78,7 @@ export {
 export {
   getReportesVoluntariado,
   postReporteVoluntariado,
+  putReporteVoluntariado,
 } from "./reportesVoluntariado.service.jsx";
 
 export {

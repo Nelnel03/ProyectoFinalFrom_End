@@ -153,45 +153,7 @@ function UserProfile({ user, onUpdateUser }) {
           <button 
             type="button" 
             className="btn-apply-volunteer"
-            onClick={async () => {
-              const result = await Swal.fire({
-                title: '¿Quieres ser Voluntario?',
-                text: "Esto enviará una solicitud al administrador para su revisión.",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#344e41',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '¡Sí, enviar solicitud!',
-                cancelButtonText: 'Cancelar'
-              });
-
-              if (result.isConfirmed) {
-                try {
-                  setLoading(true);
-                  const nuevaSolicitud = {
-                    userId: user.id,
-                    userName: user.nombre,
-                    userEmail: user.email,
-                    fechaSolicitud: new Date().toISOString().split('T')[0],
-                    estado: 'pendiente'
-                  };
-                  await services.postSolicitudVoluntariado(nuevaSolicitud);
-                  setSolicitud(nuevaSolicitud);
-                  
-                  await Swal.fire({
-                    title: 'Solicitud Enviada',
-                    text: 'El administrador revisará tu perfil pronto. Te notificaremos una vez sea aprobada.',
-                    icon: 'success',
-                    confirmButtonColor: '#344e41'
-                  });
-                } catch (error) {
-                  console.error(error);
-                  Swal.fire('Error', 'No se pudo enviar la solicitud.', 'error');
-                } finally {
-                  setLoading(false);
-                }
-              }
-            }}
+            onClick={() => onTabChange && onTabChange('solicitud_voluntariado')}
           >
             Postularse Ahora
           </button>

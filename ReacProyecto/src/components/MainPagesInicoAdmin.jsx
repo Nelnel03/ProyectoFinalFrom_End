@@ -41,6 +41,8 @@ import DarkModeToggle from './DarkModeToggle';
 import ArbolFormTab from './admin/ArbolFormTab';
 import BuzonTab from './admin/BuzonTab';
 import AyudaTab from './admin/AyudaTab';
+import AbonosTab from './admin/AbonosTab';
+import Footer from './Footer';
 
 const FORM_INICIAL = {
   nombre: '',
@@ -107,6 +109,8 @@ function MainPagesInicoAdmin() {
   const [formAbono, setFormAbono] = useState(ABONO_FORM_INICIAL);
   const [modoEdicionAbono, setModoEdicionAbono] = useState(false);
   const [idEditandoAbono, setIdEditandoAbono] = useState(null);
+  const [userSubTab, setUserSubTab] = useState('activos'); 
+  const [totalNotificaciones, setTotalNotificaciones] = useState(0);
 
   const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
   const [busqueda, setBusqueda] = useState(''); 
@@ -136,23 +140,40 @@ function MainPagesInicoAdmin() {
 
     setAdminName(user.nombre);
     cargarArboles();
+
+    // POLLEO EN TIEMPO REAL (Simulación con Intervalo de 30s)
+    const intervalId = setInterval(() => {
+      cargarArboles();
+    }, 30000); 
+
+    return () => clearInterval(intervalId);
   }, [navigate]);
 
   const cargarArboles = async () => {
     setCargando(true);
     try {
-      const [datosArboles, datosStats, datosUsuarios, datosEmpleados, datosAbonos] = await Promise.all([
+      const [datosArboles, datosStats, datosUsuarios, datosVol, datosAbonos, datosSoporte, datosRobos, datosSolicitudes, datosLabores] = await Promise.all([
         services.getArboles(),
         services.getStatsTipos(),
         services.getUsuarios(),
         services.getVoluntariados(),
-        services.getAbonos()
+        services.getAbonos(),
+        services.getReportes(),
+        services.getReportesRobados(),
+        services.getSolicitudesVoluntariado(),
+        services.getReportesVoluntariado()
       ]);
       setArboles(datosArboles || []);
       setStatsTipos(datosStats || []);
       setUsuarios(datosUsuarios || []);
-      setVoluntariados(datosEmpleados || []);
+      setVoluntariados(datosVol || []);
       setAbonos(datosAbonos || []);
+      
+      const unreadSoporte = (datosSoporte || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente').length;
+      const unreadRobos = (datosRobos || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente').length;
+      const unreadSolicitudes = (datosSolicitudes || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente' && !r.visto).length;
+      const unreadLabores = (datosLabores || []).filter(r => !r.visto).length;
+      setTotalNotificaciones(unreadSoporte + unreadRobos + unreadSolicitudes + unreadLabores);
     } catch (err) {
       mostrarMensaje('Error al cargar la información.', 'error');
     } finally {
@@ -477,8 +498,16 @@ function MainPagesInicoAdmin() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'tipoSelector' && value === '___nuevo___') { setModoNuevoTipo(true); setForm({ ...form, tipo: '' }); return; }
-    if (name === 'tipoSelector') { setModoNuevoTipo(false); setForm({ ...form, tipo: value }); return; }
+    if (name === 'tipoSelector') {
+      if (value === '___nuevo___') {
+        setModoNuevoTipo(true);
+        setForm({ ...form, tipo: '' });
+      } else {
+        setModoNuevoTipo(false);
+        setForm({ ...form, tipo: value });
+      }
+      return;
+    }
     setForm({ ...form, [name]: value });
   };
 
@@ -489,13 +518,31 @@ function MainPagesInicoAdmin() {
       return;
     }
     try {
-      if (modoEdicion) await services.putArboles(form, idEditando);
-      else await services.postArboles(form);
-      resetForm(); setTab('lista'); await cargarArboles();
-    } catch (err) { Swal.fire('Error', 'Error al guardar árbol', 'error'); }
+      // Normalizamos el tipo a minúsculas para consistencia en la base de datos
+      const formNormalizado = { 
+        ...form, 
+        tipo: form.tipo ? form.tipo.toLowerCase().trim() : '' 
+      };
+
+      if (modoEdicion) await services.putArboles(formNormalizado, idEditando);
+      else await services.postArboles(formNormalizado);
+      
+      resetForm(); 
+      setTab('lista'); 
+      await cargarArboles();
+    } catch (err) { 
+      Swal.fire('Error', 'No se pudo guardar la especie. Revisa la conexión con el servidor.', 'error'); 
+    }
   };
 
-  const handleEditar = (arbol) => { setForm({ ...FORM_INICIAL, ...arbol }); setModoEdicion(true); setIdEditando(arbol.id); setTab('agregar'); };
+  const handleEditar = (arbol) => { 
+    setForm({ ...FORM_INICIAL, ...arbol }); 
+    setModoEdicion(true); 
+    setIdEditando(arbol.id); 
+    // Si ya estamos en lista, no cambiamos de pestaña para que el scroll ariba funcione
+    if (tab !== 'lista') setTab('lista'); 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleEliminar = async (arbol) => {
     if ((await Swal.fire({ title: `¿Eliminar "${arbol.nombre}"?`, showCancelButton: true, icon: 'warning' })).isConfirmed) {
@@ -516,15 +563,23 @@ function MainPagesInicoAdmin() {
     }
   };
 
-  const resetForm = () => { setForm({ ...FORM_INICIAL, fechaRegistro: new Date().toISOString().split('T')[0] }); setModoEdicion(false); setIdEditando(null); setModoNuevoTipo(false); };
+  const resetForm = () => { 
+    setForm({ 
+      ...FORM_INICIAL, 
+      tipo: tiposDisponibles[0] || '', 
+      fechaRegistro: new Date().toISOString().split('T')[0] 
+    }); 
+    setModoEdicion(false); 
+    setIdEditando(null); 
+    setModoNuevoTipo(false); 
+  };
 
   const sidebarLinks = [
     { id: 'resumen', label: 'Panel de Control', icon: LayoutDashboard },
     { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
     { id: 'lista', label: 'Catálogo de Especies', icon: List },
     { id: 'bajas', label: 'Historial de Bajas', icon: History },
-    { id: 'voluntariados', label: 'Validación de Especies', icon: CheckCircle },
-    { id: 'abonos', label: 'Salud del Hábitat', icon: Activity },
+    { id: 'voluntariados', label: 'Registro de Voluntariados', icon: CheckCircle },
     { id: 'buzon', label: 'Buzón / Reportes', icon: FileText },
   ];
 
@@ -553,20 +608,7 @@ function MainPagesInicoAdmin() {
               <span className="nav-label">{link.label}</span>
             </button>
           ))}
-          
-          <button 
-            className={`admin-nav-item ${tab === 'agregar' ? 'active' : ''}`}
-            onClick={() => { setTab('agregar'); resetForm(); }}
-          >
-            <Settings size={18} />
-            <span className="nav-label">Configuración General</span>
-          </button>
         </nav>
-
-        <button className="admin-new-obs-btn" onClick={() => setTab('agregar')}>
-          <Plus size={18} />
-          <span>Nueva Observación</span>
-        </button>
 
         <div className="admin-sidebar-footer">
           <div className={`admin-footer-link ${tab === 'ayuda' ? 'active-text' : ''}`} onClick={() => setTab('ayuda')}>
@@ -588,29 +630,23 @@ function MainPagesInicoAdmin() {
           </div>
           
           <div className="admin-topbar-right">
-            <div className="admin-search-container">
-              <Search className="admin-search-icon" size={16} />
-              <input 
-                type="text" 
-                placeholder="Buscar datos, observadores o especies..." 
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
-            </div>
-
             <div className="admin-topbar-icons">
                <DarkModeToggle />
-               <Bell size={20} className="admin-icon-btn" />
-               <Monitor size={20} className="admin-icon-btn" />
+               <div className="admin-notification-bell-wrapper" onClick={() => setTab('buzon')}>
+                 <Bell size={20} className="admin-icon-btn" />
+                 {totalNotificaciones > 0 && (
+                   <span className="admin-notification-badge">
+                     {totalNotificaciones}
+                   </span>
+                 )}
+               </div>
             </div>
 
             <div className="admin-profile-pill">
-              <span>Perfil Admin</span>
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=32&q=80" 
-                alt="Perfil" 
-                className="admin-avatar-small"
-              />
+              <span>Panel Administrativo</span>
+              <div className="admin-avatar-placeholder">
+                <Users size={16} />
+              </div>
             </div>
           </div>
         </header>
@@ -621,148 +657,82 @@ function MainPagesInicoAdmin() {
             <div className="overview-dashboard">
               {/* Stats Grid */}
               <div className="admin-stats-grid">
-                <div className="admin-stat-card">
+                <div className="admin-stat-card clickable" onClick={() => { setTab('usuarios'); setUserSubTab('activos'); }}>
                   <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box green"><Activity size={20} /></div>
-                    <div className="admin-stat-badge green">Óptimo</div>
+                    <div className="admin-stat-icon-box green"><Users size={20} /></div>
                   </div>
-                  <div className="admin-stat-label">Sensores Activos</div>
-                  <div className="admin-stat-value">94%</div>
-                  <div className="admin-stat-subtitle">112 de 120 nodos operativos</div>
+                  <div className="admin-stat-label">Usuarios Totales</div>
+                  <div className="admin-stat-value">{usuarios.length}</div>
+                  <div className="admin-stat-subtitle">{usuarios.filter(u => u.rol === 'voluntario').length} Voluntarios</div>
                 </div>
 
-                <div className="admin-stat-card">
+                <div className="admin-stat-card clickable" onClick={() => setTab('lista')}>
                   <div className="admin-stat-header">
-                    <div className="admin-stat-icon-box green"><MapIcon size={20} /></div>
+                    <div className="admin-stat-icon-box green"><List size={20} /></div>
                   </div>
-                  <div className="admin-stat-label">Hectáreas Protegidas</div>
-                  <div className="admin-stat-value">{(arboles.length * 0.5).toFixed(2)} <span>ha</span></div>
-                  <div className="admin-stat-subtitle">+12ha desde el último mes</div>
+                  <div className="admin-stat-label">Árboles Registrados</div>
+                  <div className="admin-stat-value">{arboles.length}</div>
+                  <div className="admin-stat-subtitle">Especies en conservación</div>
                 </div>
 
-                <div className="admin-stat-card">
+                <div className="admin-stat-card clickable" onClick={() => { setTab('usuarios'); setUserSubTab('cancelados'); }}>
                   <div className="admin-stat-header">
                     <div className="admin-stat-icon-box blue"><FileText size={20} /></div>
                   </div>
-                  <div className="admin-stat-label">Peticiones Pendientes</div>
+                  <div className="admin-stat-label">Cuentas Inactivas</div>
                   <div className="admin-stat-value">{usuarios.filter(u => u.status === 'banned').length}</div>
-                  <div className="admin-stat-subtitle">Reportes que requieren atención</div>
+                  <div className="admin-stat-subtitle">Usuarios restringidos</div>
                 </div>
 
-                <div className="admin-stat-card">
+                <div className="admin-stat-card clickable" onClick={() => setTab('bajas')}>
                   <div className="admin-stat-header">
                     <div className="admin-stat-icon-box red"><AlertTriangle size={20} /></div>
                   </div>
-                  <div className="admin-stat-label">Alertas de Hábitat</div>
-                  <div className="admin-stat-value">{arboles.filter(a => a.estado === 'muerto').length} <span>activas</span></div>
-                  <div className="admin-stat-subtitle">Zonas críticas identificadas</div>
+                  <div className="admin-stat-label">Bajas Reportadas</div>
+                  <div className="admin-stat-value">{arboles.filter(a => a.estado === 'muerto').length}</div>
+                  <div className="admin-stat-subtitle">Incidencias críticas</div>
                 </div>
               </div>
 
               {/* Middle Section GRID */}
-              <div className="admin-middle-grid">
+              <div className="admin-middle-grid" style={{ gridTemplateColumns: '1fr' }}>
                 <div className="admin-card">
                   <div className="admin-card-header">
-                    <h3>Monitoreo Espacial</h3>
-                    <div className="admin-header-actions">
-                      <button className={`admin-toggle-btn ${viewMode === 'Satellite' ? 'active' : ''}`} onClick={() => setViewMode('Satellite')}>Vista Satelital</button>
-                      <button className={`admin-toggle-btn ${viewMode === 'Sensors' ? 'active' : ''}`} onClick={() => setViewMode('Sensors')}>Capa de Sensores</button>
-                    </div>
+                    <h3>Últimas Especies Registradas</h3>
+                    <button className="admin-v-all-btn" style={{ width: 'auto', marginTop: 0 }} onClick={() => setTab('lista')}>Ver catálogo completo</button>
                   </div>
-                  <div className="admin-map-container">
-                    <img 
-                      src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                      alt="Vista del Mapa" 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                    <div className="admin-map-overlay-info">
-                       <div><span className="admin-map-dot" style={{ backgroundColor: '#22c55e' }}></span> Sector Norte: Estable</div>
-                       <div><span className="admin-map-dot" style={{ backgroundColor: '#ef4444' }}></span> Cuenca del Río: Emergencia</div>
-                    </div>
-                    <div className="admin-map-zoom">
-                      <button className="admin-zoom-btn">+</button>
-                      <button className="admin-zoom-btn">-</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="admin-card">
-                  <div className="admin-card-header">
-                    <h3>Por Validar</h3>
-                  </div>
-                  <div className="admin-v-list">
-                    {arboles.slice(0, 4).map((arbol, idx) => (
+                  <div className="admin-v-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
+                    {arboles.slice(-8).reverse().map((arbol, idx) => (
                       <div className="admin-v-item" key={idx}>
                         <img src={arbol.imagenUrl || 'https://via.placeholder.com/50'} className="admin-v-img" alt="Specimen" />
                         <div className="admin-v-info">
                           <p className="admin-v-name">{arbol.nombre}</p>
-                          <p className="admin-v-meta">Por {arbol.tipo || 'Sistema'} • hace {idx + 1}h</p>
+                          <p className="admin-v-meta">{arbol.tipo || 'Sin tipo'} • {arbol.familia || 'Sin familia'}</p>
                         </div>
-                        <span className={`admin-v-badge ${idx % 2 === 0 ? 'pending' : 'verified'}`}>
-                          {idx % 2 === 0 ? 'PENDIENTE' : 'VERIFICADO'}
+                        <span className={`admin-v-badge ${arbol.estado === 'vivo' ? 'verified' : 'flagged'}`}>
+                          {arbol.estado ? arbol.estado.toUpperCase() : 'PENDIENTE'}
                         </span>
                       </div>
                     ))}
-                    <button className="admin-v-all-btn" onClick={() => setTab('lista')}>Ver cola de validaciones</button>
                   </div>
-                </div>
-              </div>
-
-              {/* Bottom Section */}
-              <div className="admin-bottom-grid">
-                <div className="admin-card">
-                  <div className="admin-card-header">
-                    <h3>Tendencia de Diversidad de Especies</h3>
-                  </div>
-                  <div className="admin-chart-placeholder">
-                    <div className="admin-chart-bar" style={{ height: '40%' }} data-month="Ene"></div>
-                    <div className="admin-chart-bar" style={{ height: '55%' }} data-month="Feb"></div>
-                    <div className="admin-chart-bar" style={{ height: '45%' }} data-month="Mar"></div>
-                    <div className="admin-chart-bar" style={{ height: '70%' }} data-month="Abr"></div>
-                    <div className="admin-chart-bar" style={{ height: '85%' }} data-month="May"></div>
-                    <div className="admin-chart-bar" style={{ height: '100%' }} data-month="Jun"></div>
-                  </div>
-                </div>
-
-                <div className="admin-card admin-health-card">
-                  <div>
-                    <h3>Índice de Salud Hábitat</h3>
-                    <p>La conectividad biológica está en su punto más alto en 3 años.</p>
-                  </div>
-                  <div className="admin-health-value">8.4 <span>/ 10</span></div>
-                </div>
-
-                <div className="admin-card admin-carbon-card">
-                  <div>
-                    <h3>Secuestro de Carbono</h3>
-                    <p>Compensación anual estimada para el área actual.</p>
-                  </div>
-                  <div className="admin-carbon-value">14.2k <span className="admin-carbon-unit">Tons / Año</span></div>
                 </div>
               </div>
             </div>
           )}
 
           <div className="tab-render-area">
-            {tab === 'lista' && <ListaTab busqueda={busqueda} setBusqueda={setBusqueda} tipoFiltro={tipoFiltro} setTipoFiltro={setTipoFiltro} tiposDisponibles={tiposDisponibles} setTab={setTab} handleEliminarTipo={handleEliminarTipo} statsTipos={statsTipos} handleUpdateStatTipo={handleUpdateStatTipo} arboles={arboles} cargando={cargando} handleEditar={handleEditar} handleAbonarArbol={handleAbonarArbol} handleEliminar={handleEliminar} handleLimpiarHistorialAbono={handleLimpiarHistorialAbono} />}
+            {tab === 'lista' && <ListaTab busqueda={busqueda} setBusqueda={setBusqueda} tipoFiltro={tipoFiltro} setTipoFiltro={setTipoFiltro} tiposDisponibles={tiposDisponibles} setTab={setTab} handleEliminarTipo={handleEliminarTipo} statsTipos={statsTipos} handleUpdateStatTipo={handleUpdateStatTipo} arboles={arboles} cargando={cargando} handleEditar={handleEditar} handleAbonarArbol={handleAbonarArbol} handleEliminar={handleEliminar} handleLimpiarHistorialAbono={handleLimpiarHistorialAbono} modoEdicion={modoEdicion} handleSubmit={handleSubmit} form={form} handleChange={handleChange} modoNuevoTipo={modoNuevoTipo} setModoNuevoTipo={setModoNuevoTipo} setForm={setForm} resetForm={resetForm} />}
             {tab === 'bajas' && <BajasTab arboles={arboles} handleEditar={handleEditar} />}
-            {tab === 'usuarios' && <UsuariosTab modoEdicionUsuario={modoEdicionUsuario} handleUserSubmit={handleUserSubmit} formUsuario={formUsuario} setFormUsuario={setFormUsuario} resetFormUsuario={resetFormUsuario} usuarios={usuarios} handleEditarUsuario={handleEditarUsuario} handleBanUsuario={handleBanUsuario} handleActivarUsuario={handleActivarUsuario} handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado} />}
+            {tab === 'usuarios' && <UsuariosTab modoEdicionUsuario={modoEdicionUsuario} handleUserSubmit={handleUserSubmit} formUsuario={formUsuario} setFormUsuario={setFormUsuario} resetFormUsuario={resetFormUsuario} usuarios={usuarios} handleEditarUsuario={handleEditarUsuario} handleBanUsuario={handleBanUsuario} handleActivarUsuario={handleActivarUsuario} handleConvertirUsuarioAVoluntariado={handleConvertirUsuarioAVoluntariado} subTab={userSubTab} setSubTab={setUserSubTab} />}
             {tab === 'voluntariados' && <VoluntariadosTab modoEdicionVoluntariado={modoEdicionVoluntariado} handleVoluntariadoSubmit={handleVoluntariadoSubmit} formVoluntariado={formVoluntariado} setFormVoluntariado={setFormVoluntariado} resetFormVoluntariado={resetFormVoluntariado} voluntariados={voluntariados} handleEditarVoluntariado={handleEditarVoluntariado} handleEliminarVoluntariado={handleEliminarVoluntariado} handleConvertirVoluntariadoAUsuario={handleConvertirVoluntariadoAUsuario} />}
             {tab === 'abonos' && <AbonosTab modoEdicionAbono={modoEdicionAbono} handleAbonoSubmit={handleAbonoSubmit} formAbono={formAbono} setFormAbono={setFormAbono} resetFormAbono={resetFormAbono} abonos={abonos} handleEditarAbono={handleEditarAbono} handleEliminarAbono={handleEliminarAbono} />}
-            {tab === 'buzon' && <BuzonTab /> }
-            {tab === 'agregar' && <ArbolFormTab modoEdicion={modoEdicion} handleSubmit={handleSubmit} form={form} handleChange={handleChange} modoNuevoTipo={modoNuevoTipo} tiposDisponibles={tiposDisponibles} setModoNuevoTipo={setModoNuevoTipo} setForm={setForm} resetForm={resetForm} setTab={setTab} /> }
+            {tab === 'buzon' && <BuzonTab refrescarNotificaciones={cargarArboles} /> }
+
             {tab === 'ayuda' && <AyudaTab /> }
           </div>
         </section>
 
-        <footer style={{ marginTop: '4rem', padding: '2rem 0', borderTop: '1px solid var(--admin-border-color)', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#9ca3af' }}>
-           <div>© 2026 BioMon ADI | Administración • Última actualización: hace 1 minuto</div>
-           <div style={{ display: 'flex', gap: '20px' }}>
-             <span>Protocolo de Privacidad</span>
-             <span>Estado de Red de Sensores</span>
-             <span>Documentación API</span>
-           </div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

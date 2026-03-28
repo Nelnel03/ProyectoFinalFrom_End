@@ -38,7 +38,9 @@ const Navbar = () => {
     return (
         <nav className="navbar-main">
             <div onClick={() => navigate(auth && user ? (user.rol === 'voluntario' ? '/dashboard-voluntario' : '/dashboard-user') : '/')} className="navbar-logo-container">
-                <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
+                <div className="navbar-logo-icon">
+                    <img src="/src/assets/logo.png" alt="Logo" className="navbar-logo-img" />
+                </div>
                 <h2 className="navbar-logo-title">BioMon ADI</h2>
             </div>
             

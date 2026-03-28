@@ -24,7 +24,9 @@ function Nav() {
     <nav className="visitor-nav">
       <div className="visitor-nav-container">
         <NavLink to={auth ? (sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user')).rol === 'admin' ? '/admin' : '/user') : '/'} className="visitor-logo">
-          <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+          <div className="visitor-logo-icon">
+            <img src="/src/assets/logo.png" alt="Logo" className="visitor-logo-img" />
+          </div>
           <span className="visitor-logo-text">BioMon ADI</span>
         </NavLink>
         
