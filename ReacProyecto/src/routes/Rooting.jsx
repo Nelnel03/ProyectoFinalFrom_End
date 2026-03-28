@@ -10,7 +10,7 @@ import ResetPassword from '../pages/ResetPassword';
 import LandingPage from '../pages/LandingPage';
 import HistoryForm from '../pages/HistoryForm';
 import Mapa from '../pages/Mapa';
-import Voluntariado from '../pages/Voluntariado';
+
 import Nav from '../components/Nav';
 import Navbar from '../components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
@@ -52,7 +52,6 @@ function MainLayout() {
        !isAdminRoute && 
        !location.pathname.startsWith('/dashboard-voluntario') && 
        !location.pathname.startsWith('/dashboard-user') && 
-       location.pathname !== '/voluntariado' && 
        (isPremiumRoute ? <Navbar /> : <Nav />)}
 
       <div className={`main-content-layout ${isPremiumRoute ? '' : isAuthRoute ? '' : 'visitor-layout'}`}>
@@ -60,7 +59,7 @@ function MainLayout() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/historia" element={<HistoryForm />} />
           <Route path="/visitante" element={<InicioVisitantes />} />
-          <Route path="/voluntariado" element={<Voluntariado />} />
+
           <Route path="/mapa" element={<Mapa />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
@@ -107,7 +106,7 @@ function MainLayout() {
           />
         </Routes>
       </div>
-      {location.pathname !== '/mapa' && location.pathname !== '/voluntariado' && location.pathname !== '/dashboard-voluntario' && !isAdminRoute && <Footer />}
+      {location.pathname !== '/mapa' && location.pathname !== '/dashboard-voluntario' && !isAdminRoute && <Footer />}
 
 
     </div>
