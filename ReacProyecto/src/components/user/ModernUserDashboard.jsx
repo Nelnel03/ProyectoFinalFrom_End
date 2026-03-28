@@ -171,11 +171,7 @@ function ModernUserDashboard() {
         );
 
       case 'coleccion':
-        const uniqueSpecies = Array.from(new Set(arboles.map(a => a.nombre)))
-          .map(nombre => arboles.find(a => a.nombre === nombre));
-
-        const displayArboles = viewMode === 'individual' ? filteredArboles : 
-          uniqueSpecies.filter(s => s.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+        const displayArboles = filteredArboles;
 
         return (
           <div className="main-section-card">

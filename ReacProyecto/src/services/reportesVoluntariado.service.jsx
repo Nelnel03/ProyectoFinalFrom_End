@@ -37,10 +37,15 @@ export async function postReporteVoluntariado(reporte) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reporte),
     });
+    if (!respuesta.ok) {
+        if (respuesta.status === 413) throw new Error("La imagen es demasiado pesada para el servidor.");
+        throw new Error("No se pudo enviar el reporte.");
+    }
     const datos = await respuesta.json();
     return datos;
   } catch (error) {
     console.error("Error al enviar el reporte de voluntariado", error);
+    throw error;
   }
 }
 /**

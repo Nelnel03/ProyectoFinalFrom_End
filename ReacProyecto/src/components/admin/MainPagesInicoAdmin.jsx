@@ -147,9 +147,9 @@ function MainPagesInicoAdmin() {
       setVoluntariados(datosVol || []);
       setAbonos(datosAbonos || []);
       
-      const unreadSoporte = (datosSoporte || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente').length;
-      const unreadRobos = (datosRobos || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente').length;
-      const unreadSolicitudes = (datosSolicitudes || []).filter(r => (r.estado || '').toLowerCase() === 'pendiente' && !r.visto).length;
+      const unreadSoporte = (datosSoporte || []).filter(r => !r.visto).length;
+      const unreadRobos = (datosRobos || []).filter(r => !r.visto).length;
+      const unreadSolicitudes = (datosSolicitudes || []).filter(r => !r.visto).length;
       const unreadLabores = (datosLabores || []).filter(r => !r.visto).length;
       setTotalNotificaciones(unreadSoporte + unreadRobos + unreadSolicitudes + unreadLabores);
     } catch (err) {
@@ -553,14 +553,7 @@ function MainPagesInicoAdmin() {
   };
 
 
-  const sidebarLinks = [
-    { id: 'resumen', label: 'Panel de Control', icon: LayoutDashboard },
-    { id: 'usuarios', label: 'Gestión de Usuarios', icon: Users },
-    { id: 'lista', label: 'Catálogo de Especies', icon: List },
-    { id: 'bajas', label: 'Historial de Bajas', icon: History },
-    { id: 'voluntariados', label: 'Bitácora de Voluntarios', icon: CheckCircle },
-    { id: 'buzon', label: 'Buzón / Reportes', icon: FileText },
-  ];
+
 
 
   return (

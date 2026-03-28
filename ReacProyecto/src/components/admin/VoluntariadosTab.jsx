@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   ClipboardList, 
-  Search, 
-  Filter, 
-  ChevronRight, 
-  Clock, 
-  MapPin, 
-  CheckCircle2, 
-  MoreVertical,
   Check,
-  AlertCircle
+  XCircle,
+  Clock,
+  CheckCircle2,
+  CalendarDays,
+  Hourglass,
+  Eye,
+  Briefcase
 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import services from '../../services/services';
 import '../../styles/MainPagesInicoAdmin.css';
 import '../../styles/VoluntariadoPremium.css';
@@ -27,16 +27,89 @@ function VoluntariadosTab({
   handleEliminarVoluntariado,
   handleConvertirVoluntariadoAUsuario
 }) {
-  const [subTab, setSubTab] = useState('lista'); // 'lista' o 'logs'
+  const [subTab, setSubTab] = useState('lista');
   const [logs, setLogs] = useState([]);
   const [selectedLog, setSelectedLog] = useState(null);
   const [loadingLogs, setLoadingLogs] = useState(false);
+  const [filtroEstado, setFiltroEstado] = useState('todos');
+
+  // Estados para Tareas Predeterminadas
+  const [tareasDisponibles, setTareasDisponibles] = useState([]);
+  const [formTarea, setFormTarea] = useState({ id: null, titulo: '', descripcion: '', horas: '', dias: '' });
+  const [modoEdicionTarea, setModoEdicionTarea] = useState(false);
+  const [isCustomTitulo, setIsCustomTitulo] = useState(false);
+
+  useEffect(() => {
+    cargarLogs();
+    cargarTareasDisponibles();
+  }, []);
 
   useEffect(() => {
     if (subTab === 'logs') {
       cargarLogs();
+    } else if (subTab === 'tareas') {
+      cargarTareasDisponibles();
     }
   }, [subTab]);
+
+  const cargarTareasDisponibles = async () => {
+    try {
+      const data = await services.getTareasDisponibles();
+      setTareasDisponibles(data);
+    } catch (error) {
+      console.error('Error al cargar tareas disponibles:', error);
+    }
+  };
+
+  const resetFormTarea = () => {
+    setFormTarea({ id: null, titulo: '', descripcion: '', horas: '', dias: '' });
+    setModoEdicionTarea(false);
+    setIsCustomTitulo(false);
+  };
+
+  const handleGuardarTarea = async (e) => {
+    e.preventDefault();
+    try {
+      if (modoEdicionTarea && formTarea.id) {
+        await services.putTareaDisponible(formTarea, formTarea.id);
+        setTareasDisponibles(tareasDisponibles.map(t => t.id === formTarea.id ? formTarea : t));
+        Swal.fire('Actualizado', 'La tarea ha sido actualizada.', 'success');
+      } else {
+        const nuevaTarea = await services.postTareaDisponible({
+          titulo: formTarea.titulo,
+          descripcion: formTarea.descripcion,
+          horas: parseFloat(formTarea.horas),
+          dias: formTarea.dias || 'Cualquier día'
+        });
+        setTareasDisponibles([...tareasDisponibles, nuevaTarea]);
+        Swal.fire('Registrada', 'Nueva tarea creada exitosamente.', 'success');
+      }
+      resetFormTarea();
+    } catch (error) {
+      Swal.fire('Error', 'No se pudo guardar la tarea.', 'error');
+    }
+  };
+
+  const handleEliminarTarea = async (id) => {
+    const result = await Swal.fire({
+      title: '¿Eliminar tarea?',
+      text: 'Los voluntarios ya no podrán seleccionarla.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminar'
+    });
+    if (result.isConfirmed) {
+      try {
+        await services.deleteTareaDisponible(id);
+        setTareasDisponibles(tareasDisponibles.filter(t => t.id !== id));
+        Swal.fire('Eliminada', 'La tarea ha sido retirada.', 'success');
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo eliminar.', 'error');
+      }
+    }
+  };
 
   const cargarLogs = async () => {
     setLoadingLogs(true);
@@ -46,9 +119,185 @@ function VoluntariadosTab({
       setLogs(sorted);
       if (sorted.length > 0) setSelectedLog(sorted[0]);
     } catch (error) {
-      console.error("Error al cargar logs:", error);
+      console.error('Error al cargar logs:', error);
     } finally {
       setLoadingLogs(false);
+    }
+  };
+
+  const handleAprobarHoras = async (log) => {
+    if (log.estado === 'aprobado') {
+      Swal.fire({ icon: 'info', title: 'Ya aprobado', text: 'Este reporte ya fue aprobado anteriormente.', timer: 2000, showConfirmButton: false });
+      return;
+    }
+
+    // Validación de tiempo mínimo (menor a 1 hora)
+    if (log.horas < 1) {
+      const warningResult = await Swal.fire({
+        title: '¡Tiempo Insuficiente!',
+        html: `El voluntario <b>${log.voluntarioNombre}</b> registró solo <b>${log.horas}h</b>, lo cual no cumple el mínimo de 1 hora.<br><br>¿Qué deseas hacer con este reporte?`,
+        icon: 'warning',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonColor: '#10b981',
+        denyButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Evaluar de todos modos',
+        denyButtonText: 'Rechazar reporte',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (warningResult.isDenied) {
+        // Secuencia de rechazo
+        const { value: motivo } = await Swal.fire({
+          title: 'Motivo del rechazo',
+          input: 'textarea',
+          inputPlaceholder: 'Ej: El tiempo mínimo requerido es de 1 hora...',
+          inputValidator: (value) => !value && 'Debes explicar por qué se rechaza.'
+        });
+
+        if (motivo) {
+          try {
+            const reporteRechazado = { ...log, estado: 'rechazado', motivoRechazo: motivo };
+            await services.putReporteVoluntariado(reporteRechazado, log.id);
+            const updated = logs.map(l => l.id === log.id ? reporteRechazado : l);
+            setLogs(updated);
+            if (selectedLog?.id === log.id) setSelectedLog(reporteRechazado);
+            Swal.fire('Rechazado', 'El reporte de horas ha sido rechazado.', 'success');
+          } catch (error) {
+            Swal.fire('Error', 'No se pudo rechazar el reporte.', 'error');
+          }
+        }
+        return; // Detenemos aquí si se rechazó
+      } else if (!warningResult.isConfirmed) {
+        return; // Detenemos aquí si se canceló
+      }
+    }
+    
+    // Si la validación pasó, o el admin decidió "Evaluar de todos modos":
+    const result = await Swal.fire({
+      title: 'Aprobar Horas',
+      html: `
+        <p style="margin-bottom: 10px;"><b>${log.voluntarioNombre}</b> reportó <b>${log.horas}h</b> en <b>${log.tipoTarea}</b>.</p>
+        <p style="font-size: 0.85rem; color: #666;">Verifica la evidencia y ajusta las horas si es necesario:</p>
+      `,
+      input: 'number',
+      inputValue: log.horas > 0 ? log.horas : 1, // Si es 0, sugerimos 1 mínimo
+      inputAttributes: {
+        min: 0,
+        step: 'any'
+      },
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#10b981',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Confirmar Horas',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed && result.value !== undefined) {
+      const horasFinales = parseFloat(result.value);
+      try {
+        const reporteActualizado = { ...log, estado: 'aprobado', horas: horasFinales };
+        await services.putReporteVoluntariado(reporteActualizado, log.id);
+        const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
+        setLogs(updated);
+        if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        Swal.fire({ 
+          icon: 'success', 
+          title: '¡Horas aprobadas!', 
+          text: `Se validaron ${horasFinales}h para ${log.voluntarioNombre}. El voluntario ya puede verlo en su panel.`, 
+          timer: 3000, 
+          showConfirmButton: false 
+        });
+      } catch (error) {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo actualizar el estado del reporte.' });
+      }
+    }
+  };
+
+  const handleVerEvidencia = (log) => {
+    if (!log.pruebas) {
+      Swal.fire({ icon: 'info', title: 'Sin Evidencias', text: 'El voluntario no adjuntó un archivo de evidencia.' });
+      return;
+    }
+    Swal.fire({
+      title: 'Evidencia del Trabajo',
+      text: log.tareas || 'Sin descripción adicional',
+      imageUrl: log.pruebas,
+      imageAlt: 'Evidencia fotográfica',
+      imageHeight: 300,
+      confirmButtonColor: '#10b981',
+      confirmButtonText: 'Cerrar'
+    });
+  };
+
+  const handleSolicitarCorreccion = async (log) => {
+    const result = await Swal.fire({
+      title: 'Solicitar corrección',
+      input: 'textarea',
+      inputLabel: 'Motivo de la corrección',
+      inputPlaceholder: 'Describe qué debe corregir el voluntario...',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f59e0b',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Enviar solicitud',
+      cancelButtonText: 'Cancelar'
+    });
+    if (result.isConfirmed && result.value) {
+      Swal.fire({ icon: 'success', title: 'Solicitud enviada', text: 'El voluntario deberá corregir su reporte.', timer: 2000, showConfirmButton: false });
+    }
+  };
+
+  const handleAprobarAsignacion = async (log) => {
+    const { value: date } = await Swal.fire({
+      title: 'Validar Asignación',
+      text: 'Indica la fecha en que el voluntario debe realizar la tarea:',
+      icon: 'question',
+      input: 'date',
+      inputAttributes: { min: new Date().toISOString().split('T')[0] },
+      showCancelButton: true,
+      confirmButtonColor: '#10b981',
+      confirmButtonText: 'Asignar Fecha',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (date) {
+      try {
+        const reporteActualizado = { ...log, estado: 'asignado', fecha: date };
+        await services.putReporteVoluntariado(reporteActualizado, log.id);
+        const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
+        setLogs(updated);
+        if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        Swal.fire({ icon: 'success', title: 'Asignación Aprobada', text: 'Se ha asignado la labor al voluntario exitosamente.', timer: 2500, showConfirmButton: false });
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo aprobar la asignación.', 'error');
+      }
+    }
+  };
+
+  const handleRechazarAsignacion = async (log) => {
+    const { value: motivo } = await Swal.fire({
+      title: 'Rechazar Solicitud',
+      input: 'textarea',
+      inputLabel: 'Razón del rechazo (opcional)',
+      inputPlaceholder: 'Falta disponibilidad...',
+      showCancelButton: true,
+      confirmButtonText: 'Rechazar Tarea',
+      cancelButtonText: 'Cancelar'
+    });
+    if (motivo !== undefined) {
+      try {
+        const reporteActualizado = { ...log, estado: 'rechazado_pre', motivoRechazo: motivo };
+        await services.putReporteVoluntariado(reporteActualizado, log.id);
+        const updated = logs.map(l => l.id === log.id ? reporteActualizado : l);
+        setLogs(updated);
+        if (selectedLog?.id === log.id) setSelectedLog(reporteActualizado);
+        Swal.fire({ icon: 'success', title: 'Asignación Rechazada', text: 'El voluntario no podrá realizar esta labor.', timer: 2500, showConfirmButton: false });
+      } catch (error) {
+        Swal.fire('Error', 'No se pudo rechazar la asignación.', 'error');
+      }
     }
   };
 
@@ -59,23 +308,42 @@ function VoluntariadosTab({
     return 'bg-trail';
   };
 
+  const logsFiltrados = filtroEstado === 'todos' ? logs 
+                      : filtroEstado === 'pendientes_accion' ? logs.filter(l => l.estado === 'enviado' || l.estado === 'solicitado')
+                      : filtroEstado === 'solicitados' ? logs.filter(l => l.estado === 'solicitado')
+                      : filtroEstado === 'en_curso' ? logs.filter(l => l.estado === 'asignado' || l.estado === 'en_curso')
+                      : filtroEstado === 'evidencias' ? logs.filter(l => l.estado === 'enviado')
+                      : filtroEstado === 'aprobados' ? logs.filter(l => l.estado === 'aprobado')
+                      : filtroEstado === 'rechazados' ? logs.filter(l => l.estado.startsWith('rechazado'))
+                      : logs;
+  const totalHoras = logs.reduce((acc, l) => acc + (Number(l.horas) || 0), 0);
+  const totalAprobados = logs.filter(l => l.estado === 'aprobado').length;
+  const totalPendientes = logs.filter(l => l.estado === 'enviado' || l.estado === 'solicitado').length;
+
   return (
     <div className="premium-tab-container">
-      {/* Sub-navigation inside Tab */}
+      {/* Sub-navegación */}
       <div className="admin-subtab-nav" style={{ marginBottom: '2rem', display: 'flex', gap: '15px' }}>
-        <button 
+        <button
           onClick={() => setSubTab('lista')}
           className={`admin-subtab-btn ${subTab === 'lista' ? 'active' : ''}`}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '30px', border: 'none', cursor: 'pointer', fontWeight: 600 }}
         >
           <Users size={18} /> Personal Activo
         </button>
-        <button 
+        <button
           onClick={() => setSubTab('logs')}
           className={`admin-subtab-btn ${subTab === 'logs' ? 'active' : ''}`}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '30px', border: 'none', cursor: 'pointer', fontWeight: 600 }}
         >
           <ClipboardList size={18} /> Bitácora de Labores
+        </button>
+        <button
+          onClick={() => setSubTab('tareas')}
+          className={`admin-subtab-btn ${subTab === 'tareas' ? 'active' : ''}`}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '30px', border: 'none', cursor: 'pointer', fontWeight: 600 }}
+        >
+          <Briefcase size={18} /> Gestión de Tareas
         </button>
       </div>
 
@@ -90,67 +358,40 @@ function VoluntariadosTab({
             <h3 className="admin-user-form-title">
               {modoEdicionVoluntariado ? 'Editar Ficha de Voluntario' : 'Registrar Nuevo Voluntario'}
             </h3>
-            
             <form onSubmit={handleVoluntariadoSubmit} className="admin-user-form">
               <div className="admin-form-group">
                 <label className="admin-user-input-label">Nombre Completo</label>
-                <input
-                  type="text"
-                  required
-                  value={formVoluntariado.nombre}
-                  onChange={(e) => setFormVoluntariado({...formVoluntariado, nombre: e.target.value})}
-                  placeholder="Ej: Carlos Rodríguez"
-                  className="admin-user-input"
-                />
+                <input type="text" required value={formVoluntariado.nombre}
+                  onChange={(e) => setFormVoluntariado({ ...formVoluntariado, nombre: e.target.value })}
+                  placeholder="Ej: Carlos Rodríguez" className="admin-user-input" />
               </div>
-              
               <div className="admin-form-group">
                 <label className="admin-user-input-label">Área de Interés / Cargo</label>
-                <input
-                  type="text"
-                  required
-                  value={formVoluntariado.area}
-                  onChange={(e) => setFormVoluntariado({...formVoluntariado, area: e.target.value})}
-                  placeholder="Ej: Siembra, Mantenimiento, Educación..."
-                  className="admin-user-input"
-                />
+                <input type="text" required value={formVoluntariado.area}
+                  onChange={(e) => setFormVoluntariado({ ...formVoluntariado, area: e.target.value })}
+                  placeholder="Ej: Siembra, Mantenimiento, Educación..." className="admin-user-input" />
               </div>
-
               <div className="admin-form-group">
                 <label className="admin-user-input-label">Correo Electrónico</label>
-                <input
-                  type="email"
-                  required
-                  value={formVoluntariado.email}
-                  onChange={(e) => setFormVoluntariado({...formVoluntariado, email: e.target.value})}
-                  placeholder="voluntario@bosque.com"
-                  className="admin-user-input"
-                />
+                <input type="email" required value={formVoluntariado.email}
+                  onChange={(e) => setFormVoluntariado({ ...formVoluntariado, email: e.target.value })}
+                  placeholder="voluntario@bosque.com" className="admin-user-input" />
               </div>
-
               <div className="admin-form-group">
                 <label className="admin-user-input-label">Teléfono</label>
-                <input
-                  type="text"
-                  required
-                  maxLength={8}
-                  value={formVoluntariado.telefono}
+                <input type="text" required maxLength={8} value={formVoluntariado.telefono}
                   onChange={(e) => {
-                     const value = e.target.value.replace(/\D/g, '');
-                     setFormVoluntariado({...formVoluntariado, telefono: value});
+                    const value = e.target.value.replace(/\D/g, '');
+                    setFormVoluntariado({ ...formVoluntariado, telefono: value });
                   }}
-                  className="admin-user-input"
-                />
+                  className="admin-user-input" />
               </div>
-              
               <div className="admin-user-form-footer">
                 <button type="submit" className="admin-btn-user-submit">
                   {modoEdicionVoluntariado ? 'Actualizar Ficha' : 'Registrar Voluntario'}
                 </button>
                 {modoEdicionVoluntariado && (
-                  <button type="button" onClick={resetFormVoluntariado} className="admin-btn-user-cancel">
-                    Cancelar
-                  </button>
+                  <button type="button" onClick={resetFormVoluntariado} className="admin-btn-user-cancel">Cancelar</button>
                 )}
               </div>
             </form>
@@ -172,12 +413,10 @@ function VoluntariadosTab({
                     <p className="admin-vol-area">{vol.area}</p>
                   </div>
                 </div>
-                
                 <div className="admin-vol-contact-box">
                   <p><strong>Email:</strong> {vol.email}</p>
                   <p><strong>Tel:</strong> {vol.telefono}</p>
                 </div>
-
                 <div className="admin-user-card-footer">
                   <button onClick={() => handleEditarVoluntariado(vol)} className="admin-btn-user-edit">Editar</button>
                   <button onClick={() => handleEliminarVoluntariado(vol.id, vol.nombre)} className="admin-btn-user-delete">Baja</button>
@@ -188,38 +427,78 @@ function VoluntariadosTab({
           </div>
         </>
       ) : (
-        <div className="premium-logs-view-wrapper" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '20px' }}>
-          {/* Main List Column */}
+        <div className="premium-logs-view-wrapper" style={{ display: 'block' }}>
+          {/* Columna principal */}
           <div className="logs-main-column">
-            <div className="premium-title-section" style={{ marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <h1 style={{ fontSize: '1.8rem' }}>Pending Logs</h1>
-                <span className="premium-badge-pending" style={{ marginLeft: '15px' }}>
-                  {logs.filter(l => l.estado === 'enviado').length} Pending
-                </span>
+
+            {/* Estadísticas rápidas */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '1.5rem' }}>
+              <div className="premium-stat-box" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px' }}>
+                <Hourglass size={20} color="#10b981" />
+                <div>
+                  <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', fontWeight: 700, color: 'var(--premium-text-muted)' }}>Horas Totales</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalHoras}h</div>
+                </div>
               </div>
-              <p style={{ fontSize: '0.9rem', color: '#666' }}>La Angostura Eco-Corridor Management</p>
+              <div className="premium-stat-box" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px' }}>
+                <CheckCircle2 size={20} color="#10b981" />
+                <div>
+                  <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', fontWeight: 700, color: 'var(--premium-text-muted)' }}>Aprobados</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalAprobados}</div>
+                </div>
+              </div>
+              <div className="premium-stat-box" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 16px' }}>
+                <Clock size={20} color="#f59e0b" />
+                <div>
+                  <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', fontWeight: 700, color: 'var(--premium-text-muted)' }}>Pendientes</div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalPendientes}</div>
+                </div>
+              </div>
             </div>
 
+            {/* Encabezado y filtros */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '10px' }}>
+              <h1 style={{ fontSize: '1.5rem', margin: 0 }}>
+                Bitácora de Labores
+                {totalPendientes > 0 && (
+                  <span className="premium-badge-pending" style={{ marginLeft: '12px', fontSize: '0.75rem' }}>
+                    {totalPendientes} pendiente{totalPendientes !== 1 ? 's' : ''}
+                  </span>
+                )}
+              </h1>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['todos', 'pendientes_accion', 'solicitados', 'en_curso', 'evidencias', 'aprobados', 'rechazados'].map(f => (
+                  <button key={f} onClick={() => setFiltroEstado(f)} style={{
+                    padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--premium-border)',
+                    background: filtroEstado === f ? 'var(--premium-forest-dark)' : 'transparent',
+                    color: filtroEstado === f ? '#fff' : 'var(--premium-text-muted)',
+                    fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer', transition: 'all 0.2s'
+                  }}>
+                    {f === 'todos' ? 'Todos' : f === 'pendientes_accion' ? 'Requiere Atención' : f === 'solicitados' ? 'Solicitudes' : f === 'en_curso' ? 'En Curso / Asignados' : f === 'evidencias' ? 'Evidencias' : f === 'rechazados' ? 'Rechazados' : 'Aprobados'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Lista de logs */}
             <div className="premium-logs-list">
-              <div className="premium-log-row-header" style={{ padding: '10px 20px', fontSize: '0.7rem' }}>
-                <span>Volunteer Name</span>
-                <span>Date</span>
-                <span>Activity Type</span>
-                <span>Hours</span>
-                <span>Status</span>
+              <div className="premium-log-row-header" style={{ padding: '10px 20px', fontSize: '0.7rem', gridTemplateColumns: '1fr 130px 150px 80px 110px auto' }}>
+                <span>Voluntario</span>
+                <span>Fecha</span>
+                <span>Actividad</span>
+                <span>Horas</span>
+                <span>Estado</span>
+                <span>Acción</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {loadingLogs ? (
-                  <p>Cargando bitácora...</p>
-                ) : logs.length > 0 ? (
-                  logs.map(log => (
-                    <div 
-                      key={log.id} 
-                      className={`premium-log-item ${selectedLog?.id === log.id ? 'active-border' : ''}`}
-                      onClick={() => setSelectedLog(log)}
-                      style={{ padding: '16px 20px' }}
+                  <p style={{ textAlign: 'center', padding: '2rem', color: 'var(--premium-text-muted)' }}>Cargando bitácora...</p>
+                ) : logsFiltrados.length > 0 ? (
+                  logsFiltrados.map(log => (
+                    <div key={log.id}
+                      className="premium-log-item"
+                      style={{ padding: '14px 20px', gridTemplateColumns: '1fr 130px 150px 80px 110px auto', cursor: 'default' }}
                     >
                       <div className="premium-vol-profile">
                         <div className="premium-avatar" style={{ width: '35px', height: '35px' }}>
@@ -227,84 +506,169 @@ function VoluntariadosTab({
                         </div>
                         <div className="premium-vol-name">
                           <h4 style={{ fontSize: '0.9rem' }}>{log.voluntarioNombre}</h4>
-                          <span style={{ fontSize: '0.7rem' }}>Active Volunteer</span>
+                          <span style={{ fontSize: '0.7rem' }}>{log.tareas?.substring(0, 30) || 'Sin descripción'}...</span>
                         </div>
                       </div>
-                      <div style={{ fontSize: '0.85rem', color: '#666' }}>{log.fecha}</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--premium-text-muted)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <CalendarDays size={13} /> {log.fecha}
+                      </div>
                       <div>
                         <span className={`premium-task-badge ${getTaskColor(log.tipoTarea)}`}>{log.tipoTarea}</span>
                       </div>
                       <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{log.horas}h</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem' }}>
-                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: log.estado === 'enviado' ? '#f59e0b' : '#10b981' }}></div>
-                        {log.estado === 'enviado' ? 'Pending' : 'Approved'}
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: log.estado === 'enviado' ? '#0f766e' : log.estado.startsWith('rechazado') ? '#ef4444' : log.estado === 'solicitado' ? '#3b82f6' : log.estado === 'en_curso' ? '#8b5cf6' : log.estado === 'asignado' ? '#a855f7' : '#10b981', flexShrink: 0 }}></div>
+                        {log.estado === 'enviado' ? 'Terminada' : log.estado.startsWith('rechazado') ? 'Rechazado' : log.estado === 'solicitado' ? 'Solicitado' : log.estado === 'en_curso' ? 'En Curso' : log.estado === 'asignado' ? 'Por Iniciar' : 'Aprobado'}
+                      </div>
+                      <div>
+                        {log.estado === 'aprobado' ? (
+                          <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: '#d1fae5', color: '#065f46', whiteSpace: 'nowrap' }}>
+                            ✓ Aprobado
+                          </span>
+                        ) : log.estado.startsWith('rechazado') ? (
+                          <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: '#fee2e2', color: '#991b1b', whiteSpace: 'nowrap' }}>
+                            × Rechazado
+                          </span>
+                        ) : log.estado === 'solicitado' ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <button
+                              onClick={() => handleAprobarAsignacion(log)}
+                              style={{ padding: '6px 10px', borderRadius: '20px', border: 'none', background: '#3b82f6', color: '#fff', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                            >
+                              <Check size={12} /> Asignar
+                            </button>
+                            <button
+                              onClick={() => handleRechazarAsignacion(log)}
+                              style={{ padding: '6px 10px', borderRadius: '20px', border: 'none', background: '#fee2e2', color: '#991b1b', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                            >
+                              <XCircle size={12} /> Rechazar
+                            </button>
+                          </div>
+                        ) : log.estado === 'asignado' ? (
+                          <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: '#e0e7ff', color: '#4338ca', whiteSpace: 'nowrap' }}>
+                            Por Iniciar
+                          </span>
+                        ) : log.estado === 'en_curso' ? (
+                          <span style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 700, background: '#f3e8ff', color: '#7e22ce', whiteSpace: 'nowrap' }}>
+                            En Curso...
+                          </span>
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <button
+                              onClick={() => handleVerEvidencia(log)}
+                              style={{ padding: '6px 12px', borderRadius: '20px', border: '1px solid #10b981', color: '#10b981', background: 'transparent', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}
+                              title="Ver Evidencia"
+                            >
+                              <Eye size={13} /> Ver
+                            </button>
+                            <button
+                              onClick={() => handleAprobarHoras(log)}
+                              style={{ padding: '6px 14px', borderRadius: '20px', border: 'none', background: 'var(--premium-forest-dark)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}
+                            >
+                              <Check size={13} /> Aprobar
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p>No hay labores registradas.</p>
+                  <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--premium-text-muted)' }}>
+                    <ClipboardList size={36} style={{ opacity: 0.3, marginBottom: '10px' }} />
+                    <p>No hay labores en esta categoría.</p>
+                  </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Details Column */}
-          <div className="logs-details-column">
-            {selectedLog ? (
-              <div className="premium-details-card" style={{ position: 'sticky', top: '20px' }}>
-                <div className="premium-details-header" style={{ marginBottom: '1rem' }}>
-                  <h3 style={{ fontSize: '1.2rem', margin: 0 }}>Log Details</h3>
-                  <button className="icon-btn-ghost"><MoreVertical size={18} /></button>
-                </div>
+        </div>
+      )}
 
-                {selectedLog.pruebas && (
-                  <img src={selectedLog.pruebas} alt="Evidence" className="premium-log-image" style={{ height: '160px', marginBottom: '1rem' }} />
+      {subTab === 'tareas' && (
+        <div className="admin-tab-content">
+          <div className="admin-section-header">
+            <h2 className="admin-section-title-white">Catálogo de Tareas Disponibles</h2>
+            <p className="admin-section-subtitle-green">Administra las labores predeterminadas que los voluntarios podrán seleccionar en su panel.</p>
+          </div>
+
+          <div className="admin-form-card" style={{ marginBottom: '2rem' }}>
+            <h3 className="admin-user-form-title">{modoEdicionTarea ? 'Editar Tarea' : 'Registrar Nueva Tarea Predeterminada'}</h3>
+            <form onSubmit={handleGuardarTarea} style={{ display: 'grid', gridTemplateColumns: 'minmax(250px, 2fr) minmax(200px, 1fr) 100px 200px', gap: '15px', alignItems: 'flex-end' }}>
+              <div>
+                <label className="admin-user-input-label">Título y Descripción</label>
+                <select 
+                  className="admin-user-input" 
+                  value={isCustomTitulo ? 'Otro' : formTarea.titulo} 
+                  onChange={e => {
+                    if (e.target.value === 'Otro') {
+                      setIsCustomTitulo(true);
+                      setFormTarea({...formTarea, titulo: ''});
+                    } else {
+                      setIsCustomTitulo(false);
+                      setFormTarea({...formTarea, titulo: e.target.value});
+                    }
+                  }} 
+                  required={!isCustomTitulo}
+                >
+                  <option value="">-- Selecciona un título base --</option>
+                  <option value="Mantenimiento">Mantenimiento</option>
+                  <option value="Plantación">Plantación</option>
+                  <option value="Recolección de plásticos y basura">Recolección de plásticos y basura</option>
+                  <option value="Colocación de abonos">Colocación de abonos</option>
+                  <option value="Otro">Otro (Escribir título nuevo)</option>
+                </select>
+                {isCustomTitulo && (
+                  <input type="text" value={formTarea.titulo} onChange={e => setFormTarea({...formTarea, titulo: e.target.value})} placeholder="Escribe el nuevo título de tarea..." className="admin-user-input" style={{ marginTop: '8px' }} required autoFocus />
                 )}
+                <input type="text" value={formTarea.descripcion} onChange={e => setFormTarea({...formTarea, descripcion: e.target.value})} placeholder="Breve instrucción o descripción..." className="admin-user-input" style={{ marginTop: '8px' }} required />
+              </div>
+              <div>
+                <label className="admin-user-input-label">Días Asignados</label>
+                <input type="text" value={formTarea.dias} onChange={e => setFormTarea({...formTarea, dias: e.target.value})} placeholder="Ej: Lunes a Viernes" className="admin-user-input" required />
+              </div>
+              <div>
+                <label className="admin-user-input-label">Horas Fijas</label>
+                <input type="number" step="0.5" value={formTarea.horas} onChange={e => setFormTarea({...formTarea, horas: e.target.value})} placeholder="4.5" className="admin-user-input" required />
+              </div>
+              <div style={{ display: 'flex', gap: '5px' }}>
+                <button type="submit" className="admin-btn-save" style={{ flex: 1, padding: '10px 0' }}>{modoEdicionTarea ? 'Validar Edición' : 'Crear Tarea'}</button>
+                {modoEdicionTarea && <button type="button" onClick={resetFormTarea} className="admin-btn-cancel" style={{ flex: 1, padding: '10px 0' }}>Cancelar</button>}
+              </div>
+            </form>
+          </div>
 
-                <div className="premium-details-info">
-                  <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#999', textTransform: 'uppercase' }}>Observation</span>
-                  <h4 style={{ margin: '5px 0 15px 0', fontSize: '1rem', lineHeight: '1.3' }}>
-                    {selectedLog.tareas?.substring(0, 80)}...
-                  </h4>
-
-                  <div className="premium-stat-grid-small" style={{ marginBottom: '1.5rem' }}>
-                    <div className="premium-stat-box">
-                      <label>Task Type</label>
-                      <span style={{ fontSize: '0.8rem' }}>{selectedLog.tipoTarea}</span>
+          <div className="premium-logs-list">
+            <div className="premium-log-row-header" style={{ padding: '10px 20px', fontSize: '0.7rem', gridTemplateColumns: '1fr 150px 80px 120px' }}>
+              <span>Detalles de la Tarea</span>
+              <span>Días</span>
+              <span>Horas</span>
+              <span>Acciones</span>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {tareasDisponibles.length > 0 ? (
+                tareasDisponibles.map(t => (
+                  <div key={t.id} className="premium-log-item" style={{ padding: '14px 20px', gridTemplateColumns: '1fr 150px 80px 120px', alignItems: 'center' }}>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--color-primario)' }}>{t.titulo}</h4>
+                      <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--premium-text-muted)' }}>{t.descripcion}</p>
                     </div>
-                    <div className="premium-stat-box">
-                      <label>Time Spent</label>
-                      <span style={{ fontSize: '0.8rem' }}>{selectedLog.horas}h</span>
+                    <div style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}><CalendarDays size={13}/> {t.dias}</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{t.horas}h</div>
+                    <div style={{ display: 'flex', gap: '5px' }}>
+                      <button onClick={() => { setFormTarea(t); setModoEdicionTarea(true); setIsCustomTitulo(!['Mantenimiento', 'Plantación', 'Recolección de plásticos y basura', 'Colocación de abonos'].includes(t.titulo)); window.scrollTo({top: 0, behavior: 'smooth'}); }} style={{ padding: '6px 14px', background: '#e0f2fe', color: '#0369a1', border: 'none', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Editar</button>
+                      <button onClick={() => handleEliminarTarea(t.id)} style={{ padding: '6px 14px', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Borrar</button>
                     </div>
                   </div>
-
-                  <div className="premium-notes-section">
-                    <label>GPS Metadata</label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f0f4f2', padding: '10px', borderRadius: '8px', marginBottom: '15px' }}>
-                      <MapPin size={14} color="#0a3622" />
-                      <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>41°01'S 71°21'W</span>
-                    </div>
-
-                    <label>Volunteer Notes</label>
-                    <p style={{ fontSize: '0.8rem', color: '#666', lineHeight: '1.4', fontStyle: 'italic' }}>
-                      "{selectedLog.tareas}"
-                    </p>
-                  </div>
-
-                  <div className="premium-actions" style={{ marginTop: '1.5rem' }}>
-                    <button className="btn-premium-approve" style={{ width: '100%', gap: '8px' }}>
-                      <Check size={18} /> Approve Hours
-                    </button>
-                    <button className="btn-premium-correction" style={{ width: '100%' }}>Request Correction</button>
-                  </div>
+                ))
+              ) : (
+                <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--premium-text-muted)' }}>
+                  <Briefcase size={36} style={{ opacity: 0.3, marginBottom: '10px' }} />
+                  <p>Aún no has creado tareas predeterminadas.</p>
                 </div>
-              </div>
-            ) : (
-              <div className="details-empty-state" style={{ textAlign: 'center', color: '#999', paddingTop: '100px' }}>
-                <ClipboardList size={40} style={{ opacity: 0.3, marginBottom: '10px' }} />
-                <p>Selecciona una labor para ver los detalles</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

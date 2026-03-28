@@ -351,11 +351,11 @@
 .unread-dot-mini {
   width: 10px;
   height: 10px;
-  background-color: var(--color-bosque-helecho);
+  background-color: #ef4444; /* Rojo intenso para soporte */
   border-radius: 50%;
   display: inline-block;
-  box-shadow: 0 0 8px rgba(45, 106, 79, 0.6);
-  animation: pulseDot 2s infinite;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+  animation: pulseDot 1.5s infinite;
 }
 
 @keyframes pulseDot {

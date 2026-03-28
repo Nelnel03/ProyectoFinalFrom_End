@@ -163,28 +163,58 @@ function MisReportesTab({ user }) {
             </section>
           )}
 
-          {/* ── ACTIVIDADES (solo voluntarios) ── */}
           {user.rol === 'voluntario' && (filtroActivo === 'todos' || filtroActivo === 'actividades') && (
             <section>
-              <h3 className="section-title-actividad">
-                Mis Reportes de Actividad
-              </h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '10px' }}>
+                <h3 className="section-title-actividad">Mis Reportes de Actividad</h3>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <span style={{ padding: '5px 14px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 700, background: '#d1fae5', color: '#065f46', border: '1px solid #6ee7b7' }}>
+                    ✓ {actividades.filter(a => a.estado === 'aprobado').length} Aprobadas
+                  </span>
+                  <span style={{ padding: '5px 14px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 700, background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' }}>
+                    ⏳ {actividades.filter(a => a.estado !== 'aprobado').length} Pendientes
+                  </span>
+                  <span style={{ padding: '5px 14px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 700, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #bfdbfe' }}>
+                    🕐 {actividades.filter(a => a.estado === 'aprobado').reduce((sum, a) => sum + (Number(a.horas) || 0), 0)}h aceptadas
+                  </span>
+                </div>
+              </div>
               {actividades.length === 0 ? (
                 <p className="empty-section-text">No tienes registros de actividad.</p>
               ) : (
                 <div className="cards-grid">
-                  {actividades.map(a => (
-                    <div key={a.id} className="reporte-item-card">
-                      <div className="card-top-row">
-                        <strong className="card-title-actividad">{a.tipoTarea}</strong>
-                        <span className="badge-registered">
-                          ✓ Registrado
-                        </span>
+                  {actividades.map(a => {
+                    const aprobado = a.estado === 'aprobado';
+                    return (
+                      <div
+                        key={a.id}
+                        className="reporte-item-card"
+                        style={{ borderLeft: `5px solid ${aprobado ? '#10b981' : '#f59e0b'}` }}
+                      >
+                        <div className="card-top-row">
+                          <strong className="card-title-actividad">{a.tipoTarea}</strong>
+                          {aprobado ? (
+                            <span style={{ padding: '3px 10px', borderRadius: '12px', fontSize: '0.72rem', fontWeight: 700, background: '#d1fae5', color: '#065f46', border: '1px solid #6ee7b7' }}>
+                              ✓ Aprobado
+                            </span>
+                          ) : (
+                            <span style={{ padding: '3px 10px', borderRadius: '12px', fontSize: '0.72rem', fontWeight: 700, background: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' }}>
+                              ⏳ Pendiente
+                            </span>
+                          )}
+                        </div>
+                        <p className="card-detail card-detail-dark" style={{ fontWeight: 600 }}>
+                          {a.horas}h — {a.fecha}
+                        </p>
+                        <p className="card-detail card-detail-italic">{a.tareas}</p>
+                        {aprobado && (
+                          <div style={{ marginTop: '8px', padding: '6px 10px', borderRadius: '8px', background: '#f0fdf4', fontSize: '0.75rem', color: '#15803d', fontWeight: 600 }}>
+                            ✓ Horas validadas por el administrador
+                          </div>
+                        )}
                       </div>
-                      <p className="card-detail card-detail-dark">{a.horas} horas — {a.fecha}</p>
-                      <p className="card-detail card-detail-italic">{a.tareas}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </section>

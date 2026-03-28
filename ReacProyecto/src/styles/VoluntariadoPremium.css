@@ -1,4 +1,4 @@
-/* VoluntariadoPremium.css - Redesign for Voluntariados page */
+/* VoluntariadoPremium.css - Rediseño para la bitácora administrativa de voluntarios */
 
 :root {
     --premium-mint-light: #f0f7f4;
@@ -12,6 +12,19 @@
     --premium-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     --premium-radius: 12px;
     --premium-border: #e2e8f0;
+}
+
+body[data-theme='dark'] {
+    --premium-mint-light: #0d1117;
+    --premium-mint-sidebar: #161b22;
+    --premium-mint-active: #21262d;
+    --premium-forest-dark: #10b981;
+    --premium-forest-hover: #34d399;
+    --premium-text-main: #f0f6fc;
+    --premium-text-muted: #8b949e;
+    --premium-white: #161b22 !important;
+    --premium-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --premium-border: #30363d;
 }
 
 .premium-vol-layout {
@@ -106,8 +119,8 @@
 }
 
 .premium-nav-item.active {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: var(--premium-mint-active);
+    color: var(--premium-forest-dark);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
@@ -135,8 +148,8 @@
 
 /* Main Content Area */
 .premium-main {
-    padding: 3rem 4rem; /* More spacious padding */
-    background-color: #ffffff;
+    padding: 3rem 4rem; /* Padding amplio para respiración */
+    background-color: var(--premium-mint-light);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -153,14 +166,14 @@
     width: 100%;
     gap: 30px;
     text-align: left;
-    border-bottom: 1.5px solid #f8fafc; /* Subtle, clean separator */
+    border-bottom: 1.5px solid var(--premium-border); /* Subtle, clean separator */
     background: transparent !important; /* Force removal of any green bg */
     box-shadow: none !important; /* Remove any shadows that cut off the look */
     min-height: auto !important; /* Prevent squashed look */
 }
 
 .premium-search-container {
-    background: #f8fafc; /* Slightly off-white for contrast */
+    background: var(--premium-white); /* Usando var en vez de gris fijo */
     padding: 12px 24px;
     border-radius: 50px;
     display: flex;
@@ -168,7 +181,7 @@
     gap: 15px;
     flex: 1;
     max-width: 550px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--premium-border);
     transition: all 0.2s ease;
 }
 
@@ -201,8 +214,8 @@
 }
 
 .premium-badge-pending {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: var(--premium-mint-active);
+    color: var(--premium-forest-dark);
     padding: 6px 16px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -232,13 +245,15 @@
     display: grid;
     grid-template-columns: 1fr 120px 150px 100px 120px;
     align-items: center;
-    background: white;
+    background: var(--premium-white);
     margin-bottom: 8px;
     padding: 16px;
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.1s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+    box-shadow: var(--premium-shadow);
+    color: var(--premium-text-main);
+    border: 1px solid var(--premium-border);
 }
 
 .premium-log-item:hover {
@@ -247,20 +262,21 @@
 }
 
 .premium-log-item.active-border {
-    border: 2px solid #059669;
-    background-color: #f0fdf4;
+    border: 2px solid var(--premium-forest-dark) !important;
+    background-color: var(--premium-mint-active) !important;
 }
 
 .premium-profile-pill {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: white;
+    background: var(--premium-white);
     padding: 4px 5px 4px 15px;
     border-radius: 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    box-shadow: var(--premium-shadow);
     flex-shrink: 0; /* Profile stays compact */
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid var(--premium-border);
+    color: var(--premium-text-main);
 }
 
 .premium-vol-profile {
@@ -273,7 +289,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #f0f0f0;
+    background: var(--premium-mint-active);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -311,7 +327,7 @@
 
 /* Details Panel */
 .premium-details-panel {
-    background-color: #f8f8f8;
+    background-color: var(--premium-mint-sidebar);
     padding: 2rem;
     border-left: 1px solid var(--premium-border);
     position: sticky;
@@ -321,10 +337,12 @@
 }
 
 .premium-details-card {
-    background: white;
+    background: var(--premium-white);
     border-radius: var(--premium-radius);
     padding: 1.5rem;
     box-shadow: var(--premium-shadow);
+    color: var(--premium-text-main);
+    border: 1px solid var(--premium-border);
 }
 
 .premium-details-header {
@@ -421,6 +439,7 @@
     cursor: pointer;
 }
 
+/* Responsive design */
 @media (max-width: 1200px) {
     .premium-vol-layout {
         grid-template-columns: 80px 1fr;
@@ -437,7 +456,7 @@
         overflow-y: auto;
     }
     .premium-sidebar {
-        display: none; /* Mobile could use a different drawer later */
+        display: none; /* Drawer móvil lateral */
     }
     .premium-header {
         flex-direction: column !important;
@@ -447,4 +466,12 @@
         width: 100%;
         max-width: none;
     }
+}
+
+/* Forcing background transparency for logs row header */
+.premium-log-row-header {
+    background: transparent !important;
+    color: var(--premium-text-main) !important;
+    border-bottom: 2px solid var(--premium-border);
+    margin-bottom: 1rem;
 }
