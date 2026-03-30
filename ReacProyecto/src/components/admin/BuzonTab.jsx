@@ -455,7 +455,7 @@ function BuzonTab({ refrescarNotificaciones }) {
                       {rep.contenido || rep.mensaje || '—'}
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                      <button onClick={() => services.deleteReportes(rep.id).then(() => cargarDatos())} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '5px 10px', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Eliminar</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleEliminarSoporte(rep.id); }} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '5px 10px', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Eliminar</button>
                     </div>
                   </div>
                 ))

@@ -219,7 +219,8 @@
       "telefono": "12345678",
       "password": "12345678",
       "rol": "user",
-      "status": "active"
+      "status": "banned",
+      "motivoBan": "prueva2"
     },
     {
       "id": "admin1",
@@ -386,176 +387,53 @@
       "rol": "voluntario",
       "fotoPerfil": "",
       "id": "4P0SqJa4lw0"
+    },
+    {
+      "nombre": "christopher",
+      "email": "tormentionrex@gmail.com",
+      "telefono": "11111111",
+      "password": "12345678",
+      "rol": "user",
+      "id": "cQpUntu3Z3Y",
+      "resetToken": "g0187n4fb8wxbc4wc7v0o",
+      "resetTokenExpiry": "2026-03-30T17:51:19.978Z"
+    },
+    {
+      "nombre": "Voluntariado",
+      "email": "v@gmail.com",
+      "telefono": "11111111",
+      "password": "12345678",
+      "rol": "voluntario",
+      "id": "hhqKyx0Pkgg",
+      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.WnqldNFXuZEQByhawOz5bgHaHa%3Fpid%3DApi&f=1&ipt=82780c584c8a359a9a86a4b0bb7d2feac6c45ad83c574afd525e78602393e7e5&ipo=images"
+    },
+    {
+      "nombre": "Voluntariado",
+      "email": "v@gmail.com",
+      "area": "Por asignar",
+      "fechaIngreso": "2026-03-30",
+      "rol": "voluntario",
+      "fotoPerfil": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.WnqldNFXuZEQByhawOz5bgHaHa%3Fpid%3DApi&f=1&ipt=82780c584c8a359a9a86a4b0bb7d2feac6c45ad83c574afd525e78602393e7e5&ipo=images",
+      "id": "oeQr_VWRFgU"
     }
   ],
-  "reportes": [
-    {
-      "id": "2ed3",
-      "asunto": "sdfghjk",
-      "mensaje": "dfrtyuikjnbvcwertyjjhgf",
-      "userId": "ca99",
-      "userName": "GG",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-25T02:17:08.657Z",
-      "estado": "Leído",
-      "visto": true
-    },
-    {
-      "asunto": "ASDFGHJKdfg",
-      "mensaje": "sdfghjjhgfddfgh",
-      "userId": "ca99",
-      "userName": "GG",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-25T02:38:56.583Z",
-      "estado": "En Proceso",
 
-      "id": "voj1VWU0_uQ",
-      "visto": true
-    },
-    {
-      "asunto": "un arbol se seco",
-      "mensaje": "se seco un arbol",
-      "userId": "ca99",
-      "userName": "GG",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-26T02:45:35.659Z",
-      "estado": "Leído",
-      "id": "d4u-KaKmyac",
-      "visto": true
-    },
-    {
-      "id": "624a",
-      "asunto": "animal muerto en la zona",
-      "mensaje": "Me encontré un perro muerto en la playa de Chacarita",
-      "userId": "ed15",
-      "userName": "Kiwi",
-      "userEmail": "kiwi@gmail.com",
-      "fecha": "2026-03-27T19:23:42.018Z",
-      "estado": "Leído",
-      "visto": true
-    },
-    {
-      "asunto": "mucha basura al rededor del corredor",
-      "mensaje": "dfghgfdgdsdfghjkl",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T03:02:44.268Z",
-      "estado": "Leído",
-      "id": "bNf7djnouhM",
-      "visto": true
-    },
-    {
-      "tipo": "soporte",
-      "usuarioId": "2e66",
-      "usuarioNombre": "Steven Forward",
-      "asunto": "Soporte de Voluntariado",
-      "contenido": "hahahhahhhahhaha",
-      "fecha": "28/3/2026",
-      "visto": true,
-      "id": "_5qSzz6pzxU"
-    },
-    {
-      "tipo": "soporte",
-      "usuarioId": "vol-2e66",
-      "usuarioNombre": "Steven Forward",
-      "asunto": "Soporte de Voluntariado",
-      "contenido": "hahahahaha",
-      "fecha": "28/3/2026",
-      "visto": true,
-      "id": "sLjIOW9jKSw"
-    },
-    {
-      "tipo": "soporte",
-      "usuarioId": "vol-2e66",
-      "usuarioNombre": "Steven Forward",
-      "asunto": "Soporte de Voluntariado",
-      "contenido": "gaggaggaagagga",
-      "fecha": "28/3/2026",
-      "visto": true,
-      "id": "-PCKKxHpCxg"
-    },
-    {
-      "tipo": "soporte",
-      "usuarioId": "vol-2e66",
-      "usuarioNombre": "Steven Forward",
-      "asunto": "Soporte de Voluntariado",
-      "contenido": "hahahaha",
-      "fecha": "28/3/2026",
-      "visto": true,
-      "id": "X5dTg4mtwZM"
-    },
-    {
-      "asunto": "árbol seco",
-      "mensaje": "hahahahahahhahah",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T08:15:11.438Z",
-      "estado": "Pendiente",
-      "id": "6c3LHkWqG14",
-      "visto": true
-    },
-    {
-      "asunto": "falta de mantenimiento",
-      "mensaje": "hshshshshhshshshshshshshshss",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T08:18:21.125Z",
-      "estado": "Pendiente",
-      "id": "UQrQK6Uk4fo",
-      "visto": true
-    },
-    {
-      "asunto": "animal muerto en la zona",
-      "mensaje": "hshshshhshshshshs",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T08:24:37.003Z",
-      "estado": "Pendiente",
-      "id": "5ManoRAWRvM",
-      "visto": true
-    },
-    {
-      "asunto": "árbol seco",
-      "mensaje": "jajajjajajajjaa",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T08:31:45.323Z",
-      "estado": "Pendiente",
-      "id": "vtb9pqGm_KA",
-      "visto": true
-    },
-    {
-      "asunto": "mucha basura al rededor del corredor",
-      "mensaje": "aaaaaaaaaaaaaaaaaaaaaaaa",
-      "userId": "ca99",
-      "userName": "GG ezz",
-      "userEmail": "g@gmail.com",
-      "fecha": "2026-03-28T08:35:15.375Z",
-      "estado": "Pendiente",
-      "id": "sEKp1tclnug",
-      "visto": true
-    },
-    {
-      "tipo": "soporte",
-      "usuarioId": "vol-2e66",
-      "usuarioNombre": "Steven Forward",
-      "asunto": "Soporte de Voluntariado",
-      "contenido": "aaaaaaaaaaaaaaa",
-      "fecha": "28/3/2026",
-      "visto": true,
-      "id": "d-gN_4ulwdI"
-
-    }
-  ],
+  "reportes": [],
   "abonos": [],
   "reportes_robados": [],
+  "solicitudesVoluntariado": [
+    {
+      "userId": "hhqKyx0Pkgg",
+      "userName": "Voluntariado",
+      "userEmail": "v@gmail.com",
+      "mensaje": "Quiero postularme porque soy Punterenense y me importa e interesa el cambio y quiero ser parte del cambio en un lugar tan lindo y futuramente prospero como la angostura",
+      "fecha": "2026-03-30T17:11:07.760Z",
+      "estado": "Aprobada",
+      "id": "-2UZg381S5Y",
+      "visto": true
+    }
+  ],
 
-  "solicitudesVoluntariado": [],
   "stats_tipos": [],
 
   "$schema": "./node_modules/json-server/schema.json"
